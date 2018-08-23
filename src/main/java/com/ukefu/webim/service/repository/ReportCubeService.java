@@ -151,7 +151,7 @@ public class ReportCubeService{
 		StringBuffer columns = new StringBuffer() ;
 		for(Dimension d:cube.getDimension()) {
 			for(CubeLevel cl : d.getCubeLevel()) {
-				if(!exist.containsKey(cl.getColumname()) && !mainMetaData.getTb().getTablename().equals(cl.getTablename())) {
+				if(!mainMetaData.getTb().getTablename().equals(cl.getTablename())) {
 					if(columns.length() > 0) {
 						columns.append(",");
 					}
@@ -213,7 +213,7 @@ public class ReportCubeService{
 					if((!StringUtils.isBlank(filter.getCode()))){
 						String startValue = getStartValue(filter , request);
 						String endValue = getEndValue(filter , request);
-						String dataname = tableppyMap.get(filter.getFilterfieldid()).getFieldname();
+						String dataname = tableMap.get(filter.getFktableid()) + "." + tableppyMap.get(filter.getFilterfieldid()).getFieldname();
 						
 						if(!StringUtils.isBlank(startValue) ){
 							wherecon.append(wherecon.length()>0?" and ":"").append(dataname).append(" >= '").append(startValue).append("' ");
@@ -224,7 +224,7 @@ public class ReportCubeService{
 					}
 				}else{//compare
 					String value = getDefaultValue(filter , request);
-					String dataname = tableppyMap.get(filter.getFilterfieldid()).getFieldname();
+					String dataname = tableMap.get(filter.getFktableid()) + "." + tableppyMap.get(filter.getFilterfieldid()).getFieldname();
 					if(!StringUtils.isBlank(value)){
 						if(!wherecon.toString().contains(dataname)){
 							if(!StringUtils.isBlank(value)){
