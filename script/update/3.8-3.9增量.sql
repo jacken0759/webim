@@ -1080,3 +1080,18 @@ ALTER TABLE uk_sessionconfig ADD servicedic varchar(32) DEFAULT NULL COMMENT '�
 ALTER TABLE uk_sessionconfig ADD servicekind tinyint DEFAULT 0 COMMENT '启用服务会话分类';
 
 ALTER TABLE uk_systemconfig ADD savelog tinyint DEFAULT 0 COMMENT '启用日志存储';
+
+CREATE TABLE `uk_sale_count` (
+	`id` varchar(32) NOT NULL,
+	`dataid` varchar(32) DEFAULT NULL COMMENT '坐席/部门/机器人ID',
+	`type` varchar(32) DEFAULT NULL COMMENT '类型（坐席user/部门organ/机器人ai）',
+	`namenum` int(11) DEFAULT '0' COMMENT '分配总数',
+  `notcall` int(11) DEFAULT '0' COMMENT '未拨打',
+  `callsuccess` int(11) DEFAULT '0' COMMENT '拨打成功',
+  `callfaild` int(11) DEFAULT '0' COMMENT '拨打失败',
+  `aptrue` int(11) DEFAULT '0' COMMENT '已预约',
+  `apfalse` int(11) DEFAULT '0' COMMENT '未预约',
+	`createtime` datetime DEFAULT NULL,
+	`orgi` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='电销 - 坐席名单计数表';
