@@ -2,7 +2,6 @@ package com.ukefu.webim.util;
 
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -13,9 +12,9 @@ import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.springframework.data.domain.PageImpl;
@@ -31,6 +30,7 @@ import com.ukefu.webim.service.repository.CallOutFilterRepository;
 import com.ukefu.webim.service.repository.CallOutNamesHisRepository;
 import com.ukefu.webim.service.repository.CallOutRoleRepository;
 import com.ukefu.webim.service.repository.CallOutTaskRepository;
+import com.ukefu.webim.service.repository.CalloutSaleCountRepository;
 import com.ukefu.webim.service.repository.ExtentionRepository;
 import com.ukefu.webim.service.repository.FormFilterRepository;
 import com.ukefu.webim.service.repository.JobDetailRepository;
@@ -46,6 +46,7 @@ import com.ukefu.webim.web.model.CallOutNames;
 import com.ukefu.webim.web.model.CallOutNamesHis;
 import com.ukefu.webim.web.model.CallOutRole;
 import com.ukefu.webim.web.model.CallOutTask;
+import com.ukefu.webim.web.model.CalloutSaleCount;
 import com.ukefu.webim.web.model.Extention;
 import com.ukefu.webim.web.model.FormFilter;
 import com.ukefu.webim.web.model.JobDetail;
@@ -550,4 +551,111 @@ public class CallCenterUtils {
 		
 		calloutRes.save(callOutNamesHis);
 	}
+	
+	public static void getCalloutCount(String orgi){
+		CalloutSaleCountRepository calloutCountRes = UKDataContext.getContext().getBean(CalloutSaleCountRepository.class) ;
+		
+		List<CalloutSaleCount> countList = calloutCountRes.findByOrgi(orgi);
+		if(countList.size() > 0){
+			calloutCountRes.delete(countList);
+		}
+		
+		BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
+		queryBuilder.must(termQuery("orgi",orgi));
+		List<CalloutSaleCount> saleCountList = new ArrayList<>();
+		PageImpl<UKDataBean> aggUserList = SearchTools.aggregation(queryBuilder,"owneruser", true, 0, 10000);
+		if(aggUserList.getContent().size() > 0){
+			for(UKDataBean ukdata : aggUserList.getContent()){
+				if(ukdata.getValues() != null){
+					CalloutSaleCount userCount = new CalloutSaleCount();
+					userCount.setOrgi(orgi);
+					userCount.setCreatetime(new Date());
+					userCount.setDataid(ukdata.getValues().get("id").toString());
+					userCount.setType(UKDataContext.UKEFU_SYSTEM_DIS_AGENT);
+					
+					if(ukdata.getValues().get("total") != null){
+						userCount.setNamenum(Integer.parseInt((ukdata.getValues().get("total").toString())));//分配总数
+					}
+					if(ukdata.getValues().get("callstatus.notcall") != null){
+						userCount.setNotcall(Integer.parseInt((ukdata.getValues().get("callstatus.notcall").toString())));//未拨打
+					}
+					if(ukdata.getValues().get("callstatus.success") != null){
+						userCount.setCallsuccess(Integer.parseInt((ukdata.getValues().get("callstatus.success").toString())));//拨打成功
+					}
+					if(ukdata.getValues().get("callstatus.faild") != null){
+						userCount.setCallfaild(Integer.parseInt((ukdata.getValues().get("callstatus.faild").toString())));//拨打失败
+					}
+					if(ukdata.getValues().get("apstatus.false") != null){
+						userCount.setApfalse(Integer.parseInt((ukdata.getValues().get("apstatus.false").toString())));//未预约
+					}
+					if(ukdata.getValues().get("apstatus.true") != null){
+						userCount.setAptrue(Integer.parseInt((ukdata.getValues().get("apstatus.true").toString())));//已预约
+					}
+					saleCountList.add(userCount);
+				}
+			}
+		}
+		PageImpl<UKDataBean> aggOrganList = SearchTools.aggregation(queryBuilder,"ownerdept", true, 0, 10000);
+		if(aggOrganList.getContent().size() > 0){
+			for(UKDataBean ukdata : aggOrganList.getContent()){
+				CalloutSaleCount userCount = new CalloutSaleCount();
+				userCount.setOrgi(orgi);
+				userCount.setCreatetime(new Date());
+				userCount.setDataid(ukdata.getValues().get("id").toString());
+				userCount.setType(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN);
+				if(ukdata.getValues().get("total") != null){
+					userCount.setNamenum(Integer.parseInt((ukdata.getValues().get("total").toString())));//分配总数
+				}
+				if(ukdata.getValues().get("callstatus.notcall") != null){
+					userCount.setNotcall(Integer.parseInt((ukdata.getValues().get("callstatus.notcall").toString())));//未拨打
+				}
+				if(ukdata.getValues().get("callstatus.success") != null){
+					userCount.setCallsuccess(Integer.parseInt((ukdata.getValues().get("callstatus.success").toString())));//拨打成功
+				}
+				if(ukdata.getValues().get("callstatus.faild") != null){
+					userCount.setCallfaild(Integer.parseInt((ukdata.getValues().get("callstatus.faild").toString())));//拨打失败
+				}
+				if(ukdata.getValues().get("apstatus.false") != null){
+					userCount.setApfalse(Integer.parseInt((ukdata.getValues().get("apstatus.false").toString())));//未预约
+				}
+				if(ukdata.getValues().get("apstatus.true") != null){
+					userCount.setAptrue(Integer.parseInt((ukdata.getValues().get("apstatus.true").toString())));//已预约
+				}
+				saleCountList.add(userCount);
+			}
+		}
+		PageImpl<UKDataBean> aggAiList = SearchTools.aggregation(queryBuilder,"ownerai", true, 0, 10000);
+		if(aggAiList.getContent().size() > 0){
+			for(UKDataBean ukdata : aggAiList.getContent()){
+				CalloutSaleCount userCount = new CalloutSaleCount();
+				userCount.setOrgi(orgi);
+				userCount.setCreatetime(new Date());
+				userCount.setDataid(ukdata.getValues().get("id").toString());
+				userCount.setType(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN);
+				if(ukdata.getValues().get("total") != null){
+					userCount.setNamenum(Integer.parseInt((ukdata.getValues().get("total").toString())));//分配总数
+				}
+				if(ukdata.getValues().get("callstatus.notcall") != null){
+					userCount.setNotcall(Integer.parseInt((ukdata.getValues().get("callstatus.notcall").toString())));//未拨打
+				}
+				if(ukdata.getValues().get("callstatus.success") != null){
+					userCount.setCallsuccess(Integer.parseInt((ukdata.getValues().get("callstatus.success").toString())));//拨打成功
+				}
+				if(ukdata.getValues().get("callstatus.faild") != null){
+					userCount.setCallfaild(Integer.parseInt((ukdata.getValues().get("callstatus.faild").toString())));//拨打失败
+				}
+				if(ukdata.getValues().get("apstatus.false") != null){
+					userCount.setApfalse(Integer.parseInt((ukdata.getValues().get("apstatus.false").toString())));//未预约
+				}
+				if(ukdata.getValues().get("apstatus.true") != null){
+					userCount.setAptrue(Integer.parseInt((ukdata.getValues().get("apstatus.true").toString())));//已预约
+				}
+				saleCountList.add(userCount);
+			}
+		}
+		if(saleCountList.size() > 0){
+			calloutCountRes.save(saleCountList);
+		}
+	}
+
 }

@@ -20,6 +20,7 @@ import com.ukefu.webim.service.repository.FormFilterItemRepository;
 import com.ukefu.webim.service.repository.FormFilterRepository;
 import com.ukefu.webim.service.repository.JobDetailRepository;
 import com.ukefu.webim.service.repository.MetadataRepository;
+import com.ukefu.webim.util.CallCenterUtils;
 import com.ukefu.webim.web.model.CallAgent;
 import com.ukefu.webim.web.model.CallOutFilter;
 import com.ukefu.webim.web.model.CallOutTask;
@@ -216,6 +217,8 @@ public class ActivityResource extends Resource{
 		this.jobDetail.setExectype(null);
 		this.jobDetail.setExectarget(null);
 		this.jobDetail.setExecto(null);
+		
+		CallCenterUtils.getCalloutCount(this.jobDetail.getOrgi());
 	}
 
 	@Override
