@@ -12,7 +12,6 @@ import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang.StringUtils;
@@ -655,6 +654,25 @@ public class CallCenterUtils {
 		}
 		if(saleCountList.size() > 0){
 			calloutCountRes.save(saleCountList);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param userid
+	 * @param orgi
+	 */
+	public static void getCalloutCount(String userid,String orgi){
+		CalloutSaleCountRepository calloutCountRes = UKDataContext.getContext().getBean(CalloutSaleCountRepository.class) ;
+		
+		List<CalloutSaleCount> countList = calloutCountRes.findByOrgiAndDataid(orgi , userid);
+		if(countList.size() > 0){
+			for(CalloutSaleCount count : countList) {
+				if(count.getNotcall() > 0) {
+					count.setNotcall(count.getNotcall() - 1);
+				}
+			}
+			calloutCountRes.save(countList);
 		}
 	}
 

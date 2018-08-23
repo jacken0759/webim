@@ -9,4 +9,6 @@ import com.ukefu.webim.web.model.CalloutSaleCount;
 public interface CalloutSaleCountRepository extends JpaRepository<CalloutSaleCount,String>{
 	
 	public List<CalloutSaleCount> findByOrgi(String orgi);
+	
+	public List<CalloutSaleCount> findByOrgiAndDataid(String orgi, String dataid);
 }

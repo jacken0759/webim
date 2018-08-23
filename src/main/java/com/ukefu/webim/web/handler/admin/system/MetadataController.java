@@ -150,7 +150,6 @@ public class MetadataController extends Handler{
 	  				metaDataTable.setName(table.getName());
 	  				metaDataTable.setUpdatetime(new Date());
 	  				metaDataTable.setCreatetime(new Date());
-					int nums = 0 ;
 					processMetadataTable( DatabaseMetaDataHandler.getTable(connection, metaDataTable.getTablename()) , metaDataTable) ;
 					for(TableProperties temp : metaDataTable.getTableproperty()) {
 						boolean found = false ;
@@ -161,12 +160,9 @@ public class MetadataController extends Handler{
 							}
 						}
 						if(found == false) {
-							table.getTableproperty().add(temp) ;
-							nums = nums + 1;
+							temp.setDbtableid(table.getId());
+							tablePropertiesRes.save(temp) ;
 						}
-					}
-					if(nums > 0) {
-						metadataRes.save(metaDataTable) ;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

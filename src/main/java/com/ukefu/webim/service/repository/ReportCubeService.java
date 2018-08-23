@@ -155,7 +155,7 @@ public class ReportCubeService{
 					if(columns.length() > 0) {
 						columns.append(",");
 					}
-					columns.append(tableMap.get(cl.getTableproperty().getDbtableid())).append(".").append(cl.getTableproperty().getFieldname()).append(" ");
+					columns.append(tableMap.get(cl.getTableproperty().getDbtableid())).append(".").append(cl.getTableproperty().getFieldname()).append(" as ").append(cl.getTableproperty().getKey());
 					exist.put(cl.getColumname(), cl.getColumname()) ;
 				}
 			}

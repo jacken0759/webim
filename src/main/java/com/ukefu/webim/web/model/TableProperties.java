@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -500,5 +501,9 @@ public class TableProperties implements java.io.Serializable,Cloneable{
 	}
 	public void setPrivatefield(boolean privatefield) {
 		this.privatefield = privatefield;
+	}
+	@Transient
+	public String getKey() {
+		return UKTools.genIDByKey(this.id) ;
 	}
 }
