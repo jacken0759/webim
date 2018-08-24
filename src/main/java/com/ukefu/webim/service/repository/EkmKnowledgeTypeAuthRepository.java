@@ -25,5 +25,7 @@ public abstract interface EkmKnowledgeTypeAuthRepository  extends JpaRepository<
 	public abstract List<EkmKnowledgeTypeAuth> findByUseridAndKnowledgebaseidAndOrgi(String userid, String knowledgebaseid,String orgi );
 	
 	public abstract List<EkmKnowledgeTypeAuth> findByKnowledgebaseidAndOrgi(String knowledgebaseid,String orgi );
+	
+	public abstract List<EkmKnowledgeTypeAuth> findByOrgi(String orgi );
 }
 
