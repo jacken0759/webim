@@ -79,6 +79,7 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>{
 	private String otherdir;	//对边呼叫方向
 	
 	private boolean waste ;		//是否作废名单
+	private boolean apstatus ;	//是否预约名单
 	
 	private String otherlegdest ;	//对边呼叫号码
 	
@@ -116,6 +117,10 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>{
 	
 	private String siptrunk ;		//自定义 SIP Trunk
 	private boolean prefix ;		//是否启用加0前缀
+	
+	private boolean callstatus ;	//拨打状态  ， 成功或失败
+	
+	
 	
 	
 	
@@ -678,5 +683,17 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>{
 	}
 	public void setCreater(String creater) {
 		this.creater = creater;
+	}
+	public boolean isCallstatus() {
+		return callstatus;
+	}
+	public void setCallstatus(boolean callstatus) {
+		this.callstatus = callstatus;
+	}
+	public boolean isApstatus() {
+		return apstatus;
+	}
+	public void setApstatus(boolean apstatus) {
+		this.apstatus = apstatus;
 	}
 }

@@ -1081,6 +1081,9 @@ public class ReportDesignController extends Handler {
 			ColumnProperties col = columnPropertiesRepository.findByIdAndOrgi(id, super.getOrgi(request));
 			if (col != null) {
 				col.setTitle(title);
+				if(!StringUtils.isBlank(request.getParameter("value"))) {
+					col.setValue(request.getParameter("value"));
+				}
 				columnPropertiesRepository.save(col) ;
 			}
 		}

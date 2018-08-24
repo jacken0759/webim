@@ -41,6 +41,7 @@ public class ColumnProperties implements java.io.Serializable {
 	private String paramname ;//参数名
 	private String orgi;
 	private int sortindex;
+	private String value ;	//控制替换
 	
 	@Id
 	@Column(length = 32)
@@ -185,5 +186,10 @@ public class ColumnProperties implements java.io.Serializable {
 	public void setSortindex(int sortindex) {
 		this.sortindex = sortindex;
 	}
-	
+	public String getValue() {
+		return value;
+	}
+	public void setValue(String value) {
+		this.value = value;
+	}
 }

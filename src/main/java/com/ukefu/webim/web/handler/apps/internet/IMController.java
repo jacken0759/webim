@@ -658,6 +658,12 @@ public class IMController extends Handler{
     	return request(super.createRequestPageTempletResponse("/apps/im/leavemsgsave"));
     }
     
+    @RequestMapping("/record")
+    @Menu(type = "admin" , subtype = "user")
+    public ModelAndView record(HttpServletRequest request) {
+    	return request(super.createRequestPageTempletResponse("/apps/im/record"));
+    }
+    
     @RequestMapping("/refuse")
     @Menu(type = "im" , subtype = "refuse" , access = true)
     public void refuse(HttpServletRequest request , HttpServletResponse response, @Valid String orgi , @Valid String appid, @Valid String userid, @Valid String sessionid, @Valid String client) throws Exception {

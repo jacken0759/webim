@@ -665,14 +665,49 @@ public class CallCenterUtils {
 	public static void getCalloutCount(String userid,String orgi){
 		CalloutSaleCountRepository calloutCountRes = UKDataContext.getContext().getBean(CalloutSaleCountRepository.class) ;
 		
-		List<CalloutSaleCount> countList = calloutCountRes.findByOrgiAndDataid(orgi , userid);
-		if(countList.size() > 0){
-			for(CalloutSaleCount count : countList) {
-				if(count.getNotcall() > 0) {
-					count.setNotcall(count.getNotcall() - 1);
+		BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
+		queryBuilder.must(termQuery("orgi",orgi));
+		queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_AGENT,userid));
+		List<CalloutSaleCount> saleCountList = new ArrayList<>();
+		PageImpl<UKDataBean> aggUserList = SearchTools.aggregation(queryBuilder,"owneruser", true, 0, 10000);
+		if(aggUserList.getContent().size() > 0){
+			for(UKDataBean ukdata : aggUserList.getContent()){
+				if(ukdata.getValues() != null){
+					CalloutSaleCount userCount = new CalloutSaleCount();
+					userCount.setOrgi(orgi);
+					userCount.setCreatetime(new Date());
+					userCount.setDataid(ukdata.getValues().get("id").toString());
+					userCount.setType(UKDataContext.UKEFU_SYSTEM_DIS_AGENT);
+					
+					if(ukdata.getValues().get("total") != null){
+						userCount.setNamenum(Integer.parseInt((ukdata.getValues().get("total").toString())));//分配总数
+					}
+					if(ukdata.getValues().get("callstatus.notcall") != null){
+						userCount.setNotcall(Integer.parseInt((ukdata.getValues().get("callstatus.notcall").toString())));//未拨打
+					}
+					if(ukdata.getValues().get("callstatus.success") != null){
+						userCount.setCallsuccess(Integer.parseInt((ukdata.getValues().get("callstatus.success").toString())));//拨打成功
+					}
+					if(ukdata.getValues().get("callstatus.faild") != null){
+						userCount.setCallfaild(Integer.parseInt((ukdata.getValues().get("callstatus.faild").toString())));//拨打失败
+					}
+					if(ukdata.getValues().get("apstatus.false") != null){
+						userCount.setApfalse(Integer.parseInt((ukdata.getValues().get("apstatus.false").toString())));//未预约
+					}
+					if(ukdata.getValues().get("apstatus.true") != null){
+						userCount.setAptrue(Integer.parseInt((ukdata.getValues().get("apstatus.true").toString())));//已预约
+					}
+					saleCountList.add(userCount);
 				}
 			}
-			calloutCountRes.save(countList);
+		}
+		
+		List<CalloutSaleCount> countList = calloutCountRes.findByOrgiAndDataid(orgi , userid);
+		if(countList.size() > 0){
+			calloutCountRes.delete(countList);
+		}
+		if(saleCountList.size() > 0) {
+			calloutCountRes.save(saleCountList) ;
 		}
 	}
 

@@ -56,6 +56,9 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	private String message ;
 	private String expmsg ;		//显示消息
 	
+	private boolean readstatus ;
+	private boolean useful ;	//回答是否有用
+	
 	private String orgi ;
 	private String channel ;
 	private String model ;			//消息所属模块， WebIM/EntIM
@@ -393,6 +396,18 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	}
 	public void setSuggestmsg(String suggestmsg) {
 		this.suggestmsg = suggestmsg;
+	}
+	public boolean isReadstatus() {
+		return readstatus;
+	}
+	public void setReadstatus(boolean readstatus) {
+		this.readstatus = readstatus;
+	}
+	public boolean isUseful() {
+		return useful;
+	}
+	public void setUseful(boolean useful) {
+		this.useful = useful;
 	}
 	@Transient
 	public List<OtherMessageItem> getSuggest(){
