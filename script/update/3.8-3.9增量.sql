@@ -1095,3 +1095,20 @@ CREATE TABLE `uk_sale_count` (
 	`orgi` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='电销 - 坐席名单计数表';
+
+
+
+ALTER TABLE uk_consult_invite ADD quickagent tinyint DEFAULT 0 COMMENT '是否显示快捷转人工';
+
+ALTER TABLE uk_callcenter_event ADD callstatus tinyint DEFAULT 0 COMMENT '拨打状态';
+
+
+
+ALTER TABLE uk_columnproperties ADD value varchar(32) DEFAULT NULL COMMENT '空值替换';
+
+
+
+ALTER TABLE uk_chat_message ADD readstatus tinyint DEFAULT 0 COMMENT '是否已读';
+ALTER TABLE uk_chat_message ADD useful tinyint DEFAULT 0 COMMENT '是否有用';
+
+ALTER TABLE uk_callcenter_event ADD apstatus tinyint DEFAULT 0 COMMENT '是否预约名单拨打';
