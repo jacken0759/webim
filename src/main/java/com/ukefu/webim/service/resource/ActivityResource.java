@@ -218,7 +218,7 @@ public class ActivityResource extends Resource{
 		this.jobDetail.setExectarget(null);
 		this.jobDetail.setExecto(null);
 		
-		CallCenterUtils.getCalloutCount(this.jobDetail.getOrgi());
+		CallCenterUtils.getCalloutCount(this.jobDetail.getOrgi(),null,null);
 	}
 
 	@Override

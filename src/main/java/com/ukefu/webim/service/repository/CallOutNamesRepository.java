@@ -2,10 +2,14 @@ package com.ukefu.webim.service.repository;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import com.ukefu.webim.web.model.CallOutNames;
 import com.ukefu.webim.web.model.CallOutTask;
@@ -35,5 +39,20 @@ public abstract interface CallOutNamesRepository extends JpaRepository<CallOutNa
 	public abstract Page<CallOutNames> findByOwneruserAndOrgi(String owneruser , String orgi , Pageable page) ;
 	
 	public abstract CallOutNames findByMetanameAndDataidAndOrgi(String metaname, String dataid , String orgi ) ;
+	
+	@Modifying
+	@Transactional
+	@Query(value = "delete from CallOutNames where orgi = ?1 and oweruser = ?2")
+	public abstract void deleteByOrgiAndOwneruser(String orgi , String owneruser ) ;
+	
+	@Modifying
+	@Transactional
+	@Query(value = "delete from CallOutNames where orgi = ?1 and dataid = ?2")
+	public abstract void deleteByOrgiAndDataid(String orgi , String dataid ) ;
+	
+	@Modifying
+	@Transactional
+	@Query(value = "delete from CallOutNames where orgi = ?1 and batid = ?2")
+	public abstract void deleteByOrgiAndBatid(String orgi , String batid ) ;
 	
 }

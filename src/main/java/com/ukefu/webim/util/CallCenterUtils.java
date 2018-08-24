@@ -27,6 +27,7 @@ import com.ukefu.webim.service.cache.CacheHelper;
 import com.ukefu.webim.service.repository.CallAgentRepository;
 import com.ukefu.webim.service.repository.CallOutFilterRepository;
 import com.ukefu.webim.service.repository.CallOutNamesHisRepository;
+import com.ukefu.webim.service.repository.CallOutNamesRepository;
 import com.ukefu.webim.service.repository.CallOutRoleRepository;
 import com.ukefu.webim.service.repository.CallOutTaskRepository;
 import com.ukefu.webim.service.repository.CalloutSaleCountRepository;
@@ -551,14 +552,13 @@ public class CallCenterUtils {
 		calloutRes.save(callOutNamesHis);
 	}
 	
-	public static void getCalloutCount(String orgi){
+	public static void getCalloutCount(String orgi, String type,String dataid){
 		CalloutSaleCountRepository calloutCountRes = UKDataContext.getContext().getBean(CalloutSaleCountRepository.class) ;
-		
+		CallOutNamesRepository callNameRes = UKDataContext.getContext().getBean(CallOutNamesRepository.class) ;
 		List<CalloutSaleCount> countList = calloutCountRes.findByOrgi(orgi);
 		if(countList.size() > 0){
 			calloutCountRes.delete(countList);
 		}
-		
 		BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
 		queryBuilder.must(termQuery("orgi",orgi));
 		List<CalloutSaleCount> saleCountList = new ArrayList<>();
@@ -593,6 +593,7 @@ public class CallCenterUtils {
 					saleCountList.add(userCount);
 				}
 			}
+			
 		}
 		PageImpl<UKDataBean> aggOrganList = SearchTools.aggregation(queryBuilder,"ownerdept", true, 0, 10000);
 		if(aggOrganList.getContent().size() > 0){
@@ -654,6 +655,21 @@ public class CallCenterUtils {
 		}
 		if(saleCountList.size() > 0){
 			calloutCountRes.save(saleCountList);
+		}
+		if(!StringUtils.isBlank(type)){
+			switch(type){
+				case "user" : 
+					callNameRes.deleteByOrgiAndOwneruser(orgi,dataid);
+					break ;
+				case "data" : 
+					callNameRes.deleteByOrgiAndDataid(orgi, dataid);
+					break ;
+				case "batch" : 
+					callNameRes.deleteByOrgiAndBatid(orgi, dataid);
+					break ;
+				default : 
+					break; 
+			}
 		}
 	}
 	
