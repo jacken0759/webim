@@ -6,8 +6,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.ukefu.core.UKDataContext;
+import com.ukefu.util.UKTools;
 import com.ukefu.webim.service.repository.LogRepository;
 import com.ukefu.webim.web.model.Log;
+import com.ukefu.webim.web.model.SystemConfig;
 
 @Configuration
 @EnableScheduling
@@ -23,7 +25,10 @@ public class LogTask {
     	 */
     	Log log = null ;
     	while((log = UKDataContext.tempLogQueue.poll()) != null){
-			logRes.save(log) ;
+    		SystemConfig systemConfig = UKTools.getSystemConfig();
+			if(systemConfig.isSavelog()) { 
+				logRes.save(log) ;
+			}
 		}
 	}
 }
