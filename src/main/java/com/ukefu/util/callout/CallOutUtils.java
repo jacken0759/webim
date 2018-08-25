@@ -105,7 +105,7 @@ public class CallOutUtils {
 			callOutName.setFilterid((String) name.getValues().get("filterid"));
 			callOutName.setDataid((String)name.getValues().get("id"));
 			
-			callOutName.setStatus(UKDataContext.NamesProcessStatus.DIS.toString());
+			callOutName.setStatus((String)name.getValues().get("status"));
 			
 			callOutName.setCreater((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));
 			callOutName.setOrgan((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));

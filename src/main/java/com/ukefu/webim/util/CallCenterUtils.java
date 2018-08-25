@@ -510,7 +510,7 @@ public class CallCenterUtils {
 		map.put("skillList",organRes.findByOrgi(orgi));
 	}
 	
-	public static void saveCallOutNamesHis(@Valid CallOutNames callOutNames) {
+	public static void saveCallOutNamesHis(@Valid CallOutNames callOutNames, String type) {
 		CallOutNamesHisRepository calloutRes = UKDataContext.getContext().getBean(CallOutNamesHisRepository.class);
 		CallOutNamesHis callOutNamesHis = new CallOutNamesHis();
 		callOutNamesHis.setActid(callOutNames.getActid());
@@ -530,10 +530,10 @@ public class CallCenterUtils {
 		callOutNamesHis.setFirstcalltime(callOutNames.getFirstcalltime());
 		callOutNamesHis.setInvalid(callOutNames.isInvalid());
 		callOutNamesHis.setLeavenum(callOutNames.getLeavenum());
-		callOutNamesHis.setMemo(callOutNames.getMemo());
+		
 		callOutNamesHis.setMetaname(callOutNames.getMetaname());
 		callOutNamesHis.setName(callOutNames.getName());
-		callOutNamesHis.setOptime(callOutNames.getOptime());
+		
 		callOutNamesHis.setOrgan(callOutNames.getOrgan());
 		callOutNamesHis.setOrgi(callOutNames.getOrgi());
 		callOutNamesHis.setOwnerdept(callOutNames.getOwnerdept());
@@ -541,9 +541,22 @@ public class CallCenterUtils {
 		callOutNamesHis.setPhonenumber(callOutNames.getPhonenumber());
 		callOutNamesHis.setPreviewtime(callOutNames.getPreviewtime());
 		callOutNamesHis.setPreviewtimes(callOutNames.getPreviewtimes());
-		callOutNamesHis.setReservation(callOutNames.isReservation());
+		if(!StringUtils.isBlank(type)){
+			if("reservation".equals(type)){
+				callOutNamesHis.setReservation(callOutNames.isReservation());
+				callOutNamesHis.setOptime(callOutNames.getOptime());
+				callOutNamesHis.setMemo(callOutNames.getMemo());
+				callOutNamesHis.setStatus(null);
+			}else if("waste".equals(type)){
+				callOutNamesHis.setStatus(callOutNames.getStatus());
+				callOutNamesHis.setReservation(false);
+				callOutNamesHis.setOptime(null);
+				callOutNamesHis.setMemo(null);
+			}
+		}
+		
 		callOutNamesHis.setServicetype(callOutNames.getServicetype());
-		callOutNamesHis.setStatus(callOutNames.getStatus());
+		
 		callOutNamesHis.setTaskid(callOutNames.getTaskid());
 		callOutNamesHis.setTaskname(callOutNames.getTaskname());
 		callOutNamesHis.setUpdatetime(callOutNames.getUpdatetime());
