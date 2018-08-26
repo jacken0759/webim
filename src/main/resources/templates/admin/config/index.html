@@ -83,6 +83,24 @@
 												<div id="logo_img" style="position:absolute;right: 20px;"></div>	
 											</div>
 										</div>
+										<#if systemConfig?? && systemConfig.loginlogo?? && systemConfig.loginlogo != ''>
+										<div class="row" style="margin-top:20px;">
+											<div class="col-lg-4">
+												<p>登录页Logo图片最大宽度</p>
+											</div>
+											<div class="col-lg-1" style="text-align:right;position: relative;">
+												<input type="text" name="loginlogowidth" value="${systemConfig.loginlogowidth!'220'}" autocomplete="off" class="layui-input">
+											</div>
+											<div class="col-lg-1" style="text-align:right;position: relative;">
+											</div>
+											<div class="col-lg-5">
+												<p>登录页Logo图片最大高度</p>
+											</div>
+											<div class="col-lg-1" style="text-align:right;position: relative;">
+												<input type="text" name="loginlogoheight" value="${systemConfig.loginlogoheight!'60'}" autocomplete="off" class="layui-input">
+											</div>
+										</div>
+										</#if>
 									</div>
 								</div>
 								
@@ -91,7 +109,7 @@
 									<div class="box-item">
 										<div class="row">
 											<div class="col-lg-8">
-												<p>登录页显示的Logo图片，建议尺寸280*80。</p>
+												<p>后台首页显示的Logo图片，建议尺寸280*80。</p>
 												<p style="color:#888888;font-size:13px;margin-top:10px;">
 													<div class="ukefu-console-logo <#if systemConfig?? && systemConfig.theme?? && systemConfig.theme == '01'>ukefu-system-theme1</#if><#if systemConfig?? && systemConfig.theme?? && systemConfig.theme == '02'>ukefu-system-theme2</#if><#if systemConfig?? && systemConfig.theme?? && systemConfig.theme == '03'>ukefu-system-theme3</#if>" style="width:140px;height:40px;padding:5px;">
 														<img src="<#if systemConfig?? && systemConfig.consolelogo?? && systemConfig.consolelogo != ''>/res/image.html?id=${systemConfig.consolelogo?url}<#else>/images/logo.png</#if>" style="height:40px;">
@@ -108,6 +126,24 @@
 												<div id="consolelogo_img" style="position:absolute;right: 20px;"></div>	
 											</div>
 										</div>
+										<#if systemConfig?? && systemConfig.consolelogo?? && systemConfig.consolelogo != ''>
+										<div class="row" style="margin-top:20px;">
+											<div class="col-lg-4">
+												<p>后台首页Logo图片最大宽度</p>
+											</div>
+											<div class="col-lg-1" style="text-align:right;position: relative;">
+												<input type="text" name="consolelogowidth" value="${systemConfig.consolelogowidth!'280'}" autocomplete="off" class="layui-input">
+											</div>
+											<div class="col-lg-1" style="text-align:right;position: relative;">
+											</div>
+											<div class="col-lg-4">
+												<p>后台首页Logo图片最大高度</p>
+											</div>
+											<div class="col-lg-2" style="text-align:right;position: relative;">
+												<input type="text" name="consolelogoheight" value="${systemConfig.consolelogoheight!'80'}" autocomplete="off" class="layui-input">
+											</div>
+										</div>
+										</#if>
 									</div>
 								</div>
 								

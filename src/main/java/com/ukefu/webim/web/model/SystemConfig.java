@@ -27,7 +27,11 @@ public class SystemConfig implements java.io.Serializable{
 	private String theme = "01";	//默认绿色
 	
 	private String loginlogo ;		//登录页 LOGO
+	private String loginlogowidth ;//登录页 LOGO最大宽度
+	private String loginlogoheight ;//登录页 LOGO最大高度
 	private String consolelogo ;	//后台页面LOGO
+	private String consolelogowidth ;	//后台页面LOGO最大宽度
+	private String consolelogoheight ;	//后台页面LOGO最大高度
 	private String favlogo ;		//系统Fav图片，icon格式，小图标
 	
 	private boolean savelog ;		//启用日志存储
@@ -422,6 +426,31 @@ public class SystemConfig implements java.io.Serializable{
 	}
 	public void setSavelog(boolean savelog) {
 		this.savelog = savelog;
+	}
+	
+	public String getLoginlogowidth() {
+		return loginlogowidth;
+	}
+	public void setLoginlogowidth(String loginlogowidth) {
+		this.loginlogowidth = loginlogowidth;
+	}
+	public String getLoginlogoheight() {
+		return loginlogoheight;
+	}
+	public void setLoginlogoheight(String loginlogoheight) {
+		this.loginlogoheight = loginlogoheight;
+	}
+	public String getConsolelogowidth() {
+		return consolelogowidth;
+	}
+	public void setConsolelogowidth(String consolelogowidth) {
+		this.consolelogowidth = consolelogowidth;
+	}
+	public String getConsolelogoheight() {
+		return consolelogoheight;
+	}
+	public void setConsolelogoheight(String consolelogoheight) {
+		this.consolelogoheight = consolelogoheight;
 	}
 	@Transient
 	public String getBackgroundColor(){
