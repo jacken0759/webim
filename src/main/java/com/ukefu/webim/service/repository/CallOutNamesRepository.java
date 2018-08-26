@@ -42,7 +42,7 @@ public abstract interface CallOutNamesRepository extends JpaRepository<CallOutNa
 	
 	@Modifying
 	@Transactional
-	@Query(value = "delete from CallOutNames where orgi = ?1 and oweruser = ?2")
+	@Query(value = "delete from CallOutNames where orgi = ?1 and owneruser = ?2")
 	public abstract void deleteByOrgiAndOwneruser(String orgi , String owneruser ) ;
 	
 	@Modifying

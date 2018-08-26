@@ -546,7 +546,9 @@ public class CallCenterUtils {
 				callOutNamesHis.setReservation(callOutNames.isReservation());
 				callOutNamesHis.setOptime(callOutNames.getOptime());
 				callOutNamesHis.setMemo(callOutNames.getMemo());
-				callOutNamesHis.setStatus(null);
+				if(!"waste".equals(callOutNames.getStatus())){
+					callOutNamesHis.setStatus(callOutNames.getStatus());
+				}
 			}else if("waste".equals(type)){
 				callOutNamesHis.setStatus(callOutNames.getStatus());
 				callOutNamesHis.setReservation(false);
