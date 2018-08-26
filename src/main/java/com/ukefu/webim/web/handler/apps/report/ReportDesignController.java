@@ -1261,8 +1261,7 @@ public class ReportDesignController extends Handler {
     			getModel(r.getId(), super.getOrgi(request));
     		}
     		report.setReportModels(reportModels);
-    		List<ReportFilter> reportFilters = reportCubeService.fillReportFilterData(reportFilterRepository.findByReportidAndFiltertypeAndOrgi(reportid, "report", super.getOrgi(request)),request);
-    		report.setReportFilters(reportFilters);
+    		report.setReportFilters(reportFilterRepository.findByReportidAndFiltertypeAndOrgi(reportid, "report", super.getOrgi(request)));
     		PublishedReport publishedReport  = new PublishedReport();
     		UKTools.copyProperties(report, publishedReport, "");
     		publishedReport.setId(null);
