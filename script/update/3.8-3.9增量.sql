@@ -1109,3 +1109,9 @@ ALTER TABLE uk_chat_message ADD readstatus tinyint DEFAULT 0 COMMENT '是否已�
 ALTER TABLE uk_chat_message ADD useful tinyint DEFAULT 0 COMMENT '是否有用';
 
 ALTER TABLE uk_callcenter_event ADD apstatus tinyint DEFAULT 0 COMMENT '是否预约名单拨打';
+
+
+ALTER TABLE uk_systemconfig ADD loginlogowidth varchar(30) COMMENT '登陆页面Logo最大宽度';
+ALTER TABLE uk_systemconfig ADD loginlogoheight varchar(30) COMMENT '登陆页面Logo最大高度';
+ALTER TABLE uk_systemconfig ADD consolelogowidth varchar(30) COMMENT '后台页面Logo最大宽度';
+ALTER TABLE uk_systemconfig ADD consolelogoheight varchar(30) COMMENT '后台页面Logo最大高度';
