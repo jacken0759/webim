@@ -611,10 +611,7 @@ ALTER TABLE uk_callcenter_event ADD userid varchar(32) DEFAULT NULL  COMMENT '�
 
 ALTER TABLE uk_callcenter_event ADD organ varchar(32) DEFAULT NULL  COMMENT '坐席用户所属部门';
 
-<<<<<<< .mine
 INSERT INTO `uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENTID`, `DESCRIPTION`, `MEMO`, `ICONSTR`, `ICONSKIN`, `CATETYPE`, `CREATER`, `CREATETIME`, `UPDATETIME`, `HASCHILD`, `SORTINDEX`, `DICID`, `DEFAULTVALUE`, `DISCODE`, `URL`, `MODULE`, `MLEVEL`, `RULES`, `MENUTYPE`) VALUES ('297e74066464004b01646402379d068f', '活动状态分类', 'pub', 'com.dic.callout.activity', NULL, 'data', '0', '', NULL, NULL, NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-07-04 14:37:04', NULL, '1', '0', NULL, '0', '0', NULL, NULL, NULL, NULL, NULL);
-||||||| .r1045
-=======
 
 
 ALTER TABLE uk_callcenter_pbxhost ADD sipport int default 5060  COMMENT 'SIP服务端口';
@@ -653,7 +650,7 @@ ALTER TABLE uk_consult_invite ADD tipuser tinyint DEFAULT 0 COMMENT '在访客�
 ALTER TABLE uk_consult_invite ADD tipagenticon varchar(255) DEFAULT NULL COMMENT '坐席端气泡提醒的图标';
 ALTER TABLE uk_consult_invite ADD tipagenttitle varchar(100) DEFAULT NULL COMMENT '坐席端气泡提醒的标题';
 ALTER TABLE uk_consult_invite ADD tipusertitle varchar(100) DEFAULT NULL COMMENT '访客端气泡提醒的标题';
-ALTER TABLE uk_consult_invite ADD tipusericon varchar(100) DEFAULT NULL COMMENT '访客端气泡提醒的图标';||||||| .r1083
+ALTER TABLE uk_consult_invite ADD tipusericon varchar(100) DEFAULT NULL COMMENT '访客端气泡提醒的图标';
 INSERT INTO `uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENTID`, `DESCRIPTION`, `MEMO`, `ICONSTR`, `ICONSKIN`, `CATETYPE`, `CREATER`, `CREATETIME`, `UPDATETIME`, `HASCHILD`, `SORTINDEX`, `DICID`, `DEFAULTVALUE`, `DISCODE`, `URL`, `MODULE`, `MLEVEL`, `RULES`, `MENUTYPE`) VALUES ('297e74066464004b01646402379d068f', '活动状态分类', 'pub', 'com.dic.callout.activity', NULL, 'data', '0', '', NULL, NULL, NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-07-04 14:37:04', NULL, '1', '0', NULL, '0', '0', NULL, NULL, NULL, NULL, NULL);
 
 
