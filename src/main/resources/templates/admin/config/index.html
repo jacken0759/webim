@@ -69,7 +69,7 @@
 												<p>登录页显示的Logo图片，建议尺寸220*60。</p>
 												<p style="color:#888888;font-size:13px;margin-top:10px;">
 													<span class="ukefu-logo">
-														<img src="<#if systemConfig?? && systemConfig.loginlogo?? && systemConfig.loginlogo != ''>/res/image.html?id=${systemConfig.loginlogo?url}<#else>/images/logo2.png</#if>" style="height:60px;">
+														<img src="<#if systemConfig?? && systemConfig.loginlogo?? && systemConfig.loginlogo != ''>/res/image.html?id=${systemConfig.loginlogo?url}<#else>/images/logo2.png</#if>" style="max-width:<#if systemConfig.loginlogowidth??>${systemConfig.loginlogowidth}<#else>220</#if>px;max-height:<#if systemConfig.loginlogoheight??>${systemConfig.loginlogoheight}<#else>60</#if>px;">
 													</span>
 												</p>
 											</div>
@@ -112,7 +112,7 @@
 												<p>后台首页显示的Logo图片，建议尺寸280*80。</p>
 												<p style="color:#888888;font-size:13px;margin-top:10px;">
 													<div class="ukefu-console-logo <#if systemConfig?? && systemConfig.theme?? && systemConfig.theme == '01'>ukefu-system-theme1</#if><#if systemConfig?? && systemConfig.theme?? && systemConfig.theme == '02'>ukefu-system-theme2</#if><#if systemConfig?? && systemConfig.theme?? && systemConfig.theme == '03'>ukefu-system-theme3</#if>" style="width:140px;height:40px;padding:5px;">
-														<img src="<#if systemConfig?? && systemConfig.consolelogo?? && systemConfig.consolelogo != ''>/res/image.html?id=${systemConfig.consolelogo?url}<#else>/images/logo.png</#if>" style="height:40px;">
+														<img src="<#if systemConfig?? && systemConfig.consolelogo?? && systemConfig.consolelogo != ''>/res/image.html?id=${systemConfig.consolelogo?url}<#else>/images/logo.png</#if>" style="max-width:<#if systemConfig.consolelogowidth??>${systemConfig.consolelogowidth}<#else>220</#if>px;max-height:<#if systemConfig.consolelogoheight??>${systemConfig.consolelogoheight}<#else>80</#if>px;">
 													</div>
 												</p>
 											</div>

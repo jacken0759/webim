@@ -37,7 +37,7 @@
 	
 		
 		<div class="login-logo">
-			<a> <img src="<#if systemConfig?? && systemConfig.loginlogo?? && systemConfig.loginlogo != ''>/res/image.html?id=${systemConfig.loginlogo?url}<#else>images/logo2.png</#if>" style="height:60px;width:220px;">
+			<a> <img src="<#if systemConfig?? && systemConfig.loginlogo?? && systemConfig.loginlogo != ''>/res/image.html?id=${systemConfig.loginlogo?url}<#else>images/logo2.png</#if>" style="max-width:<#if systemConfig.loginlogowidth??>${systemConfig.loginlogowidth}<#else>220</#if>px;max-height:<#if systemConfig.loginlogoheight??>${systemConfig.loginlogoheight}<#else>60</#if>px;">
 			</a>
 		</div>
 		<div class="login-box-body">

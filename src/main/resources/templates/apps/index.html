@@ -142,7 +142,7 @@
 	<div class="layui-layout layui-layout-admin">
 		<div class="layui-header header header-ukefu">
 			<div class="layui-main">
-				<a class="logo" href="/"><img src="<#if systemConfig?? && systemConfig.consolelogo?? && systemConfig.consolelogo != ''>/res/image.html?id=${systemConfig.consolelogo?url}<#else>images/logo.png</#if>"></a>
+				<a class="logo" href="/"><img src="<#if systemConfig?? && systemConfig.consolelogo?? && systemConfig.consolelogo != ''>/res/image.html?id=${systemConfig.consolelogo?url}<#else>images/logo.png</#if>" style="max-width:<#if systemConfig.consolelogowidth??>${systemConfig.consolelogowidth}<#else>220</#if>px;max-height:<#if systemConfig.consolelogoheight??>${systemConfig.consolelogoheight}<#else>80</#if>px;"></a>
 				<#if models?? && models["callcenter"]?? && models["callcenter"] == true && user.callcenter == true>
 				<#include "/apps/include/softphone.html">
 				</#if>
