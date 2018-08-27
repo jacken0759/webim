@@ -214,9 +214,15 @@
 		</dependency>
 	    
 	    <dependency>
-		    <groupId>org.lionsoul</groupId>
-		    <artifactId>jcseg-core</artifactId>
-		    <version>2.2.0</version>
+            <groupId>org.ansj</groupId>
+            <artifactId>ansj_seg</artifactId>
+            <version>5.1.6</version>
+        </dependency>
+        
+        <dependency>
+		    <groupId>org.ansj</groupId>
+		    <artifactId>tree_split</artifactId>
+		    <version>1.5</version>
 		</dependency>
 	    
 	    <dependency>
