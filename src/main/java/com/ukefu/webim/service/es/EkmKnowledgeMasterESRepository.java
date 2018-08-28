@@ -21,11 +21,11 @@ public abstract interface EkmKnowledgeMasterESRepository
 	
 	public abstract List<EkmKnowledgeMaster> findByOrgiAndDatastatus(String orgi,boolean datastatus);
 	
-	public abstract Page<EkmKnowledgeMaster> findByKnowbaseidAndKnowledgetypeidAndDatastatusAndOrgi(String knowbaseid,String knowledgetypeid,boolean datastatus ,String orgi,Pageable page);
+	public abstract Page<EkmKnowledgeMaster> findByKnowbaseidAndKnowledgetypeidAndDatastatusAndOrgi(String knowbaseid,String knowledgetypeid,boolean datastatus ,String orgi, BoolQueryBuilder ranyQueryBuilder,Pageable page);
 	
 	public abstract List<EkmKnowledgeMaster> findByKnowbaseidAndDatastatusAndOrgi(String knowbaseid,boolean datastatus ,String orgi);
 	
-	public abstract Page<EkmKnowledgeMaster> findByDatastatusAndKnowbaseidAndOrgi(boolean datastatus ,String knowbaseid,String orgi,Pageable pageable);
+	public abstract Page<EkmKnowledgeMaster> findByDatastatusAndKnowbaseidAndOrgi(boolean datastatus ,String knowbaseid,String orgi, BoolQueryBuilder ranyQueryBuilder,Pageable pageable);
 	
 	public abstract List<EkmKnowledgeMaster> findByCreaterAndDatastatusAndOrgi(String creater,boolean datastatus ,String orgi);
 	
@@ -35,7 +35,7 @@ public abstract interface EkmKnowledgeMasterESRepository
 	
 	public abstract Page<EkmKnowledgeMaster> getByDimentypeidAndDatastatusAndOrgi(String dimentypeid, boolean datastatus ,String orgi, Pageable pageable);
 
-	public abstract Page<EkmKnowledgeMaster> findByKnowtypeidAuth(boolean datastatus,List<String>  EkmKnowledgeMasterType,String knowbaseid,String orgi,Pageable pageable);
+	public abstract Page<EkmKnowledgeMaster> findByKnowtypeidAuth(boolean datastatus,List<String>  EkmKnowledgeMasterType,String knowbaseid,String orgi, BoolQueryBuilder ranyQueryBuilder,Pageable pageable);
 	
 	public abstract Page<EkmKnowledgeMaster> findByKnowledge(BoolQueryBuilder boolQueryBuilder,boolean datastatus,List<String>  EkmKnowledgeMasterType,String orgi, User user,Pageable pageable);
 	

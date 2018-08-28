@@ -812,6 +812,21 @@ public class UKDataContext {
 		}
 	}
 	
+	public enum KwSearchTypeEnum{
+		ORGAN,//部门
+		KWTYPE,//知识类型
+		TAG,//标签
+		ONEDAY,//最近1天
+		SEVENDAY,//最近7天,
+		THIRTYDAY,//最近30天
+		TWMONTH,//最近12个月
+		CON;//关键词（搜索框）
+		
+		public String toString(){
+			return super.toString().toLowerCase() ;
+		}
+	}
+	
 
 
 	/**

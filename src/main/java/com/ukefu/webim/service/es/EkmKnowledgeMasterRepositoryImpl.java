@@ -146,13 +146,12 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 
 	@Override
 	public Page<EkmKnowledgeMaster> findByKnowbaseidAndKnowledgetypeidAndDatastatusAndOrgi(String knowbaseid,
-			String knowledgetypeid, boolean datastatus, String orgi, Pageable page) {
+			String knowledgetypeid, boolean datastatus, String orgi, BoolQueryBuilder ranyQueryBuilder, Pageable page) {
 		
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-		BoolQueryBuilder boolQueryBuilder1 = new BoolQueryBuilder();
-		boolQueryBuilder1.must(termQuery("datastatus" , datastatus)) ;
-		boolQueryBuilder.must(boolQueryBuilder1) ;
+		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
 		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
+		boolQueryBuilder.must(ranyQueryBuilder) ;
 		//boolQueryBuilder.must(termQuery("pubstatus" , UKDataContext.PubStatusEnum.PASS.toString())) ;//审核通过
 		if(!StringUtils.isBlank(knowbaseid)){
 			boolQueryBuilder.must(termQuery("knowbaseid" , knowbaseid)) ;
@@ -262,13 +261,12 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 
 
 	@Override
-	public Page<EkmKnowledgeMaster> findByDatastatusAndKnowbaseidAndOrgi(boolean datastatus, String knowbaseid, String orgi,
+	public Page<EkmKnowledgeMaster> findByDatastatusAndKnowbaseidAndOrgi(boolean datastatus, String knowbaseid, String orgi, BoolQueryBuilder ranyQueryBuilder,
 			Pageable pageable) {
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-		BoolQueryBuilder boolQueryBuilder1 = new BoolQueryBuilder();
-		boolQueryBuilder1.must(termQuery("datastatus" , datastatus)) ;
-		boolQueryBuilder.must(boolQueryBuilder1) ;
+		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
 		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
+		boolQueryBuilder.must(ranyQueryBuilder) ;
 		//boolQueryBuilder.must(termQuery("pubstatus" , UKDataContext.PubStatusEnum.PASS.toString())) ;//审核通过
 		
 		if(!StringUtils.isBlank(knowbaseid)){
@@ -282,7 +280,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 
 	@Override
 	public Page<EkmKnowledgeMaster> findByKnowtypeidAuth(boolean datastatus, List<String> EkmKnowledgeMasterType,
-			String knowbaseid, String orgi, Pageable pageable) {
+			String knowbaseid, String orgi, BoolQueryBuilder ranyQueryBuilder, Pageable pageable) {
 		
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 		BoolQueryBuilder boolQueryBuilder1 = new BoolQueryBuilder();
@@ -292,6 +290,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 			boolQueryBuilder1.should(termQuery("knowledgetypeid" ,id)) ;
 		}
 		boolQueryBuilder.must(boolQueryBuilder1) ;
+		boolQueryBuilder.must(ranyQueryBuilder) ;
 		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
 		//boolQueryBuilder.must(termQuery("pubstatus" , UKDataContext.PubStatusEnum.PASS.toString())) ;//审核通过
 		return processQuery(boolQueryBuilder , pageable);
