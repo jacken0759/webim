@@ -1121,3 +1121,13 @@ ALTER TABLE uk_systemconfig ADD loginlogowidth varchar(30) COMMENT '登陆页面
 ALTER TABLE uk_systemconfig ADD loginlogoheight varchar(30) COMMENT '登陆页面Logo最大高度';
 ALTER TABLE uk_systemconfig ADD consolelogowidth varchar(30) COMMENT '后台页面Logo最大宽度';
 ALTER TABLE uk_systemconfig ADD consolelogoheight varchar(30) COMMENT '后台页面Logo最大高度';
+
+CREATE TABLE `uk_ekm_search` (
+  `id` varchar(32) NOT NULL,
+  `conditions` text COMMENT '查询内容',
+  `times` int(11) DEFAULT '0' COMMENT '搜索次数',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `orgi` varchar(50) DEFAULT NULL,
+	`type` VARCHAR(50) DEFAULT NULL COMMENT '类型',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='搜索历史表';
