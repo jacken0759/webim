@@ -287,6 +287,17 @@ public class SearchTools {
 	}
 	/**
 	 * 
+	 * @param orgi
+	 * @param agent
+	 * @param p
+	 * @param ps
+	 * @return
+	 */
+	public static PageImpl<UKDataBean> search(BoolQueryBuilder queryBuilder, int p, int ps , String sort){
+		return search(queryBuilder, null, true, p, ps , sort);
+	}
+	/**
+	 * 
 	 * @param queryBuilder
 	 * @param metadataTable
 	 * @param loadRef
@@ -295,8 +306,21 @@ public class SearchTools {
 	 * @return
 	 */
 	private static PageImpl<UKDataBean> search(BoolQueryBuilder queryBuilder , MetadataTable metadataTable , boolean loadRef , int p, int ps){
+		return search(queryBuilder, metadataTable, loadRef, p, ps, "createtime");
+	}
+	
+	/**
+	 * 
+	 * @param queryBuilder
+	 * @param metadataTable
+	 * @param loadRef
+	 * @param p
+	 * @param ps
+	 * @return
+	 */
+	private static PageImpl<UKDataBean> search(BoolQueryBuilder queryBuilder , MetadataTable metadataTable , boolean loadRef , int p, int ps , String sort){
 		ESDataExchangeImpl esDataExchange = UKDataContext.getContext().getBean(ESDataExchangeImpl.class);
-		return esDataExchange.findPageResult(queryBuilder, UKDataContext.SYSTEM_INDEX, metadataTable, new PageRequest(p, ps , Sort.Direction.ASC, "createtime") , loadRef) ;
+		return esDataExchange.findPageResult(queryBuilder, UKDataContext.SYSTEM_INDEX, metadataTable, new PageRequest(p, ps , Sort.Direction.ASC, sort) , loadRef) ;
 	}
 	
 	/**
