@@ -11,13 +11,13 @@
 		</#if>
 	<#elseif type?? && type == "02"><!-- 隐藏后四位 -->
 		<#if value?? && value?length gt 4>
-			****${value?substring(4)}
+			${value?substring(0,value?length - 4)}****
 		<#else>
 			<#list 0..value?length as size>*</#list>
 		</#if>
 	<#elseif type?? && type == "03"><!-- 隐藏前四位 -->
 		<#if value?? && value?length gt 4>
-			${value?substring(0,value?length - 4)}****
+			****${value?substring(4)}
 		<#else>
 			<#list 0..value?length as size>*</#list>
 		</#if>
