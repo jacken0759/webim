@@ -51,7 +51,10 @@ $(document).ready(function(){
 	
 });
 var deletemodel = function(id){
-	let thisid = id?id:$("#rmLayout").attr("data-val");
+	let thisid = $("#rmLayout").attr("data-val");
+	if(thisid == null && id != null){
+		thisid = id ;
+	}
 	$.ajax({
 		url:'/apps/report/design/modeldelete.html?id='+thisid,
 		cache:false,
@@ -125,13 +128,15 @@ var TempletHelper = {
 			}
 		}	
 	},
-	renderTemplet:function(tplid, ui ,div ,callback , helper){
+	renderTemplet:function(tplid, ui ,div ,callback , index , helper){
 		tpl = TempletHelper.getTemplet(tplid , ui) ;				//获取模板 
 		var colspan = $(div).data("colspan");
 		var model = {id:Math.uuid(6)} ;
 		var parentid = $(div).data("mid");
 		var colindex = $(div).data("index");
-		
+		if(colindex == null){
+			colindex = index ;
+		}
 		
 		UKHelper.loadURLWith(tpl.url+"&colindex="+colindex+"&parentid="+parentid+"&mid="+model.id+"&colspan="+tpl.colspan, null , function(data){ 		
 			TempletHelper.doRender(tpl , data , div , callback , helper , model);
@@ -220,7 +225,7 @@ var SpaceTools = {
 				}
 				$(this).addClass("cur_row");
 				
-				$("#rmLayout").removeClass("layui-btn-disabled");
+				$("#rmLayout").removeClass("ukefu-disabled");
 				$("#rmLayout").removeAttr("disabled");
 				$("#rmLayout").attr("data-val",$(this).attr("data-val"));
 				event.stopPropagation();	
@@ -239,8 +244,9 @@ var SpaceTools = {
 		$(document).on("click" , function(event){
 			if(!$(event.target).hasClass("handle") && $(event.target).attr("id") != "rmLayout"){
 				$(".cur_row").removeClass("cur_row");
-				$("#rmLayout").addClass("layui-btn-disabled");
+				$("#rmLayout").addClass("ukefu-disabled");
 				$("#rmLayout").attr("disabled",true);
+				$("#rmLayout").removeAttr("data-val");
 			}
 		});
 		/*$(document).on("click" , "#rmLayout" , function(){
@@ -418,7 +424,7 @@ var SpaceTools = {
 			}
 			hasData = true ;
 
-		} , helper);		
+		}, index , helper);		
 
 	},
 	save:function(){
@@ -551,7 +557,7 @@ var LayoutHelper = {
 				merge = $(selected) ;
 				i++;
 			}else{ 				
-				merge.removeClass("col-md-"+colspan).addClass("col-md-"+newcolspan).removeClass("am-u-lg-"+colspan).addClass("am-u-lg-"+newcolspan).attr("data-colspan",newcolspan).append($(selected).html());
+				merge.removeClass("layui-col-md"+colspan).addClass("layui-col-md"+newcolspan).attr("data-colspan",newcolspan).append($(selected).html());
 				$(selected).remove();
 			}
 			colspan = newcolspan ;
@@ -579,7 +585,7 @@ var LayoutHelper = {
 						group = ".ukefu-prop-col" ;
 						css = "ukefu-prop-col" ;
 					}
-					$(this).removeClass("col-md-"+colspan).addClass("col-md-"+newcolspan).removeClass("am-u-lg-"+colspan).addClass("am-u-lg-"+newcolspan).attr("data-colspan",newcolspan).after('<div class="col-md-'+newcolwidth+' '+css+'" id="'+id+'" data-colspan="'+newcolwidth+'">') ;
+					$(this).removeClass("layui-col-md"+colspan).addClass("layui-col-md"+newcolspan).attr("data-colspan",newcolspan).after('<div class="layui-col-md'+newcolwidth+' '+css+'" id="'+id+'" data-colspan="'+newcolwidth+'">') ;
 
 					SpaceTools.bind("#"+id , coltype , group); //绑定排序事件
 				}
@@ -626,8 +632,8 @@ var UKHelper = {
 			
 		return time ;
 	},
-	render:function(tplid , ui , div , callback , helper){
-		TempletHelper.renderTemplet(tplid , ui , div , callback , helper);		
+	render:function(tplid , ui , div , callback , index , helper){
+		TempletHelper.renderTemplet(tplid , ui , div , callback , index, helper);		
 	},
 	loadURLWith:function(url , panel , callback , append){
 		$.ajax({

@@ -14,6 +14,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -119,7 +120,7 @@ public class ReportDesignController extends Handler {
 
 		if (!StringUtils.isBlank(id)) {
 			map.addAttribute("report", reportRes.findByIdAndOrgi(id, super.getOrgi(request)));
-			map.addAttribute("reportModels", reportModelRes.findByOrgiAndReportid(super.getOrgi(request), id));
+			map.addAttribute("reportModels", reportModelRes.findByOrgiAndReportid(super.getOrgi(request), id , new Sort(Sort.Direction.ASC,"colindex")));
 			
 			List<ReportFilter> listFilters = reportFilterRepository.findByReportidAndFiltertypeAndOrgi(id, "report", super.getOrgi(request));
 			if(!listFilters.isEmpty()) {
@@ -222,13 +223,25 @@ public class ReportDesignController extends Handler {
 	@RequestMapping("/ltpl")
 	@Menu(type = "report", subtype = "reportdesign")
 	public ModelAndView ltpl(ModelMap map, HttpServletRequest request, @Valid String template, @Valid String id,
-			@Valid String mid, @Valid String colspan) {
+			@Valid String mid, @Valid String colspan, @Valid String colindex) {
 		map.addAttribute("templet", templateRes.findByIdAndOrgi(template, super.getOrgi(request)));
 		ReportModel model = new ReportModel();
 		model.setOrgi(super.getOrgi(request));
 		model.setCreatetime(new Date());
 		model.setReportid(id);
 		model.setParentid(id);
+		List<ReportModel> models = reportModelRes.findByOrgiAndReportid(super.getOrgi(request), id , new Sort(Sort.Direction.ASC,"colindex")) ;
+		if(!StringUtils.isBlank(colindex) && colindex.matches("[\\d]{1,}")){
+			model.setColindex(Integer.parseInt(colindex));
+			for(int i=model.getColindex() ; i < models.size() ; i++) {
+				ReportModel reportModel = models.get(i) ;
+				reportModel.setColindex(reportModel.getColindex()+1);
+				reportModelRes.save(reportModel) ;
+			}
+		}else {
+			model.setColindex(models.size()-1);
+		}
+		
 
 		if (!StringUtils.isBlank(colspan) && colspan.matches("[\\d]{1,}")) {
 			model.setColspan(Integer.parseInt(colspan));
@@ -1255,7 +1268,7 @@ public class ReportDesignController extends Handler {
     	User user = super.getUser(request);
     	if(!StringUtils.isBlank(reportid)) {
     		Report report =  reportRes.findByIdAndOrgi(reportid, super.getOrgi(request));
-    		List<ReportModel> reportModels =  reportModelRes.findByOrgiAndReportid(super.getOrgi(request), reportid);
+    		List<ReportModel> reportModels =  reportModelRes.findByOrgiAndReportid(super.getOrgi(request), reportid , new Sort(Sort.Direction.ASC,"colindex"));
     		
     		for(ReportModel r:reportModels){
     			getModel(r.getId(), super.getOrgi(request));

@@ -12,14 +12,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
-
-import com.ukefu.util.UKTools;
 @Entity
 @Table(name = "uk_cubemetadata")
 @org.hibernate.annotations.Proxy(lazy = false)
 public class CubeMetadata implements java.io.Serializable{
 	private static final long serialVersionUID = 1L;
-	public String id = UKTools.getUUID();
+	public String id;
 	private MetadataTable tb ;
 	private String orgi ;
 	private String name ;

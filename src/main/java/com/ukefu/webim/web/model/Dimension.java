@@ -15,14 +15,12 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
-
-import com.ukefu.util.UKTools;
 @Entity
 @Table(name = "uk_dimension")
 @org.hibernate.annotations.Proxy(lazy = false)
 public class Dimension implements java.io.Serializable{
 	private static final long serialVersionUID = 1L;
-	private String id = UKTools.getUUID();
+	private String id;
 	private String name ;	//维度名称	
 	private String code ;
 	private String type ;	//类型：TimeDimension

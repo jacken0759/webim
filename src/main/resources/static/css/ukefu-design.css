@@ -403,7 +403,11 @@
 		margin-top:20px;
 	}
 	.uk-layui-form {
-    height: calc(100% - 60px);
-    padding-top: 0px;
-    overflow-y: auto;
-}
+	    height: calc(100% - 60px);
+	    padding-top: 0px;
+	    overflow-y: auto;
+	}
+	.ukefu-disabled{
+		cursor: not-allowed;
+		color: #C9C9C9;		
+	}

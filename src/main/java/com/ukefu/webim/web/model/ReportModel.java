@@ -27,7 +27,7 @@ public class ReportModel implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String id = UKTools.getUUID();
+	private String id ;
 	private String posx ;
 	private String posy ;
 	private String poswidth;

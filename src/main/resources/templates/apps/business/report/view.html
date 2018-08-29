@@ -66,7 +66,7 @@
 				</#if>
 				<div class="content design">
 					<#if reportModels??>
-					<#list reportModels?reverse as model>
+					<#list reportModels as model>
 					<#if model.parentid == report.id>
 					<#assign templet = model.templet()>
 					<#include "/apps/business/report/design/layout.html"/>

@@ -27,7 +27,7 @@ public class ReportFilter implements java.io.Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -6580407773098864725L;
-	private String id = UKTools.getUUID();
+	private String id ;
 	private String dataid ;
 	private String dataname ;
 	private String title ;

@@ -56,7 +56,7 @@ public class TableProperties implements java.io.Serializable,Cloneable{
 		this.orgi = orgi ;
 	}
 	
-	private String id = UKTools.getUUID();
+	private String id;
 	private String tablename ;
 	private String dbtableid ;
 	private String name ;

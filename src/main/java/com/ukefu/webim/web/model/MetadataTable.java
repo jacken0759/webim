@@ -18,8 +18,6 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
 
-import com.ukefu.util.UKTools;
-
 
 @Entity
 @Table(name = "uk_tabletask")
@@ -29,7 +27,7 @@ public class MetadataTable implements java.io.Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -3728229777159531557L;
-	private String id = UKTools.getUUID();
+	private String id ;
 	private String name;
 	private String dbid ;
 	private String tabledirid;

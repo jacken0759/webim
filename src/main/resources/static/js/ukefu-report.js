@@ -109,35 +109,42 @@ $(document).ready(function(){
 			href = $(this).data('href') ;
 		}
 		var callback = $(this).data('callback') ;
-		top.layer.confirm(title, {icon: 3, title:'提示'}, function(index){
-			top.layer.close(index);
-			if(confirm){
-				top.layer.prompt({title: confirm, formType:1}, function(text, cindex){
-					top.layer.close(cindex);
-					if(href){
-						if(href.indexOf("?") > 0){
-							href = href + "&confirm="+text ;
-						}else{
-							href = href + "?confirm="+text ;
+		var disabled = $(this).attr("disabled");
+		if(disabled == null){
+			top.layer.confirm(title, {icon: 3, title:'提示'}, function(index){
+				top.layer.close(index);
+				if(confirm){
+					top.layer.prompt({title: confirm, formType:1}, function(text, cindex){
+						top.layer.close(cindex);
+						if(href){
+							if(href.indexOf("?") > 0){
+								href = href + "&confirm="+text ;
+							}else{
+								href = href + "?confirm="+text ;
+							}
+							if(callback!=null){
+								eval(callback+"('"+href+"' , '"+target+"')");
+							}else{
+								location.href = href ;
+							}
 						}
+						
+					});
+				}else{
+					if(href){
 						if(callback!=null){
-							eval(callback+"('"+href+"' , '"+target+"')");
+							if(callback.indexOf("(") >= 0 && callback.indexOf(")") >= 0){
+								eval(callback);
+							}else{
+								eval(callback+"('"+href+"' , '"+target+"')");
+							}
 						}else{
 							location.href = href ;
 						}
 					}
-					
-				});
-			}else{
-				if(href){
-					if(callback!=null){
-						eval(callback+"('"+href+"' , '"+target+"')");
-					}else{
-						location.href = href ;
-					}
 				}
-			}
-		});
+			});
+		}
 		return false;
 	});
 	

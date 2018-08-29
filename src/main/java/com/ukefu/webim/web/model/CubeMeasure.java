@@ -13,14 +13,12 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
-
-import com.ukefu.util.UKTools;
 @Entity
 @Table(name = "uk_cubemeasure")
 @org.hibernate.annotations.Proxy(lazy = false)
 public class CubeMeasure implements java.io.Serializable{
 	private static final long serialVersionUID = 1L;
-	private String id = UKTools.getUUID();
+	private String id ;
 	private String name ;	//维度名称	
 	private String code ;	//代码
 	private String modeltype ;	//虚拟维度

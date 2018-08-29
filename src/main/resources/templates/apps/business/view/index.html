@@ -31,11 +31,34 @@
 		<script src="/js/maps.js"></script>
 		<script src="/js/main.js"></script>
 		<script src="/js/ukefu-report.js"></script>
-		<script src="/js/ukefu-report.design.js"></script>
 		<script src="/js/ukefu-report.chart.js"></script>
 		<script src="/js/UKeFu_Util.js"></script>
 		<script src="/js/g2.min.js"></script>
 		<script src="/js/data-set.min.js"></script>
+		<script language="javascript">
+			var UKHelper = {
+				getLayDateType:function(formatStr){
+					let type = "date";
+					if(!formatStr){
+						return type;
+					}
+					if(/^.*(s|m|H).$/.test(formatStr)){
+						return "datetime";
+					}
+					if(/^.*d.$/.test(formatStr)){
+						return "date";
+					}
+					if(/^.*M.$/.test(formatStr)){
+						return "month";
+					}
+					if(/^.*y.$/.test(formatStr)){
+						return "year";
+					}
+					return type;
+				}
+				
+			}
+		</script>
 	</head>
 
 	<body class="layui-layout-content">
@@ -80,7 +103,7 @@
 			</#if>
 			<div class="content design" style="overflow:auto;margin-top:0px;height: calc(100% - 145px);">
 				<#if reportModels??>
-				<#list reportModels?reverse as model>
+				<#list reportModels as model>
 				<#if model.parentid == report.id>
 				<#assign templet = model.templet()>
 				<#include "/apps/business/report/design/layout.html"/>
