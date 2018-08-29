@@ -86,6 +86,10 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	
 	private int duration ;	//音频时长
 	
+	private String title ;	//标题
+	private String qusid ;	//问题ID
+	private String code ;	//代码
+	
 	private String scale ;		//地图级别 
 	private String suggestmsg ;	//推荐消息
 	
@@ -234,7 +238,6 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	public void setAgentuser(String agentuser) {
 		this.agentuser = agentuser;
 	}
-	@Transient
 	public String getHeadimgurl() {
 		return headimgurl;
 	}
@@ -408,6 +411,24 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	}
 	public void setUseful(boolean useful) {
 		this.useful = useful;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getQusid() {
+		return qusid;
+	}
+	public void setQusid(String qusid) {
+		this.qusid = qusid;
+	}
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
 	}
 	@Transient
 	public List<OtherMessageItem> getSuggest(){

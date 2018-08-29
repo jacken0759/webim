@@ -30,6 +30,7 @@ import com.ukefu.webim.service.repository.ConsultInviteRepository;
 import com.ukefu.webim.util.OnlineUserUtils;
 import com.ukefu.webim.util.RestResult;
 import com.ukefu.webim.util.RestResultType;
+import com.ukefu.webim.util.server.message.ChatMessage;
 import com.ukefu.webim.web.handler.Handler;
 import com.ukefu.webim.web.model.AgentServiceSatis;
 import com.ukefu.webim.web.model.AiConfig;
@@ -166,6 +167,44 @@ public class ApiIMController extends Handler{
     			satis.setSatistime(new Date());
     			agentServiceSatisRes.save(satis) ;
     		}
+    	}
+        return new ResponseEntity<>(new RestResult(RestResultType.OK), HttpStatus.OK);
+    }
+	
+	/**
+	 * 设置消息有用
+	 * @param request
+	 * @param userid	访客ID
+	 * @p 分页信息
+	 * @return
+	 */
+	@RequestMapping(value = "/message/useful", method = RequestMethod.POST)
+	@Menu(type = "apps" , subtype = "webim" , access = true)
+	@ApiOperation("获取满意度调查")
+    public ResponseEntity<RestResult> useful(HttpServletRequest request , @Valid String orgi , @Valid String id) {
+		if(!StringUtils.isBlank(id)){
+    		ChatMessage chatMessage = chatMessageRes.findById(id) ;
+    		chatMessage.setUseful(true);
+    		chatMessageRes.save(chatMessage) ;
+    	}
+        return new ResponseEntity<>(new RestResult(RestResultType.OK), HttpStatus.OK);
+    }
+	
+	/**
+	 * 设置消息有用
+	 * @param request
+	 * @param userid	访客ID
+	 * @p 分页信息
+	 * @return
+	 */
+	@RequestMapping(value = "/message/unuseful", method = RequestMethod.POST)
+	@Menu(type = "apps" , subtype = "webim" , access = true)
+	@ApiOperation("获取满意度调查")
+    public ResponseEntity<RestResult> unuseful(HttpServletRequest request , @Valid String orgi , @Valid String id) {
+		if(!StringUtils.isBlank(id)){
+    		ChatMessage chatMessage = chatMessageRes.findById(id) ;
+    		chatMessage.setUseful(false);
+    		chatMessageRes.save(chatMessage) ;
     	}
         return new ResponseEntity<>(new RestResult(RestResultType.OK), HttpStatus.OK);
     }
