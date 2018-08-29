@@ -59,6 +59,8 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	private boolean readstatus ;
 	private boolean useful ;	//回答是否有用
 	
+	private Date usetime ;		//最后一次评价时间
+	
 	private String orgi ;
 	private String channel ;
 	private String model ;			//消息所属模块， WebIM/EntIM
@@ -429,6 +431,12 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	}
 	public void setCode(String code) {
 		this.code = code;
+	}
+	public Date getUsetime() {
+		return usetime;
+	}
+	public void setUsetime(Date usetime) {
+		this.usetime = usetime;
 	}
 	@Transient
 	public List<OtherMessageItem> getSuggest(){

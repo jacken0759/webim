@@ -178,13 +178,14 @@ public class ApiIMController extends Handler{
 	 * @p 分页信息
 	 * @return
 	 */
-	@RequestMapping(value = "/message/useful", method = RequestMethod.POST)
+	@RequestMapping(value = "/message/useful", method = RequestMethod.GET)
 	@Menu(type = "apps" , subtype = "webim" , access = true)
 	@ApiOperation("获取满意度调查")
     public ResponseEntity<RestResult> useful(HttpServletRequest request , @Valid String orgi , @Valid String id) {
 		if(!StringUtils.isBlank(id)){
     		ChatMessage chatMessage = chatMessageRes.findById(id) ;
     		chatMessage.setUseful(true);
+    		chatMessage.setUsetime(new Date());
     		chatMessageRes.save(chatMessage) ;
     	}
         return new ResponseEntity<>(new RestResult(RestResultType.OK), HttpStatus.OK);
@@ -197,13 +198,14 @@ public class ApiIMController extends Handler{
 	 * @p 分页信息
 	 * @return
 	 */
-	@RequestMapping(value = "/message/unuseful", method = RequestMethod.POST)
+	@RequestMapping(value = "/message/unuseful", method = RequestMethod.GET)
 	@Menu(type = "apps" , subtype = "webim" , access = true)
 	@ApiOperation("获取满意度调查")
     public ResponseEntity<RestResult> unuseful(HttpServletRequest request , @Valid String orgi , @Valid String id) {
 		if(!StringUtils.isBlank(id)){
     		ChatMessage chatMessage = chatMessageRes.findById(id) ;
     		chatMessage.setUseful(false);
+    		chatMessage.setUsetime(new Date());
     		chatMessageRes.save(chatMessage) ;
     	}
         return new ResponseEntity<>(new RestResult(RestResultType.OK), HttpStatus.OK);
