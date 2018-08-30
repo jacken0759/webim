@@ -91,6 +91,7 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	private String title ;	//标题
 	private String qusid ;	//问题ID
 	private String code ;	//代码
+	private String score ;	//分值
 	
 	private String scale ;		//地图级别 
 	private String suggestmsg ;	//推荐消息
@@ -437,6 +438,12 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	}
 	public void setUsetime(Date usetime) {
 		this.usetime = usetime;
+	}
+	public String getScore() {
+		return score;
+	}
+	public void setScore(String score) {
+		this.score = score;
 	}
 	@Transient
 	public List<OtherMessageItem> getSuggest(){

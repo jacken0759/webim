@@ -13,6 +13,7 @@ public class OtherMessage implements java.io.Serializable{
 	private String message ;
 	private String id ;
 	private String code ;
+	private String score ;
 	private boolean detail ;
 	
 	private List<OtherMessageItem> items ;
@@ -58,5 +59,11 @@ public class OtherMessage implements java.io.Serializable{
 	}
 	public void setCode(String code) {
 		this.code = code;
+	}
+	public String getScore() {
+		return score;
+	}
+	public void setScore(String score) {
+		this.score = score;
 	}
 }
