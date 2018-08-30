@@ -58,7 +58,7 @@
 		  
 		  laypage.render({
 				elem: 'page'
-				,count: <#if logList??>${logList.totalPages}<#else>0</#if> //总页数
+				,pages: <#if logList??>${logList.totalPages}<#else>0</#if> //总页数
 				,curr:<#if logList??>${logList.number+1}<#else>0</#if>
 				,groups: 5 //连续显示分页数
 				,jump:function(data , first){

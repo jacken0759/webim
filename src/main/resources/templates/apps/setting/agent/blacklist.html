@@ -77,7 +77,7 @@
 		  
 		  laypage.render({
 				elem: 'page'
-				,count: <#if blackList??>${blackList.totalPages}<#else>0</#if> //总页数
+				,pages: <#if blackList??>${blackList.totalPages}<#else>0</#if> //总页数
 				,curr:<#if blackList??>${blackList.number+1}<#else>0</#if>
 				,groups: 5 //连续显示分页数
 				,jump:function(data , first){

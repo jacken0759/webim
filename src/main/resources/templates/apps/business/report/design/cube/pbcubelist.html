@@ -63,7 +63,7 @@
 		  ,layer = layui.layer;
 		  laypage.render({
 			  elem:'page'
-				,count: <#if cubeList??>${cubeList.totalElements}<#else>0</#if> 
+				,pages: <#if cubeList??>${cubeList.totalElements}<#else>0</#if> 
 				,curr:<#if cubeList??>${cubeList.number+1}<#else>0</#if>
 				,groups: 5 //连续显示分页数
 				,limit:20
