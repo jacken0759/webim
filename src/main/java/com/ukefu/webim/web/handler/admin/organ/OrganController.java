@@ -331,6 +331,9 @@ public class OrganController extends Handler{
     		for(String menu : menusarray){
     			OrganRole organRole = new OrganRole();
     			SysDic sysDic = UKeFuDic.getInstance().getDicItem(menu) ;
+				if(sysDic==null) {
+    				sysDic = sysDicRepository.findById(menu) ;
+    			}
     			if(sysDic!=null && !"0".equals(sysDic.getParentid())) {
     				organRole.setDicid(menu);
         			organRole.setDicvalue(sysDic.getCode());
