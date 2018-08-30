@@ -27,10 +27,12 @@ public class EkmKwSearch implements java.io.Serializable{
 	
 	private String id  = UKTools.getUUID();
 	private String conditions ;//搜索内容
-	private int times ;//搜索次数
+	private String creater ;//搜索人
 	private String orgi ;
-	private Date updatetime;
-	private String type ;
+	private String organ ;
+	private Date createtime;//搜索时间
+	private String type ;//搜索类型
+	private boolean badword;//是否含有敏感词
 
 	@Id
 	@Column(length = 32)
@@ -48,11 +50,11 @@ public class EkmKwSearch implements java.io.Serializable{
 	public void setConditions(String conditions) {
 		this.conditions = conditions;
 	}
-	public int getTimes() {
-		return times;
+	public String getCreater() {
+		return creater;
 	}
-	public void setTimes(int times) {
-		this.times = times;
+	public void setCreater(String creater) {
+		this.creater = creater;
 	}
 	public String getOrgi() {
 		return orgi;
@@ -60,11 +62,17 @@ public class EkmKwSearch implements java.io.Serializable{
 	public void setOrgi(String orgi) {
 		this.orgi = orgi;
 	}
-	public Date getUpdatetime() {
-		return updatetime;
+	public String getOrgan() {
+		return organ;
 	}
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setOrgan(String organ) {
+		this.organ = organ;
+	}
+	public Date getCreatetime() {
+		return createtime;
+	}
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
 	}
 	public String getType() {
 		return type;
@@ -72,4 +80,12 @@ public class EkmKwSearch implements java.io.Serializable{
 	public void setType(String type) {
 		this.type = type;
 	}
+	public boolean isBadword() {
+		return badword;
+	}
+	public void setBadword(boolean badword) {
+		this.badword = badword;
+	}
+	
+	
 }
