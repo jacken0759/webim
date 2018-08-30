@@ -95,30 +95,23 @@
 
 <script>
 	layui.use('element', function(){
-		var element = layui.element();
+		var element = layui.element;
 	});
 	layui.use('form', function() {
-		var form = layui.form();
+		var form = layui.form;
 		form.render(); //更新全部
 	});
 	layui.use('laydate', function() {
 		var laydate = layui.laydate;
 
-		var date = {
-			min : '1950-01-01 00:00:00',
-			istoday : false
-		};
-
-		document.getElementById('begintime').onclick = function() {
-			date.elem = this;
-			laydate(date);
-		}
-		
-		document.getElementById('endtime').onclick = function() {
-			date.elem = this;
-			laydate(date);
-		}
-
+		laydate.render({ 
+		  elem: '#begintime' ,
+		  format: 'yyyy-MM-dd HH:mm:ss'
+		});
+		laydate.render({ 
+		  elem: '#endtime' ,
+		  format: 'yyyy-MM-dd HH:mm:ss'
+		});
 	});
 	KindEditor.create('#content', {
 		themeType : 'simple',

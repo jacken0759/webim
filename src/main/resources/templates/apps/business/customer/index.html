@@ -34,7 +34,7 @@
 						</form>
 						<#if user?? && (user.roleAuthMap["A03_A01_A02_B06"]?? || user.usertype == "0") >
 						<div class="layui-btn-group ukefu-btn-group">
-						  	<a href="/apps/customer/add.html<#if ekind??>?ekind=${ekind}</#if>" title="新建客户" data-toggle="ajax" data-width="950" data-height="600" class="layui-btn layui-btn-small" >
+						  	<a href="/apps/customer/add.html<#if ekind??>?ekind=${ekind}</#if>" title="新建客户" data-toggle="ajax" data-width="950" data-height="600" class="layui-btn layui-btn-sm" >
 							  	<i class="layui-icon">&#xe608;</i>
 							  	新建客户
 						  	</a>
@@ -42,7 +42,7 @@
 						</#if>
 						<#if user?? && (user.roleAuthMap["A03_A01_A02_B09"]?? || user.usertype == "0") >
 						<div class="layui-btn-group ukefu-btn-group">
-							<button class="layui-btn layui-btn-small" href="/apps/customer/imp.html<#if ekind??>?ekind=${ekind}</#if>" title="导入客户" data-toggle="ajax" data-width="950" data-height="600">
+							<button class="layui-btn layui-btn-sm" href="/apps/customer/imp.html<#if ekind??>?ekind=${ekind}</#if>" title="导入客户" data-toggle="ajax" data-width="950" data-height="600">
 								<i class="kfont">&#xe641;</i> 导入 
 							</button>
 						</div>
@@ -50,7 +50,7 @@
 						
 						<#if user?? && (user.roleAuthMap["A03_A01_A02_B010"]?? || user.usertype == "0") >
 						<div class="layui-btn-group ukefu-btn-group">
-							<button class="layui-btn layui-btn-small dropdown-menu">
+							<button class="layui-btn layui-btn-sm dropdown-menu">
 								<i class="kfont">&#xe672;</i> 导出 
 								<i class="layui-icon">&#xe625;</i>
 							</button>
@@ -188,15 +188,15 @@
 		
 	});	
 	layui.use('form', function(){
-		var form = layui.form();
+		var form = layui.form;
 	});
 	layui.use(['laypage', 'layer'], function(){
 		  var laypage = layui.laypage
 		  ,layer = layui.layer;
 		  
-		  laypage({
-				cont: 'page'
-				,pages: <#if entCustomerList??>${entCustomerList.totalPages}<#else>0</#if> //总页数
+		  laypage.render({
+				elem: 'page'
+				,count: <#if entCustomerList??>${entCustomerList.totalPages}<#else>0</#if> //总页数
 				,curr:<#if entCustomerList??>${entCustomerList.number+1}<#else>0</#if>
 				,groups: 5 //连续显示分页数
 				,jump:function(data , first){

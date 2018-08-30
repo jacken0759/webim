@@ -3,7 +3,7 @@
 		<h1 class="site-h1" style="background-color:#FFFFFF;">
 			用户列表<#if userList??>（${userList.totalElements!''}）</#if>
 			<span style="float:right;">
-				<button class="layui-btn layui-btn-small green" href="/admin/user/add.html" data-toggle="ajax" data-width="750" data-height="450" data-title="创建新用户">
+				<button class="layui-btn layui-btn-sm green" href="/admin/user/add.html" data-toggle="ajax" data-width="750" data-height="450" data-title="创建新用户">
 					创建新用户
 				</button>
 			</span>
@@ -61,19 +61,19 @@
 					  <td>${user.mobile!''}</td>
 					  <td>
 					  	<#if user.agent>
-					  		<i class="layui-icon" style="color:#19a55d;">&#xe618;</i>
+					  		<i class="layui-icon" style="color:#19a55d;">&#xe605;</i>
 					  	</#if>
 					  </td>
 					  <#if models?? && models["callcenter"]?? && models["callcenter"] == true>
 					  <td>
 					  	<#if user.callcenter>
-					  		<i class="layui-icon" style="color:#19a55d;">&#xe618;</i>
+					  		<i class="layui-icon" style="color:#19a55d;">&#xe605;</i>
 					  	</#if>
 					  </td>
 					  </#if>
 					  <td>
 					  	<#if user.usertype?? && user.usertype =="0">
-					  		<i class="layui-icon" style="color:#19a55d;">&#xe618;</i>
+					  		<i class="layui-icon" style="color:#19a55d;">&#xe605;</i>
 					  	</#if>
 					  </td>
 					  <td style="white-space:nowrap;" nowrap="nowrap">
@@ -117,9 +117,9 @@
 		  var laypage = layui.laypage
 		  ,layer = layui.layer;
 		  
-		  laypage({
-				cont: 'page'
-				,pages: <#if userList??>${userList.totalPages}<#else>0</#if> //总页数
+		  laypage.render({
+				elem: 'page'
+				,count: <#if userList??>${userList.totalPages}<#else>0</#if> //总页数
 				,curr:<#if userList??>${userList.number+1}<#else>0</#if>
 				,groups: 5 //连续显示分页数
 				,jump:function(data , first){

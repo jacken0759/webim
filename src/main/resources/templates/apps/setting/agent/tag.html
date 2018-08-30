@@ -10,7 +10,7 @@
 					<h1 class="site-h1" style="background-color:#FFFFFF;">
 						${tagType.name!''}标签<#if userList??>（${userList.totalElements!''}）</#if>
 						<span style="float:right;">
-							<button class="layui-btn layui-btn-small green" href="/setting/tag/add.html?tagtype=${tagType.code!''}" data-toggle="ajax" data-width="650" data-height="270" data-title="添加标签">
+							<button class="layui-btn layui-btn-sm green" href="/setting/tag/add.html?tagtype=${tagType.code!''}" data-toggle="ajax" data-width="650" data-height="270" data-title="添加标签">
 								添加标签
 							</button>
 						</span>
@@ -85,9 +85,9 @@
 		  var laypage = layui.laypage
 		  ,layer = layui.layer;
 		  
-		  laypage({
-				cont: 'page'
-				,pages: <#if tagList??>${tagList.totalPages}<#else>0</#if> //总页数
+		  laypage.render({
+				elem: 'page'
+				,count: <#if tagList??>${tagList.totalPages}<#else>0</#if> //总页数
 				,curr:<#if tagList??>${tagList.number+1}<#else>0</#if>
 				,groups: 5 //连续显示分页数
 				,jump:function(data , first){

@@ -54,7 +54,7 @@
 							  <td>${user.mobile!''}</td>
 							  <td>
 							  	<#if user.online>
-							  		<i class="layui-icon" style="color:#19a55d;">&#xe618;</i>
+							  		<i class="layui-icon" style="color:#19a55d;">&#xe605;</i>
 							  	</#if>
 							  </td>
 							  <td>${user.createtime!''}</td>
@@ -78,9 +78,9 @@
 		  var laypage = layui.laypage
 		  ,layer = layui.layer;
 		  
-		  laypage({
-				cont: 'page'
-				,pages: <#if userList??>${userList.totalPages}<#else>0</#if> //总页数
+		  laypage.render({
+				elem: 'page'
+				,count: <#if userList??>${userList.totalPages}<#else>0</#if> //总页数
 				,curr:<#if userList??>${userList.number+1}<#else>0</#if>
 				,groups: 5 //连续显示分页数
 				,jump:function(data , first){

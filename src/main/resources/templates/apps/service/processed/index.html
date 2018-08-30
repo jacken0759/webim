@@ -18,18 +18,18 @@
 										<div class="layui-input-inline" style="width: auto;margin-right:0px;">
 											<label class="layui-form-label" style="width: auto;">服务时间：</label>
 											<div class="layui-input-inline" style="width: auto;margin-right:0px;">
-										      <input name="begin" class="layui-input ukefu-input" placeholder="开始时间" value="${begin!''}" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+										      <input name="begin" class="layui-input ukefu-input" placeholder="开始时间" value="${begin!''}"  data-datetype="laydate">
 										    </div>
 											<label class="layui-form-label" style="width: auto;">~</label>
 											<div class="layui-input-inline" style="width: auto;margin-right:0px;">
-										      <input name="end" class="layui-input ukefu-input" placeholder="结束时间" value="${end!''}" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+										      <input name="end" class="layui-input ukefu-input" placeholder="结束时间" value="${end!''}"  data-datetype="laydate">
 										    </div>
 										</div>
 									</div>
 									<div class="layui-inline" style="margin-right:0px;">
 										<div class="layui-input-inline" style="width: auto;margin-right:0px;">
 											<div class="layui-input-inline" style="width: auto;margin-right:0px;">
-										      <button class="layui-btn layui-btn-small layui-btn-primary" style="color:#ffffff;">
+										      <button class="layui-btn layui-btn-sm layui-btn-primary" style="color:#ffffff;">
 												  <i class="layui-icon"></i>
 												</button>
 										    </div>
@@ -39,7 +39,7 @@
 								</div>
 							</form>
 							<div class="layui-btn-group ukefu-btn-group" style="margin-top:2px;">
-								<button class="layui-btn layui-btn-small dropdown-menu">
+								<button class="layui-btn layui-btn-sm dropdown-menu">
 									<i class="kfont">&#xe672;</i> 导出 
 									<i class="layui-icon">&#xe625;</i>
 								</button>
@@ -121,7 +121,7 @@
 							</td>
 							<td>
 								<#if summary.reservation>
-								<i class="layui-icon" style="color:#19a55d;">&#xe618;</i>
+								<i class="layui-icon" style="color:#19a55d;">&#xe605;</i>
 								</#if>
 							</td>
 							<td class="minSize ">
@@ -178,9 +178,9 @@
 		  ,layer = layui.layer;
 		  var laydate = layui.laydate;
 		  
-		  laypage({
-				cont: 'page'
-				,pages: <#if summaryList??>${summaryList.totalPages}<#else>0</#if> //总页数
+		  laypage.render({
+				elem: 'page'
+				,count: <#if summaryList??>${summaryList.totalPages}<#else>0</#if> //总页数
 				,curr:<#if summaryList??>${summaryList.number+1}<#else>0</#if>
 				,groups: 5 //连续显示分页数
 				,jump:function(data , first){

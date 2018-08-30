@@ -26,7 +26,7 @@ public class LogTask {
     	Log log = null ;
     	while((log = UKDataContext.tempLogQueue.poll()) != null){
     		SystemConfig systemConfig = UKTools.getSystemConfig();
-			if(systemConfig.isSavelog()) { 
+			if(systemConfig!=null && systemConfig.isSavelog()) { 
 				logRes.save(log) ;
 			}
 		}

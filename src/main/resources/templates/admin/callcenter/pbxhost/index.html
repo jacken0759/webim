@@ -3,7 +3,7 @@
 		<h1 class="site-h1" style="background-color:#FFFFFF;">
 			服务器列表<#if pbxHostList??>（${pbxHostList?size}）</#if>
 			<span style="float:right;">
-				<button class="layui-btn layui-btn-small green" href="/admin/callcenter/pbxhost/add.html" data-toggle="ajax" data-width="750" data-title="添加新服务器">
+				<button class="layui-btn layui-btn-sm green" href="/admin/callcenter/pbxhost/add.html" data-toggle="ajax" data-width="750" data-title="添加新服务器">
 					添加新服务器
 				</button>
 			</span>
@@ -43,7 +43,7 @@
 							  <td>${pbxHost.port!''}</td>
 							  <td>
 							  	<#if pbxHost.connected>
-							  		<i class="layui-icon" style="color:#19a55d;">&#xe618;</i>
+							  		<i class="layui-icon" style="color:#19a55d;">&#xe605;</i>
 							  	</#if>
 							  </td>
 							  
@@ -78,9 +78,9 @@
 		  var laypage = layui.laypage
 		  ,layer = layui.layer;
 		  
-		  laypage({
-				cont: 'page'
-				,pages: <#if userList??>${userList.totalPages}<#else>0</#if> //总页数
+		  laypage.render({
+				elem: 'page'
+				,count: <#if userList??>${userList.totalPages}<#else>0</#if> //总页数
 				,curr:<#if userList??>${userList.number+1}<#else>0</#if>
 				,groups: 5 //连续显示分页数
 				,jump:function(data , first){

@@ -10,7 +10,7 @@
 				<h1 class="site-h1" style="border-top:1px solid #e6e6e6;">
 					历史会话
 					<div class="layui-btn-group ukefu-btn-group" style="float: right;">
-						<button class="layui-btn layui-btn-small dropdown-menu">
+						<button class="layui-btn layui-btn-sm dropdown-menu">
 							<i class="kfont">&#xe672;</i> 导出 
 							<i class="layui-icon">&#xe625;</i>
 						</button>
@@ -82,28 +82,28 @@
 								<tr class="tdHasContorllor design-dropable-td">
 									<td width="1%" nowrap="nowrap">咨询时间：</td>
 									<td width="20%">
-										<input name="begin" class="layui-input" value="${begin!''}" readOnly="readOnly" placeholder="开始日期" value="" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+										<input name="begin" class="layui-input" value="${begin!''}" readOnly="readOnly" placeholder="开始日期" value=""  data-datetype="laydate">
 									</td>
 									
 									<td width="1%" nowrap="nowrap" style="text-align: center;">～</td>
 									<td width="20%">
-										<input name="end" class="layui-input " value="${end!''}" readOnly="readOnly" placeholder="结束日期" value="" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+										<input name="end" class="layui-input " value="${end!''}" readOnly="readOnly" placeholder="结束日期" value="" data-datetype="laydate">
 									</td>
 									<td width="1%" nowrap="nowrap">服务时间日期：</td>
 									<td width="20%">
-										<input name="sbegin" class="layui-input" value="${sbegin!''}" readOnly="readOnly" placeholder="开始日期" value="" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+										<input name="sbegin" class="layui-input" value="${sbegin!''}" readOnly="readOnly" placeholder="开始日期" value=""  data-datetype="laydate">
 									</td>
 									
 									<td width="1%" nowrap="nowrap" style="text-align: center;">～</td>
 									<td width="20%">
-										<input name="send" class="layui-input" value="${send!''}" readOnly="readOnly" placeholder="结束日期" value="" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+										<input name="send" class="layui-input" value="${send!''}" readOnly="readOnly" placeholder="结束日期" value="" data-datetype="laydate">
 									</td>
 								</tr>
 								
 								<tr class="tdHasContorllor design-dropable-td">
 									
 									<td width="1%" nowrap="nowrap">
-										<button class="layui-btn layui-btn-small" type="submit">
+										<button class="layui-btn layui-btn-sm" type="submit">
 											<i class="layui-icon"></i> 
 											查询
 										</button>
@@ -221,7 +221,7 @@
 		
 	});
 	layui.use('form', function(){
-	  var form = layui.form();
+	  var form = layui.form;
 	  form.render(); //更新全部
 	});
 	layui.use('laydate', function() {
@@ -231,9 +231,9 @@
 		  var laypage = layui.laypage
 		  ,layer = layui.layer;
 		  
-		  laypage({
-				cont: 'page'
-				,pages: <#if agentServiceList??>${agentServiceList.totalPages}<#else>0</#if> //总页数
+		  laypage.render({
+				elem: 'page'
+				,count: <#if agentServiceList??>${agentServiceList.totalPages}<#else>0</#if> //总页数
 				,curr:<#if agentServiceList??>${agentServiceList.number+1}<#else>0</#if>
 				,groups: 5 //连续显示分页数
 				,jump:function(data , first){

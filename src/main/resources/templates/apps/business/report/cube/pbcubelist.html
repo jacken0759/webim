@@ -69,9 +69,9 @@
 	layui.use(['laypage', 'layer'], function(){
 		  var laypage = layui.laypage
 		  ,layer = layui.layer;
-		  laypage({
-				cont: 'page'
-				,pages: <#if cubeList??>${cubeList.totalPages}<#else>0</#if> //总页数
+		  laypage.render({
+				elem: 'page'
+				,count: <#if cubeList??>${cubeList.totalPages}<#else>0</#if> //总页数
 				,curr:<#if cubeList??>${cubeList.number+1}<#else>0</#if>
 				,groups: 5 //连续显示分页数
 				,jump:function(data , first){

@@ -3,11 +3,11 @@
 		<h1 class="site-h1" style="background-color:#FFFFFF;">
 			${sysDic.name} 字典项<#if sysDicList??>（${sysDicList.totalElements!''}）</#if>
 			<span style="float:right;">
-				<button class="layui-btn layui-btn-small green" href="/admin/sysdic/dicitem/add.html?id=${sysDic.id!''}" data-toggle="ajax" data-width="550" data-height="450" data-title="创建新字典项">
+				<button class="layui-btn layui-btn-sm green" href="/admin/sysdic/dicitem/add.html?id=${sysDic.id!''}" data-toggle="ajax" data-width="550" data-height="450" data-title="创建新字典项">
 					创建新字典项
 				</button>
 				
-				<button class="layui-btn layui-btn-small green" href="/admin/sysdic/dicitem/batadd.html?id=${sysDic.id!''}" data-toggle="ajax" data-width="750" data-title="创建新字典项">
+				<button class="layui-btn layui-btn-sm green" href="/admin/sysdic/dicitem/batadd.html?id=${sysDic.id!''}" data-toggle="ajax" data-width="750" data-title="创建新字典项">
 					批量创建字典项
 				</button>
 			</span>
@@ -93,7 +93,7 @@
 						  		</small>
 						  	  </#if>
 						  </td>
-						  <td><#if dic.discode><i class="layui-icon" style="color:#19a55d;">&#xe618;</i></#if></td>
+						  <td><#if dic.discode><i class="layui-icon" style="color:#19a55d;">&#xe605;</i></#if></td>
 						  <td><#if dic.createtime??>${dic.createtime?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
 						  <td style="white-space:nowrap;" nowrap="nowrap">
 								<a href="/admin/sysdic/dicitem/edit.html?id=${dic.id!''}&p=${sysDicList.number+1}" data-width="550" data-height="450" data-toggle="ajax" title="编辑${dic.name!''}">
@@ -125,9 +125,9 @@
 		  <#if msg??>
 		  top.layer.msg('${msg}');
 		  </#if>
-		  laypage({
-				cont: 'page'
-				,pages: <#if sysDicList??>${sysDicList.totalPages}<#else>0</#if> //总页数
+		  laypage.render({
+				elem: 'page'
+				,count: <#if sysDicList??>${sysDicList.totalPages}<#else>0</#if> //总页数
 				,curr:<#if sysDicList??>${sysDicList.number+1}<#else>0</#if>
 				,groups: 5 //连续显示分页数
 				,jump:function(data , first){

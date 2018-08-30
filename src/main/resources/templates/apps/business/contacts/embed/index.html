@@ -25,7 +25,7 @@
 						</div>
 					</form>
 					<div class="layui-btn-group">
-					  <a href="/apps/contacts/embed/add.html" title="新建联系人"  data-toggle="load" data-target="#mainajaxwin" class="layui-btn layui-btn-small" ><i class="layui-icon">&#xe608;</i>新建联系人</a>
+					  <a href="/apps/contacts/embed/add.html" title="新建联系人"  data-toggle="load" data-target="#mainajaxwin" class="layui-btn layui-btn-sm" ><i class="layui-icon">&#xe608;</i>新建联系人</a>
 					</div>
 				</div>
 			</h1>
@@ -102,7 +102,7 @@
 </div>
 <script>
 	layui.use('form', function(){
-		var form = layui.form();
+		var form = layui.form;
 	  	form.on('submit(contactsForm)', function(data){
 	  		var targetIFrame = eval(iframe);
 	  		if($(":checked").val()){
@@ -115,9 +115,9 @@
 	layui.use(['laypage'], function(){
 		  var laypage = layui.laypage ;
 		  
-		  laypage({
-				cont: 'page'
-				,pages: <#if contactsList??>${contactsList.totalPages}<#else>0</#if> //总页数
+		  laypage.render({
+				elem: 'page'
+				,count: <#if contactsList??>${contactsList.totalPages}<#else>0</#if> //总页数
 				,curr:<#if contactsList??>${contactsList.number+1}<#else>0</#if>
 				,groups: 5 //连续显示分页数
 				,jump:function(data , first){
