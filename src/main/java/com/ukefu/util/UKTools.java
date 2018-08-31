@@ -316,7 +316,7 @@ public class UKTools {
 	 */
 	public static Date getLast30Day(){
 		Calendar todayStart = Calendar.getInstance();  
-		todayStart.set(Calendar.DAY_OF_MONTH, -30);
+		todayStart.set(Calendar.DAY_OF_MONTH, todayStart.get(Calendar.DAY_OF_MONTH) - 30);
 		todayStart.set(Calendar.HOUR_OF_DAY, 0);  
         todayStart.set(Calendar.MINUTE, 0);  
         todayStart.set(Calendar.SECOND, 0);  
@@ -330,7 +330,7 @@ public class UKTools {
 	 */
 	public static Date getLastDay(int days){
 		Calendar todayStart = Calendar.getInstance();  
-		todayStart.set(Calendar.DAY_OF_MONTH, -days);
+		todayStart.set(Calendar.DAY_OF_MONTH, todayStart.get(Calendar.DAY_OF_MONTH) - days);
 		todayStart.set(Calendar.HOUR_OF_DAY, 0);  
         todayStart.set(Calendar.MINUTE, 0);  
         todayStart.set(Calendar.SECOND, 0);  
