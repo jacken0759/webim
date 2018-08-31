@@ -263,7 +263,7 @@ public class MessageUtils {
     	outMessage.setAgentUser(null);
     	outMessage.setSnsAccount(null);
     	
-    	{
+    	if(!StringUtils.isBlank(userid)){
     		data.setUserid(userid);
     		data.setUsername(data.getUsername());
     		data.setTouser(userid);

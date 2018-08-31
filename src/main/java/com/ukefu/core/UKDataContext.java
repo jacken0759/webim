@@ -604,7 +604,7 @@ public class UKDataContext {
 		EVENT,
 		IMAGE, 
 		VIDIO,
-		VOICE,LOCATION, FILE , COOPERATION , ACTION;
+		VOICE,LOCATION, FILE , COOPERATION , ACTION , NEWS;
 		
 		public String toString(){
 			return super.toString().toLowerCase() ;
