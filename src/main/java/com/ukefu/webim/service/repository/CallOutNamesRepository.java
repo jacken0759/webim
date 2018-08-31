@@ -38,7 +38,7 @@ public abstract interface CallOutNamesRepository extends JpaRepository<CallOutNa
 	
 	public abstract Page<CallOutNames> findByOwneruserAndOrgi(String owneruser , String orgi , Pageable page) ;
 	
-	public abstract CallOutNames findByMetanameAndDataidAndOrgi(String metaname, String dataid , String orgi ) ;
+	public abstract List<CallOutNames> findByMetanameAndDataidAndOrgi(String metaname, String dataid , String orgi ) ;
 	
 	@Modifying
 	@Transactional
