@@ -93,6 +93,7 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	private String code ;	//代码
 	private String score ;	//分值
 	private String url ;	//图文跳转URL
+	private String bustype ;	//扩展业务类型
 	
 	private String scale ;		//地图级别 
 	private String suggestmsg ;	//推荐消息
@@ -451,6 +452,12 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	public String getBustype() {
+		return bustype;
+	}
+	public void setBustype(String bustype) {
+		this.bustype = bustype;
 	}
 	@Transient
 	public List<OtherMessageItem> getSuggest(){
