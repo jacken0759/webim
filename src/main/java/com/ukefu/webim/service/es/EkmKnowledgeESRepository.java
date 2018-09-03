@@ -41,5 +41,6 @@ public abstract interface EkmKnowledgeESRepository
 	
 	//知识地图查询
 	public abstract Page<EkmKnowledge> findBySearchKnowledge(boolean datastatus,String  q , String tag, String knowledgetype,String orgi, User user, Date begin, Date end,Pageable pageable);
+	
 }
 

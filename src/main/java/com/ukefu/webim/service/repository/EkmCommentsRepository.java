@@ -26,5 +26,7 @@ public abstract interface EkmCommentsRepository  extends JpaRepository<EkmCommen
 	public abstract Page<EkmComments> findByDatastatusAndCreaterAndOrgi(boolean datastatus,String creater , String orgi ,Pageable pageable);
 	
 	public abstract List<EkmComments> findByCreaterAndDatastatusAndAndOrgi(String creater ,boolean datastatus, String orgi );
+	
+	public abstract List<EkmComments> findByOrganAndDatastatusAndAndOrgi(String organ ,boolean datastatus, String orgi );
 }
 

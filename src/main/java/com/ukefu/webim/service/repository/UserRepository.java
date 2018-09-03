@@ -52,6 +52,8 @@ public abstract interface UserRepository extends JpaRepository<User, String>
   
   public abstract long countByOrgiAndAgent(String orgi , boolean agent) ;
   
+  public abstract int countByOrgiAndOrgan(String orgi , String organ) ;
+  
   public abstract List<User> findAll(Specification<User> spec) ;
   
 

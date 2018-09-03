@@ -8,6 +8,5 @@ import com.ukefu.webim.web.model.EkmKnowledgeMaster;
 public abstract interface EkmKnowledgeMasterRepository  extends  ElasticsearchRepository<EkmKnowledgeMaster, String> , EkmKnowledgeMasterESRepository 
 {
 	
-	
 }
 

@@ -364,4 +364,24 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 		return null;
 	}
 
+	@Override
+	public List<EkmKnowledgeMaster> findByOrganAndDatastatusAndOrgi(
+			String organ, boolean datastatus, String orgi) {
+
+		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		BoolQueryBuilder bq = QueryBuilders.boolQuery() ; 
+		bq.must(QueryBuilders.termQuery("organ", organ)) ;
+		bq.must(QueryBuilders.termQuery("datastatus", datastatus)) ;
+		bq.must(QueryBuilders.termQuery("orgi", orgi)) ;
+		boolQueryBuilder.must(bq); 
+		
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
+		Page<EkmKnowledgeMaster> knowledgeList = null ;
+		if(elasticsearchTemplate.indexExists(EkmKnowledgeMaster.class)){
+			knowledgeList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeMaster.class ) ;
+	    }
+		
+		return knowledgeList.getContent();
+	}
+
 }
