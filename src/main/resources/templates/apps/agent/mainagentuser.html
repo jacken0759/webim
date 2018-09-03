@@ -336,9 +336,7 @@
 			    </div>
 			    <#if models?? && models["workorders"]?? && models["workorders"] == true>
 			    <div class="layui-tab-item" id="workorders">
-			    	<#if workOrdersList?? && workOrdersList?size gt 0>
 			    	<#include "/apps/agent/workorders.html">
-			    	</#if>
 			    </div>
 			    </#if>
 			    <#if sessionConfig?? && sessionConfig.otherquickplay?? && sessionConfig.otherquickplay == true>

@@ -317,14 +317,17 @@ public class ContactsController extends Handler{
     
     @RequestMapping("/embed/index")
     @Menu(type = "customer" , subtype = "embed")
-    public ModelAndView embed(ModelMap map , HttpServletRequest request , @Valid String q , @Valid String ckind) {
+    public ModelAndView embed(ModelMap map , HttpServletRequest request , @Valid String q , @Valid String ckind, @Valid String ani) {
     	BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
     	if(!StringUtils.isBlank(q)){
         	map.put("q", q) ;
         }
-    	if(!StringUtils.isBlank(ckind)){
-    		boolQueryBuilder.must(termQuery("ckind" , ckind)) ;
-        	map.put("ckind", ckind) ;
+    	if(!StringUtils.isBlank(ani)){
+    		BoolQueryBuilder phoneBooleanQuery = QueryBuilders.boolQuery();
+    		phoneBooleanQuery.should(termQuery("phone" , ani)) ;
+    		phoneBooleanQuery.should(termQuery("mobilephone" , ani)) ;
+    		boolQueryBuilder.must(phoneBooleanQuery) ;
+        	map.put("ani", ani) ;
         }
     	map.addAttribute("contactsList", contactsRes.findByCreaterAndSharesAndOrgi(super.getUser(request).getId(), super.getUser(request).getId(), super.getOrgi(request),null , null , false, boolQueryBuilder ,q , new PageRequest(super.getP(request) , super.getPs(request)))) ;
     	
@@ -333,13 +336,16 @@ public class ContactsController extends Handler{
     
     @RequestMapping("/embed/add")
     @Menu(type = "contacts" , subtype = "embedadd")
-    public ModelAndView embedadd(ModelMap map , HttpServletRequest request) {
+    public ModelAndView embedadd(ModelMap map , HttpServletRequest request, @Valid String ani) {
+    	if(!StringUtils.isBlank(ani)){
+        	map.put("ani", ani) ;
+        }
         return request(super.createRequestPageTempletResponse("/apps/business/contacts/embed/add"));
     }
     
     @RequestMapping(  "/embed/save")
     @Menu(type = "contacts" , subtype = "embedsave")
-    public ModelAndView embedsave(HttpServletRequest request  , @Valid Contacts contacts) {
+    public ModelAndView embedsave(HttpServletRequest request  , @Valid Contacts contacts, @Valid String ani) {
 		contacts.setCreater(super.getUser(request).getId());
 		contacts.setOrgi(super.getOrgi(request));
 		contacts.setOrgan(super.getUser(request).getOrgan());
@@ -348,7 +354,7 @@ public class ContactsController extends Handler{
 			contacts.setCusbirthday(null);
 		}
 		contactsRes.save(contacts) ;
-        return request(super.createRequestPageTempletResponse("redirect:/apps/contacts/embed/index.html"));
+        return request(super.createRequestPageTempletResponse("redirect:/apps/contacts/embed/index.html"+(!StringUtils.isBlank(ani) ? "?ani="+ani : null)));
     }
     
     @RequestMapping("/embed/edit")
