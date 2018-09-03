@@ -328,8 +328,8 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 				boolQueryBuilder1.should(termQuery("knowbaseid" , id));
 			}
 		}*/
-		/*if(user.isSuperuser() == true){
-			boolQueryBuild.must(boolQueryBuilder1) ;
+		if(user.isSuperuser() == true){
+			boolQueryBuilder.must(boolQueryBuilder1) ;
 		}else{
 			 
 			if(EkmKnowledgeMasterType.size() > 0){
@@ -339,21 +339,16 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 			}else{
 				boolQueryBuilder1.must(termQuery("knowledgetypeid" ,UKDataContext.UKEFU_SYSTEM_NO_DAT)) ;
 			}
-		}*/
-		if(EkmKnowledgeMasterType.size() > 0){
-			for(String id : EkmKnowledgeMasterType){
-				boolQueryBuilder1.should(termQuery("knowledgetypeid" ,id)) ;
-			}
-		}else{
-			boolQueryBuilder1.must(termQuery("knowledgetypeid" ,UKDataContext.UKEFU_SYSTEM_NO_DAT)) ;
+			boolQueryBuilder.must(boolQueryBuilder1) ;
 		}
 		
-		//boolQueryBuild.must(boolQueryBuilder1) ;
-		boolQueryBuilder.must(boolQueryBuilder1) ;
-		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
-		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
-		boolQueryBuilder.must(termQuery("pubstatus" , UKDataContext.PubStatusEnum.PASS.toString())) ;//审核通过
 		
+		//boolQueryBuild.must(boolQueryBuilder1) ;
+		//boolQueryBuilder.must(boolQueryBuilder1) ;
+//		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
+//		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
+//		boolQueryBuilder.must(termQuery("pubstatus" , UKDataContext.PubStatusEnum.PASS.toString())) ;//审核通过
+//		
 		return processQuery(boolQueryBuilder , pageable);
 	}
 
