@@ -39,7 +39,7 @@
 <#if models?? && models["workorders"]?? && models["workorders"] == true>
 <script language="javascript">
 	$(document).ready(function(){
-		loadURL("/agent/workorders/list.html?contactsid=${contacts.id!''}", "#workorders");
+		loadURL("/agent/workorders/list.html?contactsid=${contacts.id!''}&dataid=${dataid!''}", "#workorders");
 	});		
 </script>
 </#if>

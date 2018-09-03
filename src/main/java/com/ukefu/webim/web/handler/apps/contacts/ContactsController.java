@@ -38,11 +38,13 @@ import com.ukefu.util.task.ExcelImportProecess;
 import com.ukefu.util.task.export.ExcelExporterProcess;
 import com.ukefu.util.task.process.ContactsProcess;
 import com.ukefu.webim.service.es.ContactsRepository;
+import com.ukefu.webim.service.repository.AgentUserContactsRepository;
 import com.ukefu.webim.service.repository.MetadataRepository;
 import com.ukefu.webim.service.repository.PropertiesEventRepository;
 import com.ukefu.webim.service.repository.ReporterRepository;
 import com.ukefu.webim.util.PropertiesEventUtils;
 import com.ukefu.webim.web.handler.Handler;
+import com.ukefu.webim.web.model.AgentUserContacts;
 import com.ukefu.webim.web.model.Contacts;
 import com.ukefu.webim.web.model.MetadataTable;
 import com.ukefu.webim.web.model.PropertiesEvent;
@@ -62,6 +64,9 @@ public class ContactsController extends Handler{
 	
 	@Autowired
 	private MetadataRepository metadataRes ;
+	
+	@Autowired
+	private AgentUserContactsRepository agentUserContactsRes; 
 	
 	@Value("${web.upload-path}")
     private String path;
@@ -140,6 +145,9 @@ public class ContactsController extends Handler{
     		contacts = contactsRes.findOne(contacts.getId()) ;
     		contacts.setDatastatus(true);							//客户和联系人都是 逻辑删除
     		contactsRes.save(contacts) ;
+    		List<AgentUserContacts> agentUserContactsList = agentUserContactsRes.findByContactsidAndOrgi(contacts.getId(), super.getOrgi(request)) ;
+    		agentUserContactsRes.delete(agentUserContactsList);
+    		
     	}
     	return request(super.createRequestPageTempletResponse("redirect:/apps/contacts/index.html?p="+p+"&ckind="+contacts.getCkind()));
     }

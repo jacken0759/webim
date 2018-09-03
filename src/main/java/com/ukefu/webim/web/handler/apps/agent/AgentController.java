@@ -225,11 +225,13 @@ public class AgentController extends Handler {
 				agentService = this.agentServiceRepository.findOne(agentUser.getAgentserviceid()) ;
 				view.addObject("curAgentService", agentService) ;
 				
+				
 				if(agentService!=null){
 					/**
 					 * 获取关联数据
 					 */
 					processRelaData(request, agentService, map);
+					map.addAttribute("dataid", agentService.getId()) ;
 				}
 			}
 			
@@ -314,6 +316,9 @@ public class AgentController extends Handler {
 				map.addAttribute("contactsid", agentUserContacts.getContactsid()) ;
 			}
 		}
+		if(agentService!=null) {
+			map.addAttribute("agentService", agentService) ;
+		}
 	}
 	
 	@RequestMapping("/agentuser")
@@ -348,6 +353,7 @@ public class AgentController extends Handler {
 					 * 获取关联数据
 					 */
 					processRelaData(request, agentService, map);
+					map.addAttribute("dataid", agentService.getId()) ;
 				}
 			}
 			if(UKDataContext.ChannelTypeEnum.WEIXIN.toString().equals(agentUser.getChannel())){
@@ -440,13 +446,16 @@ public class AgentController extends Handler {
 	
 	@RequestMapping("/workorders/list")
 	@Menu(type = "apps", subtype = "workorderslist")
-	public ModelAndView workorderslist(HttpServletRequest request , String contactsid , ModelMap map) {
+	public ModelAndView workorderslist(HttpServletRequest request , @Valid String contactsid , @Valid String dataid, ModelMap map) {
 		if(UKDataContext.model.get("workorders")!=null && !StringUtils.isBlank(contactsid)){
 			DataExchangeInterface dataExchange = (DataExchangeInterface) UKDataContext.getContext().getBean("workorders") ;
 			if(dataExchange!=null){
 				map.addAttribute("workOrdersList", dataExchange.getListDataByIdAndOrgi(contactsid , super.getUser(request).getId(), super.getOrgi(request))) ;
 			}
 			map.addAttribute("contactsid", contactsid) ;
+		}
+		if(!StringUtils.isBlank(dataid)) {
+			map.addAttribute("dataid", dataid) ;
 		}
 		return request(super.createRequestPageTempletResponse("/apps/agent/workorders")) ;
 	}
