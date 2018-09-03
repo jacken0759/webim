@@ -23,6 +23,7 @@ import com.ukefu.webim.service.repository.AgentUserRepository;
 import com.ukefu.webim.service.repository.AgentUserTaskRepository;
 import com.ukefu.webim.service.repository.ChatMessageRepository;
 import com.ukefu.webim.service.repository.WorkSessionRepository;
+import com.ukefu.webim.util.OnlineUserUtils;
 import com.ukefu.webim.util.router.OutMessageRouter;
 import com.ukefu.webim.util.server.message.AgentServiceMessage;
 import com.ukefu.webim.util.server.message.AgentStatusMessage;
@@ -31,6 +32,7 @@ import com.ukefu.webim.web.model.AgentStatus;
 import com.ukefu.webim.web.model.AgentUser;
 import com.ukefu.webim.web.model.AgentUserTask;
 import com.ukefu.webim.web.model.MessageOutContent;
+import com.ukefu.webim.web.model.SessionConfig;
 import com.ukefu.webim.web.model.WorkSession;
   
 public class AgentEventHandler 
@@ -83,23 +85,26 @@ public class AgentEventHandler
 		String orgi = client.getHandshakeData().getSingleUrlParam("orgi") ;
 		String admin = client.getHandshakeData().getSingleUrlParam("admin") ;
 		if(!StringUtils.isBlank(user)){
-			ServiceQuene.deleteAgentStatus(user, orgi, !StringUtils.isBlank(admin) && admin.equals("true"));
-			NettyClients.getInstance().removeAgentEventClient(user , UKTools.getContextID(client.getSessionId().toString()));
-			
-			WorkSessionRepository workSessionRepository = UKDataContext.getContext().getBean(WorkSessionRepository.class) ;
-			List<WorkSession> workSessionList = workSessionRepository.findByOrgiAndClientid(orgi, UKTools.getContextID(client.getSessionId().toString())) ;
-			if(workSessionList.size() > 0) {
-				WorkSession workSession = workSessionList.get(0) ;
-				workSession.setEndtime(new Date());
-				if(workSession.getBegintime()!=null) {
-					workSession.setDuration((int) (System.currentTimeMillis() - workSession.getBegintime().getTime()));
-				}else if(workSession.getCreatetime()!=null) {
-					workSession.setDuration((int) (System.currentTimeMillis() - workSession.getCreatetime().getTime()));
+			SessionConfig sessionConfig = ServiceQuene.initSessionConfig(orgi) ;
+			if(sessionConfig!=null && sessionConfig.isAgentautoleave()) {
+				ServiceQuene.deleteAgentStatus(user, orgi, !StringUtils.isBlank(admin) && admin.equals("true"));
+				NettyClients.getInstance().removeAgentEventClient(user , UKTools.getContextID(client.getSessionId().toString()));
+				
+				WorkSessionRepository workSessionRepository = UKDataContext.getContext().getBean(WorkSessionRepository.class) ;
+				List<WorkSession> workSessionList = workSessionRepository.findByOrgiAndClientid(orgi, UKTools.getContextID(client.getSessionId().toString())) ;
+				if(workSessionList.size() > 0) {
+					WorkSession workSession = workSessionList.get(0) ;
+					workSession.setEndtime(new Date());
+					if(workSession.getBegintime()!=null) {
+						workSession.setDuration((int) (System.currentTimeMillis() - workSession.getBegintime().getTime()));
+					}else if(workSession.getCreatetime()!=null) {
+						workSession.setDuration((int) (System.currentTimeMillis() - workSession.getCreatetime().getTime()));
+					}
+					if(workSession.isFirsttime()) {
+						workSession.setFirsttimes(workSession.getDuration());
+					}
+					workSessionRepository.save(workSession) ;
 				}
-				if(workSession.isFirsttime()) {
-					workSession.setFirsttimes(workSession.getDuration());
-				}
-				workSessionRepository.save(workSession) ;
 			}
 		}
     }  
