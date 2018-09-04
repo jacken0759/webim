@@ -648,7 +648,7 @@ public class IMController extends Handler{
     	if(!StringUtils.isBlank(appid)){
     		SNSAccount snsAccount = snsAccountRepository.findBySnsid(appid);
 			String orgi = snsAccount.getOrgi();
-    		CousultInvite invite = inviteRepository.findBySnsaccountidAndOrgi(appid, orgi) ; ;
+			CousultInvite invite = OnlineUserUtils.cousult(appid, orgi, inviteRepository) ;
 	    	List<LeaveMsg> msgList = leaveMsgRes.findByOrgiAndUserid(invite.getOrgi(), msg.getUserid()) ;
 	    	if(msg!=null && msgList.size() == 0){
 	    		msg.setOrgi(invite.getOrgi());
