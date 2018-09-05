@@ -121,6 +121,15 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>{
 	private boolean callstatus ;	//拨打状态  ， 成功或失败
 	
 	
+	private String qualitystatus ;//质检状态  ， 已分配/未分配
+	private String qualitydisorgan ;	//分配的质检部门
+	private String qualitydisuser;		//分配的质检人
+	
+	private String qualityorgan ;		//实际的质检部门
+	private String qualityuser;			//实际的质检人
+	private int qualityscore ;			//质检评分
+	private Date qualitytime ;			//质检时间
+	private Date qualitytype ;			//质检类型
 	
 	
 	
@@ -695,5 +704,53 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>{
 	}
 	public void setApstatus(boolean apstatus) {
 		this.apstatus = apstatus;
+	}
+	public String getQualitystatus() {
+		return qualitystatus;
+	}
+	public void setQualitystatus(String qualitystatus) {
+		this.qualitystatus = qualitystatus;
+	}
+	public String getQualitydisorgan() {
+		return qualitydisorgan;
+	}
+	public void setQualitydisorgan(String qualitydisorgan) {
+		this.qualitydisorgan = qualitydisorgan;
+	}
+	public String getQualitydisuser() {
+		return qualitydisuser;
+	}
+	public void setQualitydisuser(String qualitydisuser) {
+		this.qualitydisuser = qualitydisuser;
+	}
+	public String getQualityorgan() {
+		return qualityorgan;
+	}
+	public void setQualityorgan(String qualityorgan) {
+		this.qualityorgan = qualityorgan;
+	}
+	public String getQualityuser() {
+		return qualityuser;
+	}
+	public void setQualityuser(String qualityuser) {
+		this.qualityuser = qualityuser;
+	}
+	public int getQualityscore() {
+		return qualityscore;
+	}
+	public void setQualityscore(int qualityscore) {
+		this.qualityscore = qualityscore;
+	}
+	public Date getQualitytime() {
+		return qualitytime;
+	}
+	public void setQualitytime(Date qualitytime) {
+		this.qualitytime = qualitytime;
+	}
+	public Date getQualitytype() {
+		return qualitytype;
+	}
+	public void setQualitytype(Date qualitytype) {
+		this.qualitytype = qualitytype;
 	}
 }
