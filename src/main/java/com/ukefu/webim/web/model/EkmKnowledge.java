@@ -59,6 +59,8 @@ public class EkmKnowledge implements java.io.Serializable{
 	private String keyphrase;//关键短语
 	
 	private Date updatetime;
+	
+	private String own;
 
 	@Id
 	@Column(length = 32)
@@ -226,6 +228,12 @@ public class EkmKnowledge implements java.io.Serializable{
 	}
 	public void setUpdatetime(Date updatetime) {
 		this.updatetime = updatetime;
+	}
+	public String getOwn() {
+		return own;
+	}
+	public void setOwn(String own) {
+		this.own = own;
 	}
 	
 	

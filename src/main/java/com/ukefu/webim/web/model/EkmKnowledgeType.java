@@ -39,6 +39,7 @@ public class EkmKnowledgeType implements java.io.Serializable{
 	private String orgi ;
 	private boolean datastatus;
 	
+	
 
 	
 	@Id

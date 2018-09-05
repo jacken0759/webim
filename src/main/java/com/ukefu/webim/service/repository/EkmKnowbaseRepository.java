@@ -12,7 +12,7 @@ import com.ukefu.webim.web.model.EkmKnowbase;
 public abstract interface EkmKnowbaseRepository  extends JpaRepository<EkmKnowbase, String>
 {
 	
-	public abstract EkmKnowbase findByNameAndOrgi(String name , String orgi );
+	public abstract EkmKnowbase findByNameAndOrgiAndOwn(String name , String orgi ,String own);
 	
 	public abstract EkmKnowbase findByIdAndOrgi(String id , String orgi);
 	
@@ -20,7 +20,7 @@ public abstract interface EkmKnowbaseRepository  extends JpaRepository<EkmKnowba
 	
 	//public abstract Page<EkmExperts> findByOrgiAndBustypeOr(String orgi ,String bustype,String bus ,Pageable paramPageable);
 	
-	public abstract List<EkmKnowbase> findByOrgi(String orgi);
+	public abstract List<EkmKnowbase> findByOrgiAndOwn(String orgi ,String own);
 	
 }
 

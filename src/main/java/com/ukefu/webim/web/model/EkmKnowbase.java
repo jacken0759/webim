@@ -34,6 +34,8 @@ public class EkmKnowbase implements java.io.Serializable{
 	private String orgi ;
 	private boolean datastatus;
 	
+	private String own ;
+	
 
 	
 	@Id
@@ -105,6 +107,12 @@ public class EkmKnowbase implements java.io.Serializable{
 	}
 	public void setDatastatus(boolean datastatus) {
 		this.datastatus = datastatus;
+	}
+	public String getOwn() {
+		return own;
+	}
+	public void setOwn(String own) {
+		this.own = own;
 	}
 	
 	

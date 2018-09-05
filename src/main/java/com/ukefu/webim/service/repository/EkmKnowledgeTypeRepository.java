@@ -13,7 +13,7 @@ import com.ukefu.webim.web.model.EkmKnowledgeType;
 public abstract interface EkmKnowledgeTypeRepository  extends JpaRepository<EkmKnowledgeType, String>
 {
 	
-	public abstract EkmKnowledgeType findByNameAndOrgi(String name , String orgi );
+	public abstract EkmKnowledgeType findByNameAndOrgi(String name , String orgi);
 	
 	public abstract EkmKnowledgeType findByIdAndOrgi(String id , String orgi);
 	
@@ -21,7 +21,7 @@ public abstract interface EkmKnowledgeTypeRepository  extends JpaRepository<EkmK
 	
 	//public abstract Page<EkmExperts> findByOrgiAndBustypeOr(String orgi ,String bustype,String bus ,Pageable paramPageable);
 	
-	public abstract List<EkmKnowledgeType> findByOrgi(String orgi);
+	public abstract List<EkmKnowledgeType> findByOrgi(String orgi );
 	
 	public abstract List<EkmKnowledgeType> findByKnowbaseidAndOrgi(String knowbaseid,String orgi);
 	
