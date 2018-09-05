@@ -816,7 +816,7 @@ public class OnlineUserUtils {
 		SessionConfig sessionConfig = ServiceQuene.initSessionConfig(data.getOrgi()) ;
 		AgentReport report = ServiceQuene.getAgentReport(data.getOrgi()) ;
 		
-		if(sessionConfig.isHourcheck() && !UKTools.isInWorkingHours(sessionConfig.getWorkinghours())){
+		if(sessionConfig.isHourcheck() && !UKTools.isInWorkingHours(sessionConfig)){
 			data.setMessage(sessionConfig.getNotinwhmsg());
 		}else{
 			if(report.getAgents() == 0){

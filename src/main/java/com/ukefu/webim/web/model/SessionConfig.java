@@ -1,14 +1,21 @@
 package com.ukefu.webim.web.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
+
+import com.ukefu.webim.util.OnlineUserUtils;
+import com.ukefu.webim.util.server.message.SessionConfigItem;
 
 @Entity
 @Table(name = "uk_sessionconfig")
@@ -406,5 +413,17 @@ public class SessionConfig implements java.io.Serializable{
 	}
 	public void setServicekind(boolean servicekind) {
 		this.servicekind = servicekind;
+	}
+	@Transient
+	public List<SessionConfigItem> getConfig(){
+		List<SessionConfigItem> sessionConfigItemList = null ;
+		if(!StringUtils.isBlank(this.getWorkinghours())) {
+			try {
+				sessionConfigItemList = OnlineUserUtils.objectMapper.readValue(this.getWorkinghours(), OnlineUserUtils.getCollectionType(ArrayList.class, SessionConfigItem.class))  ;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return sessionConfigItemList ;
 	}
 }

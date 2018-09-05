@@ -81,11 +81,14 @@ import com.ukefu.webim.service.repository.SystemConfigRepository;
 import com.ukefu.webim.service.repository.SystemMessageRepository;
 import com.ukefu.webim.service.repository.TablePropertiesRepository;
 import com.ukefu.webim.service.repository.TemplateRepository;
+import com.ukefu.webim.service.repository.WorkserviceTimeRepository;
+import com.ukefu.webim.util.server.message.SessionConfigItem;
 import com.ukefu.webim.web.model.AdType;
 import com.ukefu.webim.web.model.AttachmentFile;
 import com.ukefu.webim.web.model.JobDetail;
 import com.ukefu.webim.web.model.JobTask;
 import com.ukefu.webim.web.model.Secret;
+import com.ukefu.webim.web.model.SessionConfig;
 import com.ukefu.webim.web.model.SysDic;
 import com.ukefu.webim.web.model.SystemConfig;
 import com.ukefu.webim.web.model.SystemMessage;
@@ -95,6 +98,7 @@ import com.ukefu.webim.web.model.UKeFuDic;
 import com.ukefu.webim.web.model.User;
 import com.ukefu.webim.web.model.WorkOrders;
 import com.ukefu.webim.web.model.WorkSession;
+import com.ukefu.webim.web.model.WorkserviceTime;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
@@ -767,25 +771,34 @@ public class UKTools {
      * @param timeRanges
      * @return
      */
-    public static boolean isInWorkingHours(String timeRanges){
-    	boolean workintTime = true ;
-    	String timeStr = timeRangeDateFormat.format(new Date()) ;
-    	if(!StringUtils.isBlank(timeRanges)){		//设置了 工作时间段
-    		workintTime = false ;					//将 检查结果设置为 False ， 如果当前时间是在 时间范围内，则 置为 True
-    		String[] timeRange = timeRanges.split(",") ;
-    		for(String tr : timeRange){
-    			String[] timeGroup = tr.split("~") ;
-    			if(timeGroup.length == 2){
-    				if(timeGroup[0].compareTo(timeGroup[1]) >= 0){
-    					if(timeStr.compareTo(timeGroup[0]) >= 0 || timeStr.compareTo(timeGroup[1]) <= 0){
-	    					workintTime = true ;
-	    				}
-    				}else{
-	    				if(timeStr.compareTo(timeGroup[0]) >= 0 && timeStr.compareTo(timeGroup[1]) <= 0){
-	    					workintTime = true ;
-	    				}
+    public static boolean isInWorkingHours(SessionConfig sessionConfig){
+    	List<SessionConfigItem> configItem = sessionConfig.getConfig() ;
+    	boolean workintTime = false ;
+    	String timeStr = timeRangeDateFormat.format(new Date()) , dayStr = simpleDateFormat.format(new Date());
+    	if(configItem!=null && configItem.size() >0){		//设置了 工作时间段
+    		WorkserviceTimeRepository workServiceTimeRes = UKDataContext.getContext().getBean(WorkserviceTimeRepository.class) ;
+    		List<WorkserviceTime> workServiceTimeList = workServiceTimeRes.findByOrgi(sessionConfig.getOrgi()) ;
+    		for(SessionConfigItem item : configItem){
+    			for(WorkserviceTime wst : workServiceTimeList){
+    				if(item.getType()!=null && item.getType().equals(wst.getTimetype())){
+    					if(("one".equals(wst.getScope()) && dayStr.equals(wst.getBegin())) || ("more".equals(wst.getScope()) && dayStr.compareTo(wst.getBegin()) >=0&& dayStr.compareTo(wst.getEnd()) <= 0)){//单天
+    			    		String[] timeGroup = item.getWorkinghours().split("~") ;
+    		    			if(timeGroup.length == 2){
+    		    				if(timeGroup[0].compareTo(timeGroup[1]) >= 0){
+    		    					if(timeStr.compareTo(timeGroup[0]) >= 0 || timeStr.compareTo(timeGroup[1]) <= 0){
+    			    					workintTime = true ;
+    			    				}
+    		    				}else{
+    			    				if(timeStr.compareTo(timeGroup[0]) >= 0 && timeStr.compareTo(timeGroup[1]) <= 0){
+    			    					workintTime = true ;
+    			    				}
+    		    				}
+    		    			}
+    					}
     				}
+    				if(workintTime) break;
     			}
+    			if(workintTime) break;
     		}
     	}
     	return workintTime ;

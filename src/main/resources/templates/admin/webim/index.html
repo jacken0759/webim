@@ -7,7 +7,7 @@
 					<div class="ukefu-bt-text-title"
 						style="font-weight:400;font-size:24px;border-bottom:1px solid #dedede;">
 							${snsAccount.name!''}
-							<span style="font-size:15px;color:#AAAAAA;">接入网站创建时间：${snsAccount.createtime!?string("yyyy-MM-dd HH:mm:ss")}</span>
+							<span style="font-size:15px;color:#AAAAAA;">接入网站创建时间：<#if snsAccount.createtime??>${snsAccount.createtime?string("yyyy-MM-dd HH:mm:ss")}</#if></span>
 					</div>
 					<div class="ukefu-bt-text-content" style="">${snsAccount.name!''}</div>
 				</div>

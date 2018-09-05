@@ -2,6 +2,7 @@ package com.ukefu.webim.web.handler.apps.setting;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.Menu;
 import com.ukefu.util.UKTools;
@@ -31,6 +35,8 @@ import com.ukefu.webim.service.repository.BlackListRepository;
 import com.ukefu.webim.service.repository.SessionConfigRepository;
 import com.ukefu.webim.service.repository.TagRepository;
 import com.ukefu.webim.service.repository.TemplateRepository;
+import com.ukefu.webim.service.repository.WorkserviceTimeRepository;
+import com.ukefu.webim.util.server.message.SessionConfigItem;
 import com.ukefu.webim.web.handler.Handler;
 import com.ukefu.webim.web.model.AdType;
 import com.ukefu.webim.web.model.BlackEntity;
@@ -38,6 +44,7 @@ import com.ukefu.webim.web.model.SessionConfig;
 import com.ukefu.webim.web.model.SysDic;
 import com.ukefu.webim.web.model.Tag;
 import com.ukefu.webim.web.model.UKeFuDic;
+import com.ukefu.webim.web.model.WorkserviceTime;
 
 @Controller
 @RequestMapping("/setting")
@@ -60,6 +67,11 @@ public class IMAgentController extends Handler{
 	
 	@Value("${web.upload-path}")
     private String path;
+	
+	@Autowired
+	private WorkserviceTimeRepository workserviceTimeRes ;
+	
+	private ObjectMapper objectMapper = new ObjectMapper();
 
     @RequestMapping("/agent/index")
     @Menu(type = "setting" , subtype = "sessionconfig" , admin= false)
@@ -87,13 +99,13 @@ public class IMAgentController extends Handler{
     	if(outputDic!=null){
     		map.addAttribute("outputtemlet", templateRes.findByTemplettypeAndOrgi(outputDic.getId(), super.getOrgi(request))) ;
     	}
-    	
+    	map.addAttribute("workDateList",UKeFuDic.getInstance().getDic("com.dic.workservice.time"));
         return request(super.createAppsTempletResponse("/apps/setting/agent/index"));
     }
     
     @RequestMapping("/agent/sessionconfig/save")
     @Menu(type = "setting" , subtype = "sessionconfig" , admin= false)
-    public ModelAndView sessionconfig(ModelMap map , HttpServletRequest request , @Valid SessionConfig sessionConfig) {
+    public ModelAndView sessionconfig(ModelMap map , HttpServletRequest request , @Valid SessionConfig sessionConfig) throws JsonProcessingException {
     	SessionConfig tempSessionConfig = sessionConfigRes.findByOrgi(super.getOrgi(request)) ;
     	if(tempSessionConfig == null){
     		tempSessionConfig = sessionConfig;
@@ -101,6 +113,21 @@ public class IMAgentController extends Handler{
     	}else{
     		UKTools.copyProperties(sessionConfig, tempSessionConfig);
     	}
+    	if(sessionConfig.getWorkinghours() != null){
+    		List<SessionConfigItem> sessionConfigList = new ArrayList<SessionConfigItem>();
+    		String[] wk = sessionConfig.getWorkinghours().split(",");
+    		for(String worktime : wk){
+    			SessionConfigItem session = new SessionConfigItem();
+    			String[] items = worktime.split(":", 2) ;
+    			session.setType(items[0]);
+    			session.setWorkinghours(items[1]);
+    			sessionConfigList.add(session);
+    		}
+    		tempSessionConfig.setWorkinghours(objectMapper.writeValueAsString(sessionConfigList));
+    	}else{
+    		tempSessionConfig.setWorkinghours(null);
+    	}
+    	
     	tempSessionConfig.setOrgi(super.getOrgi(request));
     	sessionConfigRes.save(tempSessionConfig) ;
     	
@@ -320,4 +347,80 @@ public class IMAgentController extends Handler{
     	UKTools.initAdv(super.getOrgi(request));
     	return request(super.createRequestPageTempletResponse("redirect:/setting/adv.html?adpos="+adpos));
     }
+    /**
+     * 坐席工作日、节日、假日的服务时间段设置
+     */
+    @RequestMapping("/workservice/index")
+    @Menu(type = "setting" , subtype = "workservice" , admin= false)
+    public ModelAndView workServiceTime(ModelMap map , HttpServletRequest request) {
+    	
+    	Page<WorkserviceTime> workServiceList = workserviceTimeRes.findByOrgi(super.getOrgi(request), new PageRequest(super.getP(request), super.getPs(request),Sort.Direction.DESC, new String[] { "createtime" }));
+    	map.addAttribute("workServiceList", workServiceList);
+    	
+    	
+        return request(super.createAppsTempletResponse("/apps/setting/agent/workservice"));
+    }
+    @RequestMapping("/workservice/add")
+    @Menu(type = "setting" , subtype = "workservice" , admin= false)
+    public ModelAndView addWorkservice(ModelMap map , HttpServletRequest request , @Valid String id , @Valid String adpos) {
+    	map.addAttribute("workDateList",UKeFuDic.getInstance().getDic("com.dic.workservice.time"));
+    	return request(super.createRequestPageTempletResponse("/apps/setting/agent/addworkservice"));
+    }
+    @RequestMapping("/workservice/add/save")
+    @Menu(type = "setting" , subtype = "workservice" , admin= false)
+    public ModelAndView addSaveWorkservice(ModelMap map , HttpServletRequest request , @Valid WorkserviceTime workserviceTime) throws Exception {
+    	
+    	if(!StringUtils.isBlank(workserviceTime.getScope())){
+    		if("more".equals(workserviceTime.getScope()) && !StringUtils.isBlank(request.getParameter("mbegin"))&& !StringUtils.isBlank(request.getParameter("mend"))){
+    			workserviceTime.setBegin(request.getParameter("mbegin"));
+    			workserviceTime.setEnd(request.getParameter("mend"));
+    		}
+    	}
+    	workserviceTime.setCreater(super.getUser(request).getId());
+    	workserviceTime.setCreatetime(new Date());
+    	workserviceTime.setOrgi(super.getOrgi(request));
+    	workserviceTimeRes.save(workserviceTime);
+    	
+    	return request(super.createRequestPageTempletResponse("redirect:/setting/workservice/index"));
+    }
+    @RequestMapping("/workservice/edit")
+    @Menu(type = "setting" , subtype = "workservice" , admin= false)
+    public ModelAndView editWorkservice(ModelMap map , HttpServletRequest request , @Valid String id ) {
+    	WorkserviceTime workservice = workserviceTimeRes.findByIdAndOrgi(id, super.getOrgi(request));
+    	map.addAttribute("workservice", workservice);
+    	map.addAttribute("workDateList",UKeFuDic.getInstance().getDic("com.dic.workservice.time"));
+    	map.addAttribute("id", id);
+    	return request(super.createRequestPageTempletResponse("/apps/setting/agent/editworkservice"));
+    }
+    @RequestMapping("/workservice/edit/save")
+    @Menu(type = "setting" , subtype = "workservice" , admin= false)
+    public ModelAndView editSaveWorkservice(ModelMap map , HttpServletRequest request , @Valid String id , @Valid WorkserviceTime workserviceTime) {
+    	WorkserviceTime workservice = workserviceTimeRes.findByIdAndOrgi(id, super.getOrgi(request));
+    	if(workservice != null){
+    		workservice.setTimetype(workserviceTime.getTimetype());
+    		workservice.setScope(workserviceTime.getScope());
+    		if(!StringUtils.isBlank(workserviceTime.getScope())){
+        		if("more".equals(workserviceTime.getScope()) && !StringUtils.isBlank(request.getParameter("mbegin"))&& !StringUtils.isBlank(request.getParameter("mend"))){
+        			workservice.setBegin(request.getParameter("mbegin"));
+        			workservice.setEnd(request.getParameter("mend"));
+        		}else{
+        			workservice.setBegin(workserviceTime.getBegin());
+        		}
+        	}
+    		workservice.setUpdatetime(new Date());
+    		workserviceTimeRes.save(workservice);
+    	}
+    	return request(super.createRequestPageTempletResponse("redirect:/setting/workservice/index"));
+    }
+    @RequestMapping("/workservice/delete")
+    @Menu(type = "setting" , subtype = "workservice" , admin= false)
+    public ModelAndView deleteWorkservice(ModelMap map , HttpServletRequest request , @Valid String id ) {
+    	WorkserviceTime workservice = workserviceTimeRes.findByIdAndOrgi(id, super.getOrgi(request));
+    	if(workservice != null){
+    		workserviceTimeRes.delete(workservice);
+    	}
+    	return request(super.createRequestPageTempletResponse("redirect:/setting/workservice/index"));
+    }
+   
+
 }

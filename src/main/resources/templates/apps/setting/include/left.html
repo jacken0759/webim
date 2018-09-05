@@ -14,6 +14,11 @@
 				<a href="/setting/blacklist.html">黑名单</a>
 			</dd>
 			</#if>
+			<#if user?? && (user.roleAuthMap["A06_A01_A03"]?? || user.usertype == "0") >
+			<dd <#if subtype?? && subtype == 'workservice'>class="layui-this"</#if>>
+				<a href="/setting/workservice/index.html">坐席服务日期设置</a>
+			</dd>
+			</#if>
 			<!-- 
 			<dd <#if subtype?? && subtype == 'acd'>class="layui-this"</#if>>
 				<a href="/setting/acd.html">ACD策略</a>

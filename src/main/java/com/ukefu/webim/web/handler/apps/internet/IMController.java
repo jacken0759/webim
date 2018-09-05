@@ -365,7 +365,7 @@ public class IMController extends Handler{
 			
 	    		AgentReport report = ServiceQuene.getAgentReport(invite.getOrgi()) ;
 			
-				if(report.getAgents() ==0 ||  (sessionConfig.isHourcheck() && !UKTools.isInWorkingHours(sessionConfig.getWorkinghours()) && invite.isLeavemessage())){
+				if(report.getAgents() ==0 ||  (sessionConfig.isHourcheck() && !UKTools.isInWorkingHours(sessionConfig))){
 					view = request(super.createRequestPageTempletResponse("/apps/im/leavemsg")) ;
 				}else if(invite.isConsult_info()){	//启用了信息收集 , 从Request获取 ， 或从 Cookies 里去
 	    			//验证 OnlineUser 信息

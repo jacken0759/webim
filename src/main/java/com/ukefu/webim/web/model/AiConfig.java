@@ -1,14 +1,21 @@
 package com.ukefu.webim.web.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
+
+import com.ukefu.webim.util.OnlineUserUtils;
+import com.ukefu.webim.util.server.message.OtherMessageItem;
 
 @Entity
 @Table(name = "uk_xiaoe_config")
@@ -75,6 +82,9 @@ public class AiConfig implements java.io.Serializable{
 	private String selectskillmsg ;	//选择技能组的提示信息
 	
 	private String noresultmsg ;
+	
+	private String hotmsg ;	//热点消息
+	private boolean topicshot ;	//是否开启热点消息推荐
 	
 	@Id
 	@Column(length = 32)
@@ -358,5 +368,30 @@ public class AiConfig implements java.io.Serializable{
 	}
 	public void setTransagent(boolean transagent) {
 		this.transagent = transagent;
+	}
+	public String getHotmsg() {
+		return hotmsg;
+	}
+	public void setHotmsg(String hotmsg) {
+		this.hotmsg = hotmsg;
+	}
+	
+	public boolean isTopicshot() {
+		return topicshot;
+	}
+	public void setTopicshot(boolean topicshot) {
+		this.topicshot = topicshot;
+	}
+	@Transient
+	public List<OtherMessageItem> getHot(){
+		List<OtherMessageItem> otherMessageItemList = null ;
+		if(!StringUtils.isBlank(this.getHotmsg())) {
+			try {
+				otherMessageItemList = OnlineUserUtils.objectMapper.readValue(this.getHotmsg(), OnlineUserUtils.getCollectionType(ArrayList.class, OtherMessageItem.class))  ;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return otherMessageItemList ;
 	}
 }
