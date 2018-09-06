@@ -767,7 +767,7 @@ public class AgentController extends Handler {
 	    			}
 					outMessage.setCalltype(UKDataContext.CallTypeEnum.OUT.toString());
 					outMessage.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-					outMessage.setNickName(super.getUser(request).getUsername());
+					outMessage.setNickName(super.getUser(request).getUname());
 					
 	    			router.handler(agentUser.getUserid(), UKDataContext.MessageTypeEnum.MESSAGE.toString(), agentUser.getAppid(), outMessage);
 	    		}
@@ -791,7 +791,7 @@ public class AgentController extends Handler {
 	    		data.setOrgi(super.getUser(request).getOrgi());
 	    		
 	    		data.setCreater(super.getUser(request).getId());
-	    		data.setUsername(super.getUser(request).getUsername());
+	    		data.setUsername(super.getUser(request).getUname());
 	    		
 	    		chatMessageRepository.save(data) ;
 	    		

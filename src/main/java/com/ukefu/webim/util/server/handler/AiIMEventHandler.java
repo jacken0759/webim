@@ -26,6 +26,7 @@ import com.ukefu.webim.util.server.message.AgentStatusMessage;
 import com.ukefu.webim.util.server.message.ChatMessage;
 import com.ukefu.webim.util.server.message.NewRequestMessage;
 import com.ukefu.webim.web.model.AgentService;
+import com.ukefu.webim.web.model.AiConfig;
 import com.ukefu.webim.web.model.AiUser;
 import com.ukefu.webim.web.model.CousultInvite;
 import com.ukefu.webim.web.model.MessageOutContent;
@@ -71,6 +72,21 @@ public class AiIMEventHandler
 				outMessage.setCreatetime(UKTools.dateFormate.format(new Date()));
 				
 				client.sendEvent(UKDataContext.MessageTypeEnum.STATUS.toString(), outMessage);
+				
+				if(!StringUtils.isBlank(aiid)) {
+					AiConfig aiConfig = UKTools.initAiConfig(aiid, orgi) ;
+					if(aiConfig!=null && !StringUtils.isBlank(aiConfig.getHotmsg())) {
+						MessageOutContent hotMessage = new MessageOutContent() ;
+						hotMessage.setMessage(invite.getAimsg());
+						
+						hotMessage.setMessageType(UKDataContext.MessageTypeEnum.MESSAGE.toString());
+						hotMessage.setCalltype(UKDataContext.CallTypeEnum.OUT.toString());
+						hotMessage.setNickName(invite.getAiname());
+						hotMessage.setCreatetime(UKTools.dateFormate.format(new Date()));
+						hotMessage.setSuggest(aiConfig.getHot());
+						client.sendEvent(UKDataContext.MessageTypeEnum.MESSAGE.toString(), hotMessage);
+					}
+				}
 				
 				InetSocketAddress address = (InetSocketAddress) client.getRemoteAddress()  ;
 				String ip = UKTools.getIpAddr(client.getHandshakeData().getHttpHeaders(), address.getHostString()) ;

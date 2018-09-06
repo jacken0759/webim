@@ -74,6 +74,7 @@ import com.ukefu.util.event.UserEvent;
 import com.ukefu.util.mail.MailSender;
 import com.ukefu.webim.service.cache.CacheHelper;
 import com.ukefu.webim.service.repository.AdTypeRepository;
+import com.ukefu.webim.service.repository.AiConfigRepository;
 import com.ukefu.webim.service.repository.AreaTypeRepository;
 import com.ukefu.webim.service.repository.AttachmentRepository;
 import com.ukefu.webim.service.repository.SecretRepository;
@@ -84,6 +85,7 @@ import com.ukefu.webim.service.repository.TemplateRepository;
 import com.ukefu.webim.service.repository.WorkserviceTimeRepository;
 import com.ukefu.webim.util.server.message.SessionConfigItem;
 import com.ukefu.webim.web.model.AdType;
+import com.ukefu.webim.web.model.AiConfig;
 import com.ukefu.webim.web.model.AttachmentFile;
 import com.ukefu.webim.web.model.JobDetail;
 import com.ukefu.webim.web.model.JobTask;
@@ -1450,4 +1452,25 @@ public class UKTools {
 		}
 		return strb.toString();
     }
+    
+    /**
+	 * AI配置
+	 * @param orgi
+	 * @return
+	 */
+	public static AiConfig initAiConfig(String aiid,String orgi){
+		AiConfig aiConfig = (AiConfig) CacheHelper.getSystemCacheBean().getCacheObject(UKDataContext.SYSTEM_CACHE_AI_CONFIG+"_"+aiid, orgi);
+		if(UKDataContext.getContext() != null && aiConfig == null){
+			AiConfigRepository aiConfigRepository = UKDataContext.getContext().getBean(AiConfigRepository.class) ;
+			List<AiConfig> aiConfigList = aiConfigRepository.findByAiidAndOrgi(aiid,orgi) ;
+			if(aiConfigList.size() == 0){
+				aiConfig = new AiConfig() ;
+				aiConfig.setAiid(aiid);
+			}else{
+				aiConfig = aiConfigList.get(0) ;
+				CacheHelper.getSystemCacheBean().put(UKDataContext.SYSTEM_CACHE_AI_CONFIG+"_"+aiConfig.getAiid(),aiConfig, orgi) ;
+			}
+		}
+		return aiConfig ;
+	}
 }

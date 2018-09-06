@@ -27,7 +27,7 @@ public class OtherMessageItem implements java.io.Serializable{
 		this.title = title;
 	}
 	public String getId() {
-		return id;
+		return id != null ? id : "";
 	}
 	public void setId(String id) {
 		this.id = id;
