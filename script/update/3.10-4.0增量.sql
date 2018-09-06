@@ -13,9 +13,6 @@ ALTER TABLE uk_xiaoe_config ADD hotmsg text COMMENT '热点问题';
 ALTER TABLE uk_xiaoe_config ADD topicshot tinyint(4) DEFAULT '0' COMMENT '是否开启热点问题推荐';
 
 
-ALTER TABLE uk_chat_message ADD bustype varchar(32) COMMENT '扩展消息类型';
-
-
 ALTER TABLE uk_callcenter_event ADD qualitystatus varchar(20) COMMENT '质检状态';
 ALTER TABLE uk_callcenter_event ADD qualitydisorgan varchar(32) COMMENT '分配的质检部门';
 ALTER TABLE uk_callcenter_event ADD qualitydisuser varchar(32) COMMENT '分配的质检用户';
