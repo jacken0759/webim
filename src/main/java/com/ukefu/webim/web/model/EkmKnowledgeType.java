@@ -40,8 +40,6 @@ public class EkmKnowledgeType implements java.io.Serializable{
 	private boolean datastatus;
 	
 	
-
-	
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")

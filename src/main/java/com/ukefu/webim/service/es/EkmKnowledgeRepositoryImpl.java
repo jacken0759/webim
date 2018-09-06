@@ -84,47 +84,6 @@ public class EkmKnowledgeRepositoryImpl implements EkmKnowledgeESRepository{
 		return knowledgeList.getContent().get(0);
 	}
 
-	@Override
-	public Page<EkmKnowledge> findByDatastatusAndOrgi(boolean datastatus, String orgi,User user, Pageable pageable) {
-		
-		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-		BoolQueryBuilder boolQueryBuilder1 = new BoolQueryBuilder();
-		
-		
-		
-		final List<String> knowbaseRoleList = new ArrayList<>();
-		final List<String> knowbaseOrganList = new ArrayList<>();
-		
-		List<UserRole> userRoleList = userRoleRes.findByOrgiAndUser(orgi, user);
-		for(UserRole userRole :userRoleList){
-			List<EkmKnowbaseRole> tempRoleList = ekmKnowbaseRoleRes.findByRoleidAndOrgi(userRole.getRole().getId(), orgi);
-			for(EkmKnowbaseRole knowbaseRole : tempRoleList){
-				knowbaseRoleList.add(knowbaseRole.getKnowbaseid());
-			}
-		}
-		
-		List<EkmKnowbaseOrgan> tempOrganList = ekmKnowbaseOrganRes.findByOrganidAndOrgi(user.getOrgan(), orgi);
-		for(EkmKnowbaseOrgan knowbaseOrgan : tempOrganList){
-			knowbaseOrganList.add(knowbaseOrgan.getKnowbaseid());
-		}
-		
-		if(knowbaseRoleList.size() > 0){
-			for(String id : knowbaseRoleList){
-				boolQueryBuilder1.should(termQuery("knowbaseid" , id));
-			}
-		}
-		if(knowbaseOrganList.size() > 0){
-			for(String id : knowbaseOrganList){
-				boolQueryBuilder1.should(termQuery("knowbaseid" , id));
-			}
-		}
-		
-		boolQueryBuilder.must(boolQueryBuilder1) ;
-		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
-		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
-		
-		return processQuery(boolQueryBuilder , pageable);
-	}
 
 	@Override
 	public List<EkmKnowledge> findByOrgiAndDatastatus(String orgi, boolean datastatus) {
@@ -209,19 +168,6 @@ public class EkmKnowledgeRepositoryImpl implements EkmKnowledgeESRepository{
 		return knowledgeList.getContent();
 	}
 
-	@Override
-	public Page<EkmKnowledge> findByPubstatusAndDatastatusAndOrgi(String pubstatus, boolean datastatus, String orgi,
-			Pageable pageable) {
-		
-		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-		BoolQueryBuilder boolQueryBuilder1 = new BoolQueryBuilder();
-		boolQueryBuilder1.must(termQuery("pubstatus" , pubstatus)) ;
-		boolQueryBuilder1.must(termQuery("datastatus" , datastatus)) ;
-		boolQueryBuilder.must(boolQueryBuilder1) ;
-		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
-		
-		return processQuery(boolQueryBuilder , pageable);
-	}
 	
 	@Override
 	public Page<EkmKnowledge> getByDimenidAndDatastatusAndOrgi(String dimenid,
@@ -357,6 +303,65 @@ public class EkmKnowledgeRepositoryImpl implements EkmKnowledgeESRepository{
 			String orgi, User user, Date begin, Date end, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Page<EkmKnowledge> findByDatastatusAndOrgiAndOwn(boolean datastatus,
+			String orgi, User user, String own, Pageable pageable) {
+
+		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		BoolQueryBuilder boolQueryBuilder1 = new BoolQueryBuilder();
+		
+		
+		
+		final List<String> knowbaseRoleList = new ArrayList<>();
+		final List<String> knowbaseOrganList = new ArrayList<>();
+		
+		List<UserRole> userRoleList = userRoleRes.findByOrgiAndUser(orgi, user);
+		for(UserRole userRole :userRoleList){
+			List<EkmKnowbaseRole> tempRoleList = ekmKnowbaseRoleRes.findByRoleidAndOrgi(userRole.getRole().getId(), orgi);
+			for(EkmKnowbaseRole knowbaseRole : tempRoleList){
+				knowbaseRoleList.add(knowbaseRole.getKnowbaseid());
+			}
+		}
+		
+		List<EkmKnowbaseOrgan> tempOrganList = ekmKnowbaseOrganRes.findByOrganidAndOrgi(user.getOrgan(), orgi);
+		for(EkmKnowbaseOrgan knowbaseOrgan : tempOrganList){
+			knowbaseOrganList.add(knowbaseOrgan.getKnowbaseid());
+		}
+		
+		if(knowbaseRoleList.size() > 0){
+			for(String id : knowbaseRoleList){
+				boolQueryBuilder1.should(termQuery("knowbaseid" , id));
+			}
+		}
+		if(knowbaseOrganList.size() > 0){
+			for(String id : knowbaseOrganList){
+				boolQueryBuilder1.should(termQuery("knowbaseid" , id));
+			}
+		}
+		
+		boolQueryBuilder.must(boolQueryBuilder1) ;
+		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
+		boolQueryBuilder.must(termQuery("own" ,own)) ;
+		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
+		
+		return processQuery(boolQueryBuilder , pageable);
+	}
+
+	@Override
+	public Page<EkmKnowledge> findByPubstatusAndDatastatusAndOrgiAndOwn(
+			String pubstatus, boolean datastatus, String orgi, String own,
+			Pageable pageable) {
+
+		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		BoolQueryBuilder boolQueryBuilder1 = new BoolQueryBuilder();
+		boolQueryBuilder1.must(termQuery("pubstatus" , pubstatus)) ;
+		boolQueryBuilder1.must(termQuery("datastatus" , datastatus)) ;
+		boolQueryBuilder.must(boolQueryBuilder1) ;
+		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
+		boolQueryBuilder.must(termQuery("own" ,own)) ;
+		return processQuery(boolQueryBuilder , pageable);
 	}
 
 }
