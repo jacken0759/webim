@@ -28,9 +28,11 @@ ALTER TABLE uk_callcenter_event ADD qualitytype varchar(20) COMMENT '质检类�
 CREATE TABLE `uk_workservice_time` (
   `id` varchar(32) NOT NULL COMMENT '主键ID',
   `timetype` varchar(32) DEFAULT NULL COMMENT '日期类型',
-  `scope` varchar(50) DEFAULT NULL COMMENT '日期范围类型',
+  `scope` varchar(32) DEFAULT NULL COMMENT '日期范围类型（单天 one/范围 more/星期week）',
+  `apply` varchar(32) DEFAULT NULL COMMENT '适用于（文字客服 word / 排班 sche）',
   `begin` varchar(32) DEFAULT NULL COMMENT '日期开始',
   `end` varchar(32) DEFAULT NULL COMMENT '日期开始',
+  `week` text COMMENT '星期',
   `createtime` datetime DEFAULT NULL COMMENT '创建时间',
   `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
   `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
