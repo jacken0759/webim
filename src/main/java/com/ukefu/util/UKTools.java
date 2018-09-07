@@ -767,45 +767,104 @@ public class UKTools {
     	}
     	return document.html() ;
     }
-    
+    public static int dayForWeek(){  
+    	 Calendar c = Calendar.getInstance();  
+    	 int dayForWeek = 0;  
+    	 if(c.get(Calendar.DAY_OF_WEEK) == 1){  
+    	  dayForWeek = 7;  
+    	 }else{  
+    	  dayForWeek = c.get(Calendar.DAY_OF_WEEK) - 1;  
+    	 }  
+    	 return dayForWeek;   
+    }  
     /**
      * 检查当前时间是否是在 时间范围内 ，时间范围的格式为 ： 08:30~11:30,13:30~17:30
      * @param timeRanges
      * @return
+     * @throws Throwable 
      */
-    public static boolean isInWorkingHours(SessionConfig sessionConfig){
+    public static boolean isInWorkingHours(SessionConfig sessionConfig,String apply){
     	List<SessionConfigItem> configItem = sessionConfig.getConfig() ;
     	boolean workintTime = false ;
+    	boolean workType = false ;
     	String timeStr = timeRangeDateFormat.format(new Date()) , dayStr = simpleDateFormat.format(new Date());
+    	//dayForWeek(dayStr);
     	if(configItem!=null && configItem.size() >0){		//设置了 工作时间段
     		WorkserviceTimeRepository workServiceTimeRes = UKDataContext.getContext().getBean(WorkserviceTimeRepository.class) ;
     		List<WorkserviceTime> workServiceTimeList = workServiceTimeRes.findByOrgi(sessionConfig.getOrgi()) ;
-    		for(SessionConfigItem item : configItem){
-    			for(WorkserviceTime wst : workServiceTimeList){
-    				if(item.getType()!=null && item.getType().equals(wst.getTimetype())){
-    					if(("one".equals(wst.getScope()) && dayStr.equals(wst.getBegin())) || ("more".equals(wst.getScope()) && dayStr.compareTo(wst.getBegin()) >=0&& dayStr.compareTo(wst.getEnd()) <= 0)){//单天
-    			    		String[] timeGroup = item.getWorkinghours().split("~") ;
-    		    			if(timeGroup.length == 2){
-    		    				if(timeGroup[0].compareTo(timeGroup[1]) >= 0){
-    		    					if(timeStr.compareTo(timeGroup[0]) >= 0 || timeStr.compareTo(timeGroup[1]) <= 0){
-    			    					workintTime = true ;
-    			    				}
-    		    				}else{
-    			    				if(timeStr.compareTo(timeGroup[0]) >= 0 && timeStr.compareTo(timeGroup[1]) <= 0){
-    			    					workintTime = true ;
-    			    				}
-    		    				}
-    		    			}
+    		for(SessionConfigItem item : configItem){//工作时间段
+    			for(WorkserviceTime wst : workServiceTimeList){//工作日，节日，假日等日期，星期设置
+    				
+    				if(!StringUtils.isBlank(apply) && apply.equals(wst.getApply())){//判断适用场景是否对应（文字客服 webim/）
+    					
+    					//判断该记录的星期，是否包含今天（星期）
+    					if(wst.getWeek() !=null && wst.getWeek().contains((String.valueOf(dayForWeek()))) == true){
+    						
+    						//判断两条记录的日期类型是否相同（工作日，节日，假日）
+    						if(!StringUtils.isBlank(wst.getTimetype()) && !StringUtils.isBlank(item.getType()) && wst.getTimetype().equals(item.getType())){
+    							
+    							//判断该工作时间段记录，是否是"工作"
+    							if(!StringUtils.isBlank(item.getWorktype()) && !"nowork".equals(item.getWorktype())){//工作日
+    								
+    								String[] timeGroup = item.getWorkinghours().split("~") ;
+									if(timeGroup.length == 2){
+										if(timeGroup[0].compareTo(timeGroup[1]) >= 0){
+											if(timeStr.compareTo(timeGroup[0]) >= 0 || timeStr.compareTo(timeGroup[1]) <= 0){
+												workintTime = true ;
+											}
+										}else{
+											if(timeStr.compareTo(timeGroup[0]) >= 0 && timeStr.compareTo(timeGroup[1]) <= 0){
+												workintTime = true ;
+											}else{
+												workintTime = false ;
+											}
+										}
+									}
+    							}else{
+    								workType = true ;
+    								workintTime = false ;
+    							}
+    						}
+    					
+    					//判断该记录的日期，是否包含今天（日期）
+    					}else if(!StringUtils.isBlank(wst.getScope()) && ("one".equals(wst.getScope()) && dayStr.equals(wst.getBegin())) 
+    							|| ("more".equals(wst.getScope()) && dayStr.compareTo(wst.getBegin()) >=0&& dayStr.compareTo(wst.getEnd()) <= 0)){
+    						
+    						//判断两条记录的日期类型是否相同（工作日，节日，假日）
+    						if(!StringUtils.isBlank(wst.getTimetype()) && !StringUtils.isBlank(item.getType()) && wst.getTimetype().equals(item.getType())){
+    							
+    							//判断该工作时间段记录，是否是"工作"
+    							if(!StringUtils.isBlank(item.getWorktype()) && !"nowork".equals(item.getWorktype())){//工作日
+    								
+    								String[] timeGroup = item.getWorkinghours().split("~") ;
+									if(timeGroup.length == 2){
+										if(timeGroup[0].compareTo(timeGroup[1]) >= 0){
+											if(timeStr.compareTo(timeGroup[0]) >= 0 || timeStr.compareTo(timeGroup[1]) <= 0){
+												workintTime = true ;
+											}
+										}else{
+											if(timeStr.compareTo(timeGroup[0]) >= 0 && timeStr.compareTo(timeGroup[1]) <= 0){
+												workintTime = true ;
+											}else{
+												workintTime = false ;
+											}
+										}
+									}
+    							}else{
+    								workType = true ;
+    								workintTime = false ;
+    							}
+    						}
     					}
     				}
-    				if(workintTime) break;
-    			}
-    			if(workintTime) break;
+				}
+			}
+    		if(workType == true){
+    			workintTime = false ;
     		}
-    	}
+		}
     	return workintTime ;
     }
-    
     public static File processImage(File destFile,File imageFile) throws FileNotFoundException, IOException{
 		if(imageFile != null && imageFile.exists()){
 			Thumbnails.of(imageFile).width(460).keepAspectRatio(true).toFile(destFile);

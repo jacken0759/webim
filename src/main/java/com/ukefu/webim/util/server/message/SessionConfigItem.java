@@ -8,6 +8,7 @@ public class SessionConfigItem implements java.io.Serializable{
 	
 	private String workinghours ;
 	private String type;
+	private String worktype;
 	public String getWorkinghours() {
 		return workinghours;
 	}
@@ -20,4 +21,11 @@ public class SessionConfigItem implements java.io.Serializable{
 	public void setType(String type) {
 		this.type = type;
 	}
+	public String getWorktype() {
+		return worktype;
+	}
+	public void setWorktype(String worktype) {
+		this.worktype = worktype;
+	}
+	
 }

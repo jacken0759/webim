@@ -266,7 +266,7 @@ public class ChatServiceController extends Handler{
 	
 	@RequestMapping("/current/invite")
     @Menu(type = "service" , subtype = "current" , admin= true)
-    public ModelAndView currentinvite(ModelMap map , HttpServletRequest request , @Valid String id) throws Exception {
+    public ModelAndView currentinvite(ModelMap map , HttpServletRequest request , @Valid String id) throws Exception  {
 		if(!StringUtils.isBlank(id)){
 			AgentService agentService = agentServiceRes.findByIdAndOrgi(id, super.getOrgi(request)) ;
 			if(agentService!=null){

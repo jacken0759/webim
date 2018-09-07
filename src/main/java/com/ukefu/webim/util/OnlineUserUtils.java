@@ -824,7 +824,7 @@ public class OnlineUserUtils {
 		SessionConfig sessionConfig = ServiceQuene.initSessionConfig(data.getOrgi()) ;
 		AgentReport report = ServiceQuene.getAgentReport(data.getOrgi()) ;
 		
-		if(sessionConfig.isHourcheck() && !UKTools.isInWorkingHours(sessionConfig)){
+		if(sessionConfig.isHourcheck() && !UKTools.isInWorkingHours(sessionConfig,"webim")){
 			data.setMessage(sessionConfig.getNotinwhmsg());
 		}else{
 			if(report.getAgents() == 0){
@@ -859,7 +859,7 @@ public class OnlineUserUtils {
 	}
 	
 	public static NewRequestMessage newRequestMessage(String openid , String nickname, String orgi,
-			String session, String appid , String headimg , String country , String province , String city , String channel , String skill , String agent, String initiator) throws Exception {
+			String session, String appid , String headimg , String country , String province , String city , String channel , String skill , String agent, String initiator) throws Throwable {
 		IP ipdata = new IP() ;
 		ipdata.setCountry(country);
 		ipdata.setProvince(province);

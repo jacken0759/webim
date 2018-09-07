@@ -22,14 +22,15 @@ public class WorkserviceTime implements java.io.Serializable{
 	
 	private String id ;
 	private String timetype ;//日期类型（字典项 com.dic.workservice.time）
-	private String scope ; //日期范围类型（单天 one/范围 more）
+	private String scope ; //日期范围类型（单天 one/范围 more/ 星期 week）
 	private String begin ; //日期开始    格式   2018-9-3
 	private String end ; //日期结束     格式   2018-9-3
 	private Date createtime ;
 	private String creater;
 	private Date updatetime ;
 	private String orgi ;
-	
+	private String apply;//适用场景（文字客服 webim / 排班 sche）
+	private String week;
 	
 	public WorkserviceTime(){}
 	
@@ -109,6 +110,22 @@ public class WorkserviceTime implements java.io.Serializable{
 
 	public void setOrgi(String orgi) {
 		this.orgi = orgi;
+	}
+
+	public String getApply() {
+		return apply;
+	}
+
+	public void setApply(String apply) {
+		this.apply = apply;
+	}
+
+	public String getWeek() {
+		return week;
+	}
+
+	public void setWeek(String week) {
+		this.week = week;
 	}
 	
 

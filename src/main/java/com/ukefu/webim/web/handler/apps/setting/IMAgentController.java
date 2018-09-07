@@ -75,7 +75,7 @@ public class IMAgentController extends Handler{
 
     @RequestMapping("/agent/index")
     @Menu(type = "setting" , subtype = "sessionconfig" , admin= false)
-    public ModelAndView index(ModelMap map , HttpServletRequest request) {
+    public ModelAndView index(ModelMap map , HttpServletRequest request){
     	SessionConfig sessionConfig = sessionConfigRes.findByOrgi(super.getOrgi(request)) ;
     	if(sessionConfig == null){
     		sessionConfig = new SessionConfig() ;
@@ -100,12 +100,14 @@ public class IMAgentController extends Handler{
     		map.addAttribute("outputtemlet", templateRes.findByTemplettypeAndOrgi(outputDic.getId(), super.getOrgi(request))) ;
     	}
     	map.addAttribute("workDateList",UKeFuDic.getInstance().getDic("com.dic.workservice.time"));
+    	map.addAttribute("workTypeList",UKeFuDic.getInstance().getDic("com.dic.workservice.worktype"));
+    	
         return request(super.createAppsTempletResponse("/apps/setting/agent/index"));
     }
     
     @RequestMapping("/agent/sessionconfig/save")
     @Menu(type = "setting" , subtype = "sessionconfig" , admin= false)
-    public ModelAndView sessionconfig(ModelMap map , HttpServletRequest request , @Valid SessionConfig sessionConfig) throws JsonProcessingException {
+    public ModelAndView sessionconfig(ModelMap map , HttpServletRequest request , @Valid SessionConfig sessionConfig) throws JsonProcessingException{
     	SessionConfig tempSessionConfig = sessionConfigRes.findByOrgi(super.getOrgi(request)) ;
     	if(tempSessionConfig == null){
     		tempSessionConfig = sessionConfig;
@@ -118,9 +120,10 @@ public class IMAgentController extends Handler{
     		String[] wk = sessionConfig.getWorkinghours().split(",");
     		for(String worktime : wk){
     			SessionConfigItem session = new SessionConfigItem();
-    			String[] items = worktime.split(":", 2) ;
+    			String[] items = worktime.split(":", 3) ;
     			session.setType(items[0]);
-    			session.setWorkinghours(items[1]);
+    			session.setWorktype(items[1]);
+    			session.setWorkinghours(items[2]);
     			sessionConfigList.add(session);
     		}
     		tempSessionConfig.setWorkinghours(objectMapper.writeValueAsString(sessionConfigList));
@@ -137,7 +140,6 @@ public class IMAgentController extends Handler{
     	
     	ServiceQuene.initSessionConfigList() ;
     	map.put("sessionConfig", tempSessionConfig) ;
-    	
     	
     	
         return request(super.createRequestPageTempletResponse("redirect:/setting/agent/index.html"));
@@ -408,6 +410,8 @@ public class IMAgentController extends Handler{
         		}
         	}
     		workservice.setUpdatetime(new Date());
+    		workservice.setApply(workserviceTime.getApply());
+    		workservice.setWeek(workserviceTime.getWeek());
     		workserviceTimeRes.save(workservice);
     	}
     	return request(super.createRequestPageTempletResponse("redirect:/setting/workservice/index"));

@@ -293,10 +293,19 @@
 																	<#list sessionConfig.config as sc>
 																		<#assign  a = sc.type>
 																		<#assign  b = sc.workinghours>
+																		<#assign  c = sc.worktype>
 																		<small class="ukefu-timerange layui-btn layui-btn-normal">
-																			${uKeFuDic[a!''].name!''}:${b}
+																			<#if c == 'work'>
+																				${uKeFuDic[a!''].name!''}:
+																				<#if c == 'work'>工作<#else>非工作</#if>
+																				:${b}
+																			<#else>
+																				${uKeFuDic[a!''].name!''}:
+																				<#if c == 'work'>工作<#else>非工作</#if>
+																			</#if>
+																			
 																			<i class="layui-icon">&#x1006;</i>
-																			<input type='hidden' name='workinghours' value='${a}:${b}'/>
+																			<input type='hidden' class='wokrtime' name='workinghours' value='${a}:${c}:${b}' data-type='${a}' data-worktype='${c}' data-hours='${b}'/>
 																		</small>
 																	</#list>
 																</#if>
@@ -306,10 +315,10 @@
 													<div class="row" style="margin-bottom:20px;">
 														<div class="col-lg-12">
 															<div class="layui-inline">
-																<div class="layui-input-inline" style="width: 150px;">
+																<div class="layui-input-inline" style="width: 100px;">
 																	<select id="wh_timetype">
 																		<#if workDateList??>
-														      				<option value="">请选择日期类型</option>
+														      				<option value="">日期类型</option>
 															      			<#list workDateList as work>
 															      				<option value="${work.id}">${work.name!''}</option>
 															      			</#list>
@@ -323,6 +332,20 @@
 																</div>
 															</div>
 															<div class="layui-inline">
+																<div class="layui-input-inline" style="width: 100px;">
+																	<select id="wh_worktype" lay-filter="worktype">
+														      				<option value="">工作类型</option>
+															      			<option value="work">工作</option>
+															      			<option value="nowork">非工作</option>
+																	</select>
+																</div>
+															</div>
+															<div class="layui-inline work">
+																<div class="layui-input-inline" style="width: 3px;">
+																	:
+																</div>
+															</div>
+															<div class="layui-inline work">
 																<div class="layui-input-inline" style="width: 70px;">
 																	<select id="wh_start_h">
 																		<#list 0..23 as hours>
@@ -331,12 +354,12 @@
 																	</select>
 																</div>
 															</div>
-															<div class="layui-inline">
+															<div class="layui-inline work">
 																<div class="layui-input-inline" style="width: 3px;">
 																	:
 																</div>
 															</div>
-															<div class="layui-inline">
+															<div class="layui-inline work">
 																<div class="layui-input-inline" style="width: 70px;" >
 																	<select id="wh_start_m">
 																		<#list 0..59 as min>
@@ -345,12 +368,12 @@
 																	</select>
 																</div>
 															</div>
-															<div class="layui-inline">
+															<div class="layui-inline work">
 																<div class="layui-input-inline" style="width: 20px;">
 																	~
 																</div>
 															</div>
-															<div class="layui-inline">
+															<div class="layui-inline work">
 																<div class="layui-input-inline" style="width: 70px;">
 																	<select id="wh_end_h">
 																		<#list 0..23 as hours>
@@ -359,12 +382,12 @@
 																	</select>
 																</div>
 															</div>
-															<div class="layui-inline">
+															<div class="layui-inline work">
 																<div class="layui-input-inline" style="width: 3px;">
 																	:
 																</div>
 															</div>
-															<div class="layui-inline">
+															<div class="layui-inline work">
 																<div class="layui-input-inline" style="width: 70px;">
 																	<select id="wh_end_m">
 																		<#list 0..59 as min>
@@ -732,14 +755,66 @@
 				$('#satisf_op').hide();
 			}
 		});
+		form.on("select(worktype)" , function(data){
+			if(data.value == 'work'){
+				$('.work').show();		
+			}else{
+				
+				$('.work').hide();	
+			}
+		});
 	});
 	$('#wh_time_range').on("click" , function(){
-		var timerange = $("#wh_timetype").val()  + ":" + $("#wh_start_h").val()+":"+$("#wh_start_m").val()+"~"+$("#wh_end_h").val()+":"+$("#wh_end_m").val() ;
-		var timeRangeTitle = $("#wh_timetype option:selected").text()  + ":" + $("#wh_start_h").val()+":"+$("#wh_start_m").val()+"~"+$("#wh_end_h").val()+":"+$("#wh_end_m").val() ;
-		var id = "wh_"+ $("#wh_timetype").val()+ $("#wh_start_h").val()+$("#wh_start_m").val()+$("#wh_end_h").val()+$("#wh_end_m").val() ;
-		if($("#wh_timetype").val() != '' && $("#"+id).length == 0){
-			$('#workhours').append("<small id='"+id+"' class='ukefu-timerange layui-btn layui-btn-normal'>"+timeRangeTitle+" <i class='layui-icon'>&#x1006;</i><input type='hidden' name='workinghours' value='"+timerange+"'/></small>");
+		
+		
+		var timeRangeTitle = null;
+		if($('#wh_worktype').val() == 'work'){
+			timeRangeTitle = $("#wh_timetype option:selected").text()  + ":" +$("#wh_worktype option:selected").text()  + ":" + $("#wh_start_h").val()+":"+$("#wh_start_m").val()+"~"+$("#wh_end_h").val()+":"+$("#wh_end_m").val() ;
+		}else{
+			timeRangeTitle = $("#wh_timetype option:selected").text()  + ":" +$("#wh_worktype option:selected").text()  ;
 		}
+		var	timerange = $("#wh_timetype").val()  + ":" +$("#wh_worktype").val()  + ":" + $("#wh_start_h").val()+":"+$("#wh_start_m").val()+"~"+$("#wh_end_h").val()+":"+$("#wh_end_m").val() ;
+		var id = "wh_"+ $("#wh_timetype").val()+ $("#wh_start_h").val()+$("#wh_start_m").val()+$("#wh_end_h").val()+$("#wh_end_m").val() ;
+		
+		var result = true;
+		
+		$('.wokrtime').each(function(){
+			var at = $(this).data("type") ;
+			var ct = $(this).data("worktype") ;
+			var bb = $(this).data("hours") ;
+			
+			var bbs = bb.split('~');
+			
+			
+			var tt = $("#wh_timetype").val();
+			var wt = $("#wh_worktype").val();
+			
+			var start = $("#wh_start_h").val()+":"+$("#wh_start_m").val();
+			var end = $("#wh_end_h").val()+":"+$("#wh_end_m").val() ;
+			
+			if(at == tt){
+				if(ct == wt){
+					if(wt == 'nowork'){
+						top.layer.alert("该日期类型已设置过【未工作】！", {icon: 1});	
+						result = false;
+					}else{
+						if(checkTime(bbs[0],bbs[1],start,end) == false){
+							result = false;
+						}
+					}
+				}
+			}
+		});
+		if(result == true){
+			if($("#wh_timetype").val() != '' && $("#"+id).length == 0){
+				$('#workhours').append("<small id='"+id+"' class='ukefu-timerange layui-btn layui-btn-normal'>"+timeRangeTitle+" <i class='layui-icon'>&#x1006;</i><input type='hidden' name='workinghours' value='"+timerange+"'/></small>");
+			}else{
+				top.layer.alert('请选择日期类型或工作类型', {icon: 1});
+			}
+		}else{
+			top.layer.alert('时间段已存在', {icon: 1});
+		}
+		
 	});
 	$(document).on("click" , ".ukefu-timerange", function(){
 		var target = $(this);
@@ -749,5 +824,46 @@
 		});
 		
 	});
+	function checkTime (a,b,x,y) {
+		var times1=[],times2 = [];
+		if (a<b) {
+			//未跨天
+			times1.push([a,b]);
+		}else{
+			//跨天
+			times1.push([a,"24:00"],["00:00",b]);
+		}
+		
+		if (x<y) {
+			times2.push([x,y]);
+		}else{
+			times2.push([x,"24:00"],["00:00",y]);
+		}
+		
+		var flag = false;
+		//循环比较时间段是否冲突
+		for (var i = 0; i < times1.length; i++) {
+			if (flag) break;
+			for (var j = 0; j < times2.length; j++) {
+				if(check(times1[i][0],times1[i][1],times2[j][0],times2[j][1])){
+					flag = true;
+					break;
+				}
+			}
+		}
+		if (flag) {
+			//layer.msg("时间段发生冲突");
+			return false;
+		}else{
 			
+			return true;
+		}
+	}
+	function check (a,b,x,y) {
+		if(y<a||b<x){  
+			return false;
+		}else{
+			return true;
+		}
+	}
 </script>

@@ -44,7 +44,7 @@ public class IMEventHandler
     }  
     
     @OnConnect  
-    public void onConnect(SocketIOClient client)  
+    public void onConnect(SocketIOClient client) 
     {  
     	try {
 			String user = client.getHandshakeData().getSingleUrlParam("userid") ;

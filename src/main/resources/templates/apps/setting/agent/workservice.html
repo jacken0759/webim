@@ -23,15 +23,19 @@
 										<col width="10%">
 										<col width="10%">
 										<col width="10%">
+										<col width="10%">
+										<col width="10%">
 										<col width="1%">
 										<col>
 								  </colgroup>
 								  <thead>
 									<tr>
 									  <th>日期类型</th>
+									  <th>适用场景</th>
 									  <th>日期范围类型</th>
 									  <th>日期开始</th>
 									  <th>日期结束</th>
+									  <th>星期</th>
 									  <th style="white-space:nowrap;" nowrap="nowrap">操作</th>
 									</tr> 
 								  </thead>
@@ -43,16 +47,61 @@
 									  	${uKeFuDic[work.timetype!''].name!''} 
 									  </td>
 									  <td>
-									  	<#if work.scope == 'one'>
-									  		单天
-									  	<#else>
-									  		范围
-									  	</#if>
+									  		<#if work.apply == 'webim'>
+									  			文字客服
+									  		<#elseif work.apply == 'sche'>
+									  			排班
+									  		</#if>
 									  </td>
-									  <td>${work.begin!''}</td>
+									  <td>
+										  	<#if work.scope == 'one'>
+										  		单天
+										  	<#elseif work.scope == 'more'>
+										  		范围
+										  	<#elseif work.scope == 'week'>
+										  		星期
+										  	</#if>
+									  </td>
+									  <td>
+									  		<#if work.scope == 'one' ||  work.scope == 'more'>
+									  			${work.begin!''}
+									  		</#if>
+									  </td>
 									  <td>
 									  		<#if work.scope == 'more'>
 									  			${work.end!''}
+									  		</#if>
+									  </td>
+									  <td>
+									  		<#if work.scope == 'week'>
+									  			
+									  			<#list work.week?split(',') as we>
+									  				<#assign inx = 0>
+									  				<#if we == '1'>
+									  					周一,
+									  				<#assign inx = inx + 1>
+									  				<#elseif we == '2'>
+									  					周二,
+									  				<#assign inx = inx + 1>
+									  				<#elseif we == '3'>
+									  					周三,
+									  				<#assign inx = inx + 1>
+									  				<#elseif we == '4'>
+									  					周四,
+									  				<#assign inx = inx + 1>
+									  				<#elseif we == '5'>
+									  					周五,
+									  				<#assign inx = inx + 1>
+									  				<#elseif we == '6'>
+									  					周六,
+									  				<#assign inx = inx + 1>
+									  				<#elseif we == '7'>
+									  					周日
+									  				<#assign inx = inx + 1>
+						  							<#break>
+									  				</#if>
+									  			</#list>
+									  			
 									  		</#if>
 									  </td>
 									  <td style="white-space:nowrap;" nowrap="nowrap">
