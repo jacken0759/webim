@@ -1131,3 +1131,71 @@ CREATE TABLE `uk_ekm_search` (
 	`type` VARCHAR(50) DEFAULT NULL COMMENT '类型',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='搜索历史表';
+  ALTER TABLE uk_sessionconfig ADD `quenetimeout` int(11) DEFAULT '600' COMMENT '允许访客排队的最大时长';
+  ALTER TABLE uk_sessionconfig ADD `quenetimeoutmsg` varchar(255) DEFAULT NULL COMMENT '访客排队超市提示消息';
+  ALTER TABLE `uk_callcenter_event` ADD  `dataid` varchar(32) DEFAULT NULL COMMENT '数据ID';
+  ALTER TABLE `uk_callcenter_event` ADD  `nameid` varchar(32) DEFAULT NULL COMMENT '数据ID';
+    ALTER TABLE `uk_xiaoe_config` ADD  `aiid` varchar(32) DEFAULT NULL COMMENT '机器人ID';
+
+	       
+  CREATE TABLE `uk_work_session` (
+  `ID` varchar(50) NOT NULL COMMENT 'ID',
+  `USERID` varchar(50) DEFAULT NULL COMMENT '登录人ID',
+  `AGENT` varchar(50) DEFAULT NULL COMMENT '坐席工号',
+  `USERNAME` varchar(50) DEFAULT NULL COMMENT '坐席用户名（登录名）',
+  `AGENTNO` varchar(50) DEFAULT NULL COMMENT '分机号（坐席登录的分机号码）',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '坐席姓名',
+  `CODE` varchar(50) DEFAULT NULL COMMENT '坐席状态code（对应字典表里的CODE）',
+  `STATUS` varchar(50) DEFAULT NULL COMMENT '坐席当前状',
+  `BUSY` tinyint(4) DEFAULT '0' COMMENT '坐席是否忙',
+  `WORKSTATUS` varchar(50) DEFAULT NULL COMMENT '坐席工作状态',
+  `ORGI` varchar(50) DEFAULT NULL COMMENT '租户ID',
+  `AGENTSERVICEID` varchar(50) DEFAULT NULL COMMENT '会话ID',
+  `SKILL` varchar(50) DEFAULT NULL COMMENT '接入的技能组ID',
+  `SKILLNAME` varchar(50) DEFAULT NULL COMMENT '接入的技能组名称',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '记录创建时间',
+  `ANI` varchar(50) DEFAULT NULL COMMENT '主叫号码',
+  `CALLED` varchar(50) DEFAULT NULL COMMENT '被叫号码',
+  `SOURCE` varchar(50) DEFAULT NULL COMMENT '来源',
+  `SERVICEID` varchar(32) DEFAULT NULL COMMENT '服务记录ID',
+  `SERVICESTATUS` varchar(50) DEFAULT NULL COMMENT '当前呼叫状态',
+  `DISCALLER` varchar(50) DEFAULT NULL COMMENT '主叫分机号',
+  `DISCALLED` varchar(50) DEFAULT NULL COMMENT '被叫分机号',
+  `ORGAN` varchar(50) DEFAULT NULL COMMENT '所属组织机构ID',
+  `BEGINTIME` datetime DEFAULT NULL COMMENT '状态开始时间',
+  `ENDTIME` datetime DEFAULT NULL COMMENT '状态结束时间',
+  `FIRSTSTATUS` tinyint(4) DEFAULT '0' COMMENT '当天首次时间',
+  `DATESTR` varchar(20) DEFAULT NULL COMMENT '日期字符串',
+  `DURATION` int(11) DEFAULT NULL COMMENT '通话时长',
+  `IPADDR` varchar(100) DEFAULT NULL COMMENT '通话时长',
+  `HOSTNAME` varchar(100) DEFAULT NULL COMMENT '通话时长',
+  `ADMIN` tinyint(4) DEFAULT '0',
+  `firsttime` tinyint(4) DEFAULT '0' COMMENT '是否首次就绪',
+  `firsttimes` int(11) DEFAULT '0' COMMENT '首次就绪时长',
+  `CLIENTID` varchar(100) DEFAULT NULL COMMENT '客户端ID',
+  `SESSIONID` varchar(50) DEFAULT NULL COMMENT '会话ID',
+  `WORKTYPE` varchar(32) DEFAULT NULL COMMENT '业务类型',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='坐席状态表';
+  
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
