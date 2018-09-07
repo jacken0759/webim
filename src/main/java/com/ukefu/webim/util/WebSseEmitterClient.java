@@ -31,7 +31,7 @@ public class WebSseEmitterClient{
 		imClientsMap.put(client.getClient(), client) ;
 	}
 	
-	public void removeClient(String userid , String client , boolean timeout) throws Exception{
+	public void removeClient(String sessionid,String userid , String client , boolean timeout) throws Exception{
 		List<WebIMClient> keyClients = this.getClients(userid) ;
 		for(int i=0 ; i<keyClients.size() ; i++){
 			WebIMClient webIMClient = keyClients.get(i) ;
@@ -42,7 +42,7 @@ public class WebSseEmitterClient{
 			}
 		}
 		if(keyClients.size() == 0 && timeout == true){
-			OnlineUserUtils.offline(userid, userid);
+			OnlineUserUtils.offline(sessionid , userid, userid);
 		}
 	}
 }

@@ -163,6 +163,8 @@ public class CousultInvite implements java.io.Serializable{
 	private String oqrdetailinput ;	//外部推荐详情输入格式化模板
 	private String oqrdetailoutput ;	//外部推荐详情输出格式化模板
 	
+	private boolean fullscreen ;		//启用访客端对话界面全屏显示
+	
 	
 	@Id
 	@Column(length = 32)
@@ -882,5 +884,11 @@ public class CousultInvite implements java.io.Serializable{
 	}
 	public void setQuickagent(boolean quickagent) {
 		this.quickagent = quickagent;
+	}
+	public boolean isFullscreen() {
+		return fullscreen;
+	}
+	public void setFullscreen(boolean fullscreen) {
+		this.fullscreen = fullscreen;
 	}
 }

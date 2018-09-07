@@ -115,11 +115,6 @@ public class LoginController extends Handler{
 		    	final User loginUser = userRepository.findByUsernameAndPasswordAndDatastatus(user.getUsername() , UKTools.md5(user.getPassword()),false) ;
 		        if(loginUser!=null && !StringUtils.isBlank(loginUser.getId())){
 		        	view = this.processLogin(request, response, view, loginUser, referer) ;
-		        	if(!StringUtils.isBlank(sla) && sla.equals("1")) {
-	    				Cookie flagid = new Cookie(UKDataContext.UKEFU_SYSTEM_COOKIES_FLAG,UKTools.encryption(loginUser.getId()));
-	    				flagid.setMaxAge(7*24*60*60);
-	    				response.addCookie(flagid);
-		        	}
 		        }else{
 		        	view = request(super.createRequestPageTempletResponse("/login"));
 		        	if(!StringUtils.isBlank(referer)){

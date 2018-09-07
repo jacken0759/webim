@@ -86,6 +86,18 @@ public class AiConfig implements java.io.Serializable{
 	private String hotmsg ;	//热点消息
 	private boolean topicshot ;	//是否开启热点消息推荐
 	
+	private boolean topicuseful;	//是否开启知识评价功能
+	private String topicusefulmsg ;	//知识评价提示消息
+	private String topicusefulok ;	//知识评价提示消息"已解决"按钮
+	private String topicusefulno ;	//知识评价提示消息"未解决"按钮
+	
+	private String topicusefultip ;	//评价后提示信息
+	
+	private boolean topicusefulask ;	//知识评价提示消息点击"未解决"后弹出 原因
+	private boolean quickagent ;	//显示快速转人工坐席
+	private String quickagentmsg ;	//快速转人工坐席提示消息
+	private String noagentmsg ;	//无坐席在线提示消息
+	
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -381,6 +393,60 @@ public class AiConfig implements java.io.Serializable{
 	}
 	public void setTopicshot(boolean topicshot) {
 		this.topicshot = topicshot;
+	}
+	public boolean isTopicuseful() {
+		return topicuseful;
+	}
+	public void setTopicuseful(boolean topicuseful) {
+		this.topicuseful = topicuseful;
+	}
+	public String getTopicusefulmsg() {
+		return topicusefulmsg;
+	}
+	public void setTopicusefulmsg(String topicusefulmsg) {
+		this.topicusefulmsg = topicusefulmsg;
+	}
+	public String getTopicusefulok() {
+		return topicusefulok;
+	}
+	public void setTopicusefulok(String topicusefulok) {
+		this.topicusefulok = topicusefulok;
+	}
+	public String getTopicusefulno() {
+		return topicusefulno;
+	}
+	public void setTopicusefulno(String topicusefulno) {
+		this.topicusefulno = topicusefulno;
+	}
+	public boolean isTopicusefulask() {
+		return topicusefulask;
+	}
+	public void setTopicusefulask(boolean topicusefulask) {
+		this.topicusefulask = topicusefulask;
+	}
+	public boolean isQuickagent() {
+		return quickagent;
+	}
+	public void setQuickagent(boolean quickagent) {
+		this.quickagent = quickagent;
+	}
+	public String getQuickagentmsg() {
+		return quickagentmsg;
+	}
+	public void setQuickagentmsg(String quickagentmsg) {
+		this.quickagentmsg = quickagentmsg;
+	}
+	public String getTopicusefultip() {
+		return topicusefultip;
+	}
+	public void setTopicusefultip(String topicusefultip) {
+		this.topicusefultip = topicusefultip;
+	}
+	public String getNoagentmsg() {
+		return noagentmsg;
+	}
+	public void setNoagentmsg(String noagentmsg) {
+		this.noagentmsg = noagentmsg;
 	}
 	@Transient
 	public List<OtherMessageItem> getHot(){

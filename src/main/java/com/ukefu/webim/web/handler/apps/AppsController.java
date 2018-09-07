@@ -143,7 +143,7 @@ public class AppsController extends Handler{
 			onlineUser.setInvitestatus(UKDataContext.OnlineUserInviteStatus.INVITE.toString());
 			onlineUser.setInvitetimes(onlineUser.getInvitetimes()+1);
 			onlineUserRes.save(onlineUser) ;
-			OnlineUserUtils.sendWebIMClients(onlineUser.getUserid() , "invite");
+			OnlineUserUtils.sendWebIMClients(onlineUser.getSessionid() , onlineUser.getUserid() , "invite");
 			InviteRecord record = new InviteRecord() ;
 			record.setAgentno(super.getUser(request).getId());
 			record.setUserid(onlineUser.getUserid());

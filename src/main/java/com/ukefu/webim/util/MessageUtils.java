@@ -292,7 +292,8 @@ public class MessageUtils {
     		outMessage.setChannelMessage(data);
     		outMessage.setNickName(data.getUsername());
     		outMessage.setCreatetime(data.getCreatetime());
-    		
+    		outMessage.setTopic(!StringUtils.isBlank(data.getTopicid()));
+    		outMessage.setId(data.getId());
     		if(!StringUtils.isBlank(data.getSuggestmsg())) {
     			outMessage.setSuggest(data.getSuggest());
     		}

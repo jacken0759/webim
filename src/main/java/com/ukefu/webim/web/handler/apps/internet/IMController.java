@@ -266,7 +266,7 @@ public class IMController extends Handler{
 						@Override
 						public void run() {	
 							try {
-								OnlineUserUtils.webIMClients.removeClient(userid , client , false) ; //执行了 邀请/再次邀请后终端的
+								OnlineUserUtils.webIMClients.removeClient(sessionid , userid , client , false) ; //执行了 邀请/再次邀请后终端的
 							} catch (Exception e) {
 								e.printStackTrace();
 							}	
@@ -279,7 +279,7 @@ public class IMController extends Handler{
 								if(emitter!=null){
 									emitter.complete();
 								}
-								OnlineUserUtils.webIMClients.removeClient(userid , client , true) ;	//正常的超时断开
+								OnlineUserUtils.webIMClients.removeClient(sessionid , userid , client , true) ;	//正常的超时断开
 							} catch (Exception e) {
 								e.printStackTrace();
 							}

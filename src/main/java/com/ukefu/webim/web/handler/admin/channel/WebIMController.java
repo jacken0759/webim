@@ -231,6 +231,8 @@ public class WebIMController extends Handler{
     			tempInviteData.setTipuser(inviteData.isTipuser());
     			tempInviteData.setTipusertitle(inviteData.getTipusertitle());
     			
+    			tempInviteData.setFullscreen(inviteData.isFullscreen());
+    			
     			
     			tempInviteData.setCtrlenter(inviteData.isCtrlenter());
     			

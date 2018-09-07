@@ -115,13 +115,16 @@ public class OnlineUserUtils {
 	 * @throws Exception
 	 */
 	public static OnlineUser onlineuser(String userid ,String orgi , CousultInvite invite){
-		OnlineUser onlineUser = (OnlineUser) CacheHelper.getOnlineUserCacheBean().getCacheObject(userid, orgi) ;
-		if(onlineUser == null && invite != null && invite.isTraceuser()){
-			OnlineUserRepository service = (OnlineUserRepository) UKDataContext.getContext().getBean(OnlineUserRepository.class);
-
-			List<OnlineUser> tempOnlineUserList = service.findByUseridAndOrgi(userid , orgi);
-			if(tempOnlineUserList.size() > 0){
-				onlineUser = tempOnlineUserList.get(0) ;
+		OnlineUser onlineUser = null ;
+		Object object = CacheHelper.getOnlineUserCacheBean().getCacheObject(userid, orgi) ;
+		if(object!=null && object instanceof OnlineUser) {
+			if(onlineUser == null && invite != null && invite.isTraceuser()){
+				OnlineUserRepository service = (OnlineUserRepository) UKDataContext.getContext().getBean(OnlineUserRepository.class);
+	
+				List<OnlineUser> tempOnlineUserList = service.findByUseridAndOrgi(userid , orgi);
+				if(tempOnlineUserList.size() > 0){
+					onlineUser = tempOnlineUserList.get(0) ;
+				}
 			}
 		}
 		return onlineUser;
@@ -428,8 +431,8 @@ public class OnlineUserUtils {
 	 * @throws Exception
 	 */
 	public static void cacheOnlineUser(OnlineUser onlineUser ,String orgi  , CousultInvite invite){
-		if(onlineUser!=null && !StringUtils.isBlank(onlineUser.getUserid())){
-			CacheHelper.getOnlineUserCacheBean().put(onlineUser.getUserid() , onlineUser , orgi) ;
+		if(onlineUser!=null && !StringUtils.isBlank(onlineUser.getSessionid())){
+			CacheHelper.getOnlineUserCacheBean().put(onlineUser.getSessionid() , onlineUser , orgi) ;
 		}
 		if(invite.isTraceuser()){
 			UKTools.published(onlineUser);
@@ -448,126 +451,129 @@ public class OnlineUserUtils {
 	public static OnlineUser online(User user, String orgi, String sessionid,String optype, HttpServletRequest request , String channel , String appid , Contacts contacts , CousultInvite invite) {
 		OnlineUser onlineUser = null;
 		if (UKDataContext.getContext() != null && invite != null) {
-			onlineUser = onlineuser(user.getId(), orgi , invite) ;
-			if (onlineUser == null) {
-				onlineUser = new OnlineUser();
-				onlineUser.setId(user.getId());
-				onlineUser.setCreater(user.getId());
-				onlineUser.setUsername(user.getUsername());
-				onlineUser.setCreatetime(new Date());
-				onlineUser.setUpdatetime(new Date());
-				onlineUser.setUpdateuser(user.getUsername());
-				onlineUser.setSessionid(sessionid);
-				
-				if(contacts!=null){
-					onlineUser.setContactsid(contacts.getId());
-				}
-
-				onlineUser.setOrgi(orgi);
-				onlineUser.setChannel(channel);
-				
-				String cookie = getCookie(request, "R3GUESTUSEKEY");
-				if ((StringUtils.isBlank(cookie))
-						|| (user.getSessionid().equals(cookie))) {
-					onlineUser.setOlduser("0");
-				} else {
-					onlineUser.setOlduser("1");
-				}
-				onlineUser.setMobile(CheckMobile.check(request
-						.getHeader("User-Agent")) ? "1" : "0");
-
-				// onlineUser.setSource(user.getId());
-
-				String url = request.getHeader("referer");
-				onlineUser.setUrl(url);
-				if (!StringUtils.isBlank(url)) {
-					try {
-						URL referer = new URL(url);
-						onlineUser.setSource(referer.getHost());
-					} catch (MalformedURLException e) {
-						e.printStackTrace();
-					}
-				}
-				onlineUser.setAppid(appid);
-				onlineUser.setUserid(user.getId());
-				onlineUser.setUsername(user.getUsername());
-				
-				if(!StringUtils.isBlank(request.getParameter("title"))){
-					String title = request.getParameter("title") ;
-					if(title.length() > 255){
-						onlineUser.setTitle(title.substring(0,255));
-					}else{
-						onlineUser.setTitle(title);
-					}
-				}
-
-				String ip = UKTools.getIpAddr(request);
-				
-				onlineUser.setLogintime(new Date());
-				onlineUser.setIp(ip);
-
-				IP ipdata = IPTools.getInstance().findGeography(ip);
-				onlineUser.setCountry(ipdata.getCountry());
-				onlineUser.setProvince(ipdata.getProvince());
-				onlineUser.setCity(ipdata.getCity());
-				onlineUser.setIsp(ipdata.getIsp());
-				onlineUser.setRegion(ipdata.toString() + "（"
-						+ ip + "）");
-
-				onlineUser.setDatestr(new SimpleDateFormat("yyyMMdd")
-						.format(new Date()));
-
-				onlineUser.setHostname(ip);
-				onlineUser.setSessionid(sessionid);
-				onlineUser.setOptype(optype);
-				onlineUser
-						.setStatus(UKDataContext.OnlineUserOperatorStatus.ONLINE
-								.toString());
-				BrowserClient client = UKTools.parseClient(request);
-				onlineUser.setOpersystem(client.getOs());
-				onlineUser.setBrowser(client.getBrowser());
-				onlineUser.setUseragent(client.getUseragent());
-			}else{
-				onlineUser.setCreatetime(new Date());
-				if((!StringUtils.isBlank(onlineUser.getSessionid()) && !onlineUser.getSessionid().equals(sessionid)) || !UKDataContext.OnlineUserOperatorStatus.ONLINE.toString().equals(onlineUser.getStatus())){
-					onlineUser.setStatus(UKDataContext.OnlineUserOperatorStatus.ONLINE.toString());
-					onlineUser.setChannel(channel);
-					onlineUser.setAppid(appid);
+			Object object = CacheHelper.getOnlineUserCacheBean().getCacheObject(sessionid, orgi) ;
+			if(object==null || object instanceof OnlineUser) {
+				onlineUser = onlineuser(user.getId(), orgi , invite) ;
+				if (onlineUser == null) {
+					onlineUser = new OnlineUser();
+					onlineUser.setId(user.getId());
+					onlineUser.setCreater(user.getId());
+					onlineUser.setUsername(user.getUsername());
+					onlineUser.setCreatetime(new Date());
 					onlineUser.setUpdatetime(new Date());
-					if(!StringUtils.isBlank(onlineUser.getSessionid()) && !onlineUser.getSessionid().equals(sessionid)){
-						onlineUser.setInvitestatus(UKDataContext.OnlineUserInviteStatus.DEFAULT.toString());
-						onlineUser.setSessionid(sessionid);
-						onlineUser.setLogintime(new Date());
-						onlineUser.setInvitetimes(0);
+					onlineUser.setUpdateuser(user.getUsername());
+					onlineUser.setSessionid(sessionid);
+					
+					if(contacts!=null){
+						onlineUser.setContactsid(contacts.getId());
 					}
-				}else if(contacts!=null){
-					if(!StringUtils.isBlank(contacts.getId()) && !StringUtils.isBlank(contacts.getName()) &&(StringUtils.isBlank(onlineUser.getContactsid()) || !contacts.getName().equals(onlineUser.getUsername()))){
-						if(StringUtils.isBlank(onlineUser.getContactsid())){
-							onlineUser.setContactsid(contacts.getId());
+	
+					onlineUser.setOrgi(orgi);
+					onlineUser.setChannel(channel);
+					
+					String cookie = getCookie(request, "R3GUESTUSEKEY");
+					if ((StringUtils.isBlank(cookie))
+							|| (user.getSessionid().equals(cookie))) {
+						onlineUser.setOlduser("0");
+					} else {
+						onlineUser.setOlduser("1");
+					}
+					onlineUser.setMobile(CheckMobile.check(request
+							.getHeader("User-Agent")) ? "1" : "0");
+	
+					// onlineUser.setSource(user.getId());
+	
+					String url = request.getHeader("referer");
+					onlineUser.setUrl(url);
+					if (!StringUtils.isBlank(url)) {
+						try {
+							URL referer = new URL(url);
+							onlineUser.setSource(referer.getHost());
+						} catch (MalformedURLException e) {
+							e.printStackTrace();
 						}
-						if(!contacts.getName().equals(onlineUser.getUsername())){
-							onlineUser.setUsername(contacts.getName());
+					}
+					onlineUser.setAppid(appid);
+					onlineUser.setUserid(user.getId());
+					onlineUser.setUsername(user.getUsername());
+					
+					if(!StringUtils.isBlank(request.getParameter("title"))){
+						String title = request.getParameter("title") ;
+						if(title.length() > 255){
+							onlineUser.setTitle(title.substring(0,255));
+						}else{
+							onlineUser.setTitle(title);
 						}
+					}
+	
+					String ip = UKTools.getIpAddr(request);
+					
+					onlineUser.setLogintime(new Date());
+					onlineUser.setIp(ip);
+	
+					IP ipdata = IPTools.getInstance().findGeography(ip);
+					onlineUser.setCountry(ipdata.getCountry());
+					onlineUser.setProvince(ipdata.getProvince());
+					onlineUser.setCity(ipdata.getCity());
+					onlineUser.setIsp(ipdata.getIsp());
+					onlineUser.setRegion(ipdata.toString() + "（"
+							+ ip + "）");
+	
+					onlineUser.setDatestr(new SimpleDateFormat("yyyMMdd")
+							.format(new Date()));
+	
+					onlineUser.setHostname(ip);
+					onlineUser.setSessionid(sessionid);
+					onlineUser.setOptype(optype);
+					onlineUser
+							.setStatus(UKDataContext.OnlineUserOperatorStatus.ONLINE
+									.toString());
+					BrowserClient client = UKTools.parseClient(request);
+					onlineUser.setOpersystem(client.getOs());
+					onlineUser.setBrowser(client.getBrowser());
+					onlineUser.setUseragent(client.getUseragent());
+				}else{
+					onlineUser.setCreatetime(new Date());
+					if((!StringUtils.isBlank(onlineUser.getSessionid()) && !onlineUser.getSessionid().equals(sessionid)) || !UKDataContext.OnlineUserOperatorStatus.ONLINE.toString().equals(onlineUser.getStatus())){
+						onlineUser.setStatus(UKDataContext.OnlineUserOperatorStatus.ONLINE.toString());
+						onlineUser.setChannel(channel);
+						onlineUser.setAppid(appid);
+						onlineUser.setUpdatetime(new Date());
+						if(!StringUtils.isBlank(onlineUser.getSessionid()) && !onlineUser.getSessionid().equals(sessionid)){
+							onlineUser.setInvitestatus(UKDataContext.OnlineUserInviteStatus.DEFAULT.toString());
+							onlineUser.setSessionid(sessionid);
+							onlineUser.setLogintime(new Date());
+							onlineUser.setInvitetimes(0);
+						}
+					}else if(contacts!=null){
+						if(!StringUtils.isBlank(contacts.getId()) && !StringUtils.isBlank(contacts.getName()) &&(StringUtils.isBlank(onlineUser.getContactsid()) || !contacts.getName().equals(onlineUser.getUsername()))){
+							if(StringUtils.isBlank(onlineUser.getContactsid())){
+								onlineUser.setContactsid(contacts.getId());
+							}
+							if(!contacts.getName().equals(onlineUser.getUsername())){
+								onlineUser.setUsername(contacts.getName());
+							}
+							onlineUser.setUpdatetime(new Date());
+						}
+					}
+					if(StringUtils.isBlank(onlineUser.getUsername()) && !StringUtils.isBlank(user.getUsername())){
+						onlineUser.setUseragent(user.getUsername());
 						onlineUser.setUpdatetime(new Date());
 					}
 				}
-				if(StringUtils.isBlank(onlineUser.getUsername()) && !StringUtils.isBlank(user.getUsername())){
-					onlineUser.setUseragent(user.getUsername());
-					onlineUser.setUpdatetime(new Date());
-				}
+				if(invite.isRecordhis() && !StringUtils.isBlank(request.getParameter("traceid"))){
+		    		UserTraceHistory trace = new UserTraceHistory();
+		    		trace.setId(request.getParameter("traceid"));
+		    		trace.setTitle(request.getParameter("title"));
+		    		trace.setUrl(request.getParameter("url"));
+		    		trace.setOrgi(invite.getOrgi());
+		    		trace.setUpdatetime(new Date());
+		    		trace.setUsername(onlineUser.getUsername());
+		    		
+		    		UKTools.published(trace);
+	    		}
+				cacheOnlineUser(onlineUser, orgi , invite);
 			}
-			if(invite.isRecordhis() && !StringUtils.isBlank(request.getParameter("traceid"))){
-	    		UserTraceHistory trace = new UserTraceHistory();
-	    		trace.setId(request.getParameter("traceid"));
-	    		trace.setTitle(request.getParameter("title"));
-	    		trace.setUrl(request.getParameter("url"));
-	    		trace.setOrgi(invite.getOrgi());
-	    		trace.setUpdatetime(new Date());
-	    		trace.setUsername(onlineUser.getUsername());
-	    		
-	    		UKTools.published(trace);
-    		}
-			cacheOnlineUser(onlineUser, orgi , invite);
 		}
 		return onlineUser;
 	}
@@ -597,10 +603,12 @@ public class OnlineUserUtils {
 	 * @param orgi
 	 * @throws Exception
 	 */
-	public static void offline(String user, String orgi) throws Exception {
+	public static void offline(String sessionid,String user, String orgi) throws Exception {
 		if(UKDataContext.getContext()!=null){
-			OnlineUser onlineUser = (OnlineUser) CacheHelper.getOnlineUserCacheBean().getCacheObject(user, orgi) ;
-			if(onlineUser!=null){
+			OnlineUser onlineUser = null ;
+			Object object = CacheHelper.getOnlineUserCacheBean().getCacheObject(sessionid, orgi) ;
+			if(object !=null && object instanceof OnlineUser){
+				onlineUser = (OnlineUser)object;
 				CousultInvite invite = OnlineUserUtils.cousult(onlineUser.getAppid(),onlineUser.getOrgi(), UKDataContext.getContext().getBean(ConsultInviteRepository.class));
 				if(invite.isTraceuser()){
 					onlineUser.setStatus(UKDataContext.OnlineUserOperatorStatus.OFFLINE.toString());
@@ -627,7 +635,7 @@ public class OnlineUserUtils {
 					}
 				}
 			}
-			CacheHelper.getOnlineUserCacheBean().delete(user, orgi) ;
+			CacheHelper.getOnlineUserCacheBean().delete(sessionid, orgi) ;
 		}
 	}
 	
@@ -642,7 +650,7 @@ public class OnlineUserUtils {
 				onlineUser.setBetweentime((int) (new Date().getTime() - onlineUser.getLogintime().getTime()));
 				onlineUser.setUpdatetime(new Date());
 				service.save(onlineUser) ;
-				CacheHelper.getOnlineUserCacheBean().delete(onlineUser.getUserid(), onlineUser.getOrgi()) ;
+				CacheHelper.getOnlineUserCacheBean().delete(onlineUser.getSessionid(), onlineUser.getOrgi()) ;
 				if(onlineUser!=null){
 					List<OnlineUserHis> hisList = onlineHisUserRes.findBySessionidAndOrgi(onlineUser.getSessionid() , onlineUser.getOrgi()) ;
 					OnlineUserHis his = null ;
@@ -957,14 +965,14 @@ public class OnlineUserUtils {
 	 * @param userid
 	 * @throws Exception 
 	 */
-	public static void sendWebIMClients(String userid , String msg) throws Exception{
+	public static void sendWebIMClients(String sessionid , String userid , String msg) throws Exception{
 		List<WebIMClient> clients = OnlineUserUtils.webIMClients.getClients(userid) ;
 		if(clients!=null && clients.size()>0){
 			for(WebIMClient client : clients){
 				try{
 					client.getSse().send(SseEmitter.event().reconnectTime(0).data(msg));
 				}catch(Exception ex){
-					OnlineUserUtils.webIMClients.removeClient(userid , client.getClient() , true) ;
+					OnlineUserUtils.webIMClients.removeClient(sessionid , userid , client.getClient() , true) ;
 				}finally{
 					client.getSse().complete();
 				}

@@ -58,6 +58,7 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	
 	private boolean readstatus ;
 	private boolean useful ;	//回答是否有用
+	private String notreason ;	//知识回答无用的原因
 	
 	private Date usetime ;		//最后一次评价时间
 	
@@ -458,6 +459,12 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	}
 	public void setBustype(String bustype) {
 		this.bustype = bustype;
+	}
+	public String getNotreason() {
+		return notreason;
+	}
+	public void setNotreason(String notreason) {
+		this.notreason = notreason;
 	}
 	@Transient
 	public List<OtherMessageItem> getSuggest(){

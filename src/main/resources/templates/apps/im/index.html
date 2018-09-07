@@ -274,7 +274,7 @@
     </script>
     <!-- kindeditor -->
 </head>
-<body style="overflow:hidden;" class="ukefu-point-text">
+<body style="overflow:hidden;<#if inviteData.fullscreen?? && inviteData.fullscreen>max-width:100% !important;max-height:100% !important;</#if>" class="ukefu-point-text">
 <div class="large ukefu-im-theme <#if type?? && type='text'>ukefu-theme-border-${inviteData.consult_dialog_color!''}</#if>">
     <div id="containter" class="clearfix">
     	<div id="header" class="theme${inviteData.consult_dialog_color!''}">

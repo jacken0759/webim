@@ -20,6 +20,8 @@ public class MessageInContent implements MessageDataBean{
 	private Object channelMessage ;
 	private String agentserviceid ;
 	
+	private boolean topic ;
+	
 	private String attachmentid ;
 	
 	private boolean noagent ;
@@ -141,5 +143,11 @@ public class MessageInContent implements MessageDataBean{
 	}
 	public void setNoagent(boolean noagent) {
 		this.noagent = noagent;
+	}
+	public boolean isTopic() {
+		return topic;
+	}
+	public void setTopic(boolean topic) {
+		this.topic = topic;
 	}
 }

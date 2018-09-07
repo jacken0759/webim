@@ -117,11 +117,12 @@ public class AiIMEventHandler
     	String orgi = client.getHandshakeData().getSingleUrlParam("orgi") ;
     	if(!StringUtils.isBlank(user)){
 	    	NettyClients.getInstance().removeIMEventClient(user , UKTools.getContextID(client.getSessionId().toString()));
-	    	AiUser aiUser = (AiUser) CacheHelper.getOnlineUserCacheBean().getCacheObject(user, orgi) ;
-	    	if(aiUser!=null) {
+	    	Object object = CacheHelper.getOnlineUserCacheBean().getCacheObject(user, orgi) ;
+	    	if(object!=null && object instanceof AiUser) {
+	    		AiUser aiUser = (AiUser)object ;
 		    	ServiceQuene.processAiService(aiUser, orgi) ;
-		    	CacheHelper.getOnlineUserCacheBean().delete(user,UKDataContext.SYSTEM_ORGI) ;
 	    	}
+	    	CacheHelper.getOnlineUserCacheBean().delete(user,UKDataContext.SYSTEM_ORGI) ;
     	}
     	client.disconnect();
     }  
@@ -170,7 +171,7 @@ public class AiIMEventHandler
     	
     	data.setAiid(aiid);
     	
-    	Object cacheData = (AiUser) CacheHelper.getOnlineUserCacheBean().getCacheObject(user,orgi) ;
+    	Object cacheData = CacheHelper.getOnlineUserCacheBean().getCacheObject(user,orgi) ;
     	if(cacheData!=null && cacheData instanceof AiUser){
 			AiUser aiUser = (AiUser)cacheData ;
 			data.setAgentserviceid(aiUser.getAgentserviceid());
