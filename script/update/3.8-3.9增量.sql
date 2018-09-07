@@ -1177,6 +1177,141 @@ CREATE TABLE `uk_ekm_search` (
   `WORKTYPE` varchar(32) DEFAULT NULL COMMENT '业务类型',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='坐席状态表';
+CREATE TABLE `uk_act_formfilter_item` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `formfilterid` varchar(32) DEFAULT NULL COMMENT '筛选器ID',
+  `field` varchar(32) DEFAULT NULL COMMENT '字段',
+  `cond` varchar(32) DEFAULT NULL COMMENT '条件',
+  `value` varchar(32) DEFAULT NULL COMMENT '取值',
+  `contype` varchar(32) DEFAULT NULL COMMENT '条件类型',
+  `itemtype` varchar(32) DEFAULT NULL COMMENT '类型',
+  `comp` varchar(50) DEFAULT NULL COMMENT '逻辑条件',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='筛选项';
+CREATE TABLE `uk_act_formfilter` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '筛选表单名称',
+  `CODE` varchar(50) DEFAULT NULL COMMENT '筛选表单代码',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `UPDATETIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `USERNAME` varchar(50) DEFAULT NULL COMMENT '创建人名称',
+  `STATUS` varchar(50) DEFAULT NULL COMMENT '状态',
+  `PARENTID` varchar(32) DEFAULT NULL COMMENT '上级ID',
+  `FILTERTYPE` varchar(32) DEFAULT NULL COMMENT '筛选类型（批次筛选/元数据筛选）',
+  `BATID` varchar(32) DEFAULT NULL COMMENT '筛选表单使用的批次ID',
+  `TABLEID` varchar(32) DEFAULT NULL COMMENT '筛选表单使用元数据ID',
+  `DATASTATUS` tinyint(4) DEFAULT '0' COMMENT '数据状态',
+  `INX` int(11) DEFAULT '0' COMMENT '分类排序序号',
+  `ORGAN` varchar(32) DEFAULT NULL COMMENT '部门',
+  `DESCRIPTION` text COMMENT '备注信息',
+  `execnum` int(11) DEFAULT '0' COMMENT '导入次数',
+  `filternum` int(11) DEFAULT '0' COMMENT '筛选次数',
+  `conditional` int(11) DEFAULT '0' COMMENT '条件个数',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='筛选表单';
+
+CREATE TABLE `uk_act_task` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '任务名称',
+  `CODE` varchar(50) DEFAULT NULL COMMENT '任务代码',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `UPDATETIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `USERNAME` varchar(50) DEFAULT NULL COMMENT '创建人名称',
+  `STATUS` varchar(50) DEFAULT NULL COMMENT '状态',
+  `PARENTID` varchar(32) DEFAULT NULL COMMENT '上级ID',
+  `ACTID` varchar(32) DEFAULT NULL COMMENT '活动ID',
+  `INX` int(11) DEFAULT '0' COMMENT '分类排序序号',
+  `NAMENUM` int(11) DEFAULT '0' COMMENT '批次包含的名单总数',
+  `VALIDNUM` int(11) DEFAULT '0' COMMENT '批次包含的有效名单总数',
+  `INVALIDNUM` int(11) DEFAULT '0' COMMENT '批次包含的无效名单总数',
+  `ASSIGNED` int(11) DEFAULT '0' COMMENT '已分配名单总数',
+  `NOTASSIGNED` int(11) DEFAULT '0' COMMENT '未分配名单总数',
+  `ENABLE` tinyint(4) DEFAULT '0' COMMENT '分类状态',
+  `DATASTATUS` tinyint(4) DEFAULT '0' COMMENT '数据状态',
+  `ORGAN` varchar(32) DEFAULT NULL COMMENT '部门',
+  `DESCRIPTION` text COMMENT '备注信息',
+  `execnum` int(11) DEFAULT '0' COMMENT '导入次数',
+  `SOURCE` varchar(255) DEFAULT NULL COMMENT '来源信息',
+  `BATID` varchar(32) DEFAULT NULL COMMENT '批次ID',
+  `FILTERID` varchar(32) DEFAULT NULL COMMENT '筛选ID',
+  `ASSIGNEDORGAN` int(11) DEFAULT '0' COMMENT '分配给部门',
+  `exectype` varchar(32) DEFAULT NULL COMMENT '执行类型',
+  `renum` int(11) DEFAULT '0' COMMENT '分配数量',
+  `reorgannum` int(11) DEFAULT '0' COMMENT '分配到部门数量',
+  `assignedai` int(11) DEFAULT '0' COMMENT '分配到AI的名单数量',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='电销任务表';
+CREATE TABLE `uk_sales_status` (
+  `id` varchar(32) NOT NULL COMMENT '数据ID',
+  `name` varchar(255) DEFAULT NULL COMMENT '状态名',
+  `code` varchar(255) DEFAULT NULL COMMENT '状态代码',
+  `cate` varchar(32) DEFAULT NULL COMMENT '状态分类ID',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `memo` varchar(32) DEFAULT NULL COMMENT '备注',
+  `activityid` varchar(32) DEFAULT NULL COMMENT '活动ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='电销状态';
+
+
+
+CREATE TABLE `uk_act_filter_his` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '筛选名称',
+  `CODE` varchar(50) DEFAULT NULL COMMENT '筛选代码',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `UPDATETIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `USERNAME` varchar(50) DEFAULT NULL COMMENT '用户名',
+  `STATUS` varchar(50) DEFAULT NULL COMMENT '状态',
+  `PARENTID` varchar(32) DEFAULT NULL COMMENT '上级ID',
+  `ACTID` varchar(32) DEFAULT NULL COMMENT '活动ID',
+  `INX` int(11) DEFAULT '0' COMMENT '分类排序序号',
+  `NAMENUM` int(11) DEFAULT '0' COMMENT '批次包含的名单总数',
+  `VALIDNUM` int(11) DEFAULT '0' COMMENT '批次包含的有效名单总数',
+  `INVALIDNUM` int(11) DEFAULT '0' COMMENT '批次包含的无效名单总数',
+  `ASSIGNED` int(11) DEFAULT '0' COMMENT '已分配名单总数',
+  `NOTASSIGNED` int(11) DEFAULT '0' COMMENT '未分配名单总数',
+  `ENABLE` tinyint(4) DEFAULT '0' COMMENT '分类状态',
+  `DATASTATUS` tinyint(4) DEFAULT '0' COMMENT '数据状态',
+  `ORGAN` varchar(32) DEFAULT NULL COMMENT '部门',
+  `DESCRIPTION` text COMMENT '备注',
+  `execnum` int(11) DEFAULT '0' COMMENT '导入次数',
+  `SOURCE` varchar(255) DEFAULT NULL COMMENT '来源',
+  `BATID` varchar(32) DEFAULT NULL COMMENT '批次ID',
+  `FILTERID` varchar(32) DEFAULT NULL COMMENT '筛选表单ID',
+  `ASSIGNEDORGAN` int(11) DEFAULT '0' COMMENT '分配部门',
+  `exectype` varchar(32) DEFAULT NULL COMMENT '执行类型',
+  `renum` int(11) DEFAULT '0' COMMENT '分配数量',
+  `reorgannum` int(11) DEFAULT '0' COMMENT '部门分配数量',
+  `assignedai` int(11) DEFAULT '0' COMMENT '分配到AI的名单数量',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='筛选记录表';
+INSERT INTO `uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENTID`, `DESCRIPTION`, `MEMO`, `ICONSTR`, `ICONSKIN`, `CATETYPE`, `CREATER`, `CREATETIME`, `UPDATETIME`, `HASCHILD`, `SORTINDEX`, `DICID`, `DEFAULTVALUE`, `DISCODE`, `URL`, `MODULE`, `MLEVEL`, `RULES`, `MENUTYPE`) VALUES ('297e74066464004b01646402379d068f', '活动状态分类', 'pub', 'com.dic.callout.activity', NULL, 'data', '0', '', NULL, NULL, NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-07-04 14:37:04', NULL, '1', '0', NULL, '0', '0', NULL, NULL, NULL, NULL, NULL);
+ALTER TABLE uk_jobdetail ADD `city` varchar(32) DEFAULT NULL COMMENT '线路所在城市';
+ALTER TABLE uk_jobdetail ADD `prefix` tinyint(4) DEFAULT '0' COMMENT '线路资源拨号前缀';
+ALTER TABLE uk_jobdetail ADD  `reportid` varchar(32) DEFAULT NULL COMMENT '数据表ID';
+ALTER TABLE uk_jobdetail ADD `siptrunk` varchar(32) DEFAULT NULL COMMENT '线路信息';
+ALTER TABLE uk_jobdetail ADD `province` varchar(32) DEFAULT NULL COMMENT '线路所在省份';
+ALTER TABLE `uk_sales_product_type` ADD `parentid` varchar(32) DEFAULT NULL COMMENT '上级产品分类';
+ALTER TABLE `uk_act_config` ADD `dataid` varchar(32) DEFAULT NULL COMMENT '数据ID';
+ALTER TABLE `uk_act_config` ADD `previewautocallout` tinyint(4) DEFAULT '0' COMMENT '启用预览倒计时';
+ALTER TABLE `uk_act_config` ADD `defaultvalue` varchar(100) DEFAULT NULL COMMENT '默认值';
+ALTER TABLE `uk_act_config` ADD `strategy` varchar(100) DEFAULT NULL COMMENT '策略';
+ALTER TABLE `uk_act_config` ADD `type` varchar(100) DEFAULT NULL COMMENT '类型';
+ALTER TABLE `uk_act_config` ADD `updatetime` datetime DEFAULT NULL COMMENT '更新时间';
+
   
 
 
