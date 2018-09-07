@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-09-07 16:05:59
+Date: 2018-09-07 19:17:17
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -8986,27 +8986,6 @@ CREATE TABLE `uk_workorder_type` (
 
 -- ----------------------------
 -- Records of uk_workorder_type
--- ----------------------------
-
--- ----------------------------
--- Table structure for `uk_workservice_time`
--- ----------------------------
-DROP TABLE IF EXISTS `uk_workservice_time`;
-CREATE TABLE `uk_workservice_time` (
-  `id` varchar(32) NOT NULL COMMENT '主键ID',
-  `timetype` varchar(32) DEFAULT NULL COMMENT '日期类型',
-  `scope` varchar(50) DEFAULT NULL COMMENT '日期范围类型',
-  `begin` varchar(32) DEFAULT NULL COMMENT '日期开始',
-  `end` varchar(32) DEFAULT NULL COMMENT '日期开始',
-  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
-  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
-  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
--- ----------------------------
--- Records of uk_workservice_time
 -- ----------------------------
 
 -- ----------------------------
