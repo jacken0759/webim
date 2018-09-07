@@ -204,9 +204,11 @@ public class ApiIMController extends Handler{
     public ResponseEntity<RestResult> unuseful(HttpServletRequest request , @Valid String orgi , @Valid String id) {
 		if(!StringUtils.isBlank(id)){
     		ChatMessage chatMessage = chatMessageRes.findById(id) ;
-    		chatMessage.setUseful(false);
-    		chatMessage.setUsetime(new Date());
-    		chatMessageRes.save(chatMessage) ;
+    		if(chatMessage!=null) {
+	    		chatMessage.setUseful(false);
+	    		chatMessage.setUsetime(new Date());
+	    		chatMessageRes.save(chatMessage) ;
+    		}
     	}
         return new ResponseEntity<>(new RestResult(RestResultType.OK), HttpStatus.OK);
     }
