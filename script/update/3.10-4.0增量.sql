@@ -61,3 +61,6 @@ ALTER TABLE uk_xiaoe_config ADD quickagent tinyint DEFAULT 0 COMMENT '是否显�
 ALTER TABLE uk_xiaoe_config ADD quickagentmsg varchar(255) DEFAULT NULL COMMENT '快速转人工提示消息';
 
 ALTER TABLE uk_xiaoe_config ADD noagentmsg varchar(255) DEFAULT NULL COMMENT '无坐席在线提示消息';
+
+
+ALTER TABLE uk_chat_message ADD quickagent tinyint DEFAULT 0 COMMENT '错误消息快速转人工坐席';
