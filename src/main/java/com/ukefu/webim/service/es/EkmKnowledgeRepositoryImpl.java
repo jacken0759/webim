@@ -2,7 +2,6 @@ package com.ukefu.webim.service.es;
 
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,11 +21,8 @@ import com.ukefu.core.UKDataContext;
 import com.ukefu.webim.service.repository.EkmKnowbaseOrganRepository;
 import com.ukefu.webim.service.repository.EkmKnowbaseRoleRepository;
 import com.ukefu.webim.service.repository.UserRoleRepository;
-import com.ukefu.webim.web.model.EkmKnowbaseOrgan;
-import com.ukefu.webim.web.model.EkmKnowbaseRole;
 import com.ukefu.webim.web.model.EkmKnowledge;
 import com.ukefu.webim.web.model.User;
-import com.ukefu.webim.web.model.UserRole;
 
 @Component
 public class EkmKnowledgeRepositoryImpl implements EkmKnowledgeESRepository{
@@ -314,7 +310,7 @@ public class EkmKnowledgeRepositoryImpl implements EkmKnowledgeESRepository{
 		
 		
 		
-		final List<String> knowbaseRoleList = new ArrayList<>();
+		/*final List<String> knowbaseRoleList = new ArrayList<>();
 		final List<String> knowbaseOrganList = new ArrayList<>();
 		
 		List<UserRole> userRoleList = userRoleRes.findByOrgiAndUser(orgi, user);
@@ -339,7 +335,7 @@ public class EkmKnowledgeRepositoryImpl implements EkmKnowledgeESRepository{
 			for(String id : knowbaseOrganList){
 				boolQueryBuilder1.should(termQuery("knowbaseid" , id));
 			}
-		}
+		}*/
 		
 		boolQueryBuilder.must(boolQueryBuilder1) ;
 		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
