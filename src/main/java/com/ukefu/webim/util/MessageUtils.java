@@ -286,6 +286,9 @@ public class MessageUtils {
     		data.setContextid(data.getContextid());
     		data.setCalltype(direction);
     		
+    		if(data.isQuickagent()) {
+    			outMessage.setQuickagent(true);
+    		}
     		outMessage.setContextid(data.getContextid());
     		outMessage.setFromUser(data.getUserid());
     		outMessage.setToUser(data.getTouser());

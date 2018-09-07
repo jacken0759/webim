@@ -12,6 +12,7 @@ public class OtherMessage implements java.io.Serializable{
 	private String title;
 	private String message ;
 	private String id ;
+	private boolean trans;
 	private String code ;
 	private String score ;
 	private boolean detail ;
@@ -65,5 +66,11 @@ public class OtherMessage implements java.io.Serializable{
 	}
 	public void setScore(String score) {
 		this.score = score;
+	}
+	public boolean isTrans() {
+		return trans;
+	}
+	public void setTrans(boolean trans) {
+		this.trans = trans;
 	}
 }

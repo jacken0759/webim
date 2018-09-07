@@ -26,6 +26,8 @@ public class MessageInContent implements MessageDataBean{
 	
 	private boolean noagent ;
 	
+	private boolean quickagent ;
+	
 	private Object user ;
 	private String contextid ;
 	private String createtime ;
@@ -149,5 +151,11 @@ public class MessageInContent implements MessageDataBean{
 	}
 	public void setTopic(boolean topic) {
 		this.topic = topic;
+	}
+	public boolean isQuickagent() {
+		return quickagent;
+	}
+	public void setQuickagent(boolean quickagent) {
+		this.quickagent = quickagent;
 	}
 }

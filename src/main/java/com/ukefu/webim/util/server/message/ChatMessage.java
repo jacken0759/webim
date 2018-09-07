@@ -99,6 +99,8 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	private String scale ;		//地图级别 
 	private String suggestmsg ;	//推荐消息
 	
+	private boolean quickagent ;//有错误消息 强制快速转人工坐席
+	
 	private int tokenum ; 	//当前未读消息数量
 	private String agentuser ;	
 	
@@ -465,6 +467,12 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	}
 	public void setNotreason(String notreason) {
 		this.notreason = notreason;
+	}
+	public boolean isQuickagent() {
+		return quickagent;
+	}
+	public void setQuickagent(boolean quickagent) {
+		this.quickagent = quickagent;
 	}
 	@Transient
 	public List<OtherMessageItem> getSuggest(){
