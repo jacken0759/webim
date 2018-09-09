@@ -305,7 +305,10 @@ public class IMController extends Handler{
     @Menu(type = "im" , subtype = "index" , access = true)
     public ModelAndView index(ModelMap map ,HttpServletRequest request , HttpServletResponse response, @Valid String orgi, @Valid String aiid, @Valid String traceid ,@Valid String exchange, @Valid String title ,@Valid String url,@Valid String mobile ,@Valid String phone ,  @Valid String ai , @Valid String client , @Valid String type, @Valid String appid, @Valid String userid, @Valid String sessionid , @Valid String skill, @Valid String agent , @Valid Contacts contacts,@Valid String product,@Valid String description,@Valid String imgurl,@Valid String pid,@Valid String purl) throws Exception  {
     	ModelAndView view = request(super.createRequestPageTempletResponse("/apps/im/index")) ; 
-    	BlackEntity black = (BlackEntity) CacheHelper.getSystemCacheBean().getCacheObject(userid, UKDataContext.SYSTEM_ORGI) ;
+    	BlackEntity black = null ;
+    	if(!StringUtils.isBlank(userid)) {
+    		black = (BlackEntity) CacheHelper.getSystemCacheBean().getCacheObject(userid, UKDataContext.SYSTEM_ORGI) ;
+    	}
     	if(!StringUtils.isBlank(appid) &&  (black == null || (black.getEndtime()!=null && black.getEndtime().before(new Date()))) ){
     		CousultInvite invite = OnlineUserUtils.cousult(appid, orgi, inviteRepository);
     		String userID = null;
