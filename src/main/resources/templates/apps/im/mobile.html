@@ -61,7 +61,7 @@
     </style>
     <script src="/im/js/socket.io.js"></script>
     <script type="text/javascript">
-	var editor , words , textheight , wordinx = 0 ;
+	var editor , words , textheight , wordinx = 0 , invite = false ;
     
     /**
      * 文本框根据输入内容自适应高度
@@ -335,7 +335,45 @@
 		</div>
 	</div>
 </div>
-
+<#if sessionConfig?? && sessionConfig.satisfaction?? && sessionConfig.satisfaction>
+<!--调查问卷弹框-->
+<div class="diaShade" id="diaShade" style="display: none"></div>
+<div class="dialogWrap" id="dialogWrap" style="display: none;width:auto;height:auto;margin-left:0px;left:0px;">
+    <div class="dialogCon">
+        <form id="commentContent" onSubmit="return submitForm(this)">
+        	<input type="hidden" name="id" id="agentserviceid" name="agentserviceid">
+            <h2 class="diaHeader clearfix">
+                <span>评价</span>
+                <hr>
+            </h2>
+            <p class="title">您是否对此次服务满意?</p>
+            <!--评价-->
+           <p style="margin-top:20px;">
+                <span style="float:left;">评价：</span>
+                <span style="position: relative;top: 0px;left: 13px;">
+                <#assign defaultvalue = "">
+                <#if commentList??>
+                <#list commentList as comment>
+                <div style="margin-left:55px;margin-bottom:20px;">
+		            <input type="radio" name="satislevel" value="${comment.code!''}" <#if comment_index == 0>checked="checked"</#if> id="dic_${comment.id!''}" onclick="document.getElementById('satislevel_input').value = this.value">
+		            <label for="dic_${comment.id!''}" class="radio">${comment.name!''}</label>
+		        </div>
+                <#if defaultvalue == "">
+                <#assign defaultvalue = comment.code>
+                </#if>
+                </#list>
+                </#if>
+                <input type="hidden" id="satislevel_input" name="t" value="${defaultvalue}">
+                </span>
+            </p>
+            <!--按钮-->
+            <p class="submitBtnWrap" style="text-align:center;">
+				<input type="submit" class="btn submitBtn" id="submitBtn" value="提 交">
+            </p>
+        </form>
+    </div>
+</div>
+</#if>
 <script>
 	var service_end = false;
 	// 调查问卷
@@ -363,6 +401,18 @@
 		if(data.messageType == "end"){
 			service_end = true ;
 			//editor.readonly();
+		}
+		if(data.messageType == "invit"){
+			<#if sessionConfig?? && sessionConfig.satisfaction?? && sessionConfig.satisfaction>
+			if(invite == false){
+				document.getElementById("diaShade").style.display = "block" ;
+				document.getElementById("dialogWrap").style.display = "block" ;
+				invite = true ;
+			}
+			</#if>
+		}
+		if(document.getElementById("agentserviceid")){
+			document.getElementById("agentserviceid").value = data.agentserviceid ;
 		}
     })
     var insuggest = false;
@@ -495,7 +545,17 @@
 		wordinx = getPositionForTextArea(document.getElementById('message'));
 		closeFaceDialog();
 	});
-
+	
+	function submitForm(form){
+		$.post("/im/satis.html?orgi=${orgi!''}&"+"id="+form.id.value+"&satislevel="+document.getElementById("satislevel_input").value, function(data) {
+			document.getElementById("diaShade").style.display = "none" ;
+			document.getElementById("dialogWrap").style.display = "none" ;
+			alert("服务评价已提及，请关闭浏览器！");
+		});
+		return false ;
+	}
+	
+	
 	var message = {
 	// text:data.message,
 	// picture:function(){
