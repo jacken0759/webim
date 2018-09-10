@@ -75,7 +75,7 @@ public class AiIMEventHandler
 				
 				if(!StringUtils.isBlank(aiid)) {
 					AiConfig aiConfig = UKTools.initAiConfig(aiid, orgi) ;
-					if(aiConfig!=null && !StringUtils.isBlank(aiConfig.getHotmsg())) {
+					if(aiConfig!=null && !StringUtils.isBlank(aiConfig.getHotmsg()) && invite != null) {
 						MessageOutContent hotMessage = new MessageOutContent() ;
 						hotMessage.setMessage(invite.getAimsg());
 						

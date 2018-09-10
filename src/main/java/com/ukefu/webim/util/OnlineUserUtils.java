@@ -997,17 +997,17 @@ public class OnlineUserUtils {
 	}
 	
 	public static void resetHotTopicType(DataExchangeInterface dataExchange,User user , String orgi, String aiid) {
-		if(CacheHelper.getSystemCacheBean().getCacheObject("xiaoeTopicType"+"."+orgi, orgi)!=null){
-			CacheHelper.getSystemCacheBean().delete("xiaoeTopicType"+"."+orgi, orgi) ;
+		if(CacheHelper.getSystemCacheBean().getCacheObject("xiaoeTopicType"+"."+orgi+"."+aiid, orgi)!=null){
+			CacheHelper.getSystemCacheBean().delete("xiaoeTopicType"+"."+orgi+"."+aiid, orgi) ;
 		}
 		cacheHotTopicType(dataExchange,user , orgi , aiid) ;
 	}
 	@SuppressWarnings("unchecked")
 	public static List<KnowledgeType> cacheHotTopicType(DataExchangeInterface dataExchange,User user , String orgi , String aiid) {
 		List<KnowledgeType> topicTypeList = null ;
-		if((topicTypeList = (List<KnowledgeType>) CacheHelper.getSystemCacheBean().getCacheObject("xiaoeTopicType"+"."+orgi, orgi))==null){ 
+		if((topicTypeList = (List<KnowledgeType>) CacheHelper.getSystemCacheBean().getCacheObject("xiaoeTopicType"+"."+orgi+"."+aiid, orgi))==null){ 
 			topicTypeList = (List<KnowledgeType>) dataExchange.getListDataByIdAndOrgi(aiid, null,  orgi) ;
-			CacheHelper.getSystemCacheBean().put("xiaoeTopicType"+"."+orgi , topicTypeList , orgi) ;
+			CacheHelper.getSystemCacheBean().put("xiaoeTopicType"+"."+orgi+"."+aiid , topicTypeList , orgi) ;
 		}
 		return topicTypeList;
 	}
