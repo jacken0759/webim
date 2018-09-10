@@ -19,6 +19,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import com.ukefu.core.UKDataContext;
+import com.ukefu.util.UKTools;
 import com.ukefu.util.extra.DataExchangeInterface;
 import com.ukefu.webim.web.model.MetadataTable;
 import com.ukefu.webim.web.model.SysDic;
@@ -168,7 +169,16 @@ public class ExcelExporterProcess {
 			            		}
 							}
 						}else{
-							cell2.setCellValue(new HSSFRichTextString(String.valueOf(value.get(tp.getFieldname()))));
+							boolean writed = false ;
+							if(!StringUtils.isBlank(String.valueOf(value.get("distype")))){
+								if(value.get("disphonenum")!=null && value.get("disphonenum").equals(value.get(tp.getFieldname()))){
+									cell2.setCellValue(new HSSFRichTextString(UKTools.processSecField(String.valueOf(value.get(tp.getFieldname())),String.valueOf(value.get("distype")))));
+									writed = true ;
+								}
+							}
+							if(writed == false){
+								cell2.setCellValue(new HSSFRichTextString(String.valueOf(value.get(tp.getFieldname()))));
+							}
 						}
 					}
 				}
