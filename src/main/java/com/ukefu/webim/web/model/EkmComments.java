@@ -36,6 +36,7 @@ public class EkmComments implements java.io.Serializable{
 	private String orgi ;
 	private boolean datastatus;
 	
+	private double rate ;//评分
 
 	
 	@Id
@@ -119,6 +120,12 @@ public class EkmComments implements java.io.Serializable{
 	}
 	public void setKnowledgeower(String knowledgeower) {
 		this.knowledgeower = knowledgeower;
+	}
+	public double getRate() {
+		return rate;
+	}
+	public void setRate(double rate) {
+		this.rate = rate;
 	}
 	
 	
