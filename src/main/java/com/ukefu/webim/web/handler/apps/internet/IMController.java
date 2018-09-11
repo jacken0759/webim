@@ -325,20 +325,15 @@ public class IMController extends Handler{
 			
     		
     		map.addAttribute("hostname", request.getServerName()) ;
+			map.addAttribute("port", port) ;
 			
-    		SystemConfig systemConfig = UKTools.getSystemConfig();
+			SystemConfig systemConfig = UKTools.getSystemConfig();
 			if(systemConfig!=null && systemConfig.isEnablessl()) {
 				view.addObject("schema","https") ;
-				if(request.getServerPort() == 80) {
-					view.addObject("port", 443) ;
-				}else {
-					view.addObject("port", request.getServerPort()) ;
-				}
 			}else {
 				view.addObject("schema",request.getScheme()) ;
-				view.addObject("port", request.getServerPort()) ;
 			}
-    		
+			
 			map.addAttribute("appid", appid) ;
 			map.addAttribute("userid", userid) ;
 			map.addAttribute("sessionid", sessionid) ;

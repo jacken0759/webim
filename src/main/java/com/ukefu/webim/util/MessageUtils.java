@@ -164,6 +164,8 @@ public class MessageUtils {
     	outMessage.setSnsAccount(null);
     	outMessage.setDuration(data.getDuration());
     	
+    	outMessage.setId(data.getId());
+    	
     	MessageOutContent statusMessage = null ;
     	if(agentUser==null){
     		statusMessage = new MessageOutContent() ;
@@ -288,6 +290,7 @@ public class MessageUtils {
     	outMessage.setAgentUser(null);
     	outMessage.setSnsAccount(null);
     	outMessage.setDuration(data.getDuration());
+    	outMessage.setId(data.getId());
     	
     	if(!StringUtils.isBlank(userid)){
     		data.setUserid(userid);
