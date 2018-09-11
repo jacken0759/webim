@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-09-07 19:17:17
+Date: 2018-09-11 09:23:06
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -1778,6 +1778,10 @@ CREATE TABLE `uk_consult_invite` (
   `hideagent` tinyint(4) DEFAULT '0' COMMENT '在机器人界面上隐藏人工坐席',
   `quickagent` tinyint(4) DEFAULT '0' COMMENT '是否显示快捷转人工',
   `fullscreen` tinyint(4) DEFAULT '0' COMMENT '启用全屏',
+  `enablevoice` tinyint(4) DEFAULT '0' COMMENT '是否启用语音消息',
+  `enablewechatvoice` tinyint(4) DEFAULT '0' COMMENT '是否启用微信内置语音消息',
+  `weichatappkey` varchar(255) DEFAULT NULL COMMENT '微信APPKEY',
+  `weichattoken` varchar(255) DEFAULT NULL COMMENT '微信TOKEN',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='访客网站配置表';
 
@@ -8782,7 +8786,7 @@ CREATE TABLE `uk_user` (
 INSERT INTO `uk_user` VALUES ('4028811b61834723016183ec57760392', null, 'chenfarong', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'chen@ukewo.cn', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-02-11 16:12:39', null, '2018-06-29 17:40:30', null, '18510129455', '2018-02-11 16:12:39', null, '0', '陈法蓉', null, '0', null, null, null, '0', '0', '0', '2018-06-29 17:40:37', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b642f5f8c01642f60ed440683', null, 'test1', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'ad@te.com', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-06-24 09:20:38', null, '2018-07-03 10:51:17', null, '18510129433', '2018-06-24 09:20:38', null, '0', 'test1', null, '1', null, null, null, '0', '0', '0', '2018-07-03 10:51:25', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b645dc08f01645e0512ce0935', null, 'yiliao', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'asd@ac.com', null, null, null, null, null, null, null, null, null, null, null, '4028811b645dc08f01645e005f3d08dd', 'ukewo', null, '2018-07-03 10:42:28', null, '2018-07-03 10:43:31', null, '18512212955', '2018-07-03 10:42:28', null, '0', '医疗', null, '0', null, null, null, '0', '0', '0', '2018-07-03 10:43:39', null, null, null, '0', '0', '0', '0', null);
-INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-07-02 20:23:24', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-09-07 16:02:08', null, null, null, '0', '1', '1', '0', null);
+INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-07-02 20:23:24', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-09-11 08:35:14', null, null, null, '0', '1', '1', '0', null);
 
 -- ----------------------------
 -- Table structure for `uk_userevent`
@@ -8986,6 +8990,29 @@ CREATE TABLE `uk_workorder_type` (
 
 -- ----------------------------
 -- Records of uk_workorder_type
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_workservice_time`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_workservice_time`;
+CREATE TABLE `uk_workservice_time` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `timetype` varchar(32) DEFAULT NULL COMMENT '日期类型',
+  `scope` varchar(32) DEFAULT NULL COMMENT '日期范围类型（单天 one/范围 more/星期week）',
+  `apply` varchar(32) DEFAULT NULL COMMENT '适用于（文字客服 word / 排班 sche）',
+  `begin` varchar(32) DEFAULT NULL COMMENT '日期开始',
+  `end` varchar(32) DEFAULT NULL COMMENT '日期开始',
+  `week` text COMMENT '星期',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+-- ----------------------------
+-- Records of uk_workservice_time
 -- ----------------------------
 
 -- ----------------------------
