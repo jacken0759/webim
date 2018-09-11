@@ -1,12 +1,11 @@
 package com.ukefu.webim.web.model;
 
+import javax.persistence.Transient;
 import java.util.Date;
+
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -15,12 +14,10 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.Parent;
 
 import com.ukefu.util.UKTools;
+import com.ukefu.util.task.ESData;
 
 @Document(indexName = "uckefu", type = "uk_ekm_kb_times" , createIndex = false )
-@Entity
-@Table(name = "uk_ekm_knowledge_times")
-@org.hibernate.annotations.Proxy(lazy = false)
-public class EkmKnowledgeTimes implements java.io.Serializable{
+public class EkmKnowledgeTimes  implements ESData,java.io.Serializable{
 	
 	/**
 	 * 

@@ -9,7 +9,7 @@ import com.ukefu.webim.web.model.EkmKnowledgeTimes;
 public abstract interface EkmKnowledgeTimesESRepository  extends ElasticsearchRepository<EkmKnowledgeTimes, String>
 {
 	
-	public abstract List<EkmKnowledgeTimes> findByKnowledgeidAndVersionAndOrgi(String knowledgeid ,int vaersion , String orgi );
+	public abstract List<EkmKnowledgeTimes> findByKbidAndVersionAndOrgi(String kbid ,int vaersion , String orgi );
 	
 }
 
