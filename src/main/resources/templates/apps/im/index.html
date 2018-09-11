@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <meta charset="utf-8">
+   <meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta http-equiv="Cache-Control" content="no-siteapp" />
 	<meta name="viewport"
@@ -19,8 +21,12 @@
     <script type="text/javascript" src="/im/js/kindeditor/kindeditor.js"></script>
     <script type="text/javascript" src="/im/js/kindeditor/lang/zh-CN.js"></script>
     <script src="/im/js/socket.io.js"></script>
+    <script src="/js/recordmp3.js"></script>
+    <script src="/js/ukefu-voice.js"></script>
+    <script src="/js/weixinAudio.js"></script>
+    <script src="/js/template.js"></script>
     <script type="text/javascript">
-		var editor , words  , invite = false ;
+		var editor , words  , invite = false , schema = '${schema!"http"}' , upload = "/im/voice/upload.html?userid=${userid!''}&appid=${appid!''}";
 		var tipuser = '<#if inviteData??>${inviteData.tipuser}</#if>' , tipusertitle = '<#if inviteData??>${inviteData.tipusertitle!"您有一条新的消息"}</#if>', tipusericon = '<#if inviteData??>/res/image.html?id=${inviteData.tipusericon!"/images/logo2.png"}</#if>' ;
 		var newmessage = [] , ring = [];
 		newmessage['mp3'] = '/images/message.mp3';
@@ -526,6 +532,8 @@
         chat = data.message;
         if(data.messageType == "image"){
         	chat = "<a href='"+data.message+"_original' target='_blank'><img src='"+data.message+"' class='ukefu-media-image'/></a>" ;
+        }else if(data.messageType == "voice"){
+        	chat = template($('#message_tpl').html(), {data: data}) ;
         }else if(data.messageType == "file"){
         	chat = "<div class='ukefu-message-file'><div class='ukefu-file-icon'><img src='/im/img/file.png'></div><div class='ukefu-file-desc'><a href='"+data.message+"' target='_blank'><div>"+data.filename+"</div><div>"+(data.filesize/1024).toFixed(3)+"Kb</div></a></div></div>" ;
         }
@@ -575,7 +583,7 @@
 			}			
 		}
         var element = ("<div class='clearfix "+clazz+"'>" +" " + message + "</div>");
-        document.getElementById('above').innerHTML= (document.getElementById('above').innerHTML + element);
+        $('#above').append(element);
         if(scroll == null || scroll == true){
 			document.getElementById('above').scrollTop = document.getElementById('above').scrollHeight  ;
 		}
@@ -613,6 +621,27 @@
 	window.onresize = function(){
 		R3Helper.resize();		
 	};
+	UCKeFuVoice.init("webim");
+</script>
+<script id="message_tpl" type="text/html">
+	<p class="weixinAudio" id="voice_media_<%:=data.id%>" style="<% if(data.duration > 30) {%>width:300px;<% }else{ %>width:<%:=50+data.duration* 10%>px;<%}%>">
+		<audio src="<%:=data.message%>" id="media" width="1" height="1" preload></audio>
+		<span id="audio_area" class="db audio_area">
+			<span class="audio_wrp db">
+				<span class="audio_play_area">
+					<i class="icon_audio_default"></i>
+					<i class="icon_audio_playing"></i>
+				</span>
+				<span class="audio_length tips_global"><%:=data.duration %>秒</span>
+				<span id="audio_progress" class="progress_bar" style="width: 0%;"></span>
+			</span>
+		</span>
+	</p>
+	<script type='text/javascript'>
+		$('#voice_media_<%:=data.id%>').weixinAudio({
+			autoplay:false
+		});
+	<\/script>
 </script>
 </body>
 </html>

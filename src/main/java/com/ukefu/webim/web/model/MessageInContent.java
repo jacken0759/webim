@@ -22,6 +22,8 @@ public class MessageInContent implements MessageDataBean{
 	
 	private boolean topic ;
 	
+	private int duration ;	//音频时长
+	
 	private String attachmentid ;
 	
 	private boolean noagent ;
@@ -158,4 +160,11 @@ public class MessageInContent implements MessageDataBean{
 	public void setQuickagent(boolean quickagent) {
 		this.quickagent = quickagent;
 	}
+	public int getDuration() {
+		return duration;
+	}
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+	
 }

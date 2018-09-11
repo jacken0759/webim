@@ -40,7 +40,23 @@ public class MessageUtils {
 	public static ChatMessage uploadFile(String url , int size , String name, String channel , String userid , String username , String appid , String orgi , String attachid){
 		return createMessage(url , size , name , channel , UKDataContext.MediaTypeEnum.FILE.toString(), userid , username, appid , orgi , attachid);
 	}
+	
+	/**
+	 * 
+	 * @param image
+	 * @param userid
+	 */
+	public static ChatMessage uploadVoice(String url , int size , String name , String userid , String attachid , int duration){
+		return createMessage(url , size , name , UKDataContext.MediaTypeEnum.VOICE.toString(), userid , attachid , duration);
+	}
+	public static ChatMessage uploadVoice(String url , int size , String name, String channel , String userid , String username , String appid , String orgi , String attachid, int duration){
+		return createMessage(url , size , name , channel , UKDataContext.MediaTypeEnum.VOICE.toString(), userid , username, appid , orgi , attachid , duration);
+	}
 	public static ChatMessage createMessage(String message , int length , String name , String msgtype , String userid , String attachid){
+		return createMessage(message, length, name, msgtype, userid, attachid, 0) ;
+	}
+	
+	public static ChatMessage createMessage(String message , int length , String name , String msgtype , String userid , String attachid , int duration){
 		AgentUser agentUser = (AgentUser) CacheHelper.getAgentUserCacheBean().getCacheObject(userid, UKDataContext.SYSTEM_ORGI);
 		ChatMessage data = new ChatMessage() ;
 		data.setFilesize(length);
@@ -50,7 +66,7 @@ public class MessageUtils {
 		data.setMessage(message);
 		
 		data.setMsgtype(msgtype);
-		
+		data.setDuration(duration);
 		data.setType(UKDataContext.MessageTypeEnum.MESSAGE.toString());
 		
 		if(agentUser != null){
@@ -63,13 +79,15 @@ public class MessageUtils {
 		}else {
 			AiUser aiUser = (AiUser) CacheHelper.getOnlineUserCacheBean().getCacheObject(userid,UKDataContext.SYSTEM_ORGI) ;
 			data.setUserid(userid);
-			data.setAppid(aiUser.getAppid());
-			data.setAiid(aiUser.getAiid());
-			data.setUsername(aiUser.getUsername());
-			data.setOrgi(aiUser.getOrgi());
-			createAiMessage(data , data.getAppid() , aiUser.getChannel() , UKDataContext.CallTypeEnum.IN.toString() , UKDataContext.AiItemType.USERINPUT.toString() , UKDataContext.MediaTypeEnum.IMAGE.toString(), data.getUserid());
-			sendMessage(data, msgtype);
-			UKTools.ai(data);
+			if(aiUser!=null) {
+				data.setAppid(aiUser.getAppid());
+				data.setAiid(aiUser.getAiid());
+				data.setUsername(aiUser.getUsername());
+				data.setOrgi(aiUser.getOrgi());
+				createAiMessage(data , data.getAppid() , aiUser.getChannel() , UKDataContext.CallTypeEnum.IN.toString() , UKDataContext.AiItemType.USERINPUT.toString() , UKDataContext.MediaTypeEnum.IMAGE.toString(), data.getUserid());
+				sendMessage(data, msgtype);
+				UKTools.ai(data);
+			}
 		}
 		return data ;
 	}
@@ -102,7 +120,11 @@ public class MessageUtils {
     	}
 	}
 	
-	public static ChatMessage createMessage(String message , int length , String name ,String channel ,String msgtype , String userid , String username , String appid , String orgi , String attachid){
+	public static ChatMessage createMessage(String message , int length , String name ,String channel ,String msgtype , String userid , String username , String appid , String orgi , String attachid ){
+		return createMessage(message, length, name, channel, msgtype, userid, username, appid, orgi, attachid, 0) ;
+	}
+	
+	private static ChatMessage createMessage(String message , int length , String name ,String channel ,String msgtype , String userid , String username , String appid , String orgi , String attachid , int duration){
 		ChatMessage data = new ChatMessage() ;
 		if(!StringUtils.isBlank(userid)){
 			data.setUserid(userid);
@@ -118,6 +140,8 @@ public class MessageUtils {
 			data.setAttachmentid(attachid);
 			
 			data.setMsgtype(msgtype);
+			
+			data.setDuration(duration);
 			
 			data.setType(UKDataContext.MessageTypeEnum.MESSAGE.toString());
 			createAiMessage(data , appid , channel, UKDataContext.CallTypeEnum.IN.toString() , UKDataContext.AiItemType.USERINPUT.toString() , msgtype, data.getUserid());
@@ -138,6 +162,7 @@ public class MessageUtils {
     	outMessage.setCalltype(UKDataContext.CallTypeEnum.IN.toString());
     	outMessage.setAgentUser(agentUser);
     	outMessage.setSnsAccount(null);
+    	outMessage.setDuration(data.getDuration());
     	
     	MessageOutContent statusMessage = null ;
     	if(agentUser==null){
@@ -262,6 +287,7 @@ public class MessageUtils {
     	outMessage.setCalltype(direction);
     	outMessage.setAgentUser(null);
     	outMessage.setSnsAccount(null);
+    	outMessage.setDuration(data.getDuration());
     	
     	if(!StringUtils.isBlank(userid)){
     		data.setUserid(userid);

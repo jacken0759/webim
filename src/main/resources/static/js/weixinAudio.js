@@ -60,7 +60,7 @@
 			events: function() {
 				var self = this;
 				var updateTime;
-				self.$audio_area.on('click', function() {
+				$(document).on('click' , "#"+self.$Audio.context.id, function() {
 					self.play();
 					if (!updateTime) {
 						self.updateTotalTime();

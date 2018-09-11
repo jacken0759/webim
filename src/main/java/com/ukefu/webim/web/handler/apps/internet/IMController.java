@@ -754,6 +754,41 @@ public class IMController extends Handler{
         return view ; 
     }
     
+    @RequestMapping("/voice/upload")
+    @Menu(type = "im" , subtype = "image" , access = true)
+    public ModelAndView voiceupload(ModelMap map,HttpServletRequest request , @RequestParam(value = "voice", required = false) MultipartFile voice , @Valid String channel, @Valid String userid, @Valid String username , @Valid String appid , @Valid String orgi, @Valid String duration) throws IOException {
+    	ModelAndView view = request(super.createRequestPageTempletResponse("/apps/im/upload")) ; 
+    	UploadStatus upload = null ;
+    	String fileName = null ;
+    	if(voice!=null && voice.getSize() >0 && !StringUtils.isBlank(userid)){
+    		File uploadDir = new File(path , "upload");
+    		if(!uploadDir.exists()){
+    			uploadDir.mkdirs() ;
+    		}
+    		String fileid = UKTools.md5(voice.getBytes()) ;
+    		if(voice.getContentType()!=null && voice.getContentType().indexOf("audio") >= 0 && !StringUtils.isBlank(duration) && duration.matches("[\\d]{1,}")){
+				fileName = "webim/voice/"+fileid+".mp3" ;
+				File file = new File(path ,fileName) ;
+				if(file.getParentFile().exists()){
+					file.getParentFile().mkdirs() ;
+				}
+				FileUtils.writeByteArrayToFile(file , voice.getBytes());
+	    		
+				String url = "/res/voice.html?id="+fileName ;
+	    		upload = new UploadStatus("0" ,url);
+	    		if(!StringUtils.isBlank(channel)){
+	    			MessageUtils.uploadVoice(url ,(int)file.length() , file.getName() , channel, userid , username , appid , orgi , fileid , Integer.parseInt(duration)/1000);
+	    		}else{
+	    			MessageUtils.uploadVoice(url ,(int)file.length() , file.getName() , userid , fileid , Integer.parseInt(duration)/1000);
+	    		}
+    		}
+    	}else{
+    		upload = new UploadStatus("请选择文件");
+    	}
+    	map.addAttribute("upload", upload) ;
+        return view ; 
+    }
+    
     private String processAttachmentFile(MultipartFile file , HttpServletRequest request) throws IOException{
     	String id = null ;
     	if(file.getSize() > 0){			//文件尺寸 限制 ？在 启动 配置中 设置 的最大值，其他地方不做限制
