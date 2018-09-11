@@ -21,6 +21,8 @@ public class AiUser implements java.io.Serializable{
 	private String username ;
 	private String aiid ;
 	
+	private String skill ;
+	
 	private String busstype ;
 	private String aitype ;
 	private String bussid ;
@@ -221,5 +223,12 @@ public class AiUser implements java.io.Serializable{
 	public void setQueresultid(String queresultid) {
 		this.queresultid = queresultid;
 	}
-	
+
+	public String getSkill() {
+		return skill;
+	}
+
+	public void setSkill(String skill) {
+		this.skill = skill;
+	}
 }

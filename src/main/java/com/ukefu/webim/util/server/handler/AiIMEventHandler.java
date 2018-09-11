@@ -51,7 +51,7 @@ public class AiIMEventHandler
 			String appid = client.getHandshakeData().getSingleUrlParam("appid") ;
 			String aiid = client.getHandshakeData().getSingleUrlParam("aiid") ;
 //			String agent = client.getHandshakeData().getSingleUrlParam("agent") ;
-//			String skill = client.getHandshakeData().getSingleUrlParam("skill") ;
+			String skill = client.getHandshakeData().getSingleUrlParam("skill") ;
 			
 			if(!StringUtils.isBlank(user)){
 //				/**
@@ -96,6 +96,8 @@ public class AiIMEventHandler
 				aiUser.setAiid(aiid);
 				aiUser.setUsername(UKDataContext.GUEST_USER+"_"+UKTools.genIDByKey(aiUser.getId()));
 				aiUser.setChannel(UKDataContext.ChannelTypeEnum.WEBIM.toString());
+				
+				aiUser.setSkill(skill);
 				
 				AgentService agentService = ServiceQuene.processAiService(aiUser, orgi) ;
 				aiUser.setAgentserviceid(agentService.getId());
