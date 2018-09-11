@@ -13,7 +13,7 @@ var UCKeFuVoice = {
 						}
 						UCKeFuVoice.start();
 					}else{
-						output('<span id="connect-message">发送语音消息需要启用HTTS</span>' , 'connect-message' , false);
+						output('<span id="connect-message">发送语音消息需要启用HTTS</span>' , 'message connect-message' , false);
 					}
 				}, 1000);
 				
@@ -39,7 +39,7 @@ var UCKeFuVoice = {
 						}
 						UCKeFuVoice.start();
 					}else{
-						output('<span id="connect-message">发送语音消息需要启用HTTS</span>' , 'connect-message' , false);
+						output('<span id="connect-message">发送语音消息需要启用HTTS</span>' , 'message connect-message' , false);
 					}
 				}, 1000);
 			});
