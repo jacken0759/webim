@@ -91,6 +91,8 @@ public class CousultInvite implements java.io.Serializable{
 	private boolean recordhis ;			//记录访客的网页访问记录
 	private boolean traceuser;			//实时追踪访客
 	
+	private String defaultskill ;		//默认技能组
+	
 	private int maxwordsnum ; 			//允许访客端输入的最大文本字数
 	
 	
@@ -890,5 +892,11 @@ public class CousultInvite implements java.io.Serializable{
 	}
 	public void setFullscreen(boolean fullscreen) {
 		this.fullscreen = fullscreen;
+	}
+	public String getDefaultskill() {
+		return defaultskill;
+	}
+	public void setDefaultskill(String defaultskill) {
+		this.defaultskill = defaultskill;
 	}
 }
