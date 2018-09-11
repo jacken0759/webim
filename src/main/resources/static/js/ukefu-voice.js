@@ -5,7 +5,7 @@ var UCKeFuVoice = {
 		if(platform == "mobile"){
 			$(document).on("touchstart" , '#above', function() {
 				timeout = setTimeout(function() {
-					if(schema == 'https'){
+					if(schema.indexOf('https') >= 0){
 						var height = $('#bottom').height();
 						var width =  $('#bottom').width();
 						if($('#uckefu-voice-record').length == 0){
@@ -20,7 +20,7 @@ var UCKeFuVoice = {
 			});
 			 
 			$(document).on("touchend" , '#above' , function() {
-				if(schema == 'https'){
+				if(schema.indexOf('https') >= 0){
 				    clearTimeout(timeout);
 				    if($('#uckefu-voice-record').length != 0){
 				    	$('#uckefu-voice-record').remove();
@@ -31,7 +31,7 @@ var UCKeFuVoice = {
 		}else{
 			$(document).on("mousedown" , '#above', function() {
 				timeout = setTimeout(function() {
-					if(schema == 'https'){
+					if(schema.indexOf('https') >= 0){
 						var height = $('#bottom').height();
 						var width =  $('#bottom').width();
 						if($('#uckefu-voice-record').length == 0){
@@ -45,7 +45,7 @@ var UCKeFuVoice = {
 			});
 			 
 			$(document).on("mouseup" , '#above' , function() {
-				if(schema == 'https'){
+				if(schema.indexOf('https') >= 0){
 				    clearTimeout(timeout);
 				    if($('#uckefu-voice-record').length != 0){
 				    	$('#uckefu-voice-record').remove();

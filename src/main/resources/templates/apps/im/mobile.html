@@ -65,7 +65,7 @@
     </style>
     <script src="/im/js/socket.io.js"></script>
     <script type="text/javascript">
-	var editor , words , textheight , wordinx = 0 ,schema = '${schema!"http"}' , invite = false  , upload = "/im/voice/upload.html?userid=${userid!''}&appid=${appid!''}";
+	var editor , words , textheight , wordinx = 0 ,schema = window.location.protocol, invite = false  , upload = "/im/voice/upload.html?userid=${userid!''}&appid=${appid!''}";
     
     /**
      * 文本框根据输入内容自适应高度
