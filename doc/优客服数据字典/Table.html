@@ -15146,6 +15146,50 @@ vertical-align:middle;
 <td>√</td>
 <td>0</td>
 </tr>
+<tr>
+<td>125</td>
+<td>enablevoice</td>
+<td>是否启用语音消息</td>
+<td>tinyint</td>
+<td>&nbsp;</td>
+<td>×</td>
+<td>×</td>
+<td>√</td>
+<td>0</td>
+</tr>
+<tr style="background-color:#F6F6F6;">
+<td>126</td>
+<td>enablewechatvoice</td>
+<td>是否启用微信内置语音消息</td>
+<td>tinyint</td>
+<td>&nbsp;</td>
+<td>×</td>
+<td>×</td>
+<td>√</td>
+<td>0</td>
+</tr>
+<tr>
+<td>127</td>
+<td>weichatappkey</td>
+<td>微信APPKEY</td>
+<td>varchar</td>
+<td>255</td>
+<td>×</td>
+<td>×</td>
+<td>√</td>
+<td>NULL</td>
+</tr>
+<tr style="background-color:#F6F6F6;">
+<td>128</td>
+<td>weichattoken</td>
+<td>微信TOKEN</td>
+<td>varchar</td>
+<td>255</td>
+<td>×</td>
+<td>×</td>
+<td>√</td>
+<td>NULL</td>
+</tr>
 </tbody></table>
 </div>
 <div>
@@ -37305,9 +37349,9 @@ vertical-align:middle;
 <tr>
 <td>3</td>
 <td>scope</td>
-<td>日期范围类型</td>
+<td>日期范围类型（单天 one/范围 more/星期week）</td>
 <td>varchar</td>
-<td>50</td>
+<td>32</td>
 <td>×</td>
 <td>×</td>
 <td>√</td>
@@ -37315,8 +37359,8 @@ vertical-align:middle;
 </tr>
 <tr style="background-color:#F6F6F6;">
 <td>4</td>
-<td>begin</td>
-<td>日期开始</td>
+<td>apply</td>
+<td>适用于（文字客服 word / 排班 sche）</td>
 <td>varchar</td>
 <td>32</td>
 <td>×</td>
@@ -37326,7 +37370,7 @@ vertical-align:middle;
 </tr>
 <tr>
 <td>5</td>
-<td>end</td>
+<td>begin</td>
 <td>日期开始</td>
 <td>varchar</td>
 <td>32</td>
@@ -37337,6 +37381,28 @@ vertical-align:middle;
 </tr>
 <tr style="background-color:#F6F6F6;">
 <td>6</td>
+<td>end</td>
+<td>日期开始</td>
+<td>varchar</td>
+<td>32</td>
+<td>×</td>
+<td>×</td>
+<td>√</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>7</td>
+<td>week</td>
+<td>星期</td>
+<td>text</td>
+<td>65535</td>
+<td>×</td>
+<td>×</td>
+<td>√</td>
+<td>NULL</td>
+</tr>
+<tr style="background-color:#F6F6F6;">
+<td>8</td>
 <td>createtime</td>
 <td>创建时间</td>
 <td>datetime</td>
@@ -37347,7 +37413,7 @@ vertical-align:middle;
 <td>NULL</td>
 </tr>
 <tr>
-<td>7</td>
+<td>9</td>
 <td>creater</td>
 <td>创建人</td>
 <td>varchar</td>
@@ -37358,7 +37424,7 @@ vertical-align:middle;
 <td>NULL</td>
 </tr>
 <tr style="background-color:#F6F6F6;">
-<td>8</td>
+<td>10</td>
 <td>updatetime</td>
 <td>更新时间</td>
 <td>datetime</td>
@@ -37369,7 +37435,7 @@ vertical-align:middle;
 <td>NULL</td>
 </tr>
 <tr>
-<td>9</td>
+<td>11</td>
 <td>orgi</td>
 <td>租户ID</td>
 <td>varchar</td>
