@@ -73,3 +73,5 @@ ALTER TABLE uk_consult_invite ADD enablewechatvoice tinyint DEFAULT 0 COMMENT '�
 ALTER TABLE uk_consult_invite ADD weichatappkey varchar(255) DEFAULT NULL COMMENT '微信APPKEY';
 
 ALTER TABLE uk_consult_invite ADD weichattoken varchar(255) DEFAULT NULL COMMENT '微信TOKEN';
+
+ALTER TABLE uk_consult_invite ADD defaultskill text DEFAULT NULL COMMENT '默认启用的技能组';

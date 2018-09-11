@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-09-11 09:23:06
+Date: 2018-09-11 16:23:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -1782,6 +1782,7 @@ CREATE TABLE `uk_consult_invite` (
   `enablewechatvoice` tinyint(4) DEFAULT '0' COMMENT '是否启用微信内置语音消息',
   `weichatappkey` varchar(255) DEFAULT NULL COMMENT '微信APPKEY',
   `weichattoken` varchar(255) DEFAULT NULL COMMENT '微信TOKEN',
+  `defaultskill` text COMMENT '默认启用的技能组',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='访客网站配置表';
 
