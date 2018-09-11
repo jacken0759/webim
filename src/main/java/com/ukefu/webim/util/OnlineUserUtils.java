@@ -859,7 +859,7 @@ public class OnlineUserUtils {
 	}
 	
 	public static NewRequestMessage newRequestMessage(String openid , String nickname, String orgi,
-			String session, String appid , String headimg , String country , String province , String city , String channel , String skill , String agent, String initiator) throws Throwable {
+			String session, String appid , String headimg , String country , String province , String city , String channel , String skill , String agent, String initiator) throws Exception {
 		IP ipdata = new IP() ;
 		ipdata.setCountry(country);
 		ipdata.setProvince(province);
