@@ -290,7 +290,6 @@ public class MessageUtils {
     	outMessage.setAgentUser(null);
     	outMessage.setSnsAccount(null);
     	outMessage.setDuration(data.getDuration());
-    	outMessage.setId(data.getId());
     	
     	if(!StringUtils.isBlank(userid)){
     		data.setUserid(userid);
@@ -325,7 +324,6 @@ public class MessageUtils {
     		outMessage.setNickName(data.getUsername());
     		outMessage.setCreatetime(data.getCreatetime());
     		outMessage.setTopic(!StringUtils.isBlank(data.getTopicid()));
-    		outMessage.setId(data.getId());
     		if(!StringUtils.isBlank(data.getSuggestmsg())) {
     			outMessage.setSuggest(data.getSuggest());
     		}
@@ -339,6 +337,7 @@ public class MessageUtils {
     		if(UKDataContext.MessageTypeEnum.MESSAGE.toString().equals(data.getType())){
     			UKDataContext.getContext().getBean(ChatMessageRepository.class).save(data) ;
     		}
+    		outMessage.setId(data.getId());
     		AgentUser agentUser = (AgentUser) CacheHelper.getAgentUserCacheBean().getCacheObject(userid, UKDataContext.SYSTEM_ORGI);
     		if(agentUser!=null && !StringUtils.isBlank(agentUser.getAgentno())){
         		//将消息发送给 坐席

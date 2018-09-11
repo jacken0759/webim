@@ -329,9 +329,9 @@ public class IMController extends Handler{
 			
 			SystemConfig systemConfig = UKTools.getSystemConfig();
 			if(systemConfig!=null && systemConfig.isEnablessl()) {
-				view.addObject("schema","https") ;
+				map.addAttribute("schema","https") ;
 			}else {
-				view.addObject("schema",request.getScheme()) ;
+				map.addAttribute("schema",request.getScheme()) ;
 			}
 			
 			map.addAttribute("appid", appid) ;
@@ -339,10 +339,10 @@ public class IMController extends Handler{
 			map.addAttribute("sessionid", sessionid) ;
 			
 			view.addObject("product", product) ;
-			view.addObject("description", description) ;
-			view.addObject("imgurl", imgurl) ;
-			view.addObject("pid", pid) ;
-			view.addObject("purl", purl) ;
+			map.addAttribute("description", description) ;
+			map.addAttribute("imgurl", imgurl) ;
+			map.addAttribute("pid", pid) ;
+			map.addAttribute("purl", purl) ;
 			
 			map.addAttribute("ip", UKTools.md5(request.getRemoteAddr())) ;
 			
@@ -492,10 +492,10 @@ public class IMController extends Handler{
 	    			}
 	    			map.addAttribute("chatMessageList", chatMessageRes.findByUsessionAndOrgi(userid , orgi, new PageRequest(0, 20, Direction.DESC , "updatetime"))) ;
 		    	}
-	    		view.addObject("commentList" , UKeFuDic.getInstance().getDic(UKDataContext.UKEFU_SYSTEM_COMMENT_DIC)) ;
-	    		view.addObject("commentItemList" , UKeFuDic.getInstance().getDic(UKDataContext.UKEFU_SYSTEM_COMMENT_ITEM_DIC)) ;
-	    		view.addObject("welcomeAd", UKTools.getPointAdv(UKDataContext.AdPosEnum.WELCOME.toString(),orgi)) ;
-	    		view.addObject("imageAd", UKTools.getPointAdv(UKDataContext.AdPosEnum.IMAGE.toString(),orgi)) ;
+	    		map.addAttribute("commentList" , UKeFuDic.getInstance().getDic(UKDataContext.UKEFU_SYSTEM_COMMENT_DIC)) ;
+	    		map.addAttribute("commentItemList" , UKeFuDic.getInstance().getDic(UKDataContext.UKEFU_SYSTEM_COMMENT_ITEM_DIC)) ;
+	    		map.addAttribute("welcomeAd", UKTools.getPointAdv(UKDataContext.AdPosEnum.WELCOME.toString(),orgi)) ;
+	    		map.addAttribute("imageAd", UKTools.getPointAdv(UKDataContext.AdPosEnum.IMAGE.toString(),orgi)) ;
 		//    	OnlineUserUtils.sendWebIMClients(userid , "accept");
 	    		 
 	    		if(invite.isTraceuser()){
