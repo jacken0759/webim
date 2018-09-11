@@ -26,7 +26,7 @@
     <script src="/js/weixinAudio.js"></script>
     <script src="/js/template.js"></script>
     <script type="text/javascript">
-		var editor , words  , invite = false , schema = window.location.protocol , upload = "/im/voice/upload.html?userid=${userid!''}&appid=${appid!''}";
+		var editor , words  , invite = false , schema = '${schema!"http"}' , upload = "/im/voice/upload.html?userid=${userid!''}&appid=${appid!''}";
 		var tipuser = '<#if inviteData??>${inviteData.tipuser}</#if>' , tipusertitle = '<#if inviteData??>${inviteData.tipusertitle!"您有一条新的消息"}</#if>', tipusericon = '<#if inviteData??>/res/image.html?id=${inviteData.tipusericon!"/images/logo2.png"}</#if>' ;
 		var newmessage = [] , ring = [];
 		newmessage['mp3'] = '/images/message.mp3';
