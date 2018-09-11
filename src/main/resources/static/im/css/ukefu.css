@@ -56,7 +56,7 @@ html,body,.large{
 input, textarea, select, button{
 	font-family: 'Microsoft Yahei', 'Tahoma, Arial';
 }
-p{margin: 0 0 10px;}
+p{margin: 0 0 0px;}
 ul,li{
 	list-style: none;
 }
@@ -1347,10 +1347,11 @@ p.submitBtnWrap{
 			width: 18px;
 		}
 		.tips_global {
-			color: #FFFFFF;
 		}
 		.audio_area .audio_length {
 			float: right;
+			position:absolute;
+			right:0px;
 			font-size: 14px;
 			margin-top: 3px;
 			margin-left: 1em;

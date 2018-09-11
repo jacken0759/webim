@@ -84,8 +84,8 @@ public class MessageUtils {
 				data.setAiid(aiUser.getAiid());
 				data.setUsername(aiUser.getUsername());
 				data.setOrgi(aiUser.getOrgi());
-				createAiMessage(data , data.getAppid() , aiUser.getChannel() , UKDataContext.CallTypeEnum.IN.toString() , UKDataContext.AiItemType.USERINPUT.toString() , UKDataContext.MediaTypeEnum.IMAGE.toString(), data.getUserid());
-				sendMessage(data, msgtype);
+				MessageOutContent outMessage = createAiMessage(data , data.getAppid() , aiUser.getChannel() , UKDataContext.CallTypeEnum.IN.toString() , UKDataContext.AiItemType.USERINPUT.toString() , msgtype, data.getUserid());
+				sendMessage(data , outMessage, msgtype);
 				UKTools.ai(data);
 			}
 		}
@@ -96,25 +96,7 @@ public class MessageUtils {
 	 * @param data
 	 * @param msgtype
 	 */
-	private static void sendMessage(ChatMessage data , String msgtype) {
-		MessageOutContent outMessage = new MessageOutContent() ;
-    	
-    	outMessage.setMessage(data.getMessage());
-    	outMessage.setFilename(data.getFilename());
-    	outMessage.setFilesize(data.getFilesize());
-    	
-    	
-    	outMessage.setMessageType(msgtype);
-    	outMessage.setCalltype(UKDataContext.CallTypeEnum.IN.toString());
-    	outMessage.setSnsAccount(null);
-    	
-    	outMessage.setContextid(data.getContextid());
-		outMessage.setFromUser(data.getUserid());
-		outMessage.setToUser(data.getTouser());
-		outMessage.setChannelMessage(data);
-		outMessage.setNickName(data.getUsername());
-		outMessage.setCreatetime(data.getCreatetime());
-    	
+	private static void sendMessage(ChatMessage data ,MessageOutContent outMessage , String msgtype) {
 		if(!StringUtils.isBlank(data.getUserid()) && UKDataContext.MessageTypeEnum.MESSAGE.toString().equals(data.getType())){
     		NettyClients.getInstance().sendIMEventMessage(data.getUserid(), UKDataContext.MessageTypeEnum.MESSAGE.toString(), outMessage);
     	}
