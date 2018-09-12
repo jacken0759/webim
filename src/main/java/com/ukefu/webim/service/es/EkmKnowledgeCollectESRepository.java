@@ -21,6 +21,10 @@ public abstract interface EkmKnowledgeCollectESRepository  extends Elasticsearch
 	
 	public abstract Page<EkmKnowledgeCollect> findByKnowledgeowerAndStatusAndOrgi(String knowledgeower , String status, String orgi, Pageable pageable );
 	
+	public abstract List<EkmKnowledgeCollect> findByKnowledgeowerAndStatusAndOrgi(String knowledgeower , String status, String orgi);
+	
+	public abstract List<EkmKnowledgeCollect> findByKnowledgeowerAndStatusAndFolderidAndOrgi(String knowledgeower , String status,String folderid , String orgi);
+	
 	public abstract EkmKnowledgeCollect findByCreaterAndKnowledgeidAndStatusAndOrgi(String creater , String knowledgeid, String status, String orgi );
 }
 

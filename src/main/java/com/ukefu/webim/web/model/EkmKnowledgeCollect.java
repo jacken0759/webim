@@ -43,6 +43,8 @@ public class EkmKnowledgeCollect implements java.io.Serializable{
 	private Date createtime ;
 	private String orgi ;
 	
+	private String folderid ; //收藏夹id
+	
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator= "paymentableGenerator")
@@ -110,6 +112,12 @@ public class EkmKnowledgeCollect implements java.io.Serializable{
 	}
 	public void setKbid(String kbid) {
 		this.kbid = kbid;
+	}
+	public String getFolderid() {
+		return folderid;
+	}
+	public void setFolderid(String folderid) {
+		this.folderid = folderid;
 	}
 	
 }
