@@ -107,5 +107,6 @@ public abstract interface UserRepository extends JpaRepository<User, String>
 	public abstract List<User> findByOrgiAndCallcenterAndDatastatusAndOrgan(String orgi, boolean callcenter, boolean datastatus,String organ);
 	
 	public abstract List<User> findByOrgiAndCallcenterAndDatastatus(String orgi, boolean callcenter, boolean datastatus);
-
+	
+	public abstract Page<User> findByDatastatusAndOrganAndOrgi(boolean b,String organ, String orgi, Pageable pageRequest);
 }

@@ -264,7 +264,7 @@ public class IMAgentController extends Handler{
     		map.put("advType", advType) ;
     	}
     	if(advType!=null){
-    		map.put("adTypeList", adTypeRes.findByAdposAndOrgi(advType.getId() , super.getOrgi(request))) ;
+    		map.put("adTypeList", adTypeRes.findByAdposAndOrgi(advType.getId() , super.getOrgi(request), new PageRequest(super.getP(request), super.getPs(request), Sort.Direction.DESC, new String[] { "createtime" }))) ;
     	}
     	
     	map.put("tagTypeList", UKeFuDic.getInstance().getDic("com.dic.tag.type")) ;

@@ -16,7 +16,8 @@
 	</div>
 	<div class="col-lg-9">
 		<h1 class="site-h1" style="background-color:#FFFFFF;">
-			<#if organData??>${organData.name!''}<#else>默认机构</#if><#if userList??>（${userList?size!''}）</#if>
+		<input type="hidden" id="pagetemp" name="pagetemp" value="${pagetemp}">
+			<#if organData??>${organData.name!''}<#else>默认机构</#if><#if userList??>（${userList.totalElements}）</#if>
 			<span style="float:right;">
 				<#if organData??>
 				<button class="layui-btn layui-btn-sm green" href="/admin/organ/seluser.html?organ=${organData.id!''}" data-toggle="ajax" data-width="750" data-title="创建新用户">
@@ -58,8 +59,8 @@
 					</tr> 
 				  </thead>
 				  <tbody>
-					<#if userList??>
-					<#list userList as organUser>
+					<#if userList?? && userList.content?? && userList.content?size gt 0>
+					<#list userList.content as organUser>
 					<tr>
 					  <td>
 							<a href="">
@@ -102,7 +103,9 @@
 	
 	function onClick(e, treeId, treeNode) {
 		if(treeNode.topic){
-			location.href = "/admin/organ/index.html?organ="+treeNode.id;
+			
+			$("#pagetemp").val(treeNode.id);
+			location.href = "/admin/organ/index.html?organ="+treeNode.id+"&pagetemp="+$("#pagetemp").val();
 		}else if(treeNode.id == "0"){
 			location.href = "/admin/organ/index.html";
 		}else if(treeNode.area){
@@ -136,4 +139,22 @@
 		  
 		  </#if>
 		});  
+	layui.use(['laypage', 'layer'], function(){
+		  var laypage = layui.laypage
+		  ,layer = layui.layer;
+		  <#if msg??>
+		  top.layer.msg('${msg}');
+		  </#if>
+		  laypage.render({
+				elem: 'page'
+				,pages: <#if userList??>${userList.totalPages}<#else>0</#if> //总页数
+				,curr:<#if userList??>${userList.number+1}<#else>0</#if>
+				,groups: 5 //连续显示分页数
+				,jump:function(data , first){
+					if(!first){
+						location.href = "/admin/organ/index.html?p="+data.curr +"&organ="+$("#pagetemp").val()+"&pagetemp="+$("#pagetemp").val();
+					}
+				}
+		   });
+		});
 </SCRIPT>

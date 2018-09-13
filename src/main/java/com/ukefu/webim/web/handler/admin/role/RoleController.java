@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,9 +67,10 @@ public class RoleController extends Handler{
     			map.addAttribute("roleData", roleData = roleList.get(0));
     		}
     		if(roleData!=null){
-    			map.addAttribute("userRoleList", userRoleRes.findByOrgiAndRole(super.getOrgiByTenantshare(request), roleData, new PageRequest(super.getP(request), 10000)) );
+    			map.addAttribute("userRoleList", userRoleRes.findByOrgiAndRole(super.getOrgiByTenantshare(request), roleData, new PageRequest(super.getP(request), super.getPs(request), Sort.Direction.DESC, new String[] { "createtime" })) );
     		}
     	}
+    	map.addAttribute("pagetemp", request.getParameter("pagetemp"));
         return request(super.createAdminTempletResponse("/admin/role/index"));
     }
     

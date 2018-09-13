@@ -9,6 +9,9 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,12 +85,13 @@ public class OrganController extends Handler{
     			map.addAttribute("organData", organData = organList.get(0));
     		}
     		if(organData!=null){
-    			map.addAttribute("userList", userRepository.findByOrganAndOrgiAndDatastatus(organData.getId() , super.getOrgiByTenantshare(request),false));
+    			map.addAttribute("userList", userRepository.findByDatastatusAndOrganAndOrgi(false,organData.getId() ,super.getOrgi(request), new PageRequest(super.getP(request), super.getPs(request), Sort.Direction.DESC, new String[] { "createtime" })));
     		}
     	}
     	map.addAttribute("areaList", areaRepository.findByOrgi(super.getOrgiByTenantshare(request))) ;
     	map.addAttribute("roleList", roleRepository.findByOrgiAndOrgid(super.getOrgiByTenantshare(request),super.getOrgid(request)));
         map.put("msg", msg);
+        map.put("pagetemp", request.getParameter("pagetemp"));
     	return request(super.createAdminTempletResponse("/admin/organ/index"));
     }
     

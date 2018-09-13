@@ -2,6 +2,8 @@ package com.ukefu.webim.service.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ukefu.webim.web.model.Product;
@@ -17,5 +19,7 @@ public abstract interface ProductRepository extends JpaRepository<Product, Strin
 	public abstract List<Product> findByOrgiAndCate(String orgi, String cate) ;
 	
 	public abstract Product findByOrgiAndTitle(String orgi, String title) ;
+	
+	public abstract Page<Product> findByOrgiAndCate(String orgi, String cate, Pageable page) ;
 
 }

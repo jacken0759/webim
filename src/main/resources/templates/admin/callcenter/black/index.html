@@ -1,14 +1,14 @@
-<div class="row" style="height:100%;">
+<div class="row" style="height:100%;" >
 	<div class="col-lg-12" style="border-right:1px solid #e6e6e6;padding-right:0px;">
 		<h1 class="site-h1" style="background-color:#FFFFFF;">
-			黑名单列表<#if blackList??>（${blackList?size}）</#if>
+			黑名单列表<#if blackList??>（${blackList.totalElements}）</#if>
 			<span style="float:right;">
 				<button class="layui-btn layui-btn-sm green" href="/admin/callcenter/black/add.html" data-toggle="ajax" data-width="700" data-height="300" data-title="添加黑名单">
 					添加黑名单
 				</button>
 			</span>
 		</h1>
-		<div class="row">
+		<div class="row" >
 			<div class="col-lg-12">
 				<div class="row" style="padding:5px;">
 					<div class="col-lg-12">
@@ -27,8 +27,8 @@
 							</tr> 
 						  </thead>
 						  <tbody>
-							<#if blackList??>
-							<#list blackList as black>
+							<#if blackList?? && blackList.content?? && blackList.content?size gt 0>
+							<#list blackList.content as black>
 							<tr>
 							  <td>
 								  ${black.phone!''}
@@ -51,7 +51,27 @@
 						</table>
 					</div> 	   
 				</div>
+				<div class="row" style="padding:5px;">
+					<div class="col-lg-12" id="page" style="text-align:center;"></div>
+				</div>
 			</div>	
 		</div>
 	</div>	
 </div>
+<script type="text/javascript">
+layui.use(['laypage', 'layer'], function(){
+	  var laypage = layui.laypage
+	  ,layer = layui.layer;
+	  laypage.render({
+			elem: 'page'
+			,pages: <#if blackList??>${blackList.totalPages}<#else>0</#if> //总页数
+			,curr:<#if blackList??>${blackList.number+1}<#else>0</#if>
+			,groups: 5 //连续显示分页数
+			,jump:function(data , first){
+				if(!first){
+					loadURL( "/admin/callcenter/black.html?p="+data.curr ,"#callCenterContent");
+				}
+			}
+	   });
+	});
+</script>

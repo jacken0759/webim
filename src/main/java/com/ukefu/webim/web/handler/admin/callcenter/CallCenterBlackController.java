@@ -5,6 +5,8 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +28,7 @@ public class CallCenterBlackController extends Handler{
 	@RequestMapping(value = "/black")
     @Menu(type = "callcenter" , subtype = "callcenterblack" , access = false , admin = true)
     public ModelAndView black(ModelMap map , HttpServletRequest request , @Valid String hostid) {
-		map.addAttribute("blackList" , blackRes.findByOrgi(super.getOrgi(request)));
+		map.addAttribute("blackList" , blackRes.findByOrgi(super.getOrgi(request), new PageRequest(super.getP(request), super.getPs(request), Sort.Direction.DESC, "createtime")));
 		return request(super.createRequestPageTempletResponse("/admin/callcenter/black/index"));
     }
 	
