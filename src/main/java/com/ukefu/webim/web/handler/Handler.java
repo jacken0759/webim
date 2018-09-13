@@ -226,16 +226,46 @@ public class Handler {
 						if(request.getParameter("condition").equals("scope")){//范围
 							if(!StringUtils.isBlank(request.getParameter("nabegin")) ||!StringUtils.isBlank(request.getParameter("naend"))){
 								RangeQueryBuilder tempRangeQuery = null ;
-								if(!StringUtils.isBlank(request.getParameter("nabegin"))) {
-									tempRangeQuery = QueryBuilders.rangeQuery(tp.getFieldname()).from(request.getParameter("nabegin")) ;
-								}
-								if(!StringUtils.isBlank(request.getParameter("naend")) ) {
-									if(tempRangeQuery == null) {
-										tempRangeQuery = QueryBuilders.rangeQuery(tp.getFieldname()).to(request.getParameter("naend")) ;
-									}else {
-										tempRangeQuery.to(request.getParameter("naend")) ;
+								if("distime".equals(tp.getFieldname())){
+									if(!StringUtils.isBlank(request.getParameter("nabegin"))) {
+											try {
+												tempRangeQuery = QueryBuilders.rangeQuery(tp.getFieldname()).from(UKTools.dateFormate.parse(request.getParameter("nabegin")).getTime()) ;
+											} catch (ParseException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
+									}
+									if(!StringUtils.isBlank(request.getParameter("naend")) ) {
+										if(tempRangeQuery == null) {
+											try {
+												tempRangeQuery = QueryBuilders.rangeQuery(tp.getFieldname()).to(UKTools.dateFormate.parse(request.getParameter("naend")).getTime()) ;
+											} catch (ParseException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
+										}else {
+											try {
+												tempRangeQuery.to(UKTools.dateFormate.parse(request.getParameter("naend")).getTime()) ;
+											} catch (ParseException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
+										}
+									}
+								}else{
+									
+									if(!StringUtils.isBlank(request.getParameter("nabegin"))) {
+										tempRangeQuery = QueryBuilders.rangeQuery(tp.getFieldname()).from(request.getParameter("nabegin")) ;
+									}
+									if(!StringUtils.isBlank(request.getParameter("naend")) ) {
+										if(tempRangeQuery == null) {
+											tempRangeQuery = QueryBuilders.rangeQuery(tp.getFieldname()).to(request.getParameter("naend")) ;
+										}else {
+											tempRangeQuery.to(request.getParameter("naend")) ;
+										}
 									}
 								}
+								
 								organBu.should(tempRangeQuery);
 							}
 						}else if(request.getParameter("condition").equals("equal")){//大于
