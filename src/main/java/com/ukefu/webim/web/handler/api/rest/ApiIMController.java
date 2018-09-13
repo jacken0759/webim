@@ -27,6 +27,7 @@ import com.ukefu.webim.service.acd.ServiceQuene;
 import com.ukefu.webim.service.repository.AgentServiceSatisRepository;
 import com.ukefu.webim.service.repository.ChatMessageRepository;
 import com.ukefu.webim.service.repository.ConsultInviteRepository;
+import com.ukefu.webim.service.repository.LeaveMsgRepository;
 import com.ukefu.webim.util.OnlineUserUtils;
 import com.ukefu.webim.util.RestResult;
 import com.ukefu.webim.util.RestResultType;
@@ -34,6 +35,7 @@ import com.ukefu.webim.util.server.message.ChatMessage;
 import com.ukefu.webim.web.handler.Handler;
 import com.ukefu.webim.web.model.AgentServiceSatis;
 import com.ukefu.webim.web.model.AiConfig;
+import com.ukefu.webim.web.model.LeaveMsg;
 import com.ukefu.webim.web.model.UKeFuDic;
 
 import io.swagger.annotations.Api;
@@ -52,6 +54,10 @@ public class ApiIMController extends Handler{
 	
 	@Autowired
 	private AgentServiceSatisRepository agentServiceSatisRes ;
+	
+
+	@Autowired
+	private LeaveMsgRepository leaveMsgRes ;
 	
 	/**
 	 * 返回在线网站配置
@@ -167,6 +173,23 @@ public class ApiIMController extends Handler{
     			satis.setSatistime(new Date());
     			agentServiceSatisRes.save(satis) ;
     		}
+    	}
+        return new ResponseEntity<>(new RestResult(RestResultType.OK), HttpStatus.OK);
+    }
+	
+	/**
+	 * 保存留言
+	 * @param request
+	 * @param userid	访客ID
+	 * @p 分页信息
+	 * @return
+	 */
+	@RequestMapping(value = "/leavemsg/save", method = RequestMethod.POST)
+	@Menu(type = "apps" , subtype = "webim" , access = true)
+	@ApiOperation("保存留言功能")
+    public ResponseEntity<RestResult> leavemsg(HttpServletRequest request , @Valid String orgi , @Valid LeaveMsg msg) {
+		if(msg!=null && !StringUtils.isBlank(msg.getUserid())){
+			leaveMsgRes.save(msg) ;
     	}
         return new ResponseEntity<>(new RestResult(RestResultType.OK), HttpStatus.OK);
     }

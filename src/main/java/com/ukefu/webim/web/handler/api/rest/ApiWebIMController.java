@@ -1,8 +1,5 @@
 package com.ukefu.webim.web.handler.api.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -16,10 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ukefu.util.Menu;
 import com.ukefu.webim.service.repository.ConsultInviteRepository;
+import com.ukefu.webim.service.repository.LeaveMsgRepository;
 import com.ukefu.webim.util.RestResult;
 import com.ukefu.webim.util.RestResultType;
 import com.ukefu.webim.web.handler.Handler;
 import com.ukefu.webim.web.model.CousultInvite;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api/webim")
