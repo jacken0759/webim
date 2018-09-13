@@ -34,6 +34,8 @@ public class AgentService implements Serializable {
 	private String channel;
 	private Date logindate;
 	
+	private int firstreplytime ;//首次消息回复时间
+	
 	private boolean invite ;	//是否邀请评价
 	private Date invitedate ;	//邀请评价时间
 	
@@ -63,6 +65,8 @@ public class AgentService implements Serializable {
 	
 	private String agent ;
 	private String skill ;
+	
+	private String memo;
 	
 	private String agentuserid ;
 	
@@ -878,5 +882,21 @@ public class AgentService implements Serializable {
 
 	public void setServicekind(String servicekind) {
 		this.servicekind = servicekind;
+	}
+
+	public int getFirstreplytime() {
+		return firstreplytime;
+	}
+
+	public void setFirstreplytime(int firstreplytime) {
+		this.firstreplytime = firstreplytime;
+	}
+
+	public String getMemo() {
+		return memo;
+	}
+
+	public void setMemo(String memo) {
+		this.memo = memo;
 	}
 }

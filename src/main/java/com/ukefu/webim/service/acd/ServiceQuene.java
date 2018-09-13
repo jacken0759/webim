@@ -268,7 +268,6 @@ public class ServiceQuene {
 				if(service.getServicetime()!=null){
 					service.setSessiontimes(System.currentTimeMillis() - service.getServicetime().getTime());
 				}
-
 				AgentUserTaskRepository agentUserTaskRes = UKDataContext.getContext().getBean(AgentUserTaskRepository.class) ;
 				List<AgentUserTask> agentUserTaskList = agentUserTaskRes.findByIdAndOrgi(agentUser.getId() , agentUser.getOrgi()) ;
 				if(agentUserTaskList.size() > 0){
@@ -280,6 +279,8 @@ public class ServiceQuene {
 
 					service.setUserasks(agentUserTask.getUserasks());
 					service.setAgentreplys(agentUserTask.getAgentreplys());
+					
+					service.setFirstreplytime(agentUserTask.getFirstreplytime());
 				}
 
 

@@ -26,7 +26,8 @@ public class AgentUserTask {
 	private String warnings ;
 	private Date warningtime ;
 	
-	private Date logindate; 
+	private Date logindate;
+	private Date servicetime;
 	
 	private int agentreplyinterval;//回复时间间隔
 	private int agentreplytime;
@@ -275,5 +276,12 @@ public class AgentUserTask {
 	public void setLogindate(Date logindate) {
 		this.logindate = logindate;
 	}
-	
+
+	public Date getServicetime() {
+		return servicetime;
+	}
+
+	public void setServicetime(Date servicetime) {
+		this.servicetime = servicetime;
+	}
 }

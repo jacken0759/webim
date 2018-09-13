@@ -204,6 +204,13 @@ public class AgentEventHandler
     			
 	    		agentUserTask.setLastgetmessage(new Date());
 	    		
+	    		if(agentUserTask.getFirstreplytime() == 0) {
+	    			if(agentUserTask.getLastgetmessage() != null && agentUserTask.getLastmessage()!=null){
+	    				agentUserTask.setFirstreplytime(data.getAgentreplytime());
+	    			}else if(agentUserTask.getServicetime()!=null){
+	    				agentUserTask.setFirstreplytime((int)(System.currentTimeMillis() - agentUserTask.getServicetime().getTime())/1000);
+	    			}
+	    		}
 //	    		agentUserTask.setReptime(null);
 //	    		agentUserTask.setReptimes("0");
 	    		
