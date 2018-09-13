@@ -33,7 +33,7 @@ public abstract interface EkmKnowledgeESRepository
 	
 //	public abstract Page<EkmKnowledge> findByPubstatusAndDatastatusAndOrgi(String pubstatus, boolean datastatus ,String orgi, Pageable pageable);
 	
-	public abstract Page<EkmKnowledge> findByPubstatusAndDatastatusAndOrgiAndOwn(String pubstatus, boolean datastatus ,String orgi,String own, Pageable pageable);
+	public abstract Page<EkmKnowledge> findByPubstatusAndDatastatusAndOrgiAndOwn(String pubstatus, boolean datastatus ,String orgi,String own,User user, Pageable pageable);
 
 	public abstract Page<EkmKnowledge> getByDimenidAndDatastatusAndOrgi(String dimenid, boolean datastatus ,String orgi, Pageable pageable);
 	

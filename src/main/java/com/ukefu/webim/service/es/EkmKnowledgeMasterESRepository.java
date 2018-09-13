@@ -29,7 +29,7 @@ public abstract interface EkmKnowledgeMasterESRepository
 	
 	public abstract List<EkmKnowledgeMaster> findByCreaterAndDatastatusAndOrgi(String creater,boolean datastatus ,String orgi);
 	
-	public abstract Page<EkmKnowledgeMaster> findByPubstatusAndDatastatusAndOrgi(String pubstatus, boolean datastatus ,String orgi, Pageable pageable);
+	public abstract Page<EkmKnowledgeMaster> findByPubstatusAndDatastatusAndCreaterAndOrgi(String pubstatus, boolean datastatus ,String creater,String orgi, Pageable pageable);
 
 	public abstract Page<EkmKnowledgeMaster> getByDimenidAndDatastatusAndOrgi(String dimenid, boolean datastatus ,String orgi, Pageable pageable);
 	

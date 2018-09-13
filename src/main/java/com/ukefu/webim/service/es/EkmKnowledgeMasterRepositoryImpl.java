@@ -209,7 +209,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 	}
 
 	@Override
-	public Page<EkmKnowledgeMaster> findByPubstatusAndDatastatusAndOrgi(String pubstatus, boolean datastatus, String orgi,
+	public Page<EkmKnowledgeMaster> findByPubstatusAndDatastatusAndCreaterAndOrgi(String pubstatus, boolean datastatus,String creater, String orgi,
 			Pageable pageable) {
 		
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
@@ -218,7 +218,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 		boolQueryBuilder1.must(termQuery("datastatus" , datastatus)) ;
 		boolQueryBuilder.must(boolQueryBuilder1) ;
 		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
-		
+		boolQueryBuilder.must(termQuery("creater" ,creater)) ;
 		return processQuery(boolQueryBuilder , pageable);
 	}
 	

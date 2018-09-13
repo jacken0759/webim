@@ -341,13 +341,13 @@ public class EkmKnowledgeRepositoryImpl implements EkmKnowledgeESRepository{
 		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
 		boolQueryBuilder.must(termQuery("own" ,own)) ;
 		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
-		
+		boolQueryBuilder.must(termQuery("creater" , user.getId())) ;
 		return processQuery(boolQueryBuilder , pageable);
 	}
 
 	@Override
 	public Page<EkmKnowledge> findByPubstatusAndDatastatusAndOrgiAndOwn(
-			String pubstatus, boolean datastatus, String orgi, String own,
+			String pubstatus, boolean datastatus, String orgi, String own,User user,
 			Pageable pageable) {
 
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
@@ -357,7 +357,9 @@ public class EkmKnowledgeRepositoryImpl implements EkmKnowledgeESRepository{
 		boolQueryBuilder.must(boolQueryBuilder1) ;
 		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
 		boolQueryBuilder.must(termQuery("own" ,own)) ;
+		boolQueryBuilder.must(termQuery("creater" , user.getId())) ;
 		return processQuery(boolQueryBuilder , pageable);
 	}
+
 
 }
