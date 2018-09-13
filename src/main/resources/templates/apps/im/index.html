@@ -513,7 +513,7 @@
 			}
 			</#if>
 		}
-		
+		<#if sessionConfig?? && sessionConfig.satisfaction?? && sessionConfig.satisfaction>
 		if(data.messageType == "invit"){
 			<#if sessionConfig?? && sessionConfig.satisfaction?? && sessionConfig.satisfaction>
 			if(invite == false){
@@ -523,6 +523,7 @@
 			}
 			</#if>
 		}
+		</#if>
 		if(document.getElementById("agentserviceid")){
 			document.getElementById("agentserviceid").value = data.agentserviceid ;
 		}
