@@ -75,3 +75,11 @@ ALTER TABLE uk_consult_invite ADD weichatappkey varchar(255) DEFAULT NULL COMMEN
 ALTER TABLE uk_consult_invite ADD weichattoken varchar(255) DEFAULT NULL COMMENT '微信TOKEN';
 
 ALTER TABLE uk_consult_invite ADD defaultskill text DEFAULT NULL COMMENT '默认启用的技能组';
+
+ALTER TABLE uk_consult_invite ADD firstreplytime int DEFAULT 0 COMMENT '首次消息回复时间';
+
+
+ALTER TABLE uk_agentservice ADD firstreplytime int DEFAULT 0 COMMENT '首次消息回复时间';
+
+ALTER TABLE uk_agentservice ADD memo text DEFAULT NULL COMMENT '备注';
+
