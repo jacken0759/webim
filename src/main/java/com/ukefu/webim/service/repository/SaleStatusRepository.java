@@ -2,6 +2,8 @@ package com.ukefu.webim.service.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ukefu.webim.web.model.SaleStatus;
@@ -19,5 +21,7 @@ public abstract interface SaleStatusRepository extends JpaRepository<SaleStatus,
 	public abstract List<SaleStatus> findByOrgiAndCateAndActivityid(String orgi, String cate, String activityid) ;
 	
 	public abstract SaleStatus findByOrgiAndName(String orgi, String name) ;
+	
+	public abstract Page<SaleStatus> findByOrgiAndCate(String orgi, String cate,Pageable page) ;
 
 }
