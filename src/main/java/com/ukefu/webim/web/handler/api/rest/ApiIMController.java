@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.Menu;
+import com.ukefu.util.UKTools;
 import com.ukefu.util.extra.DataExchangeInterface;
 import com.ukefu.webim.service.acd.ServiceQuene;
 import com.ukefu.webim.service.repository.AgentServiceSatisRepository;
@@ -36,6 +37,7 @@ import com.ukefu.webim.web.handler.Handler;
 import com.ukefu.webim.web.model.AgentServiceSatis;
 import com.ukefu.webim.web.model.AiConfig;
 import com.ukefu.webim.web.model.LeaveMsg;
+import com.ukefu.webim.web.model.SystemConfig;
 import com.ukefu.webim.web.model.UKeFuDic;
 
 import io.swagger.annotations.Api;
@@ -133,6 +135,21 @@ public class ApiIMController extends Handler{
 	@ApiOperation("获取在线客服会话历史消息")
     public ResponseEntity<RestResult> agent(HttpServletRequest request , @Valid String orgi) {
         return new ResponseEntity<>(new RestResult(RestResultType.OK, ServiceQuene.getAgentReport(orgi)), HttpStatus.OK);
+    }
+	
+	/**
+	 * 返回访客历史消息
+	 * @param request
+	 * @param userid	访客ID
+	 * @p 分页信息
+	 * @return
+	 */
+	@RequestMapping(value = "/url", method = RequestMethod.GET)
+	@Menu(type = "apps" , subtype = "webim" , access = true)
+	@ApiOperation("获取图片和语音信息资源的访问URL地址信息")
+    public ResponseEntity<RestResult> url(HttpServletRequest request , @Valid String orgi) {
+		SystemConfig systemConfig = UKTools.getSystemConfig();
+        return new ResponseEntity<>(new RestResult(RestResultType.OK, systemConfig!=null ? systemConfig.getIconstr():""), HttpStatus.OK);
     }
 	
 	/**
