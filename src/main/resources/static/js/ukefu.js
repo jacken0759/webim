@@ -1,4 +1,8 @@
 var layer , laydate, iframe , layerwin , cursession , acceptCallOut = true ;
+layui.extend({
+    autocomplete: '/lay/modules/autocomplete'
+});
+
 $(document).ready(function(){
 	var hide ;
 	$('.dropdown-menu').on("click" , function(){

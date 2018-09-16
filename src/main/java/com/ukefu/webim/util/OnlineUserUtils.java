@@ -1062,120 +1062,136 @@ public class OnlineUserUtils {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	public static List<OtherMessageItem> suggest(String q , String orgi , String userid , CousultInvite invite) throws IOException, TemplateException {
+	public static List<OtherMessageItem> suggest(String q , String orgi , String userid , CousultInvite invite){
 		List<OtherMessageItem> suggestItemList = null ;
 		String param = "" ;
 		if(!StringUtils.isBlank(invite.getOtherurl())) {
-			if(!StringUtils.isBlank(invite.getOthertempletinput())) {
-				Template templet = UKTools.getTemplate(invite.getOthertempletinput()) ;
-				Map<String,Object> values = new HashMap<String,Object>();
-				values.put("q", q) ;
-				values.put("userid", userid) ;
-				param = UKTools.getTemplet(templet.getTemplettext(), values) ;
-			}
-			String result = HttpClientUtil.doPost(invite.getOtherurl(), param)  , text = null;
-			if(!StringUtils.isBlank(result) && !StringUtils.isBlank(invite.getOthertempletoutput()) && !result.equals("error")) {
-				Template templet = UKTools.getTemplate(invite.getOthertempletoutput()) ;
-				@SuppressWarnings("unchecked")
-				Map<String,Object> jsonData = objectMapper.readValue(result, Map.class) ;
-				Map<String,Object> values = new HashMap<String,Object>();
-				values.put("q", q) ;
-				values.put("userid", userid) ;
-				values.put("data", jsonData) ;
-				text = UKTools.getTemplet(templet.getTemplettext(), values) ;
-			}
-			if(!StringUtils.isBlank(text)){
-				JavaType javaType = getCollectionType(ArrayList.class, OtherMessageItem.class); 
-				suggestItemList = objectMapper.readValue(text, javaType) ;
+			try {
+				if(!StringUtils.isBlank(invite.getOthertempletinput())) {
+					Template templet = UKTools.getTemplate(invite.getOthertempletinput()) ;
+					Map<String,Object> values = new HashMap<String,Object>();
+					values.put("q", q) ;
+					values.put("userid", userid) ;
+					param = UKTools.getTemplet(templet.getTemplettext(), values) ;
+				}
+				String result = HttpClientUtil.doPost(invite.getOtherurl(), param)  , text = null;
+				if(!StringUtils.isBlank(result) && !StringUtils.isBlank(invite.getOthertempletoutput()) && !result.equals("error")) {
+					Template templet = UKTools.getTemplate(invite.getOthertempletoutput()) ;
+					@SuppressWarnings("unchecked")
+					Map<String,Object> jsonData = objectMapper.readValue(result, Map.class) ;
+					Map<String,Object> values = new HashMap<String,Object>();
+					values.put("q", q) ;
+					values.put("userid", userid) ;
+					values.put("data", jsonData) ;
+					text = UKTools.getTemplet(templet.getTemplettext(), values) ;
+				}
+				if(!StringUtils.isBlank(text)){
+					JavaType javaType = getCollectionType(ArrayList.class, OtherMessageItem.class); 
+					suggestItemList = objectMapper.readValue(text, javaType) ;
+				}
+			}catch(Exception ex) {
+				ex.printStackTrace();
 			}
 		}
 		return suggestItemList ;
 	}
 	
-	public static List<OtherMessageItem> search(String q , String orgi , User user) throws IOException, TemplateException {
+	public static List<OtherMessageItem> search(String q , String orgi , User user) {
 		List<OtherMessageItem> otherMessageItemList = null ;
 		String param = "" ;
 		SessionConfig sessionConfig = ServiceQuene.initSessionConfig(orgi) ;
-		if(!StringUtils.isBlank(sessionConfig.getOqrsearchurl())) {
-			Template templet = UKTools.getTemplate(sessionConfig.getOqrsearchinput()) ;
-			Map<String,Object> values = new HashMap<String,Object>();
-			values.put("q", q) ;
-			values.put("user", user) ;
-			param = UKTools.getTemplet(templet.getTemplettext(), values) ;
-		}
-		String result = HttpClientUtil.doPost(sessionConfig.getOqrsearchurl(), param)  , text = null;
-		if(!StringUtils.isBlank(result) && !StringUtils.isBlank(sessionConfig.getOqrsearchoutput()) && !result.equals("error")) {
-			Template templet = UKTools.getTemplate(sessionConfig.getOqrsearchoutput()) ;
-			@SuppressWarnings("unchecked")
-			Map<String,Object> jsonData = objectMapper.readValue(result, Map.class) ;
-			Map<String,Object> values = new HashMap<String,Object>();
-			values.put("q", q) ;
-			values.put("user", user) ;
-			values.put("data", jsonData) ;
-			text = UKTools.getTemplet(templet.getTemplettext(), values) ;
-		}
-		if(!StringUtils.isBlank(text)){
-			JavaType javaType = getCollectionType(ArrayList.class, OtherMessageItem.class); 
-			otherMessageItemList = objectMapper.readValue(text, javaType) ;
+		try {
+			if(!StringUtils.isBlank(sessionConfig.getOqrsearchurl())) {
+				Template templet = UKTools.getTemplate(sessionConfig.getOqrsearchinput()) ;
+				Map<String,Object> values = new HashMap<String,Object>();
+				values.put("q", q) ;
+				values.put("user", user) ;
+				param = UKTools.getTemplet(templet.getTemplettext(), values) ;
+			}
+			String result = HttpClientUtil.doPost(sessionConfig.getOqrsearchurl(), param)  , text = null;
+			if(!StringUtils.isBlank(result) && !StringUtils.isBlank(sessionConfig.getOqrsearchoutput()) && !result.equals("error")) {
+				Template templet = UKTools.getTemplate(sessionConfig.getOqrsearchoutput()) ;
+				@SuppressWarnings("unchecked")
+				Map<String,Object> jsonData = objectMapper.readValue(result, Map.class) ;
+				Map<String,Object> values = new HashMap<String,Object>();
+				values.put("q", q) ;
+				values.put("user", user) ;
+				values.put("data", jsonData) ;
+				text = UKTools.getTemplet(templet.getTemplettext(), values) ;
+			}
+			if(!StringUtils.isBlank(text)){
+				JavaType javaType = getCollectionType(ArrayList.class, OtherMessageItem.class); 
+				otherMessageItemList = objectMapper.readValue(text, javaType) ;
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
 		}
 		return otherMessageItemList ;
 	}
 	
-	public static OtherMessageItem suggestdetail(AiConfig aiCofig , String id , String orgi , User user) throws IOException, TemplateException {
+	public static OtherMessageItem suggestdetail(AiConfig aiCofig , String id , String orgi , User user){
 		OtherMessageItem otherMessageItem = null ;
 		String param = "" ;
-		if(!StringUtils.isBlank(aiCofig.getOqrdetailinput())) {
-			Template templet = UKTools.getTemplate(aiCofig.getOqrdetailinput()) ;
-			Map<String,Object> values = new HashMap<String,Object>();
-			values.put("id", id) ;
-			values.put("user", user) ;
-			param = UKTools.getTemplet(templet.getTemplettext(), values) ;
-		}
-		if(!StringUtils.isBlank(aiCofig.getOqrdetailurl())) {
-			String result = HttpClientUtil.doPost(aiCofig.getOqrdetailurl(), param)  , text = null;
-			if(!StringUtils.isBlank(aiCofig.getOqrdetailoutput()) && !result.equals("error")) {
-				Template templet = UKTools.getTemplate(aiCofig.getOqrdetailoutput()) ;
-				@SuppressWarnings("unchecked")
-				Map<String,Object> jsonData = objectMapper.readValue(result, Map.class) ;
+		try {
+			if(!StringUtils.isBlank(aiCofig.getOqrdetailinput())) {
+				Template templet = UKTools.getTemplate(aiCofig.getOqrdetailinput()) ;
 				Map<String,Object> values = new HashMap<String,Object>();
-				values.put("id",id) ;
+				values.put("id", id) ;
 				values.put("user", user) ;
-				values.put("data", jsonData) ;
-				text = UKTools.getTemplet(templet.getTemplettext(), values) ;
+				param = UKTools.getTemplet(templet.getTemplettext(), values) ;
 			}
-			if(!StringUtils.isBlank(text)){
-				otherMessageItem = objectMapper.readValue(text, OtherMessageItem.class) ;
+			if(!StringUtils.isBlank(aiCofig.getOqrdetailurl())) {
+				String result = HttpClientUtil.doPost(aiCofig.getOqrdetailurl(), param)  , text = null;
+				if(!StringUtils.isBlank(aiCofig.getOqrdetailoutput()) && !result.equals("error")) {
+					Template templet = UKTools.getTemplate(aiCofig.getOqrdetailoutput()) ;
+					@SuppressWarnings("unchecked")
+					Map<String,Object> jsonData = objectMapper.readValue(result, Map.class) ;
+					Map<String,Object> values = new HashMap<String,Object>();
+					values.put("id",id) ;
+					values.put("user", user) ;
+					values.put("data", jsonData) ;
+					text = UKTools.getTemplet(templet.getTemplettext(), values) ;
+				}
+				if(!StringUtils.isBlank(text)){
+					otherMessageItem = objectMapper.readValue(text, OtherMessageItem.class) ;
+				}
 			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
 		}
 		return otherMessageItem ;
 	}
 	
-	public static OtherMessageItem detail(String id , String orgi , User user) throws IOException, TemplateException {
+	public static OtherMessageItem detail(String id , String orgi , User user){
 		OtherMessageItem otherMessageItem = null ;
 		String param = "" ;
-		SessionConfig sessionConfig = ServiceQuene.initSessionConfig(orgi) ;
-		if(!StringUtils.isBlank(sessionConfig.getOqrdetailinput())) {
-			Template templet = UKTools.getTemplate(sessionConfig.getOqrdetailinput()) ;
-			Map<String,Object> values = new HashMap<String,Object>();
-			values.put("id", id) ;
-			values.put("user", user) ;
-			param = UKTools.getTemplet(templet.getTemplettext(), values) ;
-		}
-		if(!StringUtils.isBlank(sessionConfig.getOqrdetailurl())) {
-			String result = HttpClientUtil.doPost(sessionConfig.getOqrdetailurl(), param)  , text = null;
-			if(!StringUtils.isBlank(sessionConfig.getOqrdetailoutput()) && !result.equals("error")) {
-				Template templet = UKTools.getTemplate(sessionConfig.getOqrdetailoutput()) ;
-				@SuppressWarnings("unchecked")
-				Map<String,Object> jsonData = objectMapper.readValue(result, Map.class) ;
+		try {
+			SessionConfig sessionConfig = ServiceQuene.initSessionConfig(orgi) ;
+			if(!StringUtils.isBlank(sessionConfig.getOqrdetailinput())) {
+				Template templet = UKTools.getTemplate(sessionConfig.getOqrdetailinput()) ;
 				Map<String,Object> values = new HashMap<String,Object>();
-				values.put("id",id) ;
+				values.put("id", id) ;
 				values.put("user", user) ;
-				values.put("data", jsonData) ;
-				text = UKTools.getTemplet(templet.getTemplettext(), values) ;
+				param = UKTools.getTemplet(templet.getTemplettext(), values) ;
 			}
-			if(!StringUtils.isBlank(text)){
-				otherMessageItem = objectMapper.readValue(text, OtherMessageItem.class) ;
+			if(!StringUtils.isBlank(sessionConfig.getOqrdetailurl())) {
+				String result = HttpClientUtil.doPost(sessionConfig.getOqrdetailurl(), param)  , text = null;
+				if(!StringUtils.isBlank(sessionConfig.getOqrdetailoutput()) && !result.equals("error")) {
+					Template templet = UKTools.getTemplate(sessionConfig.getOqrdetailoutput()) ;
+					@SuppressWarnings("unchecked")
+					Map<String,Object> jsonData = objectMapper.readValue(result, Map.class) ;
+					Map<String,Object> values = new HashMap<String,Object>();
+					values.put("id",id) ;
+					values.put("user", user) ;
+					values.put("data", jsonData) ;
+					text = UKTools.getTemplet(templet.getTemplettext(), values) ;
+				}
+				if(!StringUtils.isBlank(text)){
+					otherMessageItem = objectMapper.readValue(text, OtherMessageItem.class) ;
+				}
 			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
 		}
 		return otherMessageItem ;
 	}

@@ -1,5 +1,6 @@
 package com.ukefu.webim.web.handler.api.rest;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +41,7 @@ import com.ukefu.webim.web.model.LeaveMsg;
 import com.ukefu.webim.web.model.SystemConfig;
 import com.ukefu.webim.web.model.UKeFuDic;
 
+import freemarker.template.TemplateException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -89,6 +91,22 @@ public class ApiIMController extends Handler{
 	@ApiOperation("获取在线客服会话ID")
     public ResponseEntity<RestResult> session(HttpServletRequest request) {
         return new ResponseEntity<>(new RestResult(RestResultType.OK, request.getSession().getId()), HttpStatus.OK);
+    }
+	
+
+	/**
+	 * 返回推荐知识
+	 * @param request
+	 * @param username	搜索用户名，精确搜索
+	 * @return
+	 * @throws TemplateException 
+	 * @throws IOException 
+	 */
+	@RequestMapping(value = "/query", method = RequestMethod.GET)
+	@Menu(type = "apps" , subtype = "webim" , access = true)
+	@ApiOperation("获取推荐知识")
+    public ResponseEntity<RestResult> query(HttpServletRequest request,@Valid String q) throws IOException, TemplateException {
+        return new ResponseEntity<>(new RestResult(RestResultType.OK, OnlineUserUtils.search(q, super.getOrgi(request), super.getUser(request))), HttpStatus.OK);
     }
 	
 	/**
