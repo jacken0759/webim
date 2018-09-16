@@ -4068,3 +4068,25 @@ background:#FFFFFF;
 	color: rgba(35, 39, 50, 0.8);
 	background: url(/images/circle.png) no-repeat left 8px;
 }
+.autocomplate-list {
+    position:absolute;
+    background:#FFF;
+    border:1px solid #ddd;
+    width:100%;
+    z-index:1000;
+    box-sizing:border-box;
+    display:none;
+    max-height:200px;
+    overflow-y:auto;
+}
+.autocomplate-list li {
+    padding: 0 10px;
+    line-height: 36px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.autocomplate-list li.active {
+    background:#2b83f9;
+    color:#FFF;
+}
