@@ -22,7 +22,7 @@ layui.define(function (exports) {
     var Class = function (config) {
         this.$ul = $('<ul class="autocomplate-list"></ul>');
         this.config = $.extend({
-            textLength: 3,//触发长度
+            textLength: 0,//触发长度
             delay: 300//触发延迟
         }, config);
     };
@@ -74,7 +74,7 @@ layui.define(function (exports) {
         }
 
         //用户输入/键盘选择
-        $elem.on("keydown", function (e) {
+        $elem.on("keyup", function (e) {
             clearInterval(longKeyDownTimer);
             if (e.keyCode == 38) {//向上
                 up();
