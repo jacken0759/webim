@@ -11,11 +11,14 @@ public class OtherMessage implements java.io.Serializable{
 	private String msgtype ;
 	private String title;
 	private String message ;
+	private String type ;
 	private String id ;
 	private boolean trans;
 	private String code ;
 	private String score ;
 	private boolean detail ;
+	
+	private int duration ;
 	
 	private List<OtherMessageItem> items ;
 	
@@ -73,4 +76,17 @@ public class OtherMessage implements java.io.Serializable{
 	public void setTrans(boolean trans) {
 		this.trans = trans;
 	}
+	public int getDuration() {
+		return duration;
+	}
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	
 }

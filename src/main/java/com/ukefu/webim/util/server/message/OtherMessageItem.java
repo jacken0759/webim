@@ -14,6 +14,8 @@ public class OtherMessageItem implements java.io.Serializable{
 	private String type ;		//图文消息类型
 	private String url ;		//图文消息跳转URL
 	
+	private int duration ;
+	
 	public String getMsgtype() {
 		return msgtype;
 	}
@@ -55,5 +57,11 @@ public class OtherMessageItem implements java.io.Serializable{
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	public int getDuration() {
+		return duration;
+	}
+	public void setDuration(int duration) {
+		this.duration = duration;
 	}
 }
