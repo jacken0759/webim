@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 
 import com.ukefu.core.UKDataContext;
 import com.ukefu.webim.service.impl.ESDataExchangeImpl;
+import com.ukefu.webim.web.model.EkmKnowledgeMaster;
 import com.ukefu.webim.web.model.FormFilter;
 import com.ukefu.webim.web.model.FormFilterItem;
 import com.ukefu.webim.web.model.MetadataTable;
@@ -381,5 +382,12 @@ public class SearchTools {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	/**
+	 * EKM 知识库首页 - 数据聚合
+	 */
+	public static PageImpl<EkmDataBean> aggregationEkm(BoolQueryBuilder queryBuilder , String aggField, boolean loadRef , int p, int ps){
+		ESDataExchangeImpl esDataExchange = UKDataContext.getContext().getBean(ESDataExchangeImpl.class);
+		return esDataExchange.findAllPageAggResultEkm(queryBuilder , aggField ,  new PageRequest(p, ps , Sort.Direction.ASC, "createtime") , loadRef , null) ;
 	}
 }
