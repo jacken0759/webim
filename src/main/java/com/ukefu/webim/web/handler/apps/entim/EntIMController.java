@@ -6,9 +6,11 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,6 +38,9 @@ public class EntIMController extends Handler{
 	
 	@Autowired
 	private UserRepository userRes ;
+	
+	@Value("${uk.im.server.port}")  
+    private Integer port; 
 	
 	@Autowired
 	private IMGroupRepository imGroupRes ;
@@ -75,9 +80,10 @@ public class EntIMController extends Handler{
     
     @RequestMapping("/point")
     @Menu(type = "im" , subtype = "entim" , access = false)
-    public ModelAndView point(HttpServletRequest request , HttpServletResponse response) {
+    public ModelAndView point(ModelMap map ,HttpServletRequest request , HttpServletResponse response) {
     	ModelAndView view = request(super.createEntIMTempletResponse("/apps/entim/point")) ; 
     	view.addObject("recentUserList", recentUserRes.findByCreaterAndOrgi(super.getUser(request).getId(), super.getOrgi(request))) ;
+    	map.addAttribute("port", port) ;
         return view;
     }
     
