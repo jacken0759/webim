@@ -83,3 +83,19 @@ ALTER TABLE uk_agentservice ADD firstreplytime int DEFAULT 0 COMMENT '首次消�
 
 ALTER TABLE uk_agentservice ADD memo text DEFAULT NULL COMMENT '备注';
 
+CREATE TABLE `uk_session_type` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `NAME` varchar(100) DEFAULT NULL COMMENT '字典名称',
+  `CODE` varchar(100) DEFAULT NULL COMMENT '代码',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `CTYPE` varchar(32) DEFAULT NULL COMMENT '类型',
+  `PARENTID` varchar(32) DEFAULT NULL COMMENT '父级ID',
+	`DICID` varchar(32) DEFAULT NULL COMMENT '目录ID',
+  `DESCRIPTION` varchar(255) DEFAULT NULL COMMENT '描述',
+  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `UPDATETIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `ORGAN` varchar(32) DEFAULT NULL COMMENT '部门',
+  PRIMARY KEY (`ID`) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
