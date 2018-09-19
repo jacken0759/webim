@@ -3,6 +3,7 @@ package com.ukefu.webim.web.handler;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -268,12 +269,71 @@ public class Handler {
 								
 								organBu.should(tempRangeQuery);
 							}
-						}else if(request.getParameter("condition").equals("equal")){//大于
-							organBu.should(QueryBuilders.termQuery(tp.getFieldname(), request.getParameter("convalue"))) ;
-						}else if(request.getParameter("condition").equals("not")){//大于
-							organBu.mustNot(QueryBuilders.termQuery(tp.getFieldname(), request.getParameter("convalue"))) ;
+						}else if(request.getParameter("condition").equals("equal")){//等于
+							
+							if(getDateFormat(request) == true){
+								RangeQueryBuilder rangeQu = null ;
+								
+								try {
+									rangeQu = QueryBuilders.rangeQuery(tp.getFieldname()).from(UKTools.dateFormate.parse(request.getParameter("convalue")).getTime()).to(UKTools.dateFormate.parse(request.getParameter("convalue")).getTime() + 1000);
+									organBu.must(rangeQu);
+								} catch (ParseException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
+							}else{
+								if("distime".equals(tp.getFieldname())){
+									try {
+										organBu.should(QueryBuilders.termQuery(tp.getFieldname(), UKTools.dateFormate.parse(request.getParameter("convalue")).getTime())) ;
+									} catch (ParseException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}else{
+									organBu.should(QueryBuilders.termQuery(tp.getFieldname(), request.getParameter("convalue"))) ;
+								}
+							}
+							
+						}else if(request.getParameter("condition").equals("not")){//不等于
+							
+							
+							if(getDateFormat(request) == true){
+								RangeQueryBuilder rangeQu = null ;
+								
+								try {
+									rangeQu = QueryBuilders.rangeQuery(tp.getFieldname()).from(UKTools.dateFormate.parse(request.getParameter("convalue")).getTime()).to(UKTools.dateFormate.parse(request.getParameter("convalue")).getTime() + 1000);
+									queryBuilder.mustNot(rangeQu);
+								} catch (ParseException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
+							}else{
+								if("distime".equals(tp.getFieldname())){
+									try {
+										queryBuilder.mustNot(QueryBuilders.termQuery(tp.getFieldname(), UKTools.dateFormate.parse(request.getParameter("convalue")).getTime())) ;
+									} catch (ParseException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}else{
+									queryBuilder.mustNot(QueryBuilders.termQuery(tp.getFieldname(), request.getParameter("convalue"))) ;
+								}
+							}
+							
+							
+							/*if("distime".equals(tp.getFieldname())){
+								try {
+									organBu.mustNot(QueryBuilders.termQuery(tp.getFieldname(), UKTools.dateFormate.parse(request.getParameter("convalue")).getTime())) ;
+								} catch (ParseException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}else{
+								organBu.mustNot(QueryBuilders.termQuery(tp.getFieldname(), request.getParameter("convalue"))) ;
+							}*/
 						}
-						
 					}
 				}
 				queryBuilder.must(organBu) ;
@@ -286,6 +346,22 @@ public class Handler {
 		map.addAttribute("naend", request.getParameter("naend"));
 
 		return queryBuilder ;
+	}
+	
+	public boolean getDateFormat(HttpServletRequest request){
+		boolean convertSuccess=true;
+		// 指定日期格式为四位年/两位月份/两位日期，注意yyyy/MM/dd区分大小写；
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			// 设置lenient为false. 否则SimpleDateFormat会比较宽松地验证日期，比如2007/02/29会被接受，并转换成2007/03/01
+	      format.setLenient(false);
+	      format.parse(request.getParameter("convalue"));
+		} catch (ParseException e) {
+		   // 如果throw java.text.ParseException或者NullPointerException，就说明格式不对
+	       convertSuccess=false;
+		} 
+		return convertSuccess;
+		
 	}
 	
 	public User getIMUser(HttpServletRequest request , String userid , String nickname){
