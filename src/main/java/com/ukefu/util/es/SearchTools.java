@@ -16,7 +16,6 @@ import org.springframework.data.domain.Sort;
 
 import com.ukefu.core.UKDataContext;
 import com.ukefu.webim.service.impl.ESDataExchangeImpl;
-import com.ukefu.webim.web.model.EkmKnowledgeMaster;
 import com.ukefu.webim.web.model.FormFilter;
 import com.ukefu.webim.web.model.FormFilterItem;
 import com.ukefu.webim.web.model.MetadataTable;
