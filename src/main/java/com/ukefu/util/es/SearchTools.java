@@ -385,8 +385,8 @@ public class SearchTools {
 	/**
 	 * EKM 知识库首页 - 数据聚合
 	 */
-	public static PageImpl<EkmDataBean> aggregationEkm(BoolQueryBuilder queryBuilder , String aggField, boolean loadRef , int p, int ps){
+	public static PageImpl<EkmDataBean> aggregationEkm(BoolQueryBuilder queryBuilder , boolean loadRef , int p, int ps){
 		ESDataExchangeImpl esDataExchange = UKDataContext.getContext().getBean(ESDataExchangeImpl.class);
-		return esDataExchange.findAllPageAggResultEkm(queryBuilder , aggField ,  new PageRequest(p, ps , Sort.Direction.ASC, "createtime") , loadRef , null) ;
+		return esDataExchange.findAllPageAggResultEkm(queryBuilder ,   new PageRequest(p, ps , Sort.Direction.ASC, "createtime") , loadRef , null) ;
 	}
 }

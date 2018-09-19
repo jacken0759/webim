@@ -456,7 +456,7 @@ public class ESDataExchangeImpl{
 	/**
 	 * 知识库 - 首页数据聚合
 	 */
-	public PageImpl<EkmDataBean> findAllPageAggResultEkm(QueryBuilder query,String aggField,Pageable page , boolean loadRef , String types) {
+	public PageImpl<EkmDataBean> findAllPageAggResultEkm(QueryBuilder query,Pageable page , boolean loadRef , String types) {
 		List<EkmDataBean> dataBeanList = new ArrayList<EkmDataBean>() ;
 		SearchRequestBuilder searchBuilder = UKDataContext.getTemplet().getClient().prepareSearch(UKDataContext.SYSTEM_INDEX);
 		if(!StringUtils.isBlank(types)) {
@@ -466,88 +466,44 @@ public class ESDataExchangeImpl{
 		int size = page.getPageSize() * (page.getPageNumber() + 1);
 		searchBuilder.setFrom(0).setSize(0);
 		
-		AggregationBuilder<?> aggregition = AggregationBuilders.terms(aggField).field(aggField).size(size) ;
-		aggregition.subAggregation(AggregationBuilders.terms("knowbaseid").field("knowbaseid")) ;
-		aggregition.subAggregation(AggregationBuilders.terms("knowledgetypeid").field("knowledgetypeid")) ;
-		aggregition.subAggregation(AggregationBuilders.terms("dimenid").field("dimenid")) ;
-		aggregition.subAggregation(AggregationBuilders.terms("dimentypeid").field("dimentypeid")) ;
-		aggregition.subAggregation(AggregationBuilders.terms("pubstatus").field("pubstatus")) ;
-		aggregition.subAggregation(AggregationBuilders.terms("knowledgetype").field("knowledgetype")) ;
-		aggregition.subAggregation(AggregationBuilders.terms("organ").field("organ")) ;
-		
-		searchBuilder.addAggregation(aggregition) ;
+		searchBuilder.addAggregation(AggregationBuilders.terms("organ").field("organ")).addAggregation(AggregationBuilders.terms("creater").field("creater"));
 		
 		
 		SearchResponse response = searchBuilder.setQuery(query).execute().actionGet();
 		List<String> users = new ArrayList<String>() 
-				,	organs = new ArrayList<String>() 
-				,	kbList = new ArrayList<String>()
-				,	ktList = new ArrayList<String>()
-				,	dimenList = new ArrayList<String>()
-				,	pubstatusList = new ArrayList<String>()
-				,	dtList = new ArrayList<String>() 
-				,	kwtList = new ArrayList<String>() ;
-		
-		if(response.getAggregations().get(aggField) instanceof Terms){
-			Terms agg = response.getAggregations().get(aggField) ;
-			if(agg!=null){
-				if(loadRef == true) {
-					if("creater".equals(aggField)) {//根据知识作者ID
-						users.add(agg.getName()) ;
-					}
-					if("organ".equals(aggField)) {//根据知识所属的部门ID
-						organs.add(agg.getName()) ;
-					}
-					if("knowbaseid".equals(aggField)) {//根据知识库ID
-						kbList.add(agg.getName()) ;
-					}
-					if("knowledgetypeid".equals(aggField)) {//根据知识分类ID
-						ktList.add(agg.getName()) ;
-					}
-					if("dimenid".equals(aggField)) {//根据维度ID（根级）
-						dimenList.add(agg.getName()) ;
-					}
-					if("dimentypeid".equals(aggField)) {//根据维度分类ID（分支）
-						dtList.add(agg.getName()) ;
-					}
-					if("pubstatus".equals(aggField)) {//根据知识状态
-						pubstatusList.add(agg.getName()) ;
-					}
-					if("knowledgetype".equals(aggField)) {//根据知识类型
-						kwtList.add(agg.getName()) ;
-					}
-				}
-				if(agg.getBuckets()!=null && agg.getBuckets().size()>0){
-					for (Terms.Bucket entry : agg.getBuckets()) {
-						EkmDataBean dataBean = new EkmDataBean();
-						dataBean.getValues().put("id", entry.getKeyAsString()) ;
-						dataBean.getValues().put(aggField, entry.getKeyAsString()) ;
-						dataBean.setId(agg.getName());
-						dataBean.setType(aggField);
-						dataBean.getValues().put("total", entry.getDocCount()) ;
-						
-						for (Aggregation temp : entry.getAggregations()) {
-							if(temp instanceof StringTerms) {
-								StringTerms agg2  = (StringTerms) temp ;
-								for (Terms.Bucket entry2 : agg2.getBuckets()) {
-									dataBean.getValues().put(temp.getName()+"."+entry2.getKeyAsString(), entry2.getDocCount()) ;
+				,	organs = new ArrayList<String>();
+		for(Object value : response.getAggregations()){
+			
+			if(value instanceof Terms){
+				Terms agg = (Terms)value;
+				if(agg!=null){
+					
+					if(agg.getBuckets()!=null && agg.getBuckets().size()>0){
+						for (Terms.Bucket entry : agg.getBuckets()) {
+							EkmDataBean dataBean = new EkmDataBean();
+							dataBean.setId(entry.getKeyAsString());
+							dataBean.setDocs((int)entry.getDocCount());
+							dataBean.setType(agg.getName());
+							if(loadRef == true) {
+								if("creater".equals(agg.getName())) {//根据知识作者ID
+									users.add( entry.getKeyAsString()) ;
+								}
+								if("organ".equals(agg.getName())) {//根据知识所属的部门ID
+									organs.add( entry.getKeyAsString()) ;
 								}
 							}
+							dataBeanList.add(dataBean) ;
 						}
-						dataBeanList.add(dataBean) ;
 					}
 				}
 			}
-		}else if(response.getAggregations().get(aggField) instanceof InternalDateHistogram){
-//			InternalDateHistogram agg = response.getAggregations().get(aggField) ;
-//			long total = response.getHits().getTotalHits() ;
 		}
 		
 		if(loadRef) {
 			if(users.size() > 0) {
 				List<User> userList = userRes.findAll(users) ;
 				for(EkmDataBean dataBean : dataBeanList) {
-					String userid = (String)dataBean.getValues().get("creater") ;
+					String userid = dataBean.getId() ;
 					if(!StringUtils.isBlank(userid)) {
 						for(User user : userList) {
 							if(user.getId().equals(userid)) {
@@ -561,7 +517,7 @@ public class ESDataExchangeImpl{
 			if(organs.size() > 0) {
 				List<Organ> organList = organRes.findAll(organs) ;
 				for(EkmDataBean dataBean : dataBeanList) {
-					String organid = (String)dataBean.getValues().get("organ") ;
+					String organid = dataBean.getId() ;
 					if(!StringUtils.isBlank(organid)) {
 						for(Organ organ : organList) {
 							if(organ.getId().equals(organid)) {
