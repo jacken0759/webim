@@ -27,6 +27,20 @@
 		</dl>
 	</li>
 </#if>
+<#if user?? && (user.roleAuthMap["A11_A07"]?? || user.usertype == "0") >
+	<li class="layui-nav-item layui-nav-itemed">
+		<a class="layui-nav-title" href="javascript:;">会话服务类型设置</a>
+		<dl class="layui-nav-child">
+			<#list sessionType as session>
+				<dd <#if typeCode?? && typeCode == session.id>class="layui-this"</#if>>
+					<a  href="/setting/sessiontype/index.html?typeCode=${session.id!''}">
+						${session.name!''}
+					</a>
+				</dd>
+			</#list>
+		</dl>
+	</li>
+	</#if>
 <#if user?? && (user.roleAuthMap["A06_A02"]?? || user.usertype == "0") >
 	<li class="layui-nav-item layui-nav-itemed">
 		<a class="layui-nav-title" href="javascript:;">广告位管理</a>

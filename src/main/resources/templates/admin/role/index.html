@@ -108,9 +108,6 @@
 layui.use(['laypage', 'layer'], function(){
 	  var laypage = layui.laypage
 	  ,layer = layui.layer;
-	  <#if msg??>
-	  top.layer.msg('${msg}');
-	  </#if>
 	  laypage.render({
 			elem: 'page'
 			,pages: <#if userRoleList??>${userRoleList.totalPages}<#else>0</#if> //总页数

@@ -112,6 +112,7 @@ public class UserInterceptorHandler extends HandlerInterceptorAdapter {
 	    	
 			view.addObject("advTypeList", UKeFuDic.getInstance().getDic("com.dic.adv.type")) ;
 			view.addObject("searchList",UKeFuDic.getInstance().getDic("com.callout.name.search"));
+			view.addObject("sessionType",UKeFuDic.getInstance().getDic("com.dic.session.type"));
 			Logger logger = LogManager.getLogger("com.ukefu.webim.web.handler.apps.internet.UCKeFuWeiXinController") ;
  			if(logger!=null && logger.getLevel() != null){
 				systemConfig.setLoglevel(logger.getLevel().toString());
