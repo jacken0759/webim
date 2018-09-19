@@ -399,7 +399,9 @@
 	layui.use('element', function(){
 		var element = layui.element;
 	});
-			
+	$('.ukefu-webim-sdk').each(function(){
+		$(this).val($(this).val().replace("${schema!''}://${hostname!''}:${import?string('###')}",window.location.protocol+"//"+window.location.host));
+	});		
 	$(document)
 			.ready(
 					function() {
