@@ -13,6 +13,8 @@ public abstract interface EkmCommentsRepository  extends JpaRepository<EkmCommen
 	
 	public abstract List<EkmComments> findByKnowledgeidAndDatastatusAndOrgi(String knowledgeid ,boolean datastatus, String orgi );
 	
+	public abstract List<EkmComments> findByKnowledgeidAndOrgi(String knowledgeid , String orgi );
+	
 	public abstract Page<EkmComments> findByDatastatusAndKnowledgeidAndOrgi(boolean datastatus,String knowledgeid , String orgi ,Pageable pageable);
 	
 	public abstract EkmComments findByIdAndOrgi(String id , String orgi );

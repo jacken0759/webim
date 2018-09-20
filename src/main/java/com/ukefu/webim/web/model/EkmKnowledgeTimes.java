@@ -16,7 +16,8 @@ import org.springframework.data.elasticsearch.annotations.Parent;
 import com.ukefu.util.UKTools;
 import com.ukefu.util.task.ESData;
 
-@Document(indexName = "uckefu", type = "uk_ekm_kb_times" , createIndex = false )
+@Document(indexName = "uckefu", type = "uk_ekm_kb_times" , createIndex = false)
+
 public class EkmKnowledgeTimes  implements ESData,java.io.Serializable{
 	
 	/**

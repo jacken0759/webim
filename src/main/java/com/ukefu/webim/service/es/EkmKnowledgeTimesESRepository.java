@@ -14,5 +14,7 @@ public abstract interface EkmKnowledgeTimesESRepository
 	
 	public abstract Page<EkmKnowledgeTimes> findByOrgi(String orgi ,Pageable pageable);
 	
+	public void delete(List<EkmKnowledgeTimes> ekmKnowledgeTimes) ;
+	
 }
 

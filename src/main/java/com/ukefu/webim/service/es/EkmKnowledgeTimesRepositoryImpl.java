@@ -2,8 +2,13 @@ package com.ukefu.webim.service.es;
 
 import java.util.List;
 
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Component;
 
+import com.ukefu.core.UKDataContext;
 import com.ukefu.webim.web.model.EkmKnowledgeTimes;
 
 @Component
@@ -60,5 +66,14 @@ public class EkmKnowledgeTimesRepositoryImpl implements EkmKnowledgeTimesESRepos
 		
 		return knowledgeTimesList;
 	}
-
+	
+	public void delete(List<EkmKnowledgeTimes> ekmKnowledgeTimes){
+		BulkRequestBuilder bulkRequest = elasticsearchTemplate.getClient().prepareBulk();  
+	    if(ekmKnowledgeTimes != null && ekmKnowledgeTimes.size()>0) {
+		    for(EkmKnowledgeTimes time : ekmKnowledgeTimes){  
+		        bulkRequest.add(new DeleteRequest().index(UKDataContext.SYSTEM_INDEX).type("uk_ekm_kb_times").id(time.getId()).routing(time.getKbid()));  
+		    }  
+		    bulkRequest.get();  
+	    }
+	}
 }
