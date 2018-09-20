@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-09-16 21:44:39
+Date: 2018-09-20 08:15:45
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -2149,6 +2149,193 @@ CREATE TABLE `uk_drilldown` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `uk_ekm_access`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_access`;
+CREATE TABLE `uk_ekm_access` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `knowledgeid` varchar(32) DEFAULT NULL COMMENT '知识ID',
+  `knowledgeower` varchar(32) DEFAULT NULL COMMENT '知识所属人ID',
+  `version` int(11) DEFAULT '0' COMMENT '版本号',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人（访客ID）',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间（访问时间）',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `datastatus` tinyint(4) DEFAULT NULL COMMENT '数据状态',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='知识库-访客记录，浏览表';
+
+-- ----------------------------
+-- Records of uk_ekm_access
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_audit`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_audit`;
+CREATE TABLE `uk_ekm_audit` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `knowid` varchar(32) NOT NULL COMMENT '知识ID',
+  `knowtime` datetime DEFAULT NULL COMMENT '知识创建时间',
+  `pubstatus` varchar(32) DEFAULT NULL COMMENT '审核状态（待审核 wait/通过 pass/驳回 rejected）',
+  `auditor` varchar(32) DEFAULT NULL COMMENT '审核人ID',
+  `auditime` datetime DEFAULT NULL COMMENT '审核时间',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人（知识所属人，提交审核人）',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间（提交审核时间）',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `reject` text COMMENT '驳回原因',
+  `version` int(11) DEFAULT NULL COMMENT '版本号',
+  `datastatus` tinyint(4) DEFAULT NULL COMMENT '数据状态',
+  `knowtitle` varchar(64) DEFAULT NULL COMMENT '知识标题',
+  `auditorname` varchar(32) DEFAULT NULL COMMENT '审核人名称',
+  `organ` varchar(32) DEFAULT NULL COMMENT '所属部门ID',
+  `knowcreatername` varchar(32) DEFAULT NULL COMMENT '知识创建人名称',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='知识库-审核表';
+
+-- ----------------------------
+-- Records of uk_ekm_audit
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_collect_folder`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_collect_folder`;
+CREATE TABLE `uk_ekm_collect_folder` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `name` varchar(32) DEFAULT NULL,
+  `parentid` varchar(32) DEFAULT NULL COMMENT '父级ID',
+  `creater` varchar(32) DEFAULT NULL COMMENT '收藏人ID',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间（收藏时间）',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='知识-收藏夹';
+
+-- ----------------------------
+-- Records of uk_ekm_collect_folder
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_comments`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_comments`;
+CREATE TABLE `uk_ekm_comments` (
+  `id` varchar(32) NOT NULL,
+  `knowledgeid` varchar(32) DEFAULT NULL COMMENT '知识ID',
+  `knowledgeower` varchar(32) DEFAULT NULL COMMENT '知识所属人ID',
+  `dismenid` varchar(32) DEFAULT NULL COMMENT '所属维度ID（根级目录）',
+  `dismentypeid` varchar(32) DEFAULT NULL COMMENT '所属维度分类ID（分支ID）',
+  `knowledgetypeid` varchar(32) DEFAULT NULL COMMENT '所属知识分类ID',
+  `knowbaseid` varchar(32) DEFAULT NULL COMMENT '所属知识库ID',
+  `datastatus` tinyint(4) DEFAULT NULL COMMENT '数据状态',
+  `content` text COMMENT '评论内容',
+  `createtime` datetime DEFAULT NULL COMMENT '评论时间',
+  `creater` varchar(32) DEFAULT NULL COMMENT '评论人',
+  `organ` varchar(32) DEFAULT NULL COMMENT '评论人所属部门',
+  `orgi` varchar(32) DEFAULT NULL,
+  `rate` float DEFAULT '0' COMMENT '评分',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM知识 - 评论表';
+
+-- ----------------------------
+-- Records of uk_ekm_comments
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_dimension`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_dimension`;
+CREATE TABLE `uk_ekm_dimension` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `name` varchar(32) DEFAULT NULL COMMENT '名称',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `organ` varchar(32) DEFAULT NULL COMMENT '所属部门',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `authorgan` varchar(32) DEFAULT NULL COMMENT '授权部门',
+  `datastatus` tinyint(4) DEFAULT NULL COMMENT '数据状态',
+  `total` int(11) DEFAULT '0' COMMENT '维度下的知识条数',
+  `viewnum` int(11) DEFAULT '0' COMMENT '维度下的知识被浏览次数',
+  `collectnum` int(11) DEFAULT '0' COMMENT '维度下的知识被收藏次数',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM - 维度表';
+
+-- ----------------------------
+-- Records of uk_ekm_dimension
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_dimension_type`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_dimension_type`;
+CREATE TABLE `uk_ekm_dimension_type` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `name` varchar(32) NOT NULL COMMENT '维度名',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `organ` varchar(32) DEFAULT NULL COMMENT '所属部门',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `datastatus` tinyint(4) DEFAULT NULL COMMENT '数据状态',
+  `parent` varchar(32) DEFAULT '0' COMMENT '父级ID',
+  `dimensionid` varchar(32) DEFAULT '0' COMMENT '维度ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM - 维度分类表';
+
+-- ----------------------------
+-- Records of uk_ekm_dimension_type
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_experts`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_experts`;
+CREATE TABLE `uk_ekm_experts` (
+  `id` varchar(32) NOT NULL,
+  `userid` varchar(50) DEFAULT NULL COMMENT '用户ID',
+  `username` varchar(50) DEFAULT NULL COMMENT '用户名',
+  `roleid` varchar(50) DEFAULT NULL COMMENT '角色ID',
+  `bustype` varchar(50) DEFAULT NULL COMMENT '业务类型（电销/回访/知识库专家）',
+  `auditimes` int(11) DEFAULT '0' COMMENT '审核知识总条数',
+  `auditpass` int(11) DEFAULT '0' COMMENT '审核知识通过总条数',
+  `auditreject` int(11) DEFAULT '0' COMMENT '审核知识驳回总条数',
+  `organ` varchar(50) DEFAULT NULL COMMENT '用户所属部门ID',
+  `datastatus` tinyint(4) DEFAULT NULL COMMENT '数据状态',
+  `createtime` datetime DEFAULT NULL,
+  `creater` varchar(32) DEFAULT NULL,
+  `orgi` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM知识库专家-授权表';
+
+-- ----------------------------
+-- Records of uk_ekm_experts
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_knowbase`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_knowbase`;
+CREATE TABLE `uk_ekm_knowbase` (
+  `id` varchar(32) NOT NULL,
+  `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `total` int(11) DEFAULT '0' COMMENT '知识库下的知识条数',
+  `viewnum` int(11) DEFAULT '0' COMMENT '知识库下的知识被浏览次数',
+  `collectnum` int(11) DEFAULT '0' COMMENT '知识库下的知识被收藏次数',
+  `organ` varchar(32) DEFAULT NULL COMMENT '所属部门ID',
+  `audit` int(11) DEFAULT '0' COMMENT '是否审核（0是/1否）',
+  `datastatus` tinyint(4) DEFAULT NULL COMMENT '数据状态',
+  `createtime` datetime DEFAULT NULL,
+  `creater` varchar(32) DEFAULT NULL,
+  `orgi` varchar(32) DEFAULT NULL,
+  `own` varchar(32) DEFAULT 'pub' COMMENT '知识归属状态(pub/公开、pri/私人)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM知识库表';
+
+-- ----------------------------
+-- Records of uk_ekm_knowbase
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `uk_ekm_knowbase_organ`
 -- ----------------------------
 DROP TABLE IF EXISTS `uk_ekm_knowbase_organ`;
@@ -2185,6 +2372,46 @@ CREATE TABLE `uk_ekm_knowbase_role` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `uk_ekm_knowledge`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_knowledge`;
+CREATE TABLE `uk_ekm_knowledge` (
+  `id` varchar(32) NOT NULL DEFAULT '0',
+  `title` text COMMENT '知识标题',
+  `summary` text COMMENT '摘要',
+  `content` text COMMENT '知识内容',
+  `tags` text COMMENT '知识标签',
+  `keyword` text COMMENT '关键字',
+  `dimenid` text COMMENT '所属维度ID（根级目录）',
+  `dimentypeid` text COMMENT '所属维度分类ID（分支ID）',
+  `organ` varchar(32) DEFAULT NULL COMMENT '部门ID',
+  `knowledgetypeid` varchar(32) DEFAULT NULL COMMENT '所属知识分类ID',
+  `knowbaseid` varchar(32) DEFAULT NULL COMMENT '所属知识库ID',
+  `pubstatus` varchar(32) DEFAULT NULL COMMENT '知识状态（新建 new/审核中 wait/发布成功 pass/被驳回 rejected /已下架 down）',
+  `datastatus` tinyint(4) DEFAULT NULL COMMENT '数据状态',
+  `version` int(11) DEFAULT '0' COMMENT '版本号',
+  `knowledgetype` varchar(32) DEFAULT NULL COMMENT '知识类型（字典项）',
+  `begintime` datetime DEFAULT NULL COMMENT '有效开始时间',
+  `endtime` datetime DEFAULT NULL COMMENT '有效结束时间',
+  `createtime` datetime DEFAULT NULL,
+  `updatetime` datetime DEFAULT NULL COMMENT '修改时间',
+  `creater` varchar(32) DEFAULT NULL,
+  `orgi` varchar(32) DEFAULT NULL,
+  `auditor` varchar(32) DEFAULT '0' COMMENT '审核人ID',
+  `nlpnr` text COMMENT '人名nr',
+  `nlpns` text COMMENT '地名ns',
+  `nlpnt` text COMMENT '机构名称nt',
+  `nlpnz` text COMMENT '其他专有名词nz',
+  `keyphrase` text COMMENT '关键短语',
+  `own` varchar(32) DEFAULT 'pub' COMMENT '知识归属状态(pub/公开、pri/私人)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM - 知识 - 草稿表';
+
+-- ----------------------------
+-- Records of uk_ekm_knowledge
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `uk_ekm_knowledge_auth`
 -- ----------------------------
 DROP TABLE IF EXISTS `uk_ekm_knowledge_auth`;
@@ -2196,6 +2423,7 @@ CREATE TABLE `uk_ekm_knowledge_auth` (
   `organ` varchar(32) DEFAULT NULL COMMENT '所属部门',
   `auth` text COMMENT '按钮',
   `view` tinyint(4) DEFAULT '0' COMMENT '查看分类权限',
+  `cover` tinyint(4) DEFAULT '0' COMMENT '是否覆盖从父级继承的权限',
   `createtime` datetime DEFAULT NULL,
   `creater` varchar(32) DEFAULT NULL,
   `orgi` varchar(32) DEFAULT NULL,
@@ -2205,6 +2433,107 @@ CREATE TABLE `uk_ekm_knowledge_auth` (
 
 -- ----------------------------
 -- Records of uk_ekm_knowledge_auth
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_knowledge_collect`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_knowledge_collect`;
+CREATE TABLE `uk_ekm_knowledge_collect` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `knowledgeid` varchar(32) DEFAULT NULL COMMENT '知识ID',
+  `kbid` varchar(32) DEFAULT NULL,
+  `knowledgeower` varchar(32) DEFAULT NULL COMMENT '知识作者',
+  `version` int(11) DEFAULT '0' COMMENT '版本号',
+  `folderid` varchar(32) DEFAULT NULL COMMENT '收藏夹id',
+  `status` varchar(32) DEFAULT NULL COMMENT '收藏状态（true收藏/false取消收藏）',
+  `creater` varchar(32) DEFAULT NULL COMMENT '收藏人ID',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间（收藏时间）',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='知识-字表（收藏表）';
+
+-- ----------------------------
+-- Records of uk_ekm_knowledge_collect
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_knowledge_master`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_knowledge_master`;
+CREATE TABLE `uk_ekm_knowledge_master` (
+  `id` varchar(32) NOT NULL DEFAULT '0',
+  `title` text COMMENT '知识标题',
+  `summary` text COMMENT '摘要',
+  `content` text COMMENT '知识内容',
+  `tags` text COMMENT '知识标签',
+  `keyword` text COMMENT '关键字',
+  `dimenid` text COMMENT '所属维度ID（根级目录）',
+  `dimentypeid` text COMMENT '所属维度分类ID（分支ID）',
+  `organ` varchar(32) DEFAULT NULL COMMENT '部门ID',
+  `knowledgetypeid` varchar(32) DEFAULT NULL COMMENT '所属知识分类ID',
+  `knowbaseid` varchar(32) DEFAULT NULL COMMENT '所属知识库ID',
+  `pubstatus` varchar(32) DEFAULT NULL COMMENT '知识状态（新建 new/审核中 wait/发布成功 pass/被驳回 rejected /已下架 down）',
+  `datastatus` tinyint(4) DEFAULT NULL COMMENT '数据状态',
+  `version` int(11) DEFAULT '0' COMMENT '版本号',
+  `knowledgetype` varchar(32) DEFAULT NULL COMMENT '知识类型（字典项）',
+  `begintime` datetime DEFAULT NULL COMMENT '有效开始时间',
+  `endtime` datetime DEFAULT NULL COMMENT '有效结束时间',
+  `updatetime` datetime DEFAULT NULL COMMENT '修改时间',
+  `createtime` datetime DEFAULT NULL,
+  `creater` varchar(32) DEFAULT NULL,
+  `orgi` varchar(32) DEFAULT NULL,
+  `auditor` varchar(32) DEFAULT '0' COMMENT '审核人ID',
+  `nlpnr` text COMMENT '人名nr',
+  `nlpns` text COMMENT '地名ns',
+  `nlpnt` text COMMENT '机构名称nt',
+  `nlpnz` text COMMENT '其他专有名词nz',
+  `keyphrase` text COMMENT '关键短语',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM - 知识 - 主表';
+
+-- ----------------------------
+-- Records of uk_ekm_knowledge_master
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_knowledge_publish`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_knowledge_publish`;
+CREATE TABLE `uk_ekm_knowledge_publish` (
+  `id` varchar(32) NOT NULL DEFAULT '0',
+  `knowid` varchar(32) NOT NULL DEFAULT '0' COMMENT '知识id',
+  `title` text COMMENT '知识标题',
+  `summary` text COMMENT '摘要',
+  `content` text COMMENT '知识内容',
+  `tags` text COMMENT '知识标签',
+  `keyword` text COMMENT '关键字',
+  `dimenid` text COMMENT '所属维度ID（根级目录）',
+  `dimentypeid` text COMMENT '所属维度分类ID（分支ID）',
+  `organ` varchar(32) DEFAULT NULL COMMENT '部门ID',
+  `knowledgetypeid` varchar(32) DEFAULT NULL COMMENT '所属知识分类ID',
+  `knowbaseid` varchar(32) DEFAULT NULL COMMENT '所属知识库ID',
+  `pubstatus` varchar(32) DEFAULT NULL COMMENT '知识状态（新建 new/审核中 wait/发布成功 pass/被驳回 rejected /已下架 down）',
+  `datastatus` tinyint(4) DEFAULT NULL COMMENT '数据状态',
+  `version` int(11) DEFAULT '0' COMMENT '版本号',
+  `knowledgetype` varchar(32) DEFAULT NULL COMMENT '知识类型（字典项）',
+  `begintime` datetime DEFAULT NULL COMMENT '有效开始时间',
+  `endtime` datetime DEFAULT NULL COMMENT '有效结束时间',
+  `createtime` datetime DEFAULT NULL,
+  `updatetime` datetime DEFAULT NULL COMMENT '修改时间',
+  `creater` varchar(32) DEFAULT NULL,
+  `orgi` varchar(32) DEFAULT NULL,
+  `auditor` varchar(32) DEFAULT '0' COMMENT '审核人ID',
+  `nlpnr` text COMMENT '人名nr',
+  `nlpns` text COMMENT '地名ns',
+  `nlpnt` text COMMENT '机构名称nt',
+  `nlpnz` text COMMENT '其他专有名词nz',
+  `keyphrase` text COMMENT '关键短语',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM - 知识发布表';
+
+-- ----------------------------
+-- Records of uk_ekm_knowledge_publish
 -- ----------------------------
 
 -- ----------------------------
@@ -2226,6 +2555,150 @@ CREATE TABLE `uk_ekm_knowledge_share` (
 
 -- ----------------------------
 -- Records of uk_ekm_knowledge_share
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_knowledge_times`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_knowledge_times`;
+CREATE TABLE `uk_ekm_knowledge_times` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `knowledgeid` varchar(32) DEFAULT NULL COMMENT '知识ID',
+  `kbid` varchar(32) DEFAULT NULL,
+  `viewtimes` int(11) DEFAULT '0' COMMENT '被浏览次数',
+  `commentstimes` int(11) DEFAULT '0' COMMENT '被评论次数',
+  `collectimes` int(11) DEFAULT '0' COMMENT '被收藏次数',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间（访问时间）',
+  `version` int(11) DEFAULT '0' COMMENT '版本号',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='知识-字表（统计相关次数）';
+
+-- ----------------------------
+-- Records of uk_ekm_knowledge_times
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_knowledge_type`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_knowledge_type`;
+CREATE TABLE `uk_ekm_knowledge_type` (
+  `id` varchar(32) NOT NULL,
+  `name` varchar(50) DEFAULT NULL COMMENT '分类名称',
+  `total` int(11) DEFAULT '0' COMMENT '该分类下的知识条数',
+  `viewnum` int(11) DEFAULT '0' COMMENT '该分类下的知识被浏览次数',
+  `collectnum` int(11) DEFAULT '0' COMMENT '该分类下的知识被收藏次数',
+  `organ` varchar(32) DEFAULT NULL COMMENT '所属部门ID',
+  `audit` int(11) DEFAULT '0' COMMENT '是否审核（0是/1否）',
+  `auditer` varchar(32) DEFAULT '0' COMMENT '审核人',
+  `parentid` varchar(32) DEFAULT NULL COMMENT '父级ID',
+  `knowbaseid` varchar(32) DEFAULT NULL COMMENT '所属知识库ID',
+  `datastatus` tinyint(4) DEFAULT NULL COMMENT '数据状态',
+  `createtime` datetime DEFAULT NULL,
+  `creater` varchar(32) DEFAULT NULL,
+  `orgi` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='知识库-对应的知识分类树表';
+
+-- ----------------------------
+-- Records of uk_ekm_knowledge_type
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_knowledge_verison`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_knowledge_verison`;
+CREATE TABLE `uk_ekm_knowledge_verison` (
+  `id` varchar(32) NOT NULL DEFAULT '0',
+  `knowid` varchar(32) NOT NULL DEFAULT '0' COMMENT '知识id',
+  `title` text COMMENT '知识标题',
+  `summary` text COMMENT '摘要',
+  `content` text COMMENT '知识内容',
+  `tags` text COMMENT '知识标签',
+  `keyword` text COMMENT '关键字',
+  `dimenid` text COMMENT '所属维度ID（根级目录）',
+  `dimentypeid` text COMMENT '所属维度分类ID（分支ID）',
+  `organ` varchar(32) DEFAULT NULL COMMENT '部门ID',
+  `knowledgetypeid` varchar(32) DEFAULT NULL COMMENT '所属知识分类ID',
+  `knowbaseid` varchar(32) DEFAULT NULL COMMENT '所属知识库ID',
+  `pubstatus` varchar(32) DEFAULT NULL COMMENT '知识状态（新建 new/审核中 wait/发布成功 pass/被驳回 rejected /已下架 down）',
+  `datastatus` tinyint(4) DEFAULT NULL COMMENT '数据状态',
+  `version` int(11) DEFAULT '0' COMMENT '版本号',
+  `knowledgetype` varchar(32) DEFAULT NULL COMMENT '知识类型（字典项）',
+  `begintime` datetime DEFAULT NULL COMMENT '有效开始时间',
+  `endtime` datetime DEFAULT NULL COMMENT '有效结束时间',
+  `createtime` datetime DEFAULT NULL,
+  `updatetime` datetime DEFAULT NULL COMMENT '修改时间',
+  `creater` varchar(32) DEFAULT NULL,
+  `orgi` varchar(32) DEFAULT NULL,
+  `auditor` varchar(32) DEFAULT '0' COMMENT '审核人ID',
+  `nlpnr` text COMMENT '人名nr',
+  `nlpns` text COMMENT '地名ns',
+  `nlpnt` text COMMENT '机构名称nt',
+  `nlpnz` text COMMENT '其他专有名词nz',
+  `keyphrase` text COMMENT '关键短语',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM - 知识表';
+
+-- ----------------------------
+-- Records of uk_ekm_knowledge_verison
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_search`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_search`;
+CREATE TABLE `uk_ekm_search` (
+  `id` varchar(32) NOT NULL,
+  `conditions` text COMMENT '查询内容',
+  `creater` varchar(50) DEFAULT NULL COMMENT '搜索人',
+  `createtime` datetime DEFAULT NULL COMMENT '搜索时间',
+  `orgi` varchar(50) DEFAULT NULL,
+  `organ` varchar(50) DEFAULT NULL,
+  `type` varchar(50) DEFAULT NULL COMMENT '类型',
+  `badword` tinyint(4) DEFAULT '0' COMMENT '是否含有敏感词',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='搜索历史表';
+
+-- ----------------------------
+-- Records of uk_ekm_search
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_search_tag`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_search_tag`;
+CREATE TABLE `uk_ekm_search_tag` (
+  `id` varchar(32) NOT NULL,
+  `tag` text COMMENT '标签',
+  `updatetime` datetime DEFAULT NULL COMMENT '最新搜索时间',
+  `times` int(11) DEFAULT '0' COMMENT '搜索次数',
+  `orgi` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='标签 - 搜索历史表';
+
+-- ----------------------------
+-- Records of uk_ekm_search_tag
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_user_contribution`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_user_contribution`;
+CREATE TABLE `uk_ekm_user_contribution` (
+  `id` varchar(32) NOT NULL,
+  `userid` varchar(50) DEFAULT NULL COMMENT '个人用户ID',
+  `topicnum` int(11) DEFAULT '0' COMMENT '个人创建知识总条数',
+  `topicpubnum` int(11) DEFAULT '0' COMMENT '个人发布知识总条数',
+  `commentsnum` int(11) DEFAULT '0' COMMENT '个人发出评论总条数',
+  `auditnum` int(11) DEFAULT '0' COMMENT '个人审核知识总次数',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `orgi` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='知识库-个人贡献信息表';
+
+-- ----------------------------
+-- Records of uk_ekm_user_contribution
 -- ----------------------------
 
 -- ----------------------------
@@ -7625,6 +8098,7 @@ INSERT INTO `uk_sysdic` VALUES ('297e1e874f83129d014f83396c3d101e', '五家渠�
 INSERT INTO `uk_sysdic` VALUES ('297e63f05d1da6be015d1dae6de20002', '系统模板分类', 'pub', 'com.dic.system.template', null, 'resu', '0', '', null, null, null, null, '297e8c7b455798280145579c73e501c1', '2017-07-07 23:32:36', null, '1', '0', null, '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('297e63f05d1da6be015d1daee82c0003', '呼叫中心', 'pub', 'callcenter', 'ukewo', null, '297e63f05d1da6be015d1dae6de20002', null, null, null, null, null, '297e8c7b455798280145579c73e501c1', '2017-07-07 23:33:08', '2017-07-07 23:33:08', '0', '1', '297e63f05d1da6be015d1dae6de20002', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('297e74066464004b01646402379d068f', '活动状态分类', 'pub', 'com.dic.callout.activity', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-07-04 14:37:04', null, '1', '0', null, '0', '0', null, null, null, null, null);
+INSERT INTO `uk_sysdic` VALUES ('297e7406650cce9d01650ce68c37067e', 'EKM知识库知识类型', 'pub', 'com.dic.ekm.knowledge.type', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-08-06 09:42:40', null, '1', '0', null, '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('297e7406659e543f01659e5987c3001d', '坐席服务时间设置', 'pub', 'com.dic.workservice.time', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-09-03 15:33:12', null, '1', '0', null, '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('4028811b6109050201610928ed6a030d', '工单邮件', 'pub', 'workordermail', 'ukewo', 'layui-icon', '297e63f05d1da6be015d1dae6de20002', '', null, '', '', null, '297e8c7b455798280145579c73e501c1', '2018-01-18 20:05:32', null, '1', '0', '297e63f05d1da6be015d1dae6de20002', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('4028811b61090502016109293494030e', '工单短信', 'pub', 'workordersms', 'ukewo', 'layui-icon', '297e63f05d1da6be015d1dae6de20002', '', null, '', '', null, '297e8c7b455798280145579c73e501c1', '2018-01-18 20:05:50', null, '1', '0', '297e63f05d1da6be015d1dae6de20002', '0', '0', null, null, null, null, null);
@@ -8683,11 +9157,11 @@ INSERT INTO `uk_templet` VALUES ('4028811b6191e289016191edc7b50348', '雷达图'
 INSERT INTO `uk_templet` VALUES ('4028811b6191e289016191ee589c0349', 'KPI图', null, 'report', null, '2018-02-14 09:29:32', null, null, '<div id=\"element_${reportModel.id!\'\'}\" class=\"r3-data-element\" style=\"min-width:100px;min-height:65px;\">\r\n	<#assign disdata = false >\r\n    <#if reportModel.reportData?? && reportModel.reportData.data??>\r\n    	<#list reportModel.reportData.data as values>\r\n    		<#if values_index == 0>\r\n    			<#list values as value>\r\n    				<#if value_index ==0>\r\n					<#assign disdata = true >\r\n    				<h1 class=\"no-margins\" <#if value.value lt 0>style=\"color:red;\"</#if>>\r\n                		${value.foramatValue!\'\'}\r\n                	</h1>\r\n                	<div class=\"stat-percent font-bold text-success\">\r\n                		<#if value.row?? && value.row.name?? && value.row.name!= \'root\' >${value.row.name!\'\'}</#if>\r\n						<small>\r\n							<#if value.name??>${value.name!\'\'}</#if>\r\n						</small>\r\n                	</div>\r\n    				</#if>\r\n    			</#list>\r\n    		</#if>\r\n    	</#list>\r\n    </#if> 	\r\n	<#if disdata == false>\r\n	<h1 class=\"no-margins\">\r\n		1000.00\r\n	</h1>\r\n	<div class=\"stat-percent font-bold text-success\">\r\n		测试占比\r\n		<small>\r\n			20%\r\n		</small>\r\n	</div>\r\n	</#if>\r\n</div>', '4028811b618d0dca01618d5a5fe6034a', 'ukewo', '/images/design/kpi.png', null, null, null, null, '0', null, null);
 INSERT INTO `uk_templet` VALUES ('4028811b6418c59701641b65e21c075b', 'sff', null, 'ffff', null, '2018-06-20 12:13:39', null, null, 'asdfasdf', '4028811b6109050201610928ed6a030d', 'ukewo', null, null, null, null, null, '0', null, null);
 INSERT INTO `uk_templet` VALUES ('4028811b642af06f01642afa426804cd', '外部机器人输入参数', null, 'otheraiinput', null, '2018-06-23 12:50:01', null, null, '{\r\n\"type\": \"query\",\r\n\"customer_id\": \"ff08819f6227a0b0016227a557770309\",\r\n\"app_key\": \"gamutsoft\",\r\n\"user_id\": \"${chat.userid!\'\'}\",\r\n\"label\": \"\",\r\n\"data\": \"${(chat.message!\'\')?replace(\'\\n\',\'\')}\",\r\n\"topn\": 5,\r\n\"thres\": 0.28,\r\n\"thres_query\": 0.3,\r\n\"thres_candidate\": 0.3\r\n}', '4028811b642af06f01642af9cfa304c6', 'ukewo', null, null, null, null, null, '0', null, null);
-INSERT INTO `uk_templet` VALUES ('4028811b642af06f01642afaae4f04d3', '外部机器人输出参数', null, 'otheraioutputparam', null, '2018-06-23 12:50:29', null, null, '{\r\n\"msgtype\":\"${data.data_type!\'text\'}\"\r\n,\"code\":\"${data.code!\'\'}\"\r\n<#if data.code?? && data.code != \'E0000\'>,\"trans\":true</#if>\r\n<#if data?? && data.candidates?? && data.candidates?size gt 0>\r\n	<#assign suggest = \"[\">\r\n	<#list data.candidates as item>\r\n		<#if suggest?length gt 1>\r\n			<#assign suggest = suggest + \",\">\r\n		</#if>\r\n		<#if item.question??>\r\n			<#assign suggest = suggest + \'{\"id\":\"\'+item.kbid+\'\",\"title\":\"\'+item.question + \'\"}\'>\r\n		</#if>\r\n	</#list>\r\n	<#assign suggest = suggest + \"]\">\r\n	,\"items\":${suggest}\r\n</#if>\r\n<#if data?? && data.data??>\r\n	,\"title\":\"${data.data.title!\'\'}\"\r\n</#if>\r\n<#if data?? && data.data??>\r\n	,\"score\":\"${data.data.score!\'\'}\"\r\n</#if>\r\n<#if data?? && data.data?? && data.data.answer??>\r\n	,\"message\":\"${data.data.answer!\'\'}\"\r\n<#elseif data?? && data.data?? && data.data.kbid??>\r\n	,\"id\":\"${data.data.kbid!\'\'}\"\r\n	,\"detail\":true\r\n<#else>\r\n	,\"message\":\"${data.message!\'\'}\"\r\n</#if>\r\n<#if data.data.type?? && data.data.type == 3>\r\n	,\"type\":\"voice\"\r\n	,\"duration\":${data.data.duration!\'0\'}\r\n</#if>\r\n}', '4028811b642af06f01642af9cfaf04c7', 'ukewo', null, null, null, null, null, '0', null, null);
+INSERT INTO `uk_templet` VALUES ('4028811b642af06f01642afaae4f04d3', '外部机器人输出参数', null, 'otheraioutputparam', null, '2018-06-23 12:50:29', null, null, '{\r\n\"msgtype\":\"${data.data_type!\'text\'}\"\r\n,\"code\":\"${data.code!\'\'}\"\r\n<#if data.code?? && data.code != \'E0000\'>,\"trans\":true</#if>\r\n<#if data?? && data.candidates?? && data.candidates?size gt 0>\r\n	<#assign suggest = \"[\">\r\n	<#list data.candidates as item>\r\n		<#if suggest?length gt 1>\r\n			<#assign suggest = suggest + \",\">\r\n		</#if>\r\n		<#if item.question??>\r\n			<#assign suggest = suggest + \'{\"id\":\"\'+item.kbid+\'\",\"title\":\"\'+item.question + \'\"}\'>\r\n		</#if>\r\n	</#list>\r\n	<#assign suggest = suggest + \"]\">\r\n	,\"items\":${suggest}\r\n</#if>\r\n<#if data?? && data.data??>\r\n	,\"title\":\"${data.data.title!\'\'}\"\r\n</#if>\r\n<#if data?? && data.data??>\r\n	,\"score\":\"${data.data.score!\'\'}\"\r\n</#if>\r\n<#if data?? && data.data?? && data.data.answer??>\r\n	,\"message\":\"${data.data.answer!\'\'}\"\r\n<#elseif data?? && data.data?? && data.data.kbid??>\r\n	,\"id\":\"${data.data.kbid!\'\'}\"\r\n	,\"detail\":true\r\n<#else>\r\n	,\"message\":\"${data.message!\'\'}\"\r\n</#if>\r\n<#if data.data?? && data.data.type?? && data.data.type == 3>\r\n	,\"type\":\"voice\"\r\n	,\"duration\":${data.data.duration!\'0\'}\r\n</#if>\r\n}', '4028811b642af06f01642af9cfaf04c7', 'ukewo', null, null, null, null, null, '0', null, null);
 INSERT INTO `uk_templet` VALUES ('4028811b644983b60164498da54a040f', '搜索输入接口', null, 'opsearh', null, '2018-06-29 11:19:37', null, null, '{\r\n	\"keyword\": \"${q!\'\'}\",\r\n	\"label\":\"\"\r\n}\r\n', '4028811b642af06f01642af9cfa304c6', 'ukewo', null, null, null, null, null, '0', null, null);
 INSERT INTO `uk_templet` VALUES ('4028811b644983b60164498e06570416', '详情输入接口', null, 'oqrdetail', null, '2018-06-29 11:20:01', null, null, '{\r\n	\"kbid\": \"${id!\'\'}\",\r\n}', '4028811b642af06f01642af9cfa304c6', 'ukewo', null, null, null, null, null, '0', null, null);
 INSERT INTO `uk_templet` VALUES ('4028811b644a2d2e01644a2ea6770400', '搜索输出接口', null, 'searchoutput', null, '2018-06-29 14:15:28', null, null, '[<#if data?? && data.data??><#list data.data as kb><#if kb_index gt 0>,</#if>\r\n{\r\n	\"id\":\"${kb.kbid!\'\'}\",\r\n	\"title\":\"${(kb.title!\'\')?replace(\'\\n\',\'\')}\"\r\n}</#list></#if>\r\n]', '4028811b642af06f01642af9cfaf04c7', 'ukewo', null, null, null, null, null, '0', null, null);
-INSERT INTO `uk_templet` VALUES ('4028811b644a2d2e01644a334a650422', '详情输出接口', null, 'detailinput', null, '2018-06-29 14:20:32', null, null, '<#if data?? && data.data??>\r\n{\r\n	\"id\":\"${data.data.kbid!\'\'}\",\r\n	\"title\":\"${(data.data.title!\'\')?replace(\'\\n\',\'\')}\",\r\n	\"content\":\"${((((data.data.content!\'\')?replace(\'\\n\',\'\'))?replace(\'\\\\\\\"\' , \'\\\'\'))?replace(\'\"\' , \'\\\\\"\'))?replace(\'\\\\/\' , \'/\')}\",\r\n	<#if data.data.type?? && data.data.type == 2>\r\n	\"type\":\"news\",\r\n	<#elseif data.data.type?? && data.data.type == 3>\r\n	\"type\":\"voice\",\r\n	\"duration\":${data.data.duration!\'0\'},\r\n	</#if>\r\n	<#if data.data.url?? && data.data.url != \'\'>\r\n	\"url\":\"${data.data.url}\",\r\n	</#if>\r\n	\"headimg\":\"${data.data.first_image!\'\'}\"\r\n}</#if>', '4028811b642af06f01642af9cfaf04c7', 'ukewo', null, null, null, null, null, '0', null, null);
+INSERT INTO `uk_templet` VALUES ('4028811b644a2d2e01644a334a650422', '详情输出接口', null, 'detailinput', null, '2018-06-29 14:20:32', null, null, '<#if data?? && data.data??>\r\n{\r\n	\"id\":\"${data.data.kbid!\'\'}\",\r\n	\"title\":\"${(data.data.title!\'\')?replace(\'\\n\',\'\')}\",\r\n	\"content\":\"${((((data.data.content!\'\')?replace(\'\\n\',\'\'))?replace(\'\\\\\\\"\' , \'\\\'\'))?replace(\'\"\' , \'\\\\\"\'))?replace(\'\\\\/\' , \'/\')}\",\r\n	<#if data.data.type?? && data.data.type == 2>\r\n	\"type\":\"news\",\r\n	<#elseif data.data.type?? && data.data.type == 3>\r\n	\"type\":\"voice\",\r\n	\"duration\":<#if data.data.duration?? && data.data.duration!= \'\'>${data.data.duration!\'0\'}<#else>0</#if>,\r\n	</#if>\r\n	<#if data.data.url?? && data.data.url != \'\'>\r\n	\"url\":\"${data.data.url}\",\r\n	</#if>\r\n	\"headimg\":\"${data.data.first_image!\'\'}\"\r\n}</#if>', '4028811b642af06f01642af9cfaf04c7', 'ukewo', null, null, null, null, null, '0', null, null);
 INSERT INTO `uk_templet` VALUES ('4028811b64f8d62b0164f948f98a040e', '访客端智能推荐参数', null, 'clientinput', null, '2018-08-02 14:17:46', null, null, '{\r\n\"type\": \"forcast\",\r\n\"customer_id\": \"ff08819f6227a0b0016227a557770309\",\r\n\"app_key\": \"gamutsoft\",\r\n\"user_id\": \"${userid!\'\'}\",\r\n\"label\": \"\",\r\n\"data\": \"${q!\'\'}\",\r\n\"topn\": 10\r\n}', '4028811b642af06f01642af9cfa304c6', 'ukewo', null, null, null, null, null, '0', null, null);
 INSERT INTO `uk_templet` VALUES ('4028811b64f8d62b0164f94f2f01041f', '访客端推荐输出结构', null, 'clientoutput', null, '2018-08-02 14:24:33', null, null, '[<#if data?? && data.candidates?? && data.candidates?size gt 0><#list data.candidates as kb><#if kb_index gt 0>,</#if>\r\n{\r\n	\"id\":\"${kb.kbid!\'\'}\",\r\n	\"title\":\"${(kb.title!\'\')?replace(\'\\n\',\'\')}\",\r\n	\"content\":\"${(kb.question!\'\')?replace(\'\\n\',\'\')}\"\r\n}</#list></#if>\r\n]', '4028811b642af06f01642af9cfaf04c7', 'ukewo', null, null, null, null, null, '0', null, null);
 INSERT INTO `uk_templet` VALUES ('4028811b655f56f501655fd402f305ad', '组织机构', null, 'organ', null, '2018-08-22 12:10:54', null, null, '<div class=\"layui-form-item\">\r\n	<div class=\"layui-inline\"> \r\n		<div class=\"layui-input-inline\" style=\"position: relative;\">\r\n			<input type=\"hidden\" name=\"${filter.code!\'\'}\"  id=\"${filter.code!\'\'}\" value=\"\">\r\n			<input type=\"text\" name=\"${filter.code!\'\'}_name\"  id=\"${filter.code!\'\'}_name\" required value=\"\" lay-verify=\"required\" autocomplete=\"off\" readOnly=\"readonly\" onClick=\"showMenu();\"\r\n				class=\"layui-input\">\r\n			<i class=\"layui-icon\" style=\"position: absolute;right: 3px;top: 6px;font-size: 25px;${systemConfig.color!\'color:#0096C4;\'}\" onClick=\"showMenu()\">&#xe631;</i>\r\n			<div id=\"menuContent\" style=\"display:none; position: absolute;z-index:10000;\" class=\"ukefu-ztree\">\r\n				<ul id=\"${filter.code!\'\'}_Tree\" class=\"ztree\" style=\"width:208px;\"></ul>\r\n			</div>\r\n		</div>\r\n	</div>\r\n</div>\r\n<SCRIPT type=\"text/javascript\">\r\n	var setting = {\r\n		data: {\r\n			simpleData: {\r\n				enable: true\r\n			}\r\n		},\r\n		callback: {\r\n			onClick: onClick,\r\n			beforeClick: beforeClick\r\n		}\r\n	};\r\n	\r\n	function beforeClick(treeId, treeNode) {\r\n		var zTree = $.fn.zTree.getZTreeObj(\"${filter.code!\'\'}_Tree\")\r\n		nodes = zTree.getSelectedNodes();\r\n		var allow = true , lastnode ;\r\n		for (var i=0, l=nodes.length; i<l; i++) {\r\n			lastnode = nodes[i].type ;\r\n			if(nodes[i].organ && (nodes.length >= 1 && (event.ctrlKey || event.shiftKey))){\r\n				allow = false ; break ;\r\n			}\r\n		}\r\n		if(lastnode != treeNode.type && (event.ctrlKey || event.shiftKey)){\r\n			allow = false ;\r\n		}\r\n		\r\n		if (allow == false) {\r\n			top.layer.alert(\"组织机构不能点选多个上级机构，也不能同时选择地区和机构\", {icon: 3});\r\n			return false;\r\n		} else {\r\n			return true;\r\n			\r\n		}\r\n	}\r\n	function onClick(e, treeId, treeNode) {\r\n		var zTree = $.fn.zTree.getZTreeObj(\"${filter.code!\'\'}_Tree\"),\r\n		nodes = zTree.getSelectedNodes(),\r\n		v = \"\" , value = \"\";\r\n		nodes.sort(function compare(a,b){return a.id-b.id;});\r\n		for (var i=0, l=nodes.length; i<l; i++) {\r\n			v += nodes[i].name + \"\";\r\n			if(value != \"\"){\r\n				value = value + \",\" ;\r\n			}\r\n			value = nodes[i].id ;\r\n		}\r\n		$(\"#${filter.code!\'\'}_name\").attr(\"value\", v);\r\n		$(\"#${filter.code!\'\'}\").attr(\"value\", value);\r\n		if (!event.ctrlKey && !event.shiftKey) {\r\n			hideMenu() ;\r\n		}\r\n	}\r\n\r\n	var zNodes =[\r\n	    { id:\'0\', pId:\'00\', name:\"${filter.name!\'\'}\", open:true , organ : true, type : \"organ\"}\r\n	    <#if organList??>\r\n	    <#list organList as organ>\r\n	    ,{ id:\'${organ.id!\'\'}\', pId:\'${organ.parent!\'0\'}\', name:\"${organ.name!\'\'}\", open:true , organ : true , type : \"organ\",  icon:\"/images/dept.png\" }\r\n	    </#list>\r\n	    </#if>\r\n	];\r\n	$(document).ready(function(){\r\n		var ztree = $.fn.zTree.init($(\"#${filter.code!\'\'}_Tree\"), setting, zNodes);\r\n		<#if organ??>\r\n		var node = ztree.getNodeByParam(\'id\', \'${organ.id!\'\'}\');//获取id为1的点\r\n		ztree.selectNode(node);//选择点  \r\n		</#if>\r\n	 \r\n	});\r\n	function showMenu() {\r\n		$(\"#menuContent\").css({left:\"0px\", top:\"38px\"}).show();\r\n\r\n		$(\"body\").bind(\"mousedown\", onBodyDown);\r\n	}\r\n	function hideMenu() {\r\n		$(\"#menuContent\").hide();\r\n		$(\"body\").unbind(\"mousedown\", onBodyDown);\r\n	}\r\n	function onBodyDown(event) {\r\n		if (!(event.target.id == \"menuBtn\" || event.target.id == \"menuContent\" || $(event.target).parents(\"#menuContent\").length>0)) {\r\n			hideMenu();\r\n		}\r\n	}\r\n</SCRIPT>', '4028811b618d0dca01618d5a5ff6034b', 'ukewo', '/images/design/select.png', null, null, null, null, '0', null, null);
@@ -8790,7 +9264,7 @@ CREATE TABLE `uk_user` (
 INSERT INTO `uk_user` VALUES ('4028811b61834723016183ec57760392', null, 'chenfarong', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'chen@ukewo.cn', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-02-11 16:12:39', null, '2018-06-29 17:40:30', null, '18510129455', '2018-02-11 16:12:39', null, '0', '陈法蓉', null, '0', null, null, null, '0', '0', '0', '2018-06-29 17:40:37', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b642f5f8c01642f60ed440683', null, 'test1', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'ad@te.com', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-06-24 09:20:38', null, '2018-07-03 10:51:17', null, '18510129433', '2018-06-24 09:20:38', null, '0', 'test1', null, '1', null, null, null, '0', '0', '0', '2018-07-03 10:51:25', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b645dc08f01645e0512ce0935', null, 'yiliao', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'asd@ac.com', null, null, null, null, null, null, null, null, null, null, null, '4028811b645dc08f01645e005f3d08dd', 'ukewo', null, '2018-07-03 10:42:28', null, '2018-07-03 10:43:31', null, '18512212955', '2018-07-03 10:42:28', null, '0', '医疗', null, '0', null, null, null, '0', '0', '0', '2018-07-03 10:43:39', null, null, null, '0', '0', '0', '0', null);
-INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-07-02 20:23:24', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-09-16 21:13:27', null, null, null, '0', '1', '1', '0', null);
+INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-07-02 20:23:24', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-09-19 11:58:11', null, null, null, '0', '1', '1', '0', null);
 
 -- ----------------------------
 -- Table structure for `uk_userevent`
