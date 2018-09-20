@@ -191,7 +191,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 	}
 
 	@Override
-	public List<EkmKnowledgeMaster> findByCreaterAndDatastatusAndOrgi(String creater, boolean datastatus, String orgi) {
+	public Page<EkmKnowledgeMaster> findByCreaterAndDatastatusAndOrgi(String creater, boolean datastatus, String orgi) {
 		
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 		BoolQueryBuilder bq = QueryBuilders.boolQuery() ; 
@@ -206,7 +206,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 			knowledgeList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeMaster.class ) ;
 	    }
 		
-		return knowledgeList.getContent();
+		return knowledgeList;
 	}
 
 	@Override
