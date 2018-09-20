@@ -45,6 +45,12 @@ public class NettyClients {
 	public void removeIMEventClient(String id , String sessionid){
 		imClients.removeClient(id, sessionid);
 	}
+	/**
+	 * HA支持
+	 * @param id
+	 * @param event
+	 * @param data
+	 */
 	public void sendIMEventMessage(String id , String event , Object data){
 		List<SocketIOClient> userClients = imClients.getClients(id) ;
 		for(SocketIOClient userClient : userClients){
@@ -61,6 +67,12 @@ public class NettyClients {
 	public void removeAgentEventClient(String id , String sessionid){
 		agentClients.removeClient(id, sessionid);
 	}
+	/**
+	 * HA支持
+	 * @param id
+	 * @param event
+	 * @param data
+	 */
 	public void sendAgentEventMessage(String id , String event , Object data){
 		List<SocketIOClient> agents = agentClients.getClients(id) ;
 		for(SocketIOClient agentClient : agents){
@@ -77,6 +89,12 @@ public class NettyClients {
 	public void removeEntIMEventClient(String id , String sessionid){
 		entIMClients.removeClient(id, sessionid);
 	}
+	/**
+	 * HA支持
+	 * @param id
+	 * @param event
+	 * @param data
+	 */
 	public void sendEntIMEventMessage(String id , String event , Object data){
 		List<SocketIOClient> entims = entIMClients.getClients(id) ;
 		for(SocketIOClient userClient : entims){
@@ -86,7 +104,12 @@ public class NettyClients {
 	public int getEntIMClientsNum(String user){
 		return entIMClients.getClients(user)!=null ? entIMClients.getClients(user).size() : 0;
 	}
-	
+	/**
+	 * HA支持
+	 * @param id
+	 * @param event
+	 * @param data
+	 */
 	public void sendCallCenterMessage(String id , String event , Object data){
 		List<SocketIOClient> ccClients = callCenterClients.getClients(id) ;
 		for(SocketIOClient ccClient : ccClients){

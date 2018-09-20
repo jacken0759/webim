@@ -251,6 +251,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 	private Page<EkmKnowledgeMaster> processQuery(BoolQueryBuilder boolQueryBuilder, Pageable page){
 		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).withSort(new FieldSortBuilder("createtime").unmappedType("date").order(SortOrder.DESC));
 		searchQueryBuilder.withHighlightFields(new Field("title") , new Field("content")) ;
+		
 		searchQueryBuilder.withPageable(page) ;
 		
 		Page<EkmKnowledgeMaster> knowledgeList = null ;
