@@ -19,6 +19,8 @@ public abstract interface EkmCommentsRepository  extends JpaRepository<EkmCommen
 	
 	public abstract Page<EkmComments> findByOrgi(String orgi ,Pageable pageable);
 	
+	public abstract Page<EkmComments> findByOrgiAndDatastatus(String orgi ,boolean datastatus,Pageable pageable);
+	
 	//我收到的评论
 	public abstract Page<EkmComments> findByDatastatusAndKnowledgeowerAndOrgi(boolean datastatus,String knowledgeower , String orgi ,Pageable pageable);
 	

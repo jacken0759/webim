@@ -37,6 +37,7 @@ public class EkmComments implements java.io.Serializable{
 	private boolean datastatus;
 	
 	private double rate ;//评分
+	private String title;
 
 	
 	@Id
@@ -126,6 +127,12 @@ public class EkmComments implements java.io.Serializable{
 	}
 	public void setRate(double rate) {
 		this.rate = rate;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	
