@@ -385,11 +385,12 @@ var active = {
 			layelement.tabAdd('ukefutab', {
 				title : title //用于演示
 				,
-				content : '<iframe frameborder="0" src="' + href + '" id="'
+				content : '<iframe frameborder="0" src="about:blank" id="'
 						+ id + '" name="' + id
 						+ '" width="100%" height="100%"></iframe>',
 				id : id
 			});
+			$('#'+id).attr("src",href);
 		}
 		layelement.tabChange('ukefutab', id);
 		$(".layui-this").each(function() {
