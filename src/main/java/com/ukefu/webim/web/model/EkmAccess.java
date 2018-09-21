@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.swing.border.TitledBorder;
 
 import org.hibernate.annotations.GenericGenerator;
 /**
@@ -32,6 +33,8 @@ public class EkmAccess implements java.io.Serializable{
 	private Date createtime ;
 	private String creater;
 	private String orgi ;
+	
+	private String title ;
 	
 
 	
@@ -87,6 +90,12 @@ public class EkmAccess implements java.io.Serializable{
 	}
 	public void setOrgi(String orgi) {
 		this.orgi = orgi;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	
