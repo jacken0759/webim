@@ -45,6 +45,16 @@ public class RPCTools {
 	 * @param data
 	 */
 	public static void sendCallCenterMessage(String id , String event , Object data){
-		UKDataContext.getContext().getBean(HazelcastInstance.class).getTopic(UKDataContext.UCKeFuTopic.TOPIC_CALLCENTER.toString()).publish("");
+		UKDataContext.getContext().getBean(HazelcastInstance.class).getTopic(UKDataContext.UCKeFuTopic.TOPIC_CALLCENTER.toString()).publish(new RPCDataBean(id, event, data));
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @param event
+	 * @param data
+	 */
+	public static void published(String name , String event , Object data){
+		UKDataContext.getContext().getBean(HazelcastInstance.class).getTopic(UKDataContext.UCKeFuTopic.NAMESPACE.toString()).publish(new RPCDataBean(name, event, data));
 	}
 }

@@ -804,7 +804,8 @@ public class UKDataContext {
 		TOPIC_ENTIM,
 		TOPIC_IM,
 		TOPIC_AGENT,
-		TOPIC_CALLCENTER;
+		TOPIC_CALLCENTER,
+		NAMESPACE;
 		
 		public String toString(){
 			return super.toString().toLowerCase() ;

@@ -7,7 +7,6 @@ import java.util.concurrent.locks.Lock;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.corundumstudio.socketio.SocketIONamespace;
 import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.aggregation.Aggregations;
 import com.hazelcast.mapreduce.aggregation.Supplier;
@@ -363,7 +362,7 @@ public class ServiceQuene {
 			
 			agentReportRes.save(agentReport) ;
 		}
-		UKDataContext.getContext().getBean("agentNamespace" , SocketIONamespace.class) .getBroadcastOperations().sendEvent("status", agentReport);
+		NettyClients.getInstance().published("agentNamespace", "status", agentReport);
 	}
 	/**
 	 * 

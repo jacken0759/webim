@@ -17,6 +17,7 @@ import com.ukefu.webim.service.rpc.AgentTopicListener;
 import com.ukefu.webim.service.rpc.CallCenterTopicListener;
 import com.ukefu.webim.service.rpc.EntIMTopicListener;
 import com.ukefu.webim.service.rpc.IMTopicListener;
+import com.ukefu.webim.service.rpc.NameSpaceTopicListener;
 
 @Configuration
 @EnableHazelcastHttpSession(maxInactiveIntervalInSeconds = 3600)
@@ -39,6 +40,7 @@ public class HazelcastHttpSessionConfig {
     	hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.TOPIC_AGENT.toString()).addMessageListener(new AgentTopicListener()) ;
     	hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.TOPIC_CALLCENTER.toString()).addMessageListener(new CallCenterTopicListener()) ;
     	hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.TOPIC_ENTIM.toString()).addMessageListener(new EntIMTopicListener()) ;
+    	hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.NAMESPACE.toString()).addMessageListener(new NameSpaceTopicListener()) ;
         return hazelcastInstance; 
     }
 }

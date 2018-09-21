@@ -3,6 +3,8 @@ package com.ukefu.util.client;
 import java.util.List;
 
 import com.corundumstudio.socketio.SocketIOClient;
+import com.corundumstudio.socketio.SocketIONamespace;
+import com.ukefu.core.UKDataContext;
 import com.ukefu.util.UKTools;
 import com.ukefu.util.rpc.RPCTools;
 
@@ -174,4 +176,20 @@ public class NettyClients {
 			}
 		}
 	}
+	
+	/**
+	 * HA支持
+	 * @param id
+	 * @param event
+	 * @param data
+	 */
+	public void published(String name , String event , Object data){
+		if(UKTools.getSystemConfig()!=null && UKTools.getSystemConfig().isEnabledis()) {
+			RPCTools.published(name, event, data);
+		}else {
+			UKDataContext.getContext().getBean(name , SocketIONamespace.class) .getBroadcastOperations().sendEvent(event, data);
+		}
+	}
+	
+	
 }
