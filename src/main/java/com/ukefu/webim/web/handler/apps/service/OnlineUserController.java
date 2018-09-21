@@ -25,6 +25,8 @@ import com.ukefu.webim.service.repository.ChatMessageRepository;
 import com.ukefu.webim.service.repository.OnlineUserHisRepository;
 import com.ukefu.webim.service.repository.OnlineUserRepository;
 import com.ukefu.webim.service.repository.ServiceSummaryRepository;
+import com.ukefu.webim.service.repository.SessionTypeRepository;
+import com.ukefu.webim.service.repository.SysDicRepository;
 import com.ukefu.webim.service.repository.TagRelationRepository;
 import com.ukefu.webim.service.repository.TagRepository;
 import com.ukefu.webim.service.repository.UserEventRepository;
@@ -35,6 +37,8 @@ import com.ukefu.webim.web.model.AgentServiceSummary;
 import com.ukefu.webim.web.model.AgentUser;
 import com.ukefu.webim.web.model.AgentUserContacts;
 import com.ukefu.webim.web.model.OnlineUser;
+import com.ukefu.webim.web.model.SessionType;
+import com.ukefu.webim.web.model.SysDic;
 import com.ukefu.webim.web.model.WeiXinUser;
 
 @Controller
@@ -76,6 +80,12 @@ public class OnlineUserController extends Handler{
 	
 	@Autowired
 	private AgentUserContactsRepository agentUserContactsRes ;
+	
+	@Autowired
+	private SessionTypeRepository sessionTypeRes ;
+	
+	@Autowired
+	private SysDicRepository sysDicRes ;
 	
 	@RequestMapping("/online/index")
     @Menu(type = "service" , subtype = "online" , admin= true)
@@ -137,6 +147,22 @@ public class OnlineUserController extends Handler{
 			}
 			map.put("agentUser", agentUserRes.findByUseridAndOrgi(userid, super.getOrgi(request))) ;
 			map.put("curragentuser", agentUserRes.findByUseridAndOrgi(userid, super.getOrgi(request))) ;
+			
+			//文字客服
+			AgentService agentService = agentServiceRes.findByIdAndOrgi(agentservice, super.getOrgi(request));
+			SysDic sysDic = sysDicRes.findByCode("sessionWords");
+			if(agentService != null &&sysDic != null){
+				List<SessionType> sessionTypeList = sessionTypeRes.findByOrgiAndCtype(super.getOrgi(request), sysDic.getId());
+				for(SessionType  ses : sessionTypeList){
+					if(!StringUtils.isBlank(agentService.getSessiontype()) && ses.getId().equals(agentService.getSessiontype())){
+						map.addAttribute("agentSessionType", ses.getName());
+					}
+				}
+			}
+			map.addAttribute("agentService", agentService);
+			map.addAttribute("userid", userid);
+			map.addAttribute("agentservice", agentservice);
+			map.addAttribute("channel", channel);
 		}
         return request(super.createAppsTempletResponse("/apps/service/online/index"));
     }
@@ -173,4 +199,66 @@ public class OnlineUserController extends Handler{
 		}
         return request(super.createRequestPageTempletResponse("/apps/service/online/trace"));
     }
+	@RequestMapping("/sessiontype")
+	@Menu(type = "service" , subtype = "online" , admin= false)
+	public ModelAndView getSessionType(ModelMap map , HttpServletRequest request , @Valid String sesid, String userid , String agentservice , @Valid String channel) {
+		//文字客服
+		SysDic sysDic = sysDicRes.findByCode("sessionWords");
+		if(sysDic != null){
+			map.addAttribute("sesTypeList", sessionTypeRes.findByOrgiAndCtype(super.getOrgi(request), sysDic.getId()));
+		}
+		
+		map.addAttribute("sesTemp", sessionTypeRes.findById(sesid));
+		map.addAttribute("sesid", sesid);
+		map.addAttribute("userid", userid);
+		map.addAttribute("agentservice", agentservice);
+		map.addAttribute("channel", channel);
+		return request(super.createRequestPageTempletResponse("/apps/service/online/sessiontype"));
+	}
+	@RequestMapping("/sessiontype/save")
+	@Menu(type = "service" , subtype = "online" , admin= false)
+	public ModelAndView saveSessionType(ModelMap map , HttpServletRequest request ,@Valid String sesid, String userid , String agentservice , @Valid String channel) {
+		
+		AgentService agentService = agentServiceRes.findByIdAndOrgi(agentservice, super.getOrgi(request));
+		if(agentService != null){
+			agentService.setSessiontype(sesid);
+			agentServiceRes.save(agentService);
+			SysDic sysDic = sysDicRes.findByCode("sessionWords");
+			if(sysDic != null){
+				List<SessionType> sessionTypeList = sessionTypeRes.findByOrgiAndCtype(super.getOrgi(request), sysDic.getId());
+				for(SessionType  ses : sessionTypeList){
+					if(!StringUtils.isBlank(agentService.getSessiontype()) && ses.getId().equals(agentService.getSessiontype())){
+						map.addAttribute("agentSessionType", ses.getName());
+					}
+				}
+			}
+		}
+		map.addAttribute("agentService", agentService);
+		
+		return request(super.createRequestPageTempletResponse("/apps/service/online/agenttype"));
+	}
+	@RequestMapping("/sessionmemo")
+	@Menu(type = "service" , subtype = "online" , admin= false)
+	public ModelAndView getSessionMemo(ModelMap map , HttpServletRequest request , @Valid String sesid, String userid , String agentservice , @Valid String channel) {
+		AgentService agentService = agentServiceRes.findByIdAndOrgi(agentservice, super.getOrgi(request));
+		
+		map.addAttribute("agentService", agentService);
+		map.addAttribute("sesid", sesid);
+		map.addAttribute("userid", userid);
+		map.addAttribute("agentservice", agentservice);
+		map.addAttribute("channel", channel);
+		return request(super.createRequestPageTempletResponse("/apps/service/online/sessionmemo"));
+	}
+	@RequestMapping("/sessionmemo/save")
+	@Menu(type = "service" , subtype = "online" , admin= false)
+	public ModelAndView saveSessionMemo(ModelMap map , HttpServletRequest request ,@Valid String sesid, String userid , String agentservice , @Valid String channel, @Valid String memo) {
+		
+		AgentService agentService = agentServiceRes.findByIdAndOrgi(agentservice, super.getOrgi(request));
+		if(agentService != null){
+			agentService.setMemo(memo);
+			agentServiceRes.save(agentService);
+		}
+		map.addAttribute("agentService", agentService);
+		return request(super.createRequestPageTempletResponse("/apps/service/online/agentmemo"));
+	}
 }

@@ -52,7 +52,9 @@ import com.ukefu.webim.service.repository.PbxHostRepository;
 import com.ukefu.webim.service.repository.QuickTypeRepository;
 import com.ukefu.webim.service.repository.SNSAccountRepository;
 import com.ukefu.webim.service.repository.ServiceSummaryRepository;
+import com.ukefu.webim.service.repository.SessionTypeRepository;
 import com.ukefu.webim.service.repository.StatusEventRepository;
+import com.ukefu.webim.service.repository.SysDicRepository;
 import com.ukefu.webim.service.repository.TagRelationRepository;
 import com.ukefu.webim.service.repository.TagRepository;
 import com.ukefu.webim.service.repository.UserRepository;
@@ -76,7 +78,9 @@ import com.ukefu.webim.web.model.PbxHost;
 import com.ukefu.webim.web.model.QuickReply;
 import com.ukefu.webim.web.model.QuickType;
 import com.ukefu.webim.web.model.SessionConfig;
+import com.ukefu.webim.web.model.SessionType;
 import com.ukefu.webim.web.model.StatusEvent;
+import com.ukefu.webim.web.model.SysDic;
 import com.ukefu.webim.web.model.TagRelation;
 import com.ukefu.webim.web.model.UploadStatus;
 import com.ukefu.webim.web.model.User;
@@ -156,6 +160,12 @@ public class AgentController extends Handler {
 	
 	@Value("${web.upload-path}")
 	private String path;	
+	
+	@Autowired
+	private SessionTypeRepository sessionTypeRes ;
+	
+	@Autowired
+	private SysDicRepository sysDicRes ;
 	
 	@RequestMapping("/index")
 	@Menu(type = "apps", subtype = "agent")
@@ -356,6 +366,17 @@ public class AgentController extends Handler {
 					map.addAttribute("dataid", agentService.getId()) ;
 				}
 			}
+			//文字客服
+			SysDic sysDic = sysDicRes.findByCode("sessionWords");
+			if(agentService != null &&sysDic != null){
+				List<SessionType> sessionTypeList = sessionTypeRes.findByOrgiAndCtype(super.getOrgi(request), sysDic.getId());
+				for(SessionType  ses : sessionTypeList){
+					if(!StringUtils.isBlank(agentService.getSessiontype()) && ses.getId().equals(agentService.getSessiontype())){
+						map.addAttribute("agentSessionType", ses.getName());
+					}
+				}
+			}
+			map.addAttribute("agentService", agentService);
 			if(UKDataContext.ChannelTypeEnum.WEIXIN.toString().equals(agentUser.getChannel())){
 				List<WeiXinUser> weiXinUserList = weiXinUserRes.findByOpenidAndOrgi(agentUser.getUserid(), super.getOrgi(request)) ;
 				if(weiXinUserList.size() > 0){
@@ -412,7 +433,7 @@ public class AgentController extends Handler {
 		List<QuickType> priQuickTypeList = quickTypeRes.findByOrgiAndQuicktypeAndCreater(super.getOrgi(request), UKDataContext.QuickTypeEnum.PRI.toString(), super.getUser(request).getId()) ; 
 		quickTypeList.addAll(priQuickTypeList) ;
 		view.addObject("pubQuickTypeList", quickTypeList) ;
-
+		
 		return view ;
 	}
 	
