@@ -21,6 +21,8 @@ public abstract interface EkmKnowledgeMasterESRepository
 	
 	public abstract List<EkmKnowledgeMaster> findByOrgiAndDatastatus(String orgi,boolean datastatus);
 	
+	public abstract List<EkmKnowledgeMaster> findByOrgi(String orgi);
+	
 	public abstract Page<EkmKnowledgeMaster> findByKnowbaseidAndKnowledgetypeidAndDatastatusAndOrgi(String knowbaseid,String knowledgetypeid,boolean datastatus ,String orgi, BoolQueryBuilder ranyQueryBuilder,Pageable page);
 	
 	public abstract List<EkmKnowledgeMaster> findByKnowbaseidAndDatastatusAndOrgi(String knowbaseid,boolean datastatus ,String orgi);

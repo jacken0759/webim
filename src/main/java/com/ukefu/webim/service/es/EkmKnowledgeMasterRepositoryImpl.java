@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
-import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.highlight.HighlightBuilder.Field;
@@ -396,6 +394,23 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
 		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
 		return processQuery(boolQueryBuilder , pageable);
+	}
+
+	@Override
+	public List<EkmKnowledgeMaster> findByOrgi(String orgi) {
+
+		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		BoolQueryBuilder bq = QueryBuilders.boolQuery() ; 
+		bq.must(QueryBuilders.termQuery("orgi", orgi)) ;
+		boolQueryBuilder.must(bq); 
+		
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
+		Page<EkmKnowledgeMaster> knowledgeList = null ;
+		if(elasticsearchTemplate.indexExists(EkmKnowledgeMaster.class)){
+			knowledgeList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeMaster.class ) ;
+	    }
+		
+		return knowledgeList.getContent();
 	}
 
 }
