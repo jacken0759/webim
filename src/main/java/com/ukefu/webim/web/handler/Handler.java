@@ -222,11 +222,11 @@ public class Handler {
 			List<TableProperties> tpList = tpRes.findByName(request.getParameter("nasearch"));
 			if(tpList.size() > 0){
 				for(TableProperties tp : tpList){
-					if(!StringUtils.isBlank(request.getParameter("condition")) ){
+					if(!StringUtils.isBlank(request.getParameter("condition")) && tp.getName().equals(request.getParameter("nasearch"))){
 						if(request.getParameter("condition").equals("scope")){//范围
 							if(!StringUtils.isBlank(request.getParameter("nabegin")) ||!StringUtils.isBlank(request.getParameter("naend"))){
 								RangeQueryBuilder tempRangeQuery = null ;
-								if("distime".equals(tp.getFieldname())){
+								if(tp.getDatatypename().equalsIgnoreCase("date") || tp.getDatatypename().equalsIgnoreCase("datetime") ){
 									if(!StringUtils.isBlank(request.getParameter("nabegin"))) {
 											try {
 												tempRangeQuery = QueryBuilders.rangeQuery(tp.getFieldname()).from(UKTools.dateFormate.parse(request.getParameter("nabegin")).getTime()) ;
@@ -253,7 +253,6 @@ public class Handler {
 										}
 									}
 								}else{
-									
 									if(!StringUtils.isBlank(request.getParameter("nabegin"))) {
 										tempRangeQuery = QueryBuilders.rangeQuery(tp.getFieldname()).from(request.getParameter("nabegin")) ;
 									}
@@ -265,7 +264,6 @@ public class Handler {
 										}
 									}
 								}
-								
 								organBu.should(tempRangeQuery);
 							}
 						}else if(request.getParameter("condition").equals("equal")){//等于
@@ -275,7 +273,7 @@ public class Handler {
 								
 								try {
 									rangeQu = QueryBuilders.rangeQuery(tp.getFieldname()).from(UKTools.dateFormate.parse(request.getParameter("convalue").toString()).getTime()).to(UKTools.dateFormate.parse(request.getParameter("convalue").toString()).getTime() + 1000);
-									queryBuilder.must(rangeQu);
+									organBu.should(rangeQu);
 								} catch (ParseException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
@@ -283,22 +281,21 @@ public class Handler {
 							}else if(UKTools.getDateFormatTemp(request) == true){
 								try {
 									rangeQu = QueryBuilders.rangeQuery(tp.getFieldname()).from(UKTools.simpleDateFormat.parse(request.getParameter("convalue").toString()).getTime()).to(UKTools.simpleDateFormat.parse(request.getParameter("convalue").toString()).getTime() + 86400000);
-									queryBuilder.must(rangeQu);
+									organBu.should(rangeQu);
 								} catch (ParseException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 								
 							}else if(!tp.getDatatypename().equalsIgnoreCase("date") && !tp.getDatatypename().equalsIgnoreCase("datetime") ){
-								queryBuilder.must(QueryBuilders.termQuery(tp.getFieldname(), request.getParameter("convalue"))) ;
+								organBu.should(QueryBuilders.termQuery(tp.getFieldname(), request.getParameter("convalue"))) ;
 							}
 						}else if(request.getParameter("condition").equals("not")){//不等于
-							
 							RangeQueryBuilder rangeQu = null ;
 							if(UKTools.getDateFormat(request) == true){
 								try {
 									rangeQu = QueryBuilders.rangeQuery(tp.getFieldname()).from(UKTools.dateFormate.parse(request.getParameter("convalue")).getTime()).to(UKTools.dateFormate.parse(request.getParameter("convalue")).getTime() + 1000);
-									queryBuilder.mustNot(rangeQu);
+									organBu.mustNot(rangeQu);
 								} catch (ParseException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
@@ -306,13 +303,13 @@ public class Handler {
 							}else if(UKTools.getDateFormatTemp(request) == true){
 								try {
 									rangeQu = QueryBuilders.rangeQuery(tp.getFieldname()).from(UKTools.simpleDateFormat.parse(request.getParameter("convalue").toString()).getTime()).to(UKTools.simpleDateFormat.parse(request.getParameter("convalue").toString()).getTime() + 86400000);
-									queryBuilder.mustNot(rangeQu);
+									organBu.mustNot(rangeQu);
 								} catch (ParseException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 							}else if(!tp.getDatatypename().equalsIgnoreCase("date") && !tp.getDatatypename().equalsIgnoreCase("datetime") ){
-								queryBuilder.mustNot(QueryBuilders.termQuery(tp.getFieldname(), request.getParameter("convalue"))) ;
+								organBu.mustNot(QueryBuilders.termQuery(tp.getFieldname(), request.getParameter("convalue"))) ;
 							}
 							
 						}
