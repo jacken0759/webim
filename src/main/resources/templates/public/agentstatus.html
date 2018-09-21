@@ -1,4 +1,5 @@
-	<div class="agent-title" id="agents_status">服务中的人数：${agentStatusReport.users!''}人，当前排队人数：${agentStatusReport.inquene!''}人，在线坐席数：${agentStatusReport.agents!''}人，坐席忙：${agentStatusReport.busy!0}人</div>
+	<div class="agent-title" id="system_time" style="margin-right:20px;">${.now?string('yyyy-MM-dd HH:mm:ss')}</div>
+	<div class="agent-title" id="agents_status">服务人数：${agentStatusReport.users!''}人，排队数：${agentStatusReport.inquene!''}人，在线坐席：${agentStatusReport.agents!''}人，坐席忙：${agentStatusReport.busy!0}人</div>
 	<div id="agentstatus"
 		class="layui-unselect layui-form-switch <#if agentStatus??>layui-form-onswitch</#if>">
 		<i></i>

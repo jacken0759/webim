@@ -28,7 +28,7 @@ $(document).ready(function(){
     	WebIM.audioplayer('audioplane', newuser, false); // 播放
     }).on('status', function(data) {
     	if(orgi == data.orgi){
-    		$('#agents_status').html("服务中的人数："+data.users+"人，当前排队人数："+data.inquene+"人，在线坐席数："+data.agents+"人，坐席忙："+data.busy+"人");	        	
+    		$('#agents_status').html("服务人数："+data.users+"人，排队数："+data.inquene+"人，在线坐席："+data.agents+"人，坐席忙："+data.busy+"人");	        	
     	}
     }).on('message', function(data) {
     	if($('#multiMediaDialogWin').length > 0 && multiMediaDialogWin != null && multiMediaDialogWin.$ && multiMediaDialogWin.$('#agentusers').length > 0){
@@ -58,7 +58,7 @@ $(document).ready(function(){
 	/****每分钟执行一次，与服务器交互，保持会话****/
 	setInterval(function(){
 		WebIM.ping();	
-	} , 60000);				
+	} , 1000);				
 }) ;
 
 var WebIM = {
@@ -97,8 +97,7 @@ var WebIM = {
 	    });  
 	}, 
 	ping : function(){
-		loadURL("/message/ping.html") ;	
-		console.log("ping:" + new Date().getTime());
+		loadURL("/message/ping.html","#system_time") ;	
 	},
 	audioplayer:function(id, file, loop) {
 	    var audioplayer = document.getElementById(id);

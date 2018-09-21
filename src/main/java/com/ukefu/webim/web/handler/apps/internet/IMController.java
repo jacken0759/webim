@@ -120,7 +120,7 @@ public class IMController extends Handler{
     @Menu(type = "im" , subtype = "point" , access = true)
     public ModelAndView point(HttpServletRequest request , HttpServletResponse response, @PathVariable String id , @Valid String orgi , @Valid String userid , @Valid String title, @Valid String aiid) {
     	ModelAndView view = request(super.createRequestPageTempletResponse("/apps/im/point")) ; 
-    	String sessionid = request.getSession().getId() ;
+    	String sessionid = UKTools.getContextID(request.getSession().getId()) ;
     	if(!StringUtils.isBlank(id)){
 	    	view.addObject("hostname", request.getServerName()) ;
 	    	
@@ -580,8 +580,9 @@ public class IMController extends Handler{
 			view.addObject("agent", agent) ;
 		}
 		
+		
 		view.addObject("client", UKTools.getUUID()) ;
-		view.addObject("sessionid", request.getSession().getId()) ;
+		view.addObject("sessionid", UKTools.getContextID(request.getSession().getId())) ;
 		
 		view.addObject("id", id) ;
 		if(!StringUtils.isBlank(ai)){

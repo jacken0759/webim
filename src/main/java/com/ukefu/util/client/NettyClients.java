@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.corundumstudio.socketio.SocketIOClient;
 import com.ukefu.util.UKTools;
+import com.ukefu.util.rpc.RPCTools;
 
 
 public class NettyClients {
@@ -23,15 +24,35 @@ public class NettyClients {
 		return clients ;
 	}
 	
+	/**
+	 * 放入开始
+	 * @param id
+	 * @param userClient
+	 */
+	public void putIMEventClient(String id , SocketIOClient userClient){
+		imClients.putClient(id, userClient);
+	}
+	public void putAgentEventClient(String id , SocketIOClient agentClient){
+		agentClients.putClient(id, agentClient);
+	}
+	public void putEntIMEventClient(String id , SocketIOClient userClient){
+		entIMClients.putClient(id, userClient);
+	}
+	public void putCallCenterEventClient(String id , SocketIOClient userClient){
+		callCenterClients.putClient(id, userClient);
+	}
+	/**
+	 * 放入结束
+	 * @return
+	 */
+	
+	
 	public NettyCallCenterClient getCallCenterClients(){
 		return this.callCenterClients ;
 	}
 
 	public void setImClients(NettyIMClient imClients) {
 		this.imClients = imClients;
-	}
-	public void putIMEventClient(String id , SocketIOClient userClient){
-		imClients.putClient(id, userClient);
 	}
 	
 	public void closeIMEventClient(String id , String sessionid, String orgi){
@@ -42,8 +63,18 @@ public class NettyClients {
 			}
 		}
 	}
+	
+	public void removeAgentEventClient(String id , String sessionid){
+		agentClients.removeClient(id, sessionid);
+	}
+	public void removeEntIMEventClient(String id , String sessionid){
+		entIMClients.removeClient(id, sessionid);
+	}
 	public void removeIMEventClient(String id , String sessionid){
 		imClients.removeClient(id, sessionid);
+	}
+	public void removeCallCenterClient(String id , String sessionid){
+		callCenterClients.removeClient(id, sessionid);
 	}
 	/**
 	 * HA支持
@@ -53,20 +84,19 @@ public class NettyClients {
 	 */
 	public void sendIMEventMessage(String id , String event , Object data){
 		List<SocketIOClient> userClients = imClients.getClients(id) ;
-		for(SocketIOClient userClient : userClients){
-			userClient.sendEvent(event, data);
+		if(userClients.size() > 0) {
+			for(SocketIOClient userClient : userClients){
+				userClient.sendEvent(event, data);
+			}
+		}else {
+			RPCTools.sendIMEventMessage(id, event, data);
 		}
 	}
 	
 	public void setAgentClients(NettyAgentClient agentClients) {
 		this.agentClients = agentClients;
 	}
-	public void putAgentEventClient(String id , SocketIOClient agentClient){
-		agentClients.putClient(id, agentClient);
-	}
-	public void removeAgentEventClient(String id , String sessionid){
-		agentClients.removeClient(id, sessionid);
-	}
+	
 	/**
 	 * HA支持
 	 * @param id
@@ -75,20 +105,19 @@ public class NettyClients {
 	 */
 	public void sendAgentEventMessage(String id , String event , Object data){
 		List<SocketIOClient> agents = agentClients.getClients(id) ;
-		for(SocketIOClient agentClient : agents){
-			agentClient.sendEvent(event, data);
+		if(agents.size() > 0) {
+			for(SocketIOClient agentClient : agents){
+				agentClient.sendEvent(event, data);
+			}
+		}else {
+			RPCTools.sendAgentEventMessage(id, event, data);
 		}
 	}
 	
 	public void setEntImClients(NettyIMClient entIMClients) {
 		this.entIMClients = entIMClients;
 	}
-	public void putEntIMEventClient(String id , SocketIOClient userClient){
-		entIMClients.putClient(id, userClient);
-	}
-	public void removeEntIMEventClient(String id , String sessionid){
-		entIMClients.removeClient(id, sessionid);
-	}
+	
 	/**
 	 * HA支持
 	 * @param id
@@ -97,8 +126,12 @@ public class NettyClients {
 	 */
 	public void sendEntIMEventMessage(String id , String event , Object data){
 		List<SocketIOClient> entims = entIMClients.getClients(id) ;
-		for(SocketIOClient userClient : entims){
-			userClient.sendEvent(event, data);
+		if(entims.size() > 0) {
+			for(SocketIOClient userClient : entims){
+				userClient.sendEvent(event, data);
+			}
+		}else {
+			RPCTools.sendEntIMEventMessage(id, event, data);
 		}
 	}
 	public int getEntIMClientsNum(String user){
@@ -112,8 +145,12 @@ public class NettyClients {
 	 */
 	public void sendCallCenterMessage(String id , String event , Object data){
 		List<SocketIOClient> ccClients = callCenterClients.getClients(id) ;
-		for(SocketIOClient ccClient : ccClients){
-			ccClient.sendEvent(event, data);
+		if(ccClients.size() > 0) {
+			for(SocketIOClient ccClient : ccClients){
+				ccClient.sendEvent(event, data);
+			}
+		}else {
+			RPCTools.sendCallCenterMessage(id, event, data);
 		}
 	}
 }
