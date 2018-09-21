@@ -390,7 +390,9 @@ var active = {
 						+ '" width="100%" height="100%"></iframe>',
 				id : id
 			});
-			$('#'+id).attr("src",href);
+			if($('#'+id).length >0){
+				$('#'+id).attr("src",href);
+			}
 		}
 		layelement.tabChange('ukefutab', id);
 		$(".layui-this").each(function() {

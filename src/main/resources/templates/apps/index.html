@@ -370,7 +370,7 @@
 			  $(".layui-tab").on("click",function(e){
 			  	if($(e.target).is(".layui-tab-close")){
 					var win = $(e.target).parent().attr("lay-id");
-					if(win == "outboundCallConsole" && uKeFuSoftPhone){
+					if(win == "outboundCallConsole" && typeof uKeFuSoftPhone != "undefined"){
 						uKeFuSoftPhone.cancleoutbound();
 					}
 				}
