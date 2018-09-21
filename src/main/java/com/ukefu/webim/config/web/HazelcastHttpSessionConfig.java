@@ -14,7 +14,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
 @Configuration
-@EnableHazelcastHttpSession(maxInactiveIntervalInSeconds = 60)
+@EnableHazelcastHttpSession(maxInactiveIntervalInSeconds = 3600)
 public class HazelcastHttpSessionConfig {
 	@Bean
     public HazelcastInstance hazelcastInstance() {
