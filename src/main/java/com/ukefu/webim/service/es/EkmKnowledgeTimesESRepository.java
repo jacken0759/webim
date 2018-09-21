@@ -12,6 +12,8 @@ public abstract interface EkmKnowledgeTimesESRepository
 	
 	public abstract List<EkmKnowledgeTimes> findByKbidAndVersionAndOrgi(String kbid ,int version , String orgi );
 	
+	public abstract List<EkmKnowledgeTimes> findByKbidAndOrgi(String kbid , String orgi );
+	
 	public abstract Page<EkmKnowledgeTimes> findByOrgi(String orgi ,Pageable pageable);
 	
 	public void delete(List<EkmKnowledgeTimes> ekmKnowledgeTimes) ;

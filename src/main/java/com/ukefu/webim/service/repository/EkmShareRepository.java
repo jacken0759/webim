@@ -1,5 +1,7 @@
 package com.ukefu.webim.service.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,5 +18,7 @@ public abstract interface EkmShareRepository  extends JpaRepository<EkmShare, St
 	
 	//获取-我分享的知识
 	public abstract Page<EkmShare> findByDatastatusAndCreaterAndOrgi(boolean datastatus,String creater , String orgi ,Pageable pageable);
+	
+	public abstract List<EkmShare> findByDatastatusAndKnowledgeidAndOrgi(boolean datastatus,String knowledgeid , String orgi);
 }
 

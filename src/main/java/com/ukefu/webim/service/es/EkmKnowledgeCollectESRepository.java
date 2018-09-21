@@ -30,5 +30,8 @@ public abstract interface EkmKnowledgeCollectESRepository  extends Elasticsearch
 	public abstract EkmKnowledgeCollect findByCreaterAndKnowledgeidAndStatusAndOrgi(String creater , String knowledgeid, String status, String orgi );
 	
 	public abstract EkmKnowledgeCollect findByCreaterAndKbidAndStatusAndOrgi(String creater , String kbid, String status, String orgi );
+	
+	public abstract List<EkmKnowledgeCollect> findByKnowledgeidAndOrgi(String knowledgeid , String orgi );
+	
 }
 

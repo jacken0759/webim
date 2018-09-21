@@ -83,8 +83,11 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 		if(elasticsearchTemplate.indexExists(EkmKnowledgeMaster.class)){
 			knowledgeList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeMaster.class ) ;
 	    }
-		
-		return knowledgeList.getContent().get(0);
+		if (knowledgeList!=null && knowledgeList.getContent().size()>0) {
+			return knowledgeList.getContent().get(0);
+		}else {
+			return null ;
+		}
 	}
 
 	@Override
@@ -332,6 +335,8 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 				boolQueryBuilder1.should(termQuery("knowbaseid" , id));
 			}
 		}*/
+		
+		boolQueryBuilder1.must(termQuery("datastatus" , datastatus)) ;
 		if(user.isSuperuser() == true){
 			boolQueryBuilder.must(boolQueryBuilder1) ;
 		}else{
@@ -381,6 +386,16 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 	    }
 		
 		return knowledgeList.getContent();
+	}
+
+	@Override
+	public Page<EkmKnowledgeMaster> findByDatastatusAndOrgi(
+			boolean datastatus, String orgi, Pageable pageable) {
+		
+		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
+		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
+		return processQuery(boolQueryBuilder , pageable);
 	}
 
 }

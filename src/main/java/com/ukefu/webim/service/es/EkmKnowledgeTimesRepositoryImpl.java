@@ -4,11 +4,8 @@ import java.util.List;
 
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.delete.DeleteRequest;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,5 +72,22 @@ public class EkmKnowledgeTimesRepositoryImpl implements EkmKnowledgeTimesESRepos
 		    }  
 		    bulkRequest.get();  
 	    }
+	}
+
+	@Override
+	public List<EkmKnowledgeTimes> findByKbidAndOrgi(String kbid, String orgi) {
+		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		BoolQueryBuilder bq = QueryBuilders.boolQuery() ; 
+		bq.must(QueryBuilders.termQuery("kbid", kbid)) ;
+		bq.must(QueryBuilders.termQuery("orgi", orgi)) ;
+		boolQueryBuilder.must(bq); 
+		
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
+		Page<EkmKnowledgeTimes> knowledgeTimesList = null ;
+		if(elasticsearchTemplate.indexExists(EkmKnowledgeTimes.class)){
+			knowledgeTimesList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeTimes.class ) ;
+	    }
+		
+		return knowledgeTimesList.getContent();
 	}
 }

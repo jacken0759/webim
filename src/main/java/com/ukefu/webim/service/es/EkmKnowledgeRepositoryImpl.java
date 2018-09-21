@@ -76,8 +76,12 @@ public class EkmKnowledgeRepositoryImpl implements EkmKnowledgeESRepository{
 		if(elasticsearchTemplate.indexExists(EkmKnowledge.class)){
 			knowledgeList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledge.class ) ;
 	    }
+		if (knowledgeList!=null && knowledgeList.getContent().size()>0) {
+			return knowledgeList.getContent().get(0);
+		}else {
+			return null ;
+		}
 		
-		return knowledgeList.getContent().get(0);
 	}
 
 
