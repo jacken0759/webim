@@ -50,6 +50,18 @@ public class NettyClients {
 	public NettyCallCenterClient getCallCenterClients(){
 		return this.callCenterClients ;
 	}
+	
+	public NettyIMClient getIMClients(){
+		return this.imClients ;
+	}
+	
+	public NettyIMClient getEntIMClients(){
+		return this.entIMClients;
+	}
+	public NettyAgentClient getAgentClients(){
+		return this.agentClients;
+	}
+	
 
 	public void setImClients(NettyIMClient imClients) {
 		this.imClients = imClients;
@@ -83,13 +95,15 @@ public class NettyClients {
 	 * @param data
 	 */
 	public void sendIMEventMessage(String id , String event , Object data){
-		List<SocketIOClient> userClients = imClients.getClients(id) ;
-		if(userClients.size() > 0) {
-			for(SocketIOClient userClient : userClients){
-				userClient.sendEvent(event, data);
-			}
-		}else {
+		if(UKTools.getSystemConfig()!=null && UKTools.getSystemConfig().isEnabledis()){
 			RPCTools.sendIMEventMessage(id, event, data);
+		}else {
+			List<SocketIOClient> userClients = imClients.getClients(id) ;
+			if(userClients.size() > 0) {
+				for(SocketIOClient userClient : userClients){
+					userClient.sendEvent(event, data);
+				}
+			}
 		}
 	}
 	
@@ -104,13 +118,15 @@ public class NettyClients {
 	 * @param data
 	 */
 	public void sendAgentEventMessage(String id , String event , Object data){
-		List<SocketIOClient> agents = agentClients.getClients(id) ;
-		if(agents.size() > 0) {
-			for(SocketIOClient agentClient : agents){
-				agentClient.sendEvent(event, data);
-			}
-		}else {
+		if(UKTools.getSystemConfig()!=null && UKTools.getSystemConfig().isEnabledis()){
 			RPCTools.sendAgentEventMessage(id, event, data);
+		}else {
+			List<SocketIOClient> agents = agentClients.getClients(id) ;
+			if(agents.size() > 0) {
+				for(SocketIOClient agentClient : agents){
+					agentClient.sendEvent(event, data);
+				}
+			}
 		}
 	}
 	
@@ -125,15 +141,18 @@ public class NettyClients {
 	 * @param data
 	 */
 	public void sendEntIMEventMessage(String id , String event , Object data){
-		List<SocketIOClient> entims = entIMClients.getClients(id) ;
-		if(entims.size() > 0) {
-			for(SocketIOClient userClient : entims){
-				userClient.sendEvent(event, data);
-			}
-		}else {
+		if(UKTools.getSystemConfig()!=null && UKTools.getSystemConfig().isEnabledis()) {
 			RPCTools.sendEntIMEventMessage(id, event, data);
+		}else{
+			List<SocketIOClient> entims = entIMClients.getClients(id) ;
+			if(entims.size() > 0) {
+				for(SocketIOClient userClient : entims){
+					userClient.sendEvent(event, data);
+				}
+			}
 		}
 	}
+	
 	public int getEntIMClientsNum(String user){
 		return entIMClients.getClients(user)!=null ? entIMClients.getClients(user).size() : 0;
 	}
@@ -144,13 +163,15 @@ public class NettyClients {
 	 * @param data
 	 */
 	public void sendCallCenterMessage(String id , String event , Object data){
-		List<SocketIOClient> ccClients = callCenterClients.getClients(id) ;
-		if(ccClients.size() > 0) {
-			for(SocketIOClient ccClient : ccClients){
-				ccClient.sendEvent(event, data);
-			}
-		}else {
+		if(UKTools.getSystemConfig()!=null && UKTools.getSystemConfig().isEnabledis()) {
 			RPCTools.sendCallCenterMessage(id, event, data);
+		}else {
+			List<SocketIOClient> ccClients = callCenterClients.getClients(id) ;
+			if(ccClients.size() > 0) {
+				for(SocketIOClient ccClient : ccClients){
+					ccClient.sendEvent(event, data);
+				}
+			}
 		}
 	}
 }

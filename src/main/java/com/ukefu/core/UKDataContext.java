@@ -800,6 +800,17 @@ public class UKDataContext {
 		}
 	}
 	
+	public enum UCKeFuTopic{
+		TOPIC_ENTIM,
+		TOPIC_IM,
+		TOPIC_AGENT,
+		TOPIC_CALLCENTER;
+		
+		public String toString(){
+			return super.toString().toLowerCase() ;
+		}
+	}
+	
 	public enum PubStatusEnum{
 		NEW,
 		WAIT,

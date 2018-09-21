@@ -12,6 +12,11 @@ import com.hazelcast.config.MapAttributeConfig;
 import com.hazelcast.config.MapIndexConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.ukefu.core.UKDataContext;
+import com.ukefu.webim.service.rpc.AgentTopicListener;
+import com.ukefu.webim.service.rpc.CallCenterTopicListener;
+import com.ukefu.webim.service.rpc.EntIMTopicListener;
+import com.ukefu.webim.service.rpc.IMTopicListener;
 
 @Configuration
 @EnableHazelcastHttpSession(maxInactiveIntervalInSeconds = 3600)
@@ -28,6 +33,12 @@ public class HazelcastHttpSessionConfig {
                 .addMapAttributeConfig(attributeConfig)
                 .addMapIndexConfig(new MapIndexConfig(
                         HazelcastSessionRepository.PRINCIPAL_NAME_ATTRIBUTE, false));
-        return Hazelcast.newHazelcastInstance(config); 
+        
+        HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance(config);
+    	hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.TOPIC_IM.toString()).addMessageListener(new IMTopicListener()) ;
+    	hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.TOPIC_AGENT.toString()).addMessageListener(new AgentTopicListener()) ;
+    	hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.TOPIC_CALLCENTER.toString()).addMessageListener(new CallCenterTopicListener()) ;
+    	hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.TOPIC_ENTIM.toString()).addMessageListener(new EntIMTopicListener()) ;
+        return hazelcastInstance; 
     }
 }

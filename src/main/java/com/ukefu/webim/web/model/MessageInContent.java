@@ -3,8 +3,12 @@ package com.ukefu.webim.web.model;
 import com.ukefu.core.UKDataContext;
 
 
-public class MessageInContent implements MessageDataBean{
+public class MessageInContent implements MessageDataBean,java.io.Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public String id ;
 	private String nickName;
 	private String orgi ;

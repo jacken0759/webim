@@ -741,6 +741,20 @@
 										</div>
 									</div>
 								</div>
+								<div class="ukefu-webim-prop">
+									<div class="ukefu-webim-tl" style="clear:both;">21、启用集群支持功能</div>
+									<div class="box-item">
+										<div class="row">
+											<div class="col-lg-8">
+												<p>启用数据通信的集群支持功能，启用分布式消息处理组件</p>
+												<p style="color:#888888;font-size:13px;margin-top:10px;">默认禁用此项功能，启用后，集群功能可用（含会话共享）</p>
+											</div>
+											<div class="col-lg-4" style="text-align:right;">
+												<input type="checkbox" title="启用" name="enabledis" value="1" <#if systemConfig?? && systemConfig.enabledis>checked="checked"</#if>>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="ukefu-im-preview ukefu-im-preview-dialog" id="pv" style="width:380px;position: fixed;background-color:#e6e6e6;">

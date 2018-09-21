@@ -102,6 +102,9 @@ public class SystemConfig implements java.io.Serializable{
 	
 	private boolean enableregorgi ; //启用自主注册功能
 	
+	private boolean enablevoice;	//启用语音功能
+	private boolean enabledis ;		//启用集群（分布式/HA）功能
+	
 	
 	@Id
 	@Column(length = 32)
@@ -451,6 +454,18 @@ public class SystemConfig implements java.io.Serializable{
 	}
 	public void setConsolelogoheight(String consolelogoheight) {
 		this.consolelogoheight = consolelogoheight;
+	}
+	public boolean isEnablevoice() {
+		return enablevoice;
+	}
+	public void setEnablevoice(boolean enablevoice) {
+		this.enablevoice = enablevoice;
+	}
+	public boolean isEnabledis() {
+		return enabledis;
+	}
+	public void setEnabledis(boolean enabledis) {
+		this.enabledis = enabledis;
 	}
 	@Transient
 	public String getBackgroundColor(){

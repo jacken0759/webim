@@ -99,3 +99,5 @@ CREATE TABLE `uk_session_type` (
   PRIMARY KEY (`ID`) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
+ALTER TABLE uk_systemconfig ADD enabledis tinyint DEFAULT 0 COMMENT '启用集群支持功能';
+ALTER TABLE uk_systemconfig ADD enablevoice tinyint DEFAULT 0 COMMENT '启用语音';
