@@ -117,6 +117,11 @@ public class UKTools {
 	
 	public static SimpleDateFormat timeRangeDateFormat = new SimpleDateFormat("HH:mm");
 	
+	static{
+		dateFormate.setLenient(true);
+		simpleDateFormat.setLenient(true);
+	}
+	
 	/**
 	 * 当前时间+已过随机生成的 长整形数字
 	 * @return
@@ -342,6 +347,21 @@ public class UKTools {
         todayStart.set(Calendar.SECOND, 0);  
         todayStart.set(Calendar.MILLISECOND, 0);  
         return todayStart.getTime();  
+	}
+	
+	/**
+	 * 获取一天的开始时间
+	 * @return
+	 */
+	public static Date getNextDay(Date date ,int days){
+		Calendar todayStart = Calendar.getInstance();  
+		todayStart.setTime(date);
+		todayStart.set(Calendar.DAY_OF_MONTH, todayStart.get(Calendar.DAY_OF_MONTH) - days);
+		todayStart.set(Calendar.HOUR_OF_DAY, 0);  
+		todayStart.set(Calendar.MINUTE, 0);  
+		todayStart.set(Calendar.SECOND, 0);  
+		todayStart.set(Calendar.MILLISECOND, 0);  
+		return todayStart.getTime();  
 	}
 	
 	/**
@@ -1527,5 +1547,22 @@ public class UKTools {
 			}
 		}
 		return aiConfig ;
+	}
+	
+	public static boolean getDateFormat(HttpServletRequest request){
+		boolean convertSuccess = false;
+		
+		if(request.getParameter("convalue").matches("[\\d]{4}[-]{1}[\\d]{1,2}[-]{1}[\\d]{1,2} [\\d]{1,2}:[\\d]{1,2}:[\\d]{1,2}")){
+			convertSuccess = true ;
+		}
+		return convertSuccess;
+		
+	}
+	public static boolean getDateFormatTemp(HttpServletRequest request){
+		boolean convertSuccess = false;
+		if(request.getParameter("convalue").matches("[\\d]{4}[-]{1}[\\d]{1,2}[-]{1}[\\d]{1,2}")){
+			convertSuccess = true ;
+		}
+		return convertSuccess;
 	}
 }
