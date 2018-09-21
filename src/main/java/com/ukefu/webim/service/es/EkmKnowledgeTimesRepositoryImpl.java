@@ -5,6 +5,7 @@ import java.util.List;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.HasParentQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -52,10 +53,9 @@ public class EkmKnowledgeTimesRepositoryImpl implements EkmKnowledgeTimesESRepos
 		
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 		boolQueryBuilder.must(QueryBuilders.termQuery("orgi", orgi)) ;
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).withSort(new FieldSortBuilder("viewtimes").unmappedType("long").order(SortOrder.DESC));
-		
+		HasParentQueryBuilder hasParentQueryBuilder=QueryBuilders.hasParentQuery("uk_ekm_kb_master",QueryBuilders.termQuery("datastatus", false));
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).withSort(new FieldSortBuilder("viewtimes").unmappedType("long").order(SortOrder.DESC)).withQuery(hasParentQueryBuilder);
 		searchQueryBuilder.withPageable(pageable) ;
-		
 		Page<EkmKnowledgeTimes> knowledgeTimesList = null ;
 		if(elasticsearchTemplate.indexExists(EkmKnowledgeTimes.class)){
 			knowledgeTimesList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeTimes.class ) ;
