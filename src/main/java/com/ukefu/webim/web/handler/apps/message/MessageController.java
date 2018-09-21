@@ -21,6 +21,7 @@ public class MessageController extends Handler{
     @Menu(type = "message" , subtype = "ping" , admin= true)
     public ModelAndView ping(ModelMap map , HttpServletRequest request) {
     	map.put("datetime", UKTools.dateFormate.format(new Date())) ;
+    	map.put("session", UKTools.getContextID(request.getSession().getId())) ;
         return request(super.createRequestPageTempletResponse("/apps/message/ping"));
     }
 }

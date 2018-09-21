@@ -262,7 +262,7 @@
 			R3Ajax.post("/im/satis.html?orgi=${orgi!''}" , function(){
 				document.getElementById("diaShade").style.display = "none" ;
 				document.getElementById("dialogWrap").style.display = "none" ;
-				alert("服务评价已提及，请关闭浏览器！");
+				alert("服务评价已提交，请关闭浏览器！");
 			} , "id="+form.id.value+"&satislevel="+document.getElementById("satislevel_input").value +"&satiscomment="+encodeURIComponent(document.getElementById("comment_input").value ));
 			return false ;
 		}
