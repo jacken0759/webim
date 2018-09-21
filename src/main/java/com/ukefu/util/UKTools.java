@@ -815,8 +815,6 @@ public class UKTools {
 										}else{
 											if(timeStr.compareTo(timeGroup[0]) >= 0 && timeStr.compareTo(timeGroup[1]) <= 0){
 												workintTime = true ;
-											}else{
-												workintTime = false ;
 											}
 										}
 									}
@@ -845,8 +843,6 @@ public class UKTools {
 										}else{
 											if(timeStr.compareTo(timeGroup[0]) >= 0 && timeStr.compareTo(timeGroup[1]) <= 0){
 												workintTime = true ;
-											}else{
-												workintTime = false ;
 											}
 										}
 									}
