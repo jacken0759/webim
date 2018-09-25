@@ -304,7 +304,6 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 	@Override
 	public Page<EkmKnowledgeMaster> findByKnowledge(BoolQueryBuilder boolQueryBuilder,boolean datastatus, List<String> EkmKnowledgeMasterType, String orgi, User user,
 			Pageable pageable) {
-		BoolQueryBuilder boolQueryBuild = QueryBuilders.boolQuery();
 		BoolQueryBuilder boolQueryBuilder1 = new BoolQueryBuilder();
 		
 		/*final List<String> knowbaseRoleList = new ArrayList<>();
@@ -334,7 +333,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 			}
 		}*/
 		
-		boolQueryBuilder1.must(termQuery("datastatus" , datastatus)) ;
+		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
 		if(user.isSuperuser() == true){
 			boolQueryBuilder.must(boolQueryBuilder1) ;
 		}else{
