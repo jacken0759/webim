@@ -82,7 +82,7 @@ public class WebIMTask {
 								 */
 								processMessage(sessionConfig, sessionConfig.getRetimeoutmsg() , sessionConfig.getServicename() , agentUser , agentStatus , task);
 								try {
-									ServiceQuene.serviceFinish(agentUser, task.getOrgi());
+									ServiceQuene.serviceFinish(agentUser, task.getOrgi() , UKDataContext.EndByType.TIMEOUT.toString());
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
@@ -101,7 +101,7 @@ public class WebIMTask {
 								 */
 								processMessage(sessionConfig, sessionConfig.getRetimeoutmsg() , agentStatus.getUsername(), agentUser , agentStatus , task);
 								try {
-									ServiceQuene.serviceFinish(agentUser, task.getOrgi());
+									ServiceQuene.serviceFinish(agentUser, task.getOrgi() , UKDataContext.EndByType.TIMEOUT.toString());
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
@@ -119,7 +119,7 @@ public class WebIMTask {
 							 */
 							processMessage(sessionConfig, sessionConfig.getQuenetimeoutmsg() , sessionConfig.getServicename(), agentUser , null , task);
 							try {
-								ServiceQuene.serviceFinish(agentUser, task.getOrgi());
+								ServiceQuene.serviceFinish(agentUser, task.getOrgi() , UKDataContext.EndByType.QUEUE.toString());
 							} catch (Exception e) {
 								e.printStackTrace();
 							}

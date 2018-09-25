@@ -812,6 +812,18 @@ public class UKDataContext {
 		}
 	}
 	
+	public enum EndByType{
+		AGENT,
+		USER,
+		TIMEOUT,
+		QUEUE,
+		SYSTEM;
+		
+		public String toString(){
+			return super.toString().toLowerCase() ;
+		}
+	}
+	
 	public enum PubStatusEnum{
 		NEW,
 		WAIT,

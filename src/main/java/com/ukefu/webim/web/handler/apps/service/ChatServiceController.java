@@ -255,7 +255,7 @@ public class ChatServiceController extends Handler{
 				User user = super.getUser(request);
 				AgentUser agentUser = agentUserRepository.findByIdAndOrgi(agentService.getAgentuserid(), super.getOrgi(request));
 				if(agentUser!=null){
-					ServiceQuene.deleteAgentUser(agentUser, user.getOrgi());
+					ServiceQuene.deleteAgentUser(agentUser, user.getOrgi() , UKDataContext.EndByType.AGENT.toString());
 				}
 				agentService.setStatus(UKDataContext.AgentUserStatusEnum.END.toString());
 				agentServiceRes.save(agentService) ;

@@ -146,7 +146,7 @@ public class AgentEventHandler
     	if(agentUser == null){
     		agentUser = UKDataContext.getContext().getBean(AgentUserRepository.class).findByIdAndOrgi(data.getTouser() , data.getOrgi()) ;
     		try {
-				ServiceQuene.serviceFinish(agentUser, data.getOrgi());
+				ServiceQuene.serviceFinish(agentUser, data.getOrgi() , UKDataContext.EndByType.AGENT.toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

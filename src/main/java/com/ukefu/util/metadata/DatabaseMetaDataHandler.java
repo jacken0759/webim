@@ -18,6 +18,7 @@
 package com.ukefu.util.metadata;
 
 import java.sql.Connection;
+import java.sql.Statement;
 import java.util.List;
 
 
@@ -87,4 +88,27 @@ public class DatabaseMetaDataHandler{
 		return rivuTableMetaData;
 	}
 	
+	/**
+	 * 
+	 * @param database
+	 * @return
+	 * @throws Exception
+	 */
+	public static UKTableMetaData getSQL(Connection conn, String name,String datasql) throws Exception{
+		UKTableMetaData rivuTableMetaData = null ;
+		Statement statement = null ;
+		try{
+			UKDatabaseMetadata rivuDatabase  = null ;
+			rivuDatabase = new UKDatabaseMetadata(conn) ;
+			statement = conn.createStatement() ;
+			rivuTableMetaData = rivuDatabase.loadSQL(statement, datasql, name, null, null, true);
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}finally {
+			if(statement!=null) {
+				statement.close();
+			}
+		}
+		return rivuTableMetaData;
+	}
 }

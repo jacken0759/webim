@@ -34,7 +34,7 @@ public class MetadataTable implements java.io.Serializable{
 	private String tablename;
 	private String code;
 	private String secure;
-	private String tabletype = "1"; // 1:Table : 2:SQL
+	private String tabletype = "1"; // 1:Table : 2:SQL , 3:ES
 	private String datasql ;
 	private int startindex = 0;
 	private Date updatetime ;

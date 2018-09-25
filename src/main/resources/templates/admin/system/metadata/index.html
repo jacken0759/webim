@@ -6,6 +6,9 @@
 				<button class="layui-btn layui-btn-sm green" href="/admin/metadata/imptb.html" data-toggle="ajax" data-width="550" data-title="创建新字典项">
 					导入元数据
 				</button>
+				<button class="layui-btn layui-btn-sm green" href="/admin/metadata/addsql.html" data-toggle="ajax" data-width="550" data-title="创建新字典项">
+					导入SQL
+				</button>
 				<a class="layui-btn layui-btn-sm layui-btn-danger" href="javascript:void(0)" id="batdel" data-toggle="tip" data-title="删除数据表项同时会删除数据表元数据下的所有内容，请确认是否继续操作”？" title="删除数据表">
 					批量删除
 				</a>
@@ -49,7 +52,7 @@
 						 </a>	
 					  </td>
 					  <td>${table.tablename!''}	</td>
-					  <td><#if table.tabletype?? && table.tabletype == "1">数据表<#else>SQL</#if></td>
+					  <td><#if table.tabletype?? && table.tabletype == "1">数据表<#elseif table.tabletype?? && table.tabletype == "3">ES数据表<#else>SQL</#if></td>
 					  <td>
 					  	<#if table.fromdb?? && table.fromdb == true>
 					  		<i class="layui-icon" style="color:#19a55d;">&#xe605;</i>
@@ -59,10 +62,17 @@
 					  </td>
 					  <td><#if table.createtime??>${table.createtime?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
 					  <td style="white-space:nowrap;width:1%;" nowrap="nowrap">
-							<a href="/admin/metadata/edit.html?id=${table.id!''}&p=${metadataList.number+1}" data-width="550" data-height="320" data-toggle="ajax" title="编辑${table.name!''}">
+					  		<#if table.tabletype?? && table.tabletype == "1">
+							<a href="/admin/metadata/edit.html?id=${table.id!''}&p=${metadataList.number+1}" data-width="550" data-toggle="ajax" title="编辑${table.name!''}">
 								<i class="layui-icon">&#xe642;</i>
 								编辑
 							</a>
+							<#elseif table.tabletype?? && table.tabletype == "2">
+							<a href="/admin/metadata/editsql.html?id=${table.id!''}&p=${metadataList.number+1}" data-width="550" data-toggle="ajax" title="编辑${table.name!''}">
+								<i class="layui-icon">&#xe642;</i>
+								编辑
+							</a>
+							</#if>
 							<a href="/admin/metadata/delete.html?id=${table.id!''}&p=${metadataList.number+1}" data-toggle="tip" data-title="删除数据表项同时会删除数据表元数据下的所有内容，请确认是否删除数据表“${table.name!''}”？" title="删除${table.name!''}">
 								<i class="layui-icon" style="color:red;">&#x1006;</i>
 								删除

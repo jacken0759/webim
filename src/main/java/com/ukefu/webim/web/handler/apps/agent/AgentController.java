@@ -584,7 +584,7 @@ public class AgentController extends Handler {
 		List<AgentService> agentServiceList = new ArrayList<AgentService>();
 		for(AgentUser agentUser : agentUserList){
 			if(agentUser!=null && super.getUser(request).getId().equals(agentUser.getAgentno())){
-				ServiceQuene.deleteAgentUser(agentUser, super.getOrgi(request));
+				ServiceQuene.deleteAgentUser(agentUser, super.getOrgi(request) ,UKDataContext.EndByType.AGENT.toString());
 				AgentService agentService = agentServiceRepository.findByIdAndOrgi(agentUser.getAgentserviceid(), super.getOrgi(request)) ;
 				if(agentService!=null){
 					agentService.setStatus(UKDataContext.AgentUserStatusEnum.END.toString());
@@ -604,7 +604,7 @@ public class AgentController extends Handler {
 			throws Exception {
 		AgentUser agentUser = agentUserRepository.findByIdAndOrgi(userid, super.getOrgi(request));
 		if(agentUser!=null && super.getUser(request).getId().equals(agentUser.getAgentno())){
-			ServiceQuene.deleteAgentUser(agentUser, super.getOrgi(request));
+			ServiceQuene.deleteAgentUser(agentUser, super.getOrgi(request) , UKDataContext.EndByType.AGENT.toString());
 			if(!StringUtils.isBlank(agentUser.getAgentserviceid())){
 				AgentService agentService = agentServiceRepository.findByIdAndOrgi(agentUser.getAgentserviceid(), super.getOrgi(request)) ;
 				agentService.setStatus(UKDataContext.AgentUserStatusEnum.END.toString());

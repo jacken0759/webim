@@ -88,6 +88,74 @@ public class MetadataController extends Handler{
     	return request(super.createRequestPageTempletResponse("redirect:/admin/metadata/index.html"));
     }
     
+    @RequestMapping("/addsql")
+    @Menu(type = "admin" , subtype = "addsql" , admin = true)
+    public ModelAndView addsql(ModelMap map , HttpServletRequest request) {
+    	return request(super.createRequestPageTempletResponse("/admin/system/metadata/addsql"));
+    }
+    @RequestMapping("/addsqlsave")
+    @Menu(type = "admin" , subtype = "metadata" , admin = true)
+    public ModelAndView addsqlsave(ModelMap map , HttpServletRequest request , final @Valid String datasql , final @Valid String name) throws Exception {
+    	if(!StringUtils.isBlank(datasql) && !StringUtils.isBlank(name)){
+    		final User user = super.getUser(request);
+	    	Session session = (Session) em.getDelegate();
+	    	session.doWork(
+	    		    new Work() {
+	    		        public void execute(Connection connection) throws SQLException 
+	    		        {
+	    		        	try{
+	    		        		int count = metadataRes.countByTablename(name) ;
+    				    		if(count == 0){
+    			 		    		MetadataTable metaDataTable = new MetadataTable();
+    				  				//当前记录没有被添加过，进行正常添加
+    				  				metaDataTable.setTablename(name);
+    				  				metaDataTable.setOrgi(user.getOrgi());
+    				  				metaDataTable.setId(UKTools.md5(metaDataTable.getTablename()));
+    				  				metaDataTable.setTabledirid("0");
+    				  				metaDataTable.setCreater(user.getId());
+    				  				metaDataTable.setCreatername(user.getUsername());
+    				  				metaDataTable.setName(name);
+    				  				metaDataTable.setDatasql(datasql);
+    				  				metaDataTable.setTabletype("2");
+    				  				metaDataTable.setUpdatetime(new Date());
+    				  				metaDataTable.setCreatetime(new Date());
+    				  				metadataRes.save(processMetadataTable( DatabaseMetaDataHandler.getSQL(connection, name, datasql) , metaDataTable));
+    				    		}
+	    			    	}catch(Exception ex){
+	    			    		ex.printStackTrace();
+	    			    	}finally{
+	    			    		connection.close();
+	    			    	}
+	    		        }
+	    		    }
+	    		);
+	    	
+    	}
+    	
+        return request(super.createRequestPageTempletResponse("redirect:/admin/metadata/index.html"));
+    }
+    
+    @RequestMapping("/editsql")
+    @Menu(type = "admin" , subtype = "editsql" , admin = true)
+    public ModelAndView editsql(ModelMap map , HttpServletRequest request , @Valid String id) {
+    	map.addAttribute("metadata", metadataRes.findById(id)) ;
+    	return request(super.createRequestPageTempletResponse("/admin/system/metadata/editsql"));
+    }
+    
+    
+
+    @RequestMapping("/updatesql")
+    @Menu(type = "admin" , subtype = "updatesql" , admin = true)
+    public ModelAndView updatesql(ModelMap map , HttpServletRequest request , @Valid MetadataTable metadata) throws SQLException {
+    	MetadataTable table = metadataRes.findById(metadata.getId()) ;
+    	if(table!=null) {
+	    	table.setName(metadata.getName());
+	    	table.setDatasql(metadata.getDatasql());
+	    	metadataRes.save(table);
+    	}
+    	return request(super.createRequestPageTempletResponse("redirect:/admin/metadata/index.html"));
+    }
+    
     @RequestMapping("/properties/edit")
     @Menu(type = "admin" , subtype = "metadata" , admin = true)
     public ModelAndView propertiesedit(ModelMap map , HttpServletRequest request , @Valid String id) {

@@ -86,7 +86,7 @@ public class UKColumnMetadata{
 	}
 
 	public String getTitle() {
-		return title;
+		return !StringUtils.isBlank(title) ? title : this.name ;
 	}
 
 	public void setTitle(String title) {

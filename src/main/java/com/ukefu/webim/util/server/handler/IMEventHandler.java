@@ -105,7 +105,7 @@ public class IMEventHandler
 				/**
 				 * 用户主动断开服务
 				 */
-				ServiceQuene.serviceFinish((AgentUser) CacheHelper.getAgentUserCacheBean().getCacheObject(user, UKDataContext.SYSTEM_ORGI), orgi); 
+				ServiceQuene.serviceFinish((AgentUser) CacheHelper.getAgentUserCacheBean().getCacheObject(user, UKDataContext.SYSTEM_ORGI), orgi , UKDataContext.EndByType.USER.toString()); 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

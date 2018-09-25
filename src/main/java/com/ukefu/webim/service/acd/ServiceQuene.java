@@ -219,7 +219,7 @@ public class ServiceQuene {
 	 * @param agentStatus
 	 * @throws Exception 
 	 */
-	public static void serviceFinish(AgentUser agentUser , String orgi) throws Exception{
+	public static void serviceFinish(AgentUser agentUser , String orgi , String endby) throws Exception{
 		if(agentUser!=null){
 			AgentStatus agentStatus = null;
 			if(UKDataContext.AgentUserStatusEnum.INSERVICE.toString().equals(agentUser.getStatus()) && agentUser.getAgentno()!=null){
@@ -264,6 +264,7 @@ public class ServiceQuene {
 			if(service!=null){
 				service.setStatus(UKDataContext.AgentUserStatusEnum.END.toString());
 				service.setEndtime(new Date());
+				service.setEndby(endby);
 				if(service.getServicetime()!=null){
 					service.setSessiontimes(System.currentTimeMillis() - service.getServicetime().getTime());
 				}
@@ -717,12 +718,12 @@ public class ServiceQuene {
 		return agentService ;
 	}
 	
-	public static AgentUser deleteAgentUser(AgentUser agentUser, String orgi)
+	public static AgentUser deleteAgentUser(AgentUser agentUser, String orgi ,String endby)
 			throws Exception {
 		if (agentUser!=null) {
 			if (!UKDataContext.AgentUserStatusEnum.END.toString().equals(
 					agentUser.getStatus())) {
-				serviceFinish(agentUser, orgi);
+				serviceFinish(agentUser, orgi , endby);
 			}
 			if(!StringUtils.isBlank(agentUser.getId())){
 				AgentUserRepository agentUserRes = UKDataContext.getContext().getBean(AgentUserRepository.class) ;

@@ -41,6 +41,7 @@ public class ExcelImportUtils{
     		metaDataTable.setTablename(event.getTablename());
     		metaDataTable.setOrgi(this.event.getOrgi());
     		metaDataTable.setId(UKTools.md5(event.getTablename()));
+    		metaDataTable.setTabletype("3");
     		metaDataTable.setTabledirid("0");
     		metaDataTable.setCreater(event.getDSData().getUser().getId());
     		metaDataTable.setCreatername(event.getDSData().getUser().getUsername());
