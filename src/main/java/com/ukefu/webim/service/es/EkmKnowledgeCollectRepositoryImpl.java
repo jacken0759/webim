@@ -76,12 +76,10 @@ public class EkmKnowledgeCollectRepositoryImpl implements EkmKnowledgeCollectESR
 	}
 
 	@Override
-	public Page<EkmKnowledgeCollect> findByCreaterAndStatusAndOrgi(
+	public Page<EkmKnowledgeCollect> findByCreaterAndStatusAndOrgi(BoolQueryBuilder boolQuery,
 			String creater, String status, String orgi, Pageable pageable) {
-		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-		boolQueryBuilder.must(QueryBuilders.termQuery("orgi", orgi)) ;
 		HasParentQueryBuilder hasParentQueryBuilder=QueryBuilders.hasParentQuery("uk_ekm_kb_master",QueryBuilders.termQuery("datastatus", false));
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).withSort(new FieldSortBuilder("createtime").unmappedType("date").order(SortOrder.DESC)).withQuery(hasParentQueryBuilder);
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQuery).withSort(new FieldSortBuilder("createtime").unmappedType("date").order(SortOrder.DESC)).withQuery(hasParentQueryBuilder);
 		searchQueryBuilder.withPageable(pageable) ;
 		Page<EkmKnowledgeCollect> knowledgeCollectList = null ;
 		if(elasticsearchTemplate.indexExists(EkmKnowledgeTimes.class)){
@@ -111,16 +109,12 @@ public class EkmKnowledgeCollectRepositoryImpl implements EkmKnowledgeCollectESR
 	}
 
 	@Override
-	public Page<EkmKnowledgeCollect> findByKnowledgeowerAndStatusAndOrgi(
+	public Page<EkmKnowledgeCollect> findByKnowledgeowerAndStatusAndOrgi(BoolQueryBuilder boolQuery,
 			String knowledgeower, String status, String orgi, Pageable pageable) {
-		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-		BoolQueryBuilder bq = QueryBuilders.boolQuery() ; 
-		bq.must(QueryBuilders.termQuery("status", status)) ;
-		bq.must(QueryBuilders.termQuery("orgi", orgi)) ;
-		bq.must(QueryBuilders.termQuery("knowledgeower", knowledgeower)) ;
-		boolQueryBuilder.must(bq); 
+		boolQuery.must(QueryBuilders.termQuery("status", status)) ;
+		boolQuery.must(QueryBuilders.termQuery("knowledgeower", knowledgeower)) ;
 		HasParentQueryBuilder hasParentQueryBuilder=QueryBuilders.hasParentQuery("uk_ekm_kb_master",QueryBuilders.termQuery("datastatus", false));
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).withQuery(hasParentQueryBuilder) ;
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQuery).withQuery(hasParentQueryBuilder) ;
 		searchQueryBuilder.withPageable(pageable) ;
 		Page<EkmKnowledgeCollect> knowledgeCollectList = null ;
 		if(elasticsearchTemplate.indexExists(EkmKnowledgeCollect.class)){

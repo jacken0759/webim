@@ -2,6 +2,7 @@ package com.ukefu.webim.service.es;
 
 import java.util.List;
 
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,11 +15,11 @@ public abstract interface EkmKnowledgeCollectESRepository
 	
 	public abstract List<EkmKnowledgeCollect> findByIdAndOrgi(String id , String orgi );
 	
-	public abstract Page<EkmKnowledgeCollect> findByCreaterAndStatusAndOrgi(String creater , String status, String orgi, Pageable pageable );
+	public abstract Page<EkmKnowledgeCollect> findByCreaterAndStatusAndOrgi(BoolQueryBuilder boolQuery,String creater , String status, String orgi, Pageable pageable );
 	
 	public abstract List<EkmKnowledgeCollect> findByStatusAndCreaterAndOrgi(String status , String creater, String orgi);
 	
-	public abstract Page<EkmKnowledgeCollect> findByKnowledgeowerAndStatusAndOrgi(String knowledgeower , String status, String orgi, Pageable pageable );
+	public abstract Page<EkmKnowledgeCollect> findByKnowledgeowerAndStatusAndOrgi(BoolQueryBuilder boolQuery,String knowledgeower , String status, String orgi, Pageable pageable );
 	
 	public abstract List<EkmKnowledgeCollect> findByKnowledgeowerAndStatusAndOrgi(String knowledgeower , String status, String orgi);
 	
