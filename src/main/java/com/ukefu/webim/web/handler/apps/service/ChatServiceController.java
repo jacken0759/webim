@@ -39,12 +39,14 @@ import com.ukefu.webim.service.cache.CacheHelper;
 import com.ukefu.webim.service.repository.AgentServiceRepository;
 import com.ukefu.webim.service.repository.AgentStatusRepository;
 import com.ukefu.webim.service.repository.AgentUserRepository;
+import com.ukefu.webim.service.repository.ChatMessageRepository;
 import com.ukefu.webim.service.repository.LeaveMsgRepository;
 import com.ukefu.webim.service.repository.MetadataRepository;
 import com.ukefu.webim.service.repository.OrganRepository;
 import com.ukefu.webim.service.repository.OrgiSkillRelRepository;
 import com.ukefu.webim.service.repository.UserRepository;
 import com.ukefu.webim.util.OnlineUserUtils;
+import com.ukefu.webim.util.server.message.ChatMessage;
 import com.ukefu.webim.web.handler.Handler;
 import com.ukefu.webim.web.model.AgentService;
 import com.ukefu.webim.web.model.AgentStatus;
@@ -91,6 +93,8 @@ public class ChatServiceController extends Handler{
 	private UserRepository userRes ;
 	@Autowired
 	private OrgiSkillRelRepository orgiSkillRelService;
+	@Autowired
+	private ChatMessageRepository chatMessageRes;
 	
 	@RequestMapping("/history/index")
     @Menu(type = "service" , subtype = "history" , admin= true)
@@ -127,7 +131,7 @@ public class ChatServiceController extends Handler{
 						list.add(cb.greaterThanOrEqualTo(root.get("servicetime").as(Date.class), UKTools.dateFormate.parse(sbegin))) ;
 					}
 					if(!StringUtils.isBlank(send) && send.matches("[\\d]{4}-[\\d]{2}-[\\d]{2} [\\d]{2}:[\\d]{2}:[\\d]{2}")){
-						list.add(cb.lessThanOrEqualTo(root.get(servicetimetype).as(Date.class), UKTools.dateFormate.parse(send))) ;
+						list.add(cb.lessThanOrEqualTo(root.get("servicetime").as(Date.class), UKTools.dateFormate.parse(send))) ;
 					}
 				} catch (ParseException e) {
 					e.printStackTrace();
@@ -146,8 +150,8 @@ public class ChatServiceController extends Handler{
 		map.put("skill", skill);
 		map.put("begin", begin) ;
 		map.put("end", end) ;
-		map.put("sbegin", begin) ;
-		map.put("send", end) ;
+		map.put("sbegin", sbegin) ;
+		map.put("send", send) ;
 		map.put("organlist",organ.findByOrgi(super.getOrgi(request)));
 		map.put("userlist",user.findByOrgiAndDatastatus(super.getOrgi(request), false));
 		
@@ -532,7 +536,7 @@ public class ChatServiceController extends Handler{
 						list.add(cb.greaterThanOrEqualTo(root.get("servicetime").as(Date.class), UKTools.dateFormate.parse(sbegin))) ;
 					}
 					if(!StringUtils.isBlank(send) && send.matches("[\\d]{4}-[\\d]{2}-[\\d]{2} [\\d]{2}:[\\d]{2}:[\\d]{2}")){
-						list.add(cb.lessThanOrEqualTo(root.get(servicetimetype).as(Date.class), UKTools.dateFormate.parse(send))) ;
+						list.add(cb.lessThanOrEqualTo(root.get("servicetime").as(Date.class), UKTools.dateFormate.parse(send))) ;
 					}
 				} catch (ParseException e) {
 					e.printStackTrace();
@@ -556,5 +560,177 @@ public class ChatServiceController extends Handler{
 		excelProcess.process();
 
 		return;
+	}
+	@RequestMapping("/aihistory/index")
+    @Menu(type = "service" , subtype = "aihistory" , admin= true)
+    public ModelAndView xiaoeHis(ModelMap map , HttpServletRequest request ,final String username,final String channel ,final String servicetype,final String skill,final String agent,final String servicetimetype,final String begin,final String end , final String sbegin,final String send) {
+		final String orgi = super.getOrgi(request);
+		Page<AgentService> page = agentServiceRes.findAll(new Specification<AgentService>(){
+			@Override
+			public Predicate toPredicate(Root<AgentService> root, CriteriaQuery<?> query,CriteriaBuilder cb) {
+				List<Predicate> list = new ArrayList<Predicate>();  
+				list.add(cb.equal(root.get("aiservice").as(boolean.class), true)) ;
+				if(!StringUtils.isBlank(username)) {
+					list.add(cb.equal(root.get("username").as(String.class), username)) ;
+				}
+				
+				list.add(cb.equal(root.get("orgi").as(String.class), orgi)) ;
+				
+				if(!StringUtils.isBlank(channel)) {
+					list.add(cb.equal(root.get("channel").as(String.class), channel)) ;
+				}
+				if(!StringUtils.isBlank(agent)) {
+					list.add(cb.equal(root.get("agentno").as(String.class), agent)) ;
+				}
+				if(!StringUtils.isBlank(skill)) {
+					list.add(cb.equal(root.get("skill").as(String.class), skill)) ;
+				}
+				try {
+					if(!StringUtils.isBlank(begin) && begin.matches("[\\d]{4}-[\\d]{2}-[\\d]{2} [\\d]{2}:[\\d]{2}:[\\d]{2}")){
+						list.add(cb.greaterThanOrEqualTo(root.get("logindate").as(Date.class), UKTools.dateFormate.parse(begin))) ;
+					}
+					if(!StringUtils.isBlank(end) && end.matches("[\\d]{4}-[\\d]{2}-[\\d]{2} [\\d]{2}:[\\d]{2}:[\\d]{2}")){
+						list.add(cb.lessThanOrEqualTo(root.get("logindate").as(Date.class), UKTools.dateFormate.parse(end))) ;
+					}
+					
+					if(!StringUtils.isBlank(sbegin) && sbegin.matches("[\\d]{4}-[\\d]{2}-[\\d]{2} [\\d]{2}:[\\d]{2}:[\\d]{2}")){
+						list.add(cb.greaterThanOrEqualTo(root.get("servicetime").as(Date.class), UKTools.dateFormate.parse(sbegin))) ;
+					}
+					if(!StringUtils.isBlank(send) && send.matches("[\\d]{4}-[\\d]{2}-[\\d]{2} [\\d]{2}:[\\d]{2}:[\\d]{2}")){
+						list.add(cb.lessThanOrEqualTo(root.get("servicetime").as(Date.class), UKTools.dateFormate.parse(send))) ;
+					}
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				
+				Predicate[] p = new Predicate[list.size()];  
+			    return cb.and(list.toArray(p));   
+			}
+		},new PageRequest(super.getP(request), super.getPs(request), Direction.DESC , "createtime")) ;
+		map.put("agentServiceList", page) ;
+		map.put("username", username) ;
+		map.put("channel", channel) ;
+		map.put("servicetype", servicetype) ;
+		map.put("servicetimetype", servicetimetype) ;
+		map.put("agent", agent);
+		map.put("skill", skill);
+		map.put("begin", begin) ;
+		map.put("end", end) ;
+		map.put("sbegin", sbegin) ;
+		map.put("send", send) ;
+		map.put("organlist",organ.findByOrgi(super.getOrgi(request)));
+		map.put("userlist",user.findByOrgiAndDatastatus(super.getOrgi(request), false));
+		
+        return request(super.createAppsTempletResponse("/apps/service/aihistory/index"));
+    }
+	
+	/*
+	 * 导出全部机器人会话内容
+	 */
+	@RequestMapping("/chatmessage/expall")
+	@Menu(type = "callcenter", subtype = "callcenter")
+	public void chatExpall(ModelMap map, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		Page<ChatMessage> chatList = chatMessageRes.findByAiidIsNotNullAndOrgi(super.getOrgi(request), new PageRequest(0, 10000));
+		MetadataTable table = metadataRes.findByTablename("uk_chat_message");
+		List<Map<String, Object>> values = new ArrayList<Map<String, Object>>();
+		for (ChatMessage chatmessage : chatList) {
+			values.add(UKTools.transBean2Map(chatmessage));
+		}
+		response.setHeader("content-disposition", "attachment;filename=UCKeFu-ChatMessage-History-"
+				+ new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".xls");
+		ExcelExporterProcess excelProcess = new ExcelExporterProcess(values, table, response.getOutputStream());
+		excelProcess.process();
+		return;
+	}
+	/*
+	 * 导出机器人会话内容搜索结果
+	 */
+	@RequestMapping("/chatmessage/expsearch")
+	@Menu(type = "callcenter", subtype = "callcenter")
+	public void aiExpall(ModelMap map , HttpServletResponse response , HttpServletRequest request ,final String username,final String channel ,final String servicetype,final String skill,final String agent,final String servicetimetype,final String begin,final String end , final String sbegin,final String send) throws IOException {
+		final String orgi = super.getOrgi(request);
+		
+		Page<AgentService> page = agentServiceRes.findAll(new Specification<AgentService>(){
+			@Override
+			public Predicate toPredicate(Root<AgentService> root, CriteriaQuery<?> query,CriteriaBuilder cb) {
+				List<Predicate> list = new ArrayList<Predicate>(); 
+				list.add(cb.equal(root.get("aiservice").as(boolean.class), true)) ;
+				if(!StringUtils.isBlank(username)) {
+					list.add(cb.equal(root.get("username").as(String.class), username)) ;
+				}
+				
+				list.add(cb.equal(root.get("orgi").as(String.class), orgi)) ;
+				
+				if(!StringUtils.isBlank(channel)) {
+					list.add(cb.equal(root.get("channel").as(String.class), channel)) ;
+				}
+				if(!StringUtils.isBlank(agent)) {
+					list.add(cb.equal(root.get("agentno").as(String.class), agent)) ;
+				}
+				if(!StringUtils.isBlank(skill)) {
+					list.add(cb.equal(root.get("skill").as(String.class), skill)) ;
+				}
+				try {
+					if(!StringUtils.isBlank(begin) && begin.matches("[\\d]{4}-[\\d]{2}-[\\d]{2} [\\d]{2}:[\\d]{2}:[\\d]{2}")){
+						list.add(cb.greaterThanOrEqualTo(root.get("logindate").as(Date.class), UKTools.dateFormate.parse(begin))) ;
+					}
+					if(!StringUtils.isBlank(end) && end.matches("[\\d]{4}-[\\d]{2}-[\\d]{2} [\\d]{2}:[\\d]{2}:[\\d]{2}")){
+						list.add(cb.lessThanOrEqualTo(root.get("logindate").as(Date.class), UKTools.dateFormate.parse(end))) ;
+					}
+					
+					if(!StringUtils.isBlank(sbegin) && sbegin.matches("[\\d]{4}-[\\d]{2}-[\\d]{2} [\\d]{2}:[\\d]{2}:[\\d]{2}")){
+						list.add(cb.greaterThanOrEqualTo(root.get("servicetime").as(Date.class), UKTools.dateFormate.parse(sbegin))) ;
+					}
+					if(!StringUtils.isBlank(send) && send.matches("[\\d]{4}-[\\d]{2}-[\\d]{2} [\\d]{2}:[\\d]{2}:[\\d]{2}")){
+						list.add(cb.lessThanOrEqualTo(root.get("servicetime").as(Date.class), UKTools.dateFormate.parse(send))) ;
+					}
+					
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				
+				Predicate[] p = new Predicate[list.size()];  
+			    return cb.and(list.toArray(p));   
+			}
+		},new PageRequest(super.getP(request), super.getPs(request), Direction.DESC , "createtime")) ;
+		List<ChatMessage> chatAllList = new ArrayList<ChatMessage>();
+		for(AgentService agentService:page.getContent()) {
+			List<ChatMessage> chatList = chatMessageRes.findByOrgiAndAgentserviceid(orgi, agentService.getId());
+			if(chatList.size() > 0) {
+				chatAllList.addAll(chatList);
+			}
+		}
+		this.getAiChatMessageExcel(response, chatAllList);
+		return;
+	}
+	@RequestMapping("/chatmessage/expids")
+	@Menu(type = "callcenter", subtype = "callcenter")
+	public void aiExpids(ModelMap map, HttpServletRequest request, HttpServletResponse response, @Valid String[] ids)
+			throws IOException {
+		if (ids != null && ids.length > 0) {
+			List<ChatMessage> chatAllList = new ArrayList<ChatMessage>();
+			for(String agent : ids) {
+				List<ChatMessage> chatList = chatMessageRes.findByOrgiAndAgentserviceid(super.getOrgi(request), agent);
+				if(chatList.size() > 0) {
+					chatAllList.addAll(chatList);
+				}
+			}
+			this.getAiChatMessageExcel(response, chatAllList);
+		}
+		return;
+	}
+	public void getAiChatMessageExcel( HttpServletResponse response, List<ChatMessage> chatList) throws IOException {
+		MetadataTable table = metadataRes.findByTablename("uk_chat_message");
+		List<Map<String, Object>> values = new ArrayList<Map<String, Object>>();
+		for (ChatMessage chatmessage : chatList) {
+			values.add(UKTools.transBean2Map(chatmessage));
+		}
+
+		response.setHeader("content-disposition", "attachment;filename=UCKeFu-ChatMessage-History-"
+				+ new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".xls");
+
+		ExcelExporterProcess excelProcess = new ExcelExporterProcess(values, table, response.getOutputStream());
+		excelProcess.process();
 	}
 }

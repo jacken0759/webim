@@ -28,4 +28,8 @@ public abstract interface ChatMessageRepository
   public abstract Page<ChatMessage> findByAgentserviceidAndOrgi(String agentserviceid, String orgi , Pageable page );
   
   public abstract Page<ChatMessage> findByContextidAndUseridAndOrgi(String contextid ,String userid , String orgi, Pageable page);
+  
+  public abstract Page<ChatMessage> findByAiidIsNotNullAndOrgi(String orgi , Pageable page );
+  
+  public abstract List<ChatMessage> findByOrgiAndAgentserviceid(String orgi ,String agentserviceid);
 }

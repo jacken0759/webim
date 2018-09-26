@@ -8,6 +8,13 @@
 					<a href="/service/history/index.html">历史会话</a>
 				</dd>
 			</#if>
+			<#if user?? && (user.roleAuthMap["A08_A01_A01"]?? || user.usertype == "0") >
+				<#if models?? && models["xiaoe"]?? && models["xiaoe"] == true>
+					<dd <#if subtype?? && subtype == 'aihistory'>class="layui-this"</#if>>
+						<a href="/service/aihistory/index.html">机器人会话</a>
+					</dd>
+				</#if>
+			</#if>
 			<#if user?? && (user.roleAuthMap["A08_A01_A02"]?? || user.usertype == "0") >
 				<dd <#if subtype?? && subtype == 'current'>class="layui-this"</#if>>
 					<a href="/service/current/index.html">当前会话</a>

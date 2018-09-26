@@ -190,7 +190,36 @@ public class MetadataController extends Handler{
     	tablePropertiesRes.save(tableProperties);
     	return request(super.createRequestPageTempletResponse("redirect:/admin/metadata/table.html?id="+tableProperties.getDbtableid()));
     }
+    @RequestMapping("/properties/update/mul")
+    @Menu(type = "admin" , subtype = "metadata" , admin = true)
+    public ModelAndView editMultiple(ModelMap map , HttpServletRequest request , @Valid String[] ids) {
+    	String[] porids = ids;
+    	map.addAttribute("porids", porids);
+    	return request(super.createRequestPageTempletResponse("/admin/system/metadata/editmultiple"));
+    }
     
+    @RequestMapping("/properties/update/mul/save")
+    @Menu(type = "admin" , subtype = "metadata" , admin = true)
+    public ModelAndView updateMultiple(ModelMap map , HttpServletRequest request , @Valid TableProperties table, @Valid String[] porids) throws SQLException {
+    	
+    	String bdtableid = null;
+    	if(porids.length > 0) {
+    		List<TableProperties> proList = new ArrayList<TableProperties>();
+    		for(String proid : porids) {
+        		TableProperties tableProperties = tablePropertiesRes.findById(proid) ;
+        		if(tableProperties != null) {
+        			tableProperties.setImpfield(table.isImpfield());
+        			proList.add(tableProperties);
+        		}
+        	}
+    		if(proList.size() > 0) {
+    			tablePropertiesRes.save(proList);
+    			bdtableid = proList.get(0).getDbtableid();
+    		}
+    	}
+    	
+    	return request(super.createRequestPageTempletResponse("redirect:/admin/metadata/table.html?id="+bdtableid));
+    }
     @RequestMapping("/delete")
     @Menu(type = "admin" , subtype = "metadata" , admin = true)
     public ModelAndView delete(ModelMap map , HttpServletRequest request , @Valid String id) throws SQLException {
