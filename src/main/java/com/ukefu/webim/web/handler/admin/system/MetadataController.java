@@ -203,7 +203,7 @@ public class MetadataController extends Handler{
     public ModelAndView updateMultiple(ModelMap map , HttpServletRequest request , @Valid TableProperties table, @Valid String[] porids) throws SQLException {
     	
     	String bdtableid = null;
-    	if(porids.length > 0) {
+    	if(porids!=null && porids.length > 0) {
     		List<TableProperties> proList = new ArrayList<TableProperties>();
     		for(String proid : porids) {
         		TableProperties tableProperties = tablePropertiesRes.findById(proid) ;
