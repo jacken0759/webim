@@ -24,7 +24,7 @@
            xmlns="http://www.hazelcast.com/schema/config"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <group>
-        <name>UCKeFu_UC_UCKeFu_CD</name>
+        <name>UCKeFu_UC_UCKeFu_BR</name>
         <password>UCKeFu-1234567890</password>
     </group>
     <network>
@@ -37,13 +37,10 @@
             <ports>0</ports>
         </outbound-ports>
         <join>
-        	<multicast enabled="false"></multicast>
-            <tcp-ip enabled="true">
+            <tcp-ip enabled="false">
+                <interface>127.0.0.1</interface>
                 <member-list>
-                	<!-- 
-                    <member>192.168.1.155:5701</member>
-                    <member>192.168.1.155:5702</member>
-                     -->
+                    <member>127.0.0.1</member>
                 </member-list>
             </tcp-ip>
         </join>

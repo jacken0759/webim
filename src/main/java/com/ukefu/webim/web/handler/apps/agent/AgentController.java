@@ -34,6 +34,7 @@ import com.ukefu.util.Menu;
 import com.ukefu.util.UKTools;
 import com.ukefu.util.client.NettyClients;
 import com.ukefu.util.extra.DataExchangeInterface;
+import com.ukefu.util.extra.EkmDataInterface;
 import com.ukefu.webim.service.acd.ServiceQuene;
 import com.ukefu.webim.service.cache.CacheHelper;
 import com.ukefu.webim.service.es.QuickReplyRepository;
@@ -71,12 +72,17 @@ import com.ukefu.webim.web.model.AgentUserContacts;
 import com.ukefu.webim.web.model.AgentUserTask;
 import com.ukefu.webim.web.model.AttachmentFile;
 import com.ukefu.webim.web.model.BlackEntity;
+import com.ukefu.webim.web.model.EkmComments;
+import com.ukefu.webim.web.model.EkmKnowledgeMaster;
+import com.ukefu.webim.web.model.EkmKnowledgeType;
+import com.ukefu.webim.web.model.EkmKnowledgeTypeAuth;
 import com.ukefu.webim.web.model.MessageOutContent;
 import com.ukefu.webim.web.model.OnlineUser;
 import com.ukefu.webim.web.model.Organ;
 import com.ukefu.webim.web.model.PbxHost;
 import com.ukefu.webim.web.model.QuickReply;
 import com.ukefu.webim.web.model.QuickType;
+import com.ukefu.webim.web.model.Role;
 import com.ukefu.webim.web.model.SessionConfig;
 import com.ukefu.webim.web.model.SessionType;
 import com.ukefu.webim.web.model.StatusEvent;
@@ -167,6 +173,8 @@ public class AgentController extends Handler {
 	@Autowired
 	private SysDicRepository sysDicRes ;
 	
+	
+	
 	@RequestMapping("/index")
 	@Menu(type = "apps", subtype = "agent")
 	public ModelAndView index(ModelMap map , HttpServletRequest request ,HttpServletResponse response , @Valid String sort) throws IOException, TemplateException {
@@ -214,8 +222,16 @@ public class AgentController extends Handler {
 		
 		view.addObject("sessionConfig", sessionConfig) ;
 		if(sessionConfig.isOtherquickplay() && !StringUtils.isBlank(sessionConfig.getOqrsearchurl())) {
-			view.addObject("topicList", OnlineUserUtils.search(null, super.getOrgi(request), super.getUser(request))) ;
+			
+		}else{//ekm知识库
+			if(UKDataContext.model.get("ekm")!=null ){
+			EkmDataInterface dataExchange = (EkmDataInterface) UKDataContext.getContext().getBean("ekm") ;
+			Page<EkmKnowledgeMaster> knowledgeList = dataExchange.findByOrgi(map, request, super.getOrgi(request), super.getUser(request), new PageRequest(super.getP(request), 10000)) ;
+				
+			view.addObject("topicList", knowledgeList.getContent()) ;
+			}
 		}
+		
 		
 		if(agentUserList.size() > 0){
 			AgentUser agentUser = agentUserList.get(0) ;
@@ -441,10 +457,17 @@ public class AgentController extends Handler {
 	@Menu(type = "apps", subtype = "othertopic")
 	public ModelAndView othertopic(ModelMap map ,HttpServletRequest request , String q) throws IOException, TemplateException {
 		SessionConfig sessionConfig = ServiceQuene.initSessionConfig(super.getOrgi(request)) ;
-		
 		map.put("sessionConfig", sessionConfig) ;
 		if(sessionConfig.isOtherquickplay()) {
-			map.put("topicList", OnlineUserUtils.search(q, super.getOrgi(request), super.getUser(request))) ;
+			
+		}else {//ekm知识库
+			if(UKDataContext.model.get("ekm")!=null ){
+			EkmDataInterface dataExchange = (EkmDataInterface) UKDataContext.getContext().getBean("ekm") ;
+			Page<EkmKnowledgeMaster> knowledgeList = dataExchange.findByOrgi(map, request, super.getOrgi(request), super.getUser(request), new PageRequest(super.getP(request), 10000)) ;
+					
+			map.put("topicList", knowledgeList.getContent()) ;
+			}
+			
 		}
 		
 		return request(super.createRequestPageTempletResponse("/apps/agent/othertopic")) ;
@@ -452,14 +475,19 @@ public class AgentController extends Handler {
 	
 	@RequestMapping("/other/topic/detail")
 	@Menu(type = "apps", subtype = "othertopicdetail")
-	public ModelAndView othertopicdetail(ModelMap map ,HttpServletRequest request , String id) throws IOException, TemplateException {
+	public ModelAndView othertopicdetail(ModelMap map ,HttpServletRequest request , String knowledgeid) throws IOException, TemplateException {
 		SessionConfig sessionConfig = ServiceQuene.initSessionConfig(super.getOrgi(request)) ;
 		
 		map.put("sessionConfig", sessionConfig) ;
 		if(sessionConfig.isOtherquickplay()) {
-			map.put("topic", OnlineUserUtils.detail(id, super.getOrgi(request), super.getUser(request))) ;
+			
+		}else {//ekm知识库
+			if(UKDataContext.model.get("ekm")!=null && !StringUtils.isBlank(knowledgeid)){
+				EkmDataInterface dataExchange = (EkmDataInterface) UKDataContext.getContext().getBean("ekm") ;
+				dataExchange.getKnowledgeDetail(map, request, knowledgeid, super.getOrgi(request), super.getUser(request), super.getP(request), super.get50Ps(request));
+			}
+				
 		}
-		
 		return request(super.createRequestPageTempletResponse("/apps/agent/topicdetail")) ;
 	}
 	
@@ -1270,5 +1298,60 @@ public class AgentController extends Handler {
     		map.addAttribute("quickReply", quickReply) ;
     	}
     	return request(super.createRequestPageTempletResponse("/apps/agent/quickreplycontent"));
+	}
+    
+    @RequestMapping({"/ekm/comments"})
+   	@Menu(type="apps", subtype="quickreply")
+   	public ModelAndView ekmComments(ModelMap map , HttpServletRequest request ,EkmComments ekmComments, @Valid String knowledgeid){
+    	if(UKDataContext.model.get("ekm")!=null ){
+			EkmDataInterface dataExchange = (EkmDataInterface) UKDataContext.getContext().getBean("ekm") ;
+			dataExchange.doKnowledgeComments(map, request, knowledgeid, ekmComments, super.getUser(request), super.getOrgi(request));
+		}
+       	return request(super.createRequestPageTempletResponse("redirect:/agent/other/topic/detail.html?knowledgeid="+knowledgeid));
+   	}
+    
+    
+    
+    public void getCommentAuth(EkmKnowledgeType kt , User user, List<EkmKnowledgeType> ktList , List<EkmKnowledgeTypeAuth> authList , List<EkmKnowledgeTypeAuth> ktaList){
+		if(kt!=null){
+			boolean over = false;
+			for(EkmKnowledgeTypeAuth kta : authList){
+				if(!StringUtils.isBlank(kta.getKnowledgetypeid()) && kta.getKnowledgetypeid().equals(kt.getId())){
+					if(kta.isView() && !StringUtils.isBlank(kta.getAuth()) && kta.getAuth().indexOf("comkw") != -1 && (kta.getUserid().equals(user.getId()) || kta.getUserid().equals(user.getOrgan()))){
+						ktaList.add(kta) ;
+						if(StringUtils.isBlank(kt.getParentid()) || kt.getParentid().equals("0") ){
+							over = true;
+							break ;
+						}
+					}else if(kta.isView() && !StringUtils.isBlank(kta.getAuth()) && kta.getAuth().indexOf("comkw") != -1 ){
+						for(Role role :user.getRoleList()){
+							if(role.getId().equals(kta.getUserid())){
+								ktaList.add(kta) ;
+								
+							}
+						}
+						if(StringUtils.isBlank(kt.getParentid()) || kt.getParentid().equals("0") ){
+							over = true;
+							break ;
+						}
+					}
+					if(kta.isCover()){
+						over = true;
+						break ;
+					}
+				}
+			}
+			if(over == false){
+				for(EkmKnowledgeType temp : ktList){
+					if(temp.getId().equals(kt.getParentid())){
+						int size = ktaList.size() ;
+						this.getCommentAuth(temp , user , ktList, authList, ktaList) ;
+						if(ktaList.size() == size) {
+							ktaList.clear();
+						}
+					}
+				}
+			}
+		}
 	}
 }
