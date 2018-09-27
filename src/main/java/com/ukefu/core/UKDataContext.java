@@ -835,6 +835,19 @@ public class UKDataContext {
 			return super.toString().toLowerCase() ;
 		}
 	}
+
+	public enum AiMatchType{
+		FULL,
+		KW,
+		PART,
+		NO,
+		CLICK,
+		HIGHT;
+		
+		public String toString(){
+			return super.toString().toLowerCase() ;
+		}
+	}
 	
 	public enum KwSearchTypeEnum{
 		ORGAN,//部门

@@ -81,6 +81,8 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	
 	private boolean datastatus ;	//数据状态，是否已撤回消息	
 	
+	private String matchtype ;		//匹配状态
+	
 	private String mediaid ;
 	private String locx ;	//location x
 	private String locy ;	//location y
@@ -473,6 +475,12 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	}
 	public void setQuickagent(boolean quickagent) {
 		this.quickagent = quickagent;
+	}
+	public String getMatchtype() {
+		return matchtype;
+	}
+	public void setMatchtype(String matchtype) {
+		this.matchtype = matchtype;
 	}
 	@Transient
 	public List<OtherMessageItem> getSuggest(){

@@ -17,6 +17,7 @@ public class OtherMessage implements java.io.Serializable{
 	private String code ;
 	private String score ;
 	private boolean detail ;
+	private String matchtype ;
 	
 	private int duration ;
 	
@@ -88,5 +89,10 @@ public class OtherMessage implements java.io.Serializable{
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+	public String getMatchtype() {
+		return matchtype;
+	}
+	public void setMatchtype(String matchtype) {
+		this.matchtype = matchtype;
+	}
 }
