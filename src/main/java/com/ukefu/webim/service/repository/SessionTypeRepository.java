@@ -20,6 +20,8 @@ public abstract interface SessionTypeRepository  extends JpaRepository<SessionTy
 	public abstract Page<SessionType> findByOrgiAndParentidAndCtype(String orgi ,String parentid, String ctype, Pageable page);
 	
 	public abstract List<SessionType> findByCodeOrName(String code , String name);
+	
+	public abstract List<SessionType> findByIdAndOrgi(String id , String orgi);
 
 	public abstract SessionType findById(String id);
 	
