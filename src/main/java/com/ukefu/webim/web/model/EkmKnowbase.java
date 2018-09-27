@@ -35,7 +35,8 @@ public class EkmKnowbase implements java.io.Serializable{
 	private boolean datastatus;
 	
 	private String own ;
-	
+	private String kbtype;//知识库类型（knowledge 知识库 ）/（help 帮助平台）/（ask 问答）
+	private String kbviewid;//访问知识库 短ID （base62生成）
 
 	
 	@Id
@@ -113,6 +114,18 @@ public class EkmKnowbase implements java.io.Serializable{
 	}
 	public void setOwn(String own) {
 		this.own = own;
+	}
+	public String getKbtype() {
+		return kbtype;
+	}
+	public void setKbtype(String kbtype) {
+		this.kbtype = kbtype;
+	}
+	public String getKbviewid() {
+		return kbviewid;
+	}
+	public void setKbviewid(String kbviewid) {
+		this.kbviewid = kbviewid;
 	}
 	
 	

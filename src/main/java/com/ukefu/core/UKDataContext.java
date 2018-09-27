@@ -862,7 +862,15 @@ public class UKDataContext {
 		}
 	}
 	
-
+	public enum KnowbaseTypeEnum{
+		KNOWLEDGE,//知识库
+		HELP,//帮助平台
+		ASK;//问答平台
+		
+		public String toString(){
+			return super.toString().toLowerCase() ;
+		}
+	}
 
 	/**
 	 * 
