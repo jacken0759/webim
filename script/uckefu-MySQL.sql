@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-09-27 16:56:47
+Date: 2018-09-27 17:18:34
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -4439,30 +4439,6 @@ CREATE TABLE `uk_sessionconfig` (
 
 -- ----------------------------
 -- Records of uk_sessionconfig
--- ----------------------------
-
--- ----------------------------
--- Table structure for `uk_session_type`
--- ----------------------------
-DROP TABLE IF EXISTS `uk_session_type`;
-CREATE TABLE `uk_session_type` (
-  `ID` varchar(32) NOT NULL COMMENT '主键ID',
-  `NAME` varchar(100) DEFAULT NULL COMMENT '字典名称',
-  `CODE` varchar(100) DEFAULT NULL COMMENT '代码',
-  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
-  `CTYPE` varchar(32) DEFAULT NULL COMMENT '类型',
-  `PARENTID` varchar(32) DEFAULT NULL COMMENT '父级ID',
-  `DICID` varchar(32) DEFAULT NULL COMMENT '目录ID',
-  `DESCRIPTION` varchar(255) DEFAULT NULL COMMENT '描述',
-  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
-  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
-  `UPDATETIME` datetime DEFAULT NULL COMMENT '更新时间',
-  `ORGAN` varchar(32) DEFAULT NULL COMMENT '部门',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
--- ----------------------------
--- Records of uk_session_type
 -- ----------------------------
 
 -- ----------------------------
@@ -9190,7 +9166,7 @@ INSERT INTO `uk_templet` VALUES ('4028811b6191e289016191edc7b50348', '雷达图'
 INSERT INTO `uk_templet` VALUES ('4028811b6191e289016191ee589c0349', 'KPI图', null, 'report', null, '2018-02-14 09:29:32', null, null, '<div id=\"element_${reportModel.id!\'\'}\" class=\"r3-data-element\" style=\"min-width:100px;min-height:65px;\">\r\n	<#assign disdata = false >\r\n    <#if reportModel.reportData?? && reportModel.reportData.data??>\r\n    	<#list reportModel.reportData.data as values>\r\n    		<#if values_index == 0>\r\n    			<#list values as value>\r\n    				<#if value_index ==0>\r\n					<#assign disdata = true >\r\n    				<h1 class=\"no-margins\" <#if value.value lt 0>style=\"color:red;\"</#if>>\r\n                		${value.foramatValue!\'\'}\r\n                	</h1>\r\n                	<div class=\"stat-percent font-bold text-success\">\r\n                		<#if value.row?? && value.row.name?? && value.row.name!= \'root\' >${value.row.name!\'\'}</#if>\r\n						<small>\r\n							<#if value.name??>${value.name!\'\'}</#if>\r\n						</small>\r\n                	</div>\r\n    				</#if>\r\n    			</#list>\r\n    		</#if>\r\n    	</#list>\r\n    </#if> 	\r\n	<#if disdata == false>\r\n	<h1 class=\"no-margins\">\r\n		1000.00\r\n	</h1>\r\n	<div class=\"stat-percent font-bold text-success\">\r\n		测试占比\r\n		<small>\r\n			20%\r\n		</small>\r\n	</div>\r\n	</#if>\r\n</div>', '4028811b618d0dca01618d5a5fe6034a', 'ukewo', '/images/design/kpi.png', null, null, null, null, '0', null, null);
 INSERT INTO `uk_templet` VALUES ('4028811b6418c59701641b65e21c075b', 'sff', null, 'ffff', null, '2018-06-20 12:13:39', null, null, 'asdfasdf', '4028811b6109050201610928ed6a030d', 'ukewo', null, null, null, null, null, '0', null, null);
 INSERT INTO `uk_templet` VALUES ('4028811b642af06f01642afa426804cd', '外部机器人输入参数', null, 'otheraiinput', null, '2018-06-23 12:50:01', null, null, '{\r\n\"type\": \"query\",\r\n\"customer_id\": \"ff08819f6227a0b0016227a557770309\",\r\n\"app_key\": \"gamutsoft\",\r\n\"user_id\": \"${chat.userid!\'\'}\",\r\n\"label\": \"\",\r\n\"data\": \"${(chat.message!\'\')?replace(\'\\n\',\'\')}\",\r\n\"topn\": 5,\r\n\"thres\": 0.28,\r\n\"thres_query\": 0.3,\r\n\"thres_candidate\": 0.3\r\n}', '4028811b642af06f01642af9cfa304c6', 'ukewo', null, null, null, null, null, '0', null, null);
-INSERT INTO `uk_templet` VALUES ('4028811b642af06f01642afaae4f04d3', '外部机器人输出参数', null, 'otheraioutputparam', null, '2018-06-23 12:50:29', null, null, '{\r\n\"msgtype\":\"${data.data_type!\'text\'}\"\r\n,\"code\":\"${data.code!\'\'}\"\r\n<#if data.code?? && data.code != \'E0000\'>,\"trans\":true</#if>\r\n<#if data?? && data.candidates?? && data.candidates?size gt 0>\r\n	<#assign suggest = \"[\">\r\n	<#list data.candidates as item>\r\n		<#if suggest?length gt 1>\r\n			<#assign suggest = suggest + \",\">\r\n		</#if>\r\n		<#if item.question??>\r\n			<#assign suggest = suggest + \'{\"id\":\"\'+item.kbid+\'\",\"title\":\"\'+item.question + \'\"}\'>\r\n		</#if>\r\n	</#list>\r\n	<#assign suggest = suggest + \"]\">\r\n	,\"items\":${suggest}\r\n</#if>\r\n<#if data?? && data.data??>\r\n	,\"title\":\"${data.data.title!\'\'}\"\r\n</#if>\r\n<#if data?? && data.data??>\r\n	,\"score\":\"${data.data.score!\'\'}\"\r\n</#if>\r\n<#if data?? && data.data?? && data.data.answer??>\r\n	,\"message\":\"${data.data.answer!\'\'}\"\r\n<#elseif data?? && data.data?? && data.data.kbid??>\r\n	,\"id\":\"${data.data.kbid!\'\'}\"\r\n	,\"detail\":true\r\n<#else>\r\n	,\"message\":\"${data.message!\'\'}\"\r\n</#if>\r\n<#if data.data?? && data.data.type?? && data.data.type == 3>\r\n	,\"type\":\"voice\"\r\n	,\"duration\":${data.data.duration!\'0\'}\r\n</#if>\r\n}', '4028811b642af06f01642af9cfaf04c7', 'ukewo', null, null, null, null, null, '0', null, null);
+INSERT INTO `uk_templet` VALUES ('4028811b642af06f01642afaae4f04d3', '外部机器人输出参数', null, 'otheraioutputparam', null, '2018-06-23 12:50:29', null, null, '{\r\n\"msgtype\":\"${data.data_type!\'text\'}\"\r\n,\"code\":\"${data.code!\'\'}\"\r\n<#if data.code?? && data.code != \'E0000\'>,\"trans\":true</#if>\r\n<#if data?? && data.candidates?? && data.candidates?size gt 0>\r\n	<#assign suggest = \"[\">\r\n	<#list data.candidates as item>\r\n		<#if suggest?length gt 1>\r\n			<#assign suggest = suggest + \",\">\r\n		</#if>\r\n		<#if item.question??>\r\n			<#assign suggest = suggest + \'{\"id\":\"\'+item.kbid+\'\",\"title\":\"\'+item.question + \'\"}\'>\r\n		</#if>\r\n	</#list>\r\n	<#assign suggest = suggest + \"]\">\r\n	,\"items\":${suggest}\r\n</#if>\r\n<#if data?? && data.data??>\r\n	,\"title\":\"${data.data.title!\'\'}\"\r\n</#if>\r\n<#if data?? && data.data??>\r\n	,\"score\":\"${data.data.score!\'\'}\"\r\n	<#if data.data.score?? && data.data.score gt 0.8>\r\n	,matchtype:\'hight\'\r\n	</#if>\r\n</#if>\r\n<#if data?? && data.data?? && data.data.answer??>\r\n	,\"message\":\"${data.data.answer!\'\'}\"\r\n<#elseif data?? && data.data?? && data.data.kbid??>\r\n	,\"id\":\"${data.data.kbid!\'\'}\"\r\n	,\"detail\":true\r\n<#else>\r\n	,\"message\":\"${data.message!\'\'}\"\r\n</#if>\r\n<#if data.data?? && data.data.type?? && data.data.type == 3>\r\n	,\"type\":\"voice\"\r\n	,\"duration\":${data.data.duration!\'0\'}\r\n</#if>\r\n}', '4028811b642af06f01642af9cfaf04c7', 'ukewo', null, null, null, null, null, '0', null, null);
 INSERT INTO `uk_templet` VALUES ('4028811b644983b60164498da54a040f', '搜索输入接口', null, 'opsearh', null, '2018-06-29 11:19:37', null, null, '{\r\n	\"keyword\": \"${q!\'\'}\",\r\n	\"label\":\"\"\r\n}\r\n', '4028811b642af06f01642af9cfa304c6', 'ukewo', null, null, null, null, null, '0', null, null);
 INSERT INTO `uk_templet` VALUES ('4028811b644983b60164498e06570416', '详情输入接口', null, 'oqrdetail', null, '2018-06-29 11:20:01', null, null, '{\r\n	\"kbid\": \"${id!\'\'}\",\r\n}', '4028811b642af06f01642af9cfa304c6', 'ukewo', null, null, null, null, null, '0', null, null);
 INSERT INTO `uk_templet` VALUES ('4028811b644a2d2e01644a2ea6770400', '搜索输出接口', null, 'searchoutput', null, '2018-06-29 14:15:28', null, null, '[<#if data?? && data.data??><#list data.data as kb><#if kb_index gt 0>,</#if>\r\n{\r\n	\"id\":\"${kb.kbid!\'\'}\",\r\n	\"title\":\"${(kb.title!\'\')?replace(\'\\n\',\'\')}\"\r\n}</#list></#if>\r\n]', '4028811b642af06f01642af9cfaf04c7', 'ukewo', null, null, null, null, null, '0', null, null);
@@ -9297,7 +9273,7 @@ CREATE TABLE `uk_user` (
 INSERT INTO `uk_user` VALUES ('4028811b61834723016183ec57760392', null, 'chenfarong', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'chen@ukewo.cn', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-02-11 16:12:39', null, '2018-06-29 17:40:30', null, '18510129455', '2018-02-11 16:12:39', null, '0', '陈法蓉', null, '0', null, null, null, '0', '0', '0', '2018-06-29 17:40:37', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b642f5f8c01642f60ed440683', null, 'test1', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'ad@te.com', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-06-24 09:20:38', null, '2018-07-03 10:51:17', null, '18510129433', '2018-06-24 09:20:38', null, '0', 'test1', null, '1', null, null, null, '0', '0', '0', '2018-07-03 10:51:25', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b645dc08f01645e0512ce0935', null, 'yiliao', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'asd@ac.com', null, null, null, null, null, null, null, null, null, null, null, '4028811b645dc08f01645e005f3d08dd', 'ukewo', null, '2018-07-03 10:42:28', null, '2018-07-03 10:43:31', null, '18512212955', '2018-07-03 10:42:28', null, '0', '医疗', null, '0', null, null, null, '0', '0', '0', '2018-07-03 10:43:39', null, null, null, '0', '0', '0', '0', null);
-INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-09-27 10:13:51', null, null, null, '0', '1', '1', '0', null);
+INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-09-27 14:47:44', null, null, null, '0', '1', '1', '0', null);
 
 -- ----------------------------
 -- Table structure for `uk_userevent`
