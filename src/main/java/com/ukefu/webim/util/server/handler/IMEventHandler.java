@@ -127,6 +127,9 @@ public class IMEventHandler
 		}
 		if(agentUser!=null){
 			agentUser.setName(contacts.getName());
+			if(!StringUtils.isBlank(contacts.getName())) {
+				agentUser.setUsername(contacts.getName());
+			}
 			agentUser.setPhone(contacts.getPhone());
 			agentUser.setEmail(contacts.getEmail());
 			agentUser.setResion(contacts.getMemo());
