@@ -14,8 +14,9 @@ public class SessionTypeExchangeImpl implements DataExchangeInterface{
 	@Autowired
 	private SessionTypeRepository sessionTypeRes ;
 	
-	public SessionType getDataByIdAndOrgi(String id, String orgi){
-		return sessionTypeRes.findOne(id) ;
+	public String getDataByIdAndOrgi(String id, String orgi){
+		SessionType sessionType = sessionTypeRes.findOne(id)  ; 
+		return  sessionType!=null ? sessionType.getName() : "";
 	}
 
 	@Override
