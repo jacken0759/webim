@@ -103,3 +103,6 @@ ALTER TABLE uk_systemconfig ADD enabledis tinyint DEFAULT 0 COMMENT '启用集�
 ALTER TABLE uk_systemconfig ADD enablevoice tinyint DEFAULT 0 COMMENT '启用语音';
 
 ALTER TABLE uk_chat_message ADD matchtype varchar(50) DEFAULT NULL COMMENT '匹配状态';
+
+
+ALTER TABLE uk_chat_message modify expmsg text ;
