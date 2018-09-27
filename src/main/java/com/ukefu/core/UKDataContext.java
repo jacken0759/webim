@@ -842,7 +842,8 @@ public class UKDataContext {
 		PART,
 		NO,
 		CLICK,
-		HIGHT;
+		HIGHT,
+		SUGGEST;
 		
 		public String toString(){
 			return super.toString().toLowerCase() ;
