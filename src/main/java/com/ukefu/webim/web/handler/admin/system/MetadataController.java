@@ -195,15 +195,16 @@ public class MetadataController extends Handler{
     }
     @RequestMapping("/properties/update/mul")
     @Menu(type = "admin" , subtype = "metadata" , admin = true)
-    public ModelAndView editMultiple(ModelMap map , HttpServletRequest request , @Valid String[] ids) {
+    public ModelAndView editMultiple(ModelMap map , HttpServletRequest request , @Valid String[] ids, @Valid String tbid) {
     	String[] porids = ids;
     	map.addAttribute("porids", porids);
+    	map.addAttribute("tbid", tbid);
     	return request(super.createRequestPageTempletResponse("/admin/system/metadata/editmultiple"));
     }
     
     @RequestMapping("/properties/update/mul/save")
     @Menu(type = "admin" , subtype = "metadata" , admin = true)
-    public ModelAndView updateMultiple(ModelMap map , HttpServletRequest request , @Valid TableProperties table, @Valid String[] porids) throws SQLException {
+    public ModelAndView updateMultiple(ModelMap map , HttpServletRequest request , @Valid TableProperties table, @Valid String[] porids, @Valid String tbid) throws SQLException {
     	
     	String bdtableid = null;
 
@@ -222,7 +223,7 @@ public class MetadataController extends Handler{
     		}
     	}
     	
-    	return request(super.createRequestPageTempletResponse("redirect:/admin/metadata/table.html?id="+bdtableid));
+    	return request(super.createRequestPageTempletResponse("redirect:/admin/metadata/table.html?id="+tbid));
     }
     @RequestMapping("/delete")
     @Menu(type = "admin" , subtype = "metadata" , admin = true)
