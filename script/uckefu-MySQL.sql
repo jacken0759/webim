@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-09-27 09:26:37
+Date: 2018-09-27 11:30:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -4441,6 +4441,30 @@ CREATE TABLE `uk_sessionconfig` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `uk_session_type`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_session_type`;
+CREATE TABLE `uk_session_type` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `NAME` varchar(100) DEFAULT NULL COMMENT '字典名称',
+  `CODE` varchar(100) DEFAULT NULL COMMENT '代码',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `CTYPE` varchar(32) DEFAULT NULL COMMENT '类型',
+  `PARENTID` varchar(32) DEFAULT NULL COMMENT '父级ID',
+  `DICID` varchar(32) DEFAULT NULL COMMENT '目录ID',
+  `DESCRIPTION` varchar(255) DEFAULT NULL COMMENT '描述',
+  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `UPDATETIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `ORGAN` varchar(32) DEFAULT NULL COMMENT '部门',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+-- ----------------------------
+-- Records of uk_session_type
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `uk_skill`
 -- ----------------------------
 DROP TABLE IF EXISTS `uk_skill`;
@@ -8137,6 +8161,8 @@ INSERT INTO `uk_sysdic` VALUES ('4028811b65fc7cd30165fc7e1f09000a', '分配时�
 INSERT INTO `uk_sysdic` VALUES ('4028811b6614fd0501661888fe950089', '工作日', 'pub', '01', 'ukewo', null, '297e7406659e543f01659e5987c3001d', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-09-27 08:58:43', '2018-09-27 08:58:43', '0', '1', '297e7406659e543f01659e5987c3001d', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('4028811b6614fd0501661888fea5008a', '节日', 'pub', '02', 'ukewo', null, '297e7406659e543f01659e5987c3001d', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-09-27 08:58:43', '2018-09-27 08:58:43', '0', '2', '297e7406659e543f01659e5987c3001d', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('4028811b6614fd0501661888feb4008b', '假日', 'pub', '03', 'ukewo', null, '297e7406659e543f01659e5987c3001d', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-09-27 08:58:43', '2018-09-27 08:58:43', '0', '3', '297e7406659e543f01659e5987c3001d', '0', '0', null, null, null, null, null);
+INSERT INTO `uk_sysdic` VALUES ('4028811b6618c7de0166190ef707022c', '在线客服会话服务类型', 'pub', 'com.dic.session.type', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-09-27 11:25:03', null, '1', '0', null, '0', '0', null, null, null, null, null);
+INSERT INTO `uk_sysdic` VALUES ('4028811b6618c7de0166190f2ea60232', '文字客服', 'pub', 'sessionWords', 'ukewo', null, '4028811b6618c7de0166190ef707022c', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-09-27 11:25:17', '2018-09-27 11:25:17', '0', '1', '4028811b6618c7de0166190ef707022c', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('402881e8618cc9ab01618cd99f40035a', '模型类型', 'pub', 'com.dic.cube.modeltype', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-02-13 09:48:47', null, '1', '0', null, '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('402881e8618cc9ab01618cd9cfae035b', '立方体', 'pub', 'cube', 'ukewo', 'layui-icon', '402881e8618cc9ab01618cd99f40035a', '', null, '', '', null, '4028cac3614cd2f901614cf8be1f0324', '2018-02-13 09:49:00', '2018-02-13 09:49:00', '0', '1', '402881e8618cc9ab01618cd99f40035a', '0', '1', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('402881e86191fd51016191ff64550355', '维度成员数据类型', 'pub', 'com.dic.cubelevel.type', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-02-14 09:48:09', null, '1', '0', null, '0', '0', null, null, null, null, null);
@@ -9270,7 +9296,7 @@ CREATE TABLE `uk_user` (
 INSERT INTO `uk_user` VALUES ('4028811b61834723016183ec57760392', null, 'chenfarong', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'chen@ukewo.cn', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-02-11 16:12:39', null, '2018-06-29 17:40:30', null, '18510129455', '2018-02-11 16:12:39', null, '0', '陈法蓉', null, '0', null, null, null, '0', '0', '0', '2018-06-29 17:40:37', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b642f5f8c01642f60ed440683', null, 'test1', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'ad@te.com', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-06-24 09:20:38', null, '2018-07-03 10:51:17', null, '18510129433', '2018-06-24 09:20:38', null, '0', 'test1', null, '1', null, null, null, '0', '0', '0', '2018-07-03 10:51:25', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b645dc08f01645e0512ce0935', null, 'yiliao', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'asd@ac.com', null, null, null, null, null, null, null, null, null, null, null, '4028811b645dc08f01645e005f3d08dd', 'ukewo', null, '2018-07-03 10:42:28', null, '2018-07-03 10:43:31', null, '18512212955', '2018-07-03 10:42:28', null, '0', '医疗', null, '0', null, null, null, '0', '0', '0', '2018-07-03 10:43:39', null, null, null, '0', '0', '0', '0', null);
-INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-09-27 09:14:04', null, null, null, '0', '1', '1', '0', null);
+INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-09-27 10:13:51', null, null, null, '0', '1', '1', '0', null);
 
 -- ----------------------------
 -- Table structure for `uk_userevent`
