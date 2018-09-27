@@ -545,7 +545,7 @@ public class ChatServiceController extends Handler{
 				Predicate[] p = new Predicate[list.size()];  
 			    return cb.and(list.toArray(p));   
 			}
-		},new PageRequest(super.getP(request), super.getPs(request), Direction.DESC , "createtime")) ;
+		},new PageRequest(super.getP(request),10000, Direction.DESC , "createtime")) ;
 
 		MetadataTable table = metadataRes.findByTablename("uk_agentservice");
 		List<Map<String, Object>> values = new ArrayList<Map<String, Object>>();
@@ -631,7 +631,7 @@ public class ChatServiceController extends Handler{
 	@Menu(type = "callcenter", subtype = "callcenter")
 	public void chatExpall(ModelMap map, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
-		Page<ChatMessage> chatList = chatMessageRes.findByAiidIsNotNullAndOrgi(super.getOrgi(request), new PageRequest(0, 10000));
+		Page<ChatMessage> chatList = chatMessageRes.findByChatypeAndOrgi(UKDataContext.AiItemType.AIREPLY.toString(),super.getOrgi(request), new PageRequest(0, 10000));
 		MetadataTable table = metadataRes.findByTablename("uk_chat_message");
 		List<Map<String, Object>> values = new ArrayList<Map<String, Object>>();
 		for (ChatMessage chatmessage : chatList) {
@@ -693,15 +693,15 @@ public class ChatServiceController extends Handler{
 				Predicate[] p = new Predicate[list.size()];  
 			    return cb.and(list.toArray(p));   
 			}
-		},new PageRequest(super.getP(request), super.getPs(request), Direction.DESC , "createtime")) ;
+		},new PageRequest(super.getP(request), 10000, Direction.DESC , "createtime")) ;
 		List<ChatMessage> chatAllList = new ArrayList<ChatMessage>();
 		for(AgentService agentService:page.getContent()) {
-			List<ChatMessage> chatList = chatMessageRes.findByOrgiAndAgentserviceid(orgi, agentService.getId());
+			List<ChatMessage> chatList = chatMessageRes.findByOrgiAndAgentserviceidAndChatype(orgi, agentService.getId(), UKDataContext.AiItemType.AIREPLY.toString());
 			if(chatList.size() > 0) {
 				chatAllList.addAll(chatList);
 			}
 		}
-		this.getAiChatMessageExcel(response, chatAllList);
+		this.getAiChatMessageExcel(response, chatAllList);    
 		return;
 	}
 	@RequestMapping("/chatmessage/expids")
@@ -711,7 +711,7 @@ public class ChatServiceController extends Handler{
 		if (ids != null && ids.length > 0) {
 			List<ChatMessage> chatAllList = new ArrayList<ChatMessage>();
 			for(String agent : ids) {
-				List<ChatMessage> chatList = chatMessageRes.findByOrgiAndAgentserviceid(super.getOrgi(request), agent);
+				List<ChatMessage> chatList = chatMessageRes.findByOrgiAndAgentserviceidAndChatype(super.getOrgi(request), agent,UKDataContext.AiItemType.AIREPLY.toString());
 				if(chatList.size() > 0) {
 					chatAllList.addAll(chatList);
 				}

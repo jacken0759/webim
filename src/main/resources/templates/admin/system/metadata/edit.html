@@ -31,7 +31,27 @@
 				<@select "com.dic.db.type" "previewtemplet" metadata.previewtemplet!'' "lay-ignore required lay-verify='required' "/>
 			</div>
 		</div>
-
+		<!-- <div class="layui-form-item">
+			<label class="layui-form-label">筛选字段：</label>
+			<div class="layui-input-inline">
+				<select name="conditions">
+					<option value="">请选择筛选字段</option>
+					<#if propertiesList??>
+						<#list propertiesList as pro>
+							<option value="${pro.fieldname!''}">${pro.fieldname!''}（${pro.name!''}）</option>
+						</#list>
+					</#if>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">筛选值（等于）：</label>
+			<div class="layui-input-inline">
+				<input type="text" name="convalue" value=""
+					required lay-verify="required" placeholder="筛选值"
+					autocomplete="off" class="layui-input">
+			</div>
+		</div> -->
 		<div class="layui-form-button">
 			<div class="layui-button-block">
 				<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>

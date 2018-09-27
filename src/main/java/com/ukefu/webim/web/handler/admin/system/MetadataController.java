@@ -73,6 +73,7 @@ public class MetadataController extends Handler{
     @Menu(type = "admin" , subtype = "metadata" , admin = true)
     public ModelAndView edit(ModelMap map , HttpServletRequest request , @Valid String id) {
     	map.addAttribute("metadata", metadataRes.findById(id)) ;
+    	map.addAttribute("propertiesList", tablePropertiesRes.findByDbtableid(id)) ;
     	return request(super.createRequestPageTempletResponse("/admin/system/metadata/edit"));
     }
     
@@ -187,6 +188,8 @@ public class MetadataController extends Handler{
     	
     	tableProperties.setImpfield(tp.isImpfield());
     	
+    	tableProperties.setSortindex(tp.getSortindex());
+    	
     	tablePropertiesRes.save(tableProperties);
     	return request(super.createRequestPageTempletResponse("redirect:/admin/metadata/table.html?id="+tableProperties.getDbtableid()));
     }
@@ -203,7 +206,8 @@ public class MetadataController extends Handler{
     public ModelAndView updateMultiple(ModelMap map , HttpServletRequest request , @Valid TableProperties table, @Valid String[] porids) throws SQLException {
     	
     	String bdtableid = null;
-    	if(porids!=null && porids.length > 0) {
+
+    	if(porids != null && porids.length > 0) {
     		List<TableProperties> proList = new ArrayList<TableProperties>();
     		for(String proid : porids) {
         		TableProperties tableProperties = tablePropertiesRes.findById(proid) ;

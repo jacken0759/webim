@@ -31,5 +31,5 @@ public abstract interface ChatMessageRepository
   
   public abstract Page<ChatMessage> findByAiidIsNotNullAndOrgi(String orgi , Pageable page );
   
-  public abstract List<ChatMessage> findByOrgiAndAgentserviceid(String orgi ,String agentserviceid);
+  public abstract List<ChatMessage> findByOrgiAndAgentserviceidAndChatype(String orgi ,String agentserviceid,String chatype);
 }

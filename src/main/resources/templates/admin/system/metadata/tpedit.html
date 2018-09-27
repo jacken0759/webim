@@ -9,7 +9,16 @@
 					autocomplete="off" class="layui-input">
 			</div>
 		</div>
-		
+		<div class="layui-form-item">
+			<label class="layui-form-label">顺序：</label>
+			<div class="layui-input-inline" style="width:80px;" title="顺序">
+				<select name="sortindex">
+					<#list 1..100 as inx>
+					<option value="${inx}" <#if tp.sortindex?? && tp.sortindex == inx>selected="selected"</#if>>${inx}</option>
+					</#list>
+				</select>
+			</div>
+		</div>
 		<div class="layui-form-item">
 			<div class="layui-inline">
 				<label class="layui-form-label">禁用导入导出：</label>
