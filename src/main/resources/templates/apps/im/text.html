@@ -21,7 +21,7 @@ var ukefu = {
 		},
 		openChatDialog:function(){
 			var url = ukefu.chat ;
-			if(data){
+			if(data != null){
 				if(data.id){
 					url = url + "&id="+data.id ;	
 				}
@@ -43,9 +43,6 @@ var ukefu = {
 				</#if>
 				<#if phone??>
 				url = url+"&phone=${phone?url}"
-				</#if>
-				<#if pid??>
-				url = url+"&userid=${userid?url}"
 				</#if>
 				<#if id??>
 				url = url+"&id=${id?url}"

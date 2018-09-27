@@ -258,32 +258,33 @@ var ukefu = {
 		if(data){
 			if(data.id){
 				url = url + "&id="+data.id ;	
+			}else{
+				<#if id??>
+				url = url+"&id=${id?url}"
+				</#if>
 			}
+				
 			if(data.name){
 				url = url + "&name="+encodeURIComponent(data.name);	
+			}else{
+				<#if name??>
+				url = url+"&name=${name?url}"
+				</#if>
 			}
 			if(data.email){
 				url = url + "&email="+encodeURIComponent(data.email);	
+			}else{
+				<#if email??>
+				url = url+"&email=${email?url}"
+				</#if>
 			}
 			if(data.phone){
 				url = url + "&phone="+encodeURIComponent(data.phone);	
+			}else{
+				<#if phone??>
+				url = url+"&phone=${phone?url}"
+				</#if>
 			}
-		}else{
-			<#if name??>
-			url = url+"&name=${name?url}"
-			</#if>
-			<#if email??>
-			url = url+"&email=${email?url}"
-			</#if>
-			<#if phone??>
-			url = url+"&phone=${phone?url}"
-			</#if>
-			<#if pid??>
-			url = url+"&userid=${userid?url}"
-			</#if>
-			<#if id??>
-			url = url+"&id=${id?url}"
-			</#if>
 		}
 		
 		<#if product??>
