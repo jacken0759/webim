@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-09-27 11:30:23
+Date: 2018-09-27 16:56:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -1606,6 +1606,7 @@ CREATE TABLE `uk_chat_message` (
   `bustype` varchar(32) DEFAULT NULL COMMENT '扩展消息类型',
   `notreason` varchar(32) DEFAULT NULL COMMENT '知识点无用的原因',
   `quickagent` tinyint(4) DEFAULT '0' COMMENT '错误消息快速转人工坐席',
+  `matchtype` varchar(50) DEFAULT NULL COMMENT '匹配状态',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `sessionid` (`usession`) USING BTREE,
   KEY `orgi` (`orgi`) USING BTREE
