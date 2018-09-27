@@ -116,12 +116,12 @@ public class IMController extends Handler{
 	@Autowired
 	private SNSAccountRepository snsAccountRepository ;
 	
-    @RequestMapping("/{id}")
+    @RequestMapping("/{appid}")
     @Menu(type = "im" , subtype = "point" , access = true)
-    public ModelAndView point(HttpServletRequest request , HttpServletResponse response, @PathVariable String id , @Valid String orgi , @Valid String userid , @Valid String title, @Valid String aiid) {
+    public ModelAndView point(HttpServletRequest request , HttpServletResponse response, @PathVariable String appid , @Valid String orgi , @Valid String userid , @Valid String id, @Valid String title, @Valid String aiid , @Valid String name , @Valid String email ,@Valid String phone,@Valid String ai,@Valid String product,@Valid String description,@Valid String imgurl,@Valid String pid,@Valid String purl) {
     	ModelAndView view = request(super.createRequestPageTempletResponse("/apps/im/point")) ; 
     	String sessionid = UKTools.getContextID(request.getSession().getId()) ;
-    	if(!StringUtils.isBlank(id)){
+    	if(!StringUtils.isBlank(appid)){
 	    	view.addObject("hostname", request.getServerName()) ;
 	    	
 			SystemConfig systemConfig = UKTools.getSystemConfig();
@@ -136,7 +136,7 @@ public class IMController extends Handler{
 				view.addObject("schema",request.getScheme()) ;
 				view.addObject("port", request.getServerPort()) ;
 			}
-			view.addObject("appid", id) ;
+			view.addObject("appid", appid) ;
 			
 			
 			view.addObject("client", UKTools.getUUID()) ;
@@ -146,13 +146,25 @@ public class IMController extends Handler{
 			
 			view.addObject("mobile", CheckMobile.check(request.getHeader("User-Agent"))) ;
 			
+			view.addObject("name", name) ;
+			view.addObject("email", email) ;
+			view.addObject("phone", phone) ;
+			view.addObject("userid", userid) ;
+			view.addObject("id", id) ;
 			
-			CousultInvite invite = OnlineUserUtils.cousult(id,orgi, inviteRepository);
+			view.addObject("product", product) ;
+			view.addObject("description", description) ;
+			view.addObject("imgurl", imgurl) ;
+			view.addObject("pid", pid) ;
+			view.addObject("purl", purl) ;
+			
+			
+			CousultInvite invite = OnlineUserUtils.cousult(appid,orgi, inviteRepository);
 	    	if(invite!=null){
 	    		orgi = invite.getOrgi() ;
 	    		view.addObject("inviteData", invite);
 	    		view.addObject("orgi",invite.getOrgi());
-	    		view.addObject("appid",id);
+	    		view.addObject("appid",appid);
 	    		
 	    		if(!StringUtils.isBlank(aiid)) {
 					view.addObject("aiid", aiid) ;
@@ -192,7 +204,7 @@ public class IMController extends Handler{
 					}
 				}
 				userHistory.setOrgi(invite.getOrgi());
-				userHistory.setAppid(id);
+				userHistory.setAppid(appid);
 				userHistory.setSessionid(sessionid);
 				
 				String ip = UKTools.getIpAddr(request);

@@ -268,7 +268,39 @@ var ukefu = {
 			if(data.phone){
 				url = url + "&phone="+encodeURIComponent(data.phone);	
 			}
+		}else{
+			<#if name??>
+			url = url+"&name=${name?url}"
+			</#if>
+			<#if email??>
+			url = url+"&email=${email?url}"
+			</#if>
+			<#if phone??>
+			url = url+"&phone=${phone?url}"
+			</#if>
+			<#if pid??>
+			url = url+"&userid=${userid?url}"
+			</#if>
+			<#if id??>
+			url = url+"&id=${id?url}"
+			</#if>
 		}
+		
+		<#if product??>
+		url = url+"&product=${product?url}"
+		</#if>
+		<#if description??>
+		url = url+"&description=${description?url}"
+		</#if>
+		<#if imgurl??>
+		url = url+"&imgurl=${imgurl?url}"
+		</#if>
+		<#if pid??>
+		url = url+"&pid=${pid?url}"
+		</#if>
+		<#if purl??>
+		url = url+"&pid=${purl?url}"
+		</#if>
 		
 		url = url + "&title="+encodeURIComponent(document.title);
 		<#if traceid??>
