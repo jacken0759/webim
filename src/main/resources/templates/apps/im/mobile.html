@@ -392,7 +392,7 @@
 	// 参数连接
 	// 参数连接
 	var hostname = location.hostname ;
-    var socket = io.connect('${schema!'http'}://'+hostname+':${port}/im/user?userid=${userid!''}<#if aiid??>&aiid=${aiid}</#if>&orgi=${orgi!''}&session=${sessionid!''}&appid=${appid!''}&osname=${(osname!'')?url}&browser=${(browser!'')?url}<#if skill??>&skill=${skill}</#if><#if agent??>&agent=${agent}</#if>');
+    var socket = io.connect('${schema!'http'}://'+hostname+':${port}/im/user?userid=${userid!''}<#if aiid??>&aiid=${aiid}</#if>&orgi=${orgi!''}&session=${sessionid!''}&appid=${appid!''}&osname=${(osname!'')?url}&browser=${(browser!'')?url}<#if skill??>&skill=${skill}</#if><#if username??>&nickname=${username!''}</#if><#if agent??>&agent=${agent}</#if>');
     socket.on('connect',function(){
     	<#if contacts?? && contacts.name??>
     	socket.emit('new', {
