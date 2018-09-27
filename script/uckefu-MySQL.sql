@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-09-27 17:35:30
+Date: 2018-09-27 20:26:46
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -8164,6 +8164,7 @@ INSERT INTO `uk_sysdic` VALUES ('4028811b6614fd0501661888fea5008a', '节日', 'p
 INSERT INTO `uk_sysdic` VALUES ('4028811b6614fd0501661888feb4008b', '假日', 'pub', '03', 'ukewo', null, '297e7406659e543f01659e5987c3001d', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-09-27 08:58:43', '2018-09-27 08:58:43', '0', '3', '297e7406659e543f01659e5987c3001d', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('4028811b6618c7de0166190ef707022c', '在线客服会话服务类型', 'pub', 'com.dic.session.type', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-09-27 11:25:03', null, '1', '0', null, '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('4028811b6618c7de0166190f2ea60232', '文字客服', 'pub', 'sessionWords', 'ukewo', null, '4028811b6618c7de0166190ef707022c', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-09-27 11:25:17', '2018-09-27 11:25:17', '0', '1', '4028811b6618c7de0166190ef707022c', '0', '0', null, null, null, null, null);
+INSERT INTO `uk_sysdic` VALUES ('4028811b661a5cae01661afe9cce0a8c', '会话分类', 'pub', 'sessiontype', 'ukewo', null, '402888815e097729015e0999f26e0002', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-09-27 20:26:25', '2018-09-27 20:26:25', '0', '1', '402888815e097729015e0999f26e0002', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('402881e8618cc9ab01618cd99f40035a', '模型类型', 'pub', 'com.dic.cube.modeltype', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-02-13 09:48:47', null, '1', '0', null, '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('402881e8618cc9ab01618cd9cfae035b', '立方体', 'pub', 'cube', 'ukewo', 'layui-icon', '402881e8618cc9ab01618cd99f40035a', '', null, '', '', null, '4028cac3614cd2f901614cf8be1f0324', '2018-02-13 09:49:00', '2018-02-13 09:49:00', '0', '1', '402881e8618cc9ab01618cd99f40035a', '0', '1', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('402881e86191fd51016191ff64550355', '维度成员数据类型', 'pub', 'com.dic.cubelevel.type', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-02-14 09:48:09', null, '1', '0', null, '0', '0', null, null, null, null, null);
