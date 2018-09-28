@@ -62,6 +62,20 @@
 						<#elseif agentUser.channel?? && agentUser.channel == "weixin">
 								<#include "/apps/agent/channel/weixin.html">
 						</#if>
+						<ul class="info-list">
+								<li>
+								    	服务类型：
+								    	<span id="agenttype">
+								    	${agentSessionType!''}
+								    	</span>
+								    	<a href="/service/sessiontype.html?userid=${userid!''}&agentservice=${agentService.id!''}&sesid=${agentService.sessiontype!''}" data-toggle="ajax" data-width="600" data-height="350" title="选择服务分类"><i class='layui-icon'>&#xe642;</i></a>
+								</li>
+								<li>
+								
+								    	备注：<span id="agentmemo">${agentService.memo!''}</span>
+								    	<a href="/service/sessionmemo.html?userid=${userid!''}&agentservice=${agentService.id!''}" data-toggle="ajax" data-width="600" data-height="350" title="填写备注"><i class='layui-icon'>&#xe642;</i></a>
+								</li>
+							</ul>
 					</div>
 				</div>
 			</div>
