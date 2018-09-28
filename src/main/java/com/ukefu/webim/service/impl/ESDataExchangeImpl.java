@@ -32,10 +32,13 @@ import org.springframework.stereotype.Repository;
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.es.EkmDataBean;
 import com.ukefu.util.es.UKDataBean;
+import com.ukefu.util.extra.EkmDataInterface;
 import com.ukefu.webim.service.repository.CallOutTaskRepository;
+import com.ukefu.webim.service.repository.EkmDimensionRepository;
 import com.ukefu.webim.service.repository.OrganRepository;
 import com.ukefu.webim.service.repository.UserRepository;
 import com.ukefu.webim.web.model.CallOutTask;
+import com.ukefu.webim.web.model.EkmDimension;
 import com.ukefu.webim.web.model.MetadataTable;
 import com.ukefu.webim.web.model.Organ;
 import com.ukefu.webim.web.model.TableProperties;
@@ -52,6 +55,9 @@ public class ESDataExchangeImpl{
 	
 	@Autowired
 	private OrganRepository organRes ;
+	
+	@Autowired
+	private EkmDimensionRepository ekmDimensionRes ;
 	
 	public void saveIObject(UKDataBean dataBean) throws Exception {
 		if(dataBean.getId() == null) {
@@ -466,12 +472,13 @@ public class ESDataExchangeImpl{
 		int size = page.getPageSize() * (page.getPageNumber() + 1);
 		searchBuilder.setFrom(0).setSize(0);
 		
-		searchBuilder.addAggregation(AggregationBuilders.terms("organ").field("organ")).addAggregation(AggregationBuilders.terms("creater").field("creater"));
+		searchBuilder.addAggregation(AggregationBuilders.terms("organ").field("organ")).addAggregation(AggregationBuilders.terms("creater").field("creater")).addAggregation(AggregationBuilders.terms("dimenid").field("dimenid"));
 		
 		
 		SearchResponse response = searchBuilder.setQuery(query).execute().actionGet();
 		List<String> users = new ArrayList<String>() 
-				,	organs = new ArrayList<String>();
+				,	organs = new ArrayList<String>()
+		,	dimenids = new ArrayList<String>();
 		for(Object value : response.getAggregations()){
 			
 			if(value instanceof Terms){
@@ -490,6 +497,9 @@ public class ESDataExchangeImpl{
 								}
 								if("organ".equals(agg.getName())) {//根据知识所属的部门ID
 									organs.add( entry.getKeyAsString()) ;
+								}
+								if("dimenid".equals(agg.getName())) {//根据知识所属的维度ID
+									dimenids.add( entry.getKeyAsString()) ;
 								}
 							}
 							dataBeanList.add(dataBean) ;
@@ -522,6 +532,20 @@ public class ESDataExchangeImpl{
 						for(Organ organ : organList) {
 							if(organ.getId().equals(organid)) {
 								dataBean.setOrgan(organ);
+								break ;
+							}
+						}
+					}
+				}
+			}
+			if(dimenids.size() > 0) {
+				List<EkmDimension> dimenidsList = ekmDimensionRes.findAll(dimenids) ;
+				for(EkmDataBean dataBean : dataBeanList) {
+					String dimenid = dataBean.getId() ;
+					if(!StringUtils.isBlank(dimenid)) {
+						for(EkmDimension dimension : dimenidsList) {
+							if(dimension.getId().equals(dimenid)) {
+								dataBean.setEkmdimension(dimension);
 								break ;
 							}
 						}

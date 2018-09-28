@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ukefu.webim.web.model.EkmDimension;
 import com.ukefu.webim.web.model.EkmKnowledgeMaster;
 import com.ukefu.webim.web.model.Organ;
 import com.ukefu.webim.web.model.User;
@@ -17,7 +18,7 @@ public class EkmDataBean implements java.io.Serializable{
 	
 	private User user ;
 	private Organ organ;
-	
+	private EkmDimension ekmdimension;
 	private String type ;
 	
 	private String id ;	
@@ -62,4 +63,13 @@ public class EkmDataBean implements java.io.Serializable{
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	public EkmDimension getEkmdimension() {
+		return ekmdimension;
+	}
+
+	public void setEkmdimension(EkmDimension ekmdimension) {
+		this.ekmdimension = ekmdimension;
+	}
+	
 }
