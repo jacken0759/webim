@@ -18,6 +18,6 @@ public interface EkmDataInterface {
 	
 	public void doKnowledgeComments(ModelMap map,HttpServletRequest request,String knowledgeid,EkmComments ekmComments ,User user,String orgi) ;
 	
-	public void getKnowledgeListByKnowledgeTypeAndKnowbase(ModelMap map,HttpServletRequest request,User user,String orgi, String knowledgetype, String knowbaseid,int p,int ps) ;
+	public void searchKnowledgeListByKnowledgeTypeAndKnowbase(ModelMap map,HttpServletRequest request,User user,String orgi, String knowledgetype, String knowbaseid,int p,int ps) ;
 	
 }
