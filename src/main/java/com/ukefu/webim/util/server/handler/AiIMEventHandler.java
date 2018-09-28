@@ -99,7 +99,7 @@ public class AiIMEventHandler
 				
 				aiUser.setSkill(skill);
 				
-				AgentService agentService = ServiceQuene.processAiService(aiUser, orgi) ;
+				AgentService agentService = ServiceQuene.processAiService(aiUser, orgi , null) ;
 				aiUser.setAgentserviceid(agentService.getId());
 				
 				CacheHelper.getOnlineUserCacheBean().put(user, aiUser, UKDataContext.SYSTEM_ORGI);
@@ -122,7 +122,7 @@ public class AiIMEventHandler
 	    	Object object = CacheHelper.getOnlineUserCacheBean().getCacheObject(user, orgi) ;
 	    	if(object!=null && object instanceof AiUser) {
 	    		AiUser aiUser = (AiUser)object ;
-		    	ServiceQuene.processAiService(aiUser, orgi) ;
+		    	ServiceQuene.processAiService(aiUser, orgi , UKDataContext.EndByType.USER.toString()) ;
 	    	}
 	    	CacheHelper.getOnlineUserCacheBean().delete(user,UKDataContext.SYSTEM_ORGI) ;
     	}

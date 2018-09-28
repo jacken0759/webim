@@ -509,7 +509,7 @@ public class ServiceQuene {
 	 * @return
 	 * @throws Exception
 	 */
-	public static AgentService processAiService(AiUser aiUser , String orgi) throws Exception{
+	public static AgentService processAiService(AiUser aiUser , String orgi ,String endby) throws Exception{
 		AgentService agentService = new AgentService();	//放入缓存的对象
 		AgentServiceRepository agentServiceRes  = UKDataContext.getContext().getBean(AgentServiceRepository.class);
 		if(!StringUtils.isBlank(aiUser.getAgentserviceid())) {
@@ -539,6 +539,9 @@ public class ServiceQuene {
 			}
 			
 			agentService.setUserid(aiUser.getUserid());
+			
+			agentService.setEndby(endby);
+			
 			agentService.setAiid(aiUser.getAiid());
 			agentService.setAiservice(true);
 			agentService.setStatus(UKDataContext.AgentUserStatusEnum.INSERVICE.toString());
