@@ -304,6 +304,18 @@ public class AgentController extends Handler {
 			List<QuickType> priQuickTypeList = quickTypeRes.findByOrgiAndQuicktypeAndCreater(super.getOrgi(request), UKDataContext.QuickTypeEnum.PRI.toString(), super.getUser(request).getId()) ; 
 			quickTypeList.addAll(priQuickTypeList) ;
 			view.addObject("pubQuickTypeList", quickTypeList) ;
+			
+			//文字客服
+			SysDic sysDic = sysDicRes.findByCode("sessionWords");
+			if(agentService != null &&sysDic != null){
+				List<SessionType> sessionTypeList = sessionTypeRes.findByOrgiAndCtype(super.getOrgi(request), sysDic.getId());
+				for(SessionType  ses : sessionTypeList){
+					if(!StringUtils.isBlank(agentService.getSessiontype()) && ses.getId().equals(agentService.getSessiontype())){
+						map.addAttribute("agentSessionType", ses.getName());
+					}
+				}
+			}
+			
 		}
 		return view ;
 	}
