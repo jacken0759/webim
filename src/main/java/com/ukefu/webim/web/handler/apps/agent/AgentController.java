@@ -404,7 +404,7 @@ public class AgentController extends Handler {
 					}
 				}
 			}
-			map.addAttribute("agentService", agentService);
+			
 			if(UKDataContext.ChannelTypeEnum.WEIXIN.toString().equals(agentUser.getChannel())){
 				List<WeiXinUser> weiXinUserList = weiXinUserRes.findByOpenidAndOrgi(agentUser.getUserid(), super.getOrgi(request)) ;
 				if(weiXinUserList.size() > 0){
