@@ -120,9 +120,9 @@ ALTER TABLE uk_xiaoe_config ADD smartsuggestappsec varchar(100) COMMENT '推荐A
 ALTER TABLE uk_xiaoe_config ADD smartsuggestparam varchar(255) COMMENT '推荐AppSec';
 ALTER TABLE uk_xiaoe_config ADD smartsuggestmethod varchar(50) COMMENT '外部推荐请求方式';
 ALTER TABLE uk_xiaoe_config ADD smartsuggesttempletinput varchar(50) COMMENT '外部推荐输入格式化模板';
-ALTER TABLE uk_xiaoe_config ADD smartsuggesttempletoutput varchar(50) COMMENT '外部推荐输出格式化模板';||||||| .r1369
-ALTER TABLE uk_chat_message modify expmsg text ;=======
+
 ALTER TABLE uk_chat_message modify expmsg text ;
 
+
 ALTER TABLE uk_ekm_knowbase ADD kbtype varchar(32) DEFAULT NULL COMMENT '知识库类型（knowledge 知识库 ）/（help 帮助平台）/（ask 问答）';
-ALTER TABLE uk_ekm_knowbase ADD kbviewid varchar(32) DEFAULT NULL COMMENT '知识库访问短ID';>>>>>>> .r1373
+ALTER TABLE uk_ekm_knowbase ADD kbviewid varchar(32) DEFAULT NULL COMMENT '知识库访问短ID';
