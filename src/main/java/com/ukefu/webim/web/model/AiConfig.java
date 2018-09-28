@@ -98,6 +98,17 @@ public class AiConfig implements java.io.Serializable{
 	private String quickagentmsg ;	//快速转人工坐席提示消息
 	private String noagentmsg ;	//无坐席在线提示消息
 	
+	private boolean enablesmartsuggest ;	//启用外部推荐内容
+	private String smartsuggesturl ;		//外部推荐URL
+	private boolean smartsuggestssl ;		//外部推荐启用SSL
+	private boolean smartsuggestlogin;		//需要登录
+	private String smartsuggestappkey;		//外部推荐APPKey
+	private String smartsuggestappsec;		//推荐AppSec
+	private String smartsuggestparam ;		//外部推荐参数
+	private String smartsuggestmethod ;		//外部推荐请求方式  ， GET/POST
+	private String smartsuggesttempletinput ;	//外部推荐输入格式化模板
+	private String smartsuggesttempletoutput ;	//外部推荐输出格式化模板
+	
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -447,6 +458,66 @@ public class AiConfig implements java.io.Serializable{
 	}
 	public void setNoagentmsg(String noagentmsg) {
 		this.noagentmsg = noagentmsg;
+	}
+	public boolean isEnablesmartsuggest() {
+		return enablesmartsuggest;
+	}
+	public void setEnablesmartsuggest(boolean enablesmartsuggest) {
+		this.enablesmartsuggest = enablesmartsuggest;
+	}
+	public String getSmartsuggesturl() {
+		return smartsuggesturl;
+	}
+	public void setSmartsuggesturl(String smartsuggesturl) {
+		this.smartsuggesturl = smartsuggesturl;
+	}
+	public boolean isSmartsuggestssl() {
+		return smartsuggestssl;
+	}
+	public void setSmartsuggestssl(boolean smartsuggestssl) {
+		this.smartsuggestssl = smartsuggestssl;
+	}
+	public boolean isSmartsuggestlogin() {
+		return smartsuggestlogin;
+	}
+	public void setSmartsuggestlogin(boolean smartsuggestlogin) {
+		this.smartsuggestlogin = smartsuggestlogin;
+	}
+	public String getSmartsuggestappkey() {
+		return smartsuggestappkey;
+	}
+	public void setSmartsuggestappkey(String smartsuggestappkey) {
+		this.smartsuggestappkey = smartsuggestappkey;
+	}
+	public String getSmartsuggestappsec() {
+		return smartsuggestappsec;
+	}
+	public void setSmartsuggestappsec(String smartsuggestappsec) {
+		this.smartsuggestappsec = smartsuggestappsec;
+	}
+	public String getSmartsuggestparam() {
+		return smartsuggestparam;
+	}
+	public void setSmartsuggestparam(String smartsuggestparam) {
+		this.smartsuggestparam = smartsuggestparam;
+	}
+	public String getSmartsuggestmethod() {
+		return smartsuggestmethod;
+	}
+	public void setSmartsuggestmethod(String smartsuggestmethod) {
+		this.smartsuggestmethod = smartsuggestmethod;
+	}
+	public String getSmartsuggesttempletinput() {
+		return smartsuggesttempletinput;
+	}
+	public void setSmartsuggesttempletinput(String smartsuggesttempletinput) {
+		this.smartsuggesttempletinput = smartsuggesttempletinput;
+	}
+	public String getSmartsuggesttempletoutput() {
+		return smartsuggesttempletoutput;
+	}
+	public void setSmartsuggesttempletoutput(String smartsuggesttempletoutput) {
+		this.smartsuggesttempletoutput = smartsuggesttempletoutput;
 	}
 	@Transient
 	public List<OtherMessageItem> getHot(){

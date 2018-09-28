@@ -274,6 +274,6 @@ public class ApiIMController extends Handler{
 	@RequestMapping(value = "/suggest/mobile/{appid}", method = RequestMethod.GET)
     @Menu(type = "im" , subtype = "index" , access = true)
     public ResponseEntity<RestResult> mobilesuggest(ModelMap map , HttpServletRequest request , HttpServletResponse response,  @PathVariable String appid ,@Valid String q ,@Valid String traceid,@Valid String aiid ,@Valid String p ,@Valid String exchange, @Valid String title ,@Valid String url, @Valid String skill, @Valid String id , @Valid String userid , @Valid String agent , @Valid String name , @Valid String email ,@Valid String phone,@Valid String ai,@Valid String orgi ,@Valid String product,@Valid String description,@Valid String imgurl,@Valid String pid,@Valid String purl) throws Exception {
-    	return new ResponseEntity<>(new RestResult(RestResultType.OK ,!StringUtils.isBlank(appid) && !StringUtils.isBlank(q) ? OnlineUserUtils.suggest(q, orgi, userid,OnlineUserUtils.cousult(appid ,null, consultInviteRepository)  ): null), HttpStatus.OK);
+    	return new ResponseEntity<>(new RestResult(RestResultType.OK ,!StringUtils.isBlank(appid) && !StringUtils.isBlank(q) ? OnlineUserUtils.suggest(q, orgi, userid,OnlineUserUtils.cousult(appid ,null, consultInviteRepository) , aiid , skill  ): null), HttpStatus.OK);
     }
 }

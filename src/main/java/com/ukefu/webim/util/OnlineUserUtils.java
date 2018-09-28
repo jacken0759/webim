@@ -25,6 +25,7 @@ import com.ukefu.util.CheckMobile;
 import com.ukefu.util.IP;
 import com.ukefu.util.IPTools;
 import com.ukefu.util.UKTools;
+import com.ukefu.util.ai.AiUtils;
 import com.ukefu.util.extra.DataExchangeInterface;
 import com.ukefu.util.webim.WebIMClient;
 import com.ukefu.webim.service.acd.ServiceQuene;
@@ -1062,26 +1063,29 @@ public class OnlineUserUtils {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	public static List<OtherMessageItem> suggest(String q , String orgi , String userid , CousultInvite invite){
+	public static List<OtherMessageItem> suggest(String q , String orgi , String userid , CousultInvite invite , String aiid , String skill){
 		List<OtherMessageItem> suggestItemList = null ;
 		String param = "" ;
-		if(!StringUtils.isBlank(invite.getOtherurl())) {
+		AiConfig aiConfig = AiUtils.initAiConfig(!StringUtils.isBlank(aiid) ? aiid : invite!=null ? invite.getAiid() : "",orgi) ;
+		if(aiConfig!=null && aiConfig.isEnablesmartsuggest() && !StringUtils.isBlank(aiConfig.getSmartsuggesturl())) {
 			try {
-				if(!StringUtils.isBlank(invite.getOthertempletinput())) {
-					Template templet = UKTools.getTemplate(invite.getOthertempletinput()) ;
+				if(!StringUtils.isBlank(aiConfig.getSmartsuggesturl())) {
+					Template templet = UKTools.getTemplate(aiConfig.getSmartsuggesttempletinput()) ;
 					Map<String,Object> values = new HashMap<String,Object>();
 					values.put("q", q) ;
+					values.put("skill", skill) ;
 					values.put("userid", userid) ;
 					param = UKTools.getTemplet(templet.getTemplettext(), values) ;
 				}
-				String result = HttpClientUtil.doPost(invite.getOtherurl(), param)  , text = null;
-				if(!StringUtils.isBlank(result) && !StringUtils.isBlank(invite.getOthertempletoutput()) && !result.equals("error")) {
-					Template templet = UKTools.getTemplate(invite.getOthertempletoutput()) ;
+				String result = HttpClientUtil.doPost(aiConfig.getSmartsuggesturl(), param)  , text = null;
+				if(!StringUtils.isBlank(result) && !StringUtils.isBlank(aiConfig.getSmartsuggesttempletoutput()) && !result.equals("error")) {
+					Template templet = UKTools.getTemplate(aiConfig.getSmartsuggesttempletoutput()) ;
 					@SuppressWarnings("unchecked")
 					Map<String,Object> jsonData = objectMapper.readValue(result, Map.class) ;
 					Map<String,Object> values = new HashMap<String,Object>();
 					values.put("q", q) ;
 					values.put("userid", userid) ;
+					values.put("skill", skill) ;
 					values.put("data", jsonData) ;
 					text = UKTools.getTemplet(templet.getTemplettext(), values) ;
 				}
