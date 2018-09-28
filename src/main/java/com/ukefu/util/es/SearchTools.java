@@ -387,6 +387,6 @@ public class SearchTools {
 	 */
 	public static PageImpl<EkmDataBean> aggregationEkm(BoolQueryBuilder queryBuilder , boolean loadRef , int p, int ps){
 		ESDataExchangeImpl esDataExchange = UKDataContext.getContext().getBean(ESDataExchangeImpl.class);
-		return esDataExchange.findAllPageAggResultEkm(queryBuilder ,   new PageRequest(p, ps , Sort.Direction.ASC, "createtime") , loadRef , null) ;
+		return esDataExchange.findAllPageAggResultEkm(queryBuilder ,   new PageRequest(p, ps , Sort.Direction.ASC, "createtime") , loadRef , "uk_ekm_kb_master") ;
 	}
 }
