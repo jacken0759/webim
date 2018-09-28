@@ -107,5 +107,22 @@ ALTER TABLE uk_chat_message ADD matchtype varchar(50) DEFAULT NULL COMMENT '匹�
 
 ALTER TABLE uk_chat_message modify expmsg text ;
 
+
+ALTER TABLE uk_xiaoe_config ADD enablesmartsuggest tinyint DEFAULT 0 COMMENT '启用外部推荐内容';
+
+ALTER TABLE uk_xiaoe_config ADD smartsuggesturl varchar(255) COMMENT '启用外部推荐内容';
+ALTER TABLE uk_xiaoe_config ADD smartsuggestssl tinyint DEFAULT 0 COMMENT '外部推荐启用SSL';
+ALTER TABLE uk_xiaoe_config ADD smartsuggestlogin tinyint DEFAULT 0 COMMENT '需要登录';
+
+ALTER TABLE uk_xiaoe_config ADD smartsuggestappkey varchar(50) COMMENT '外部推荐APPKey';
+ALTER TABLE uk_xiaoe_config ADD smartsuggestappsec varchar(100) COMMENT '推荐AppSec';
+
+ALTER TABLE uk_xiaoe_config ADD smartsuggestparam varchar(255) COMMENT '推荐AppSec';
+ALTER TABLE uk_xiaoe_config ADD smartsuggestmethod varchar(50) COMMENT '外部推荐请求方式';
+ALTER TABLE uk_xiaoe_config ADD smartsuggesttempletinput varchar(50) COMMENT '外部推荐输入格式化模板';
+ALTER TABLE uk_xiaoe_config ADD smartsuggesttempletoutput varchar(50) COMMENT '外部推荐输出格式化模板';||||||| .r1369
+ALTER TABLE uk_chat_message modify expmsg text ;=======
+ALTER TABLE uk_chat_message modify expmsg text ;
+
 ALTER TABLE uk_ekm_knowbase ADD kbtype varchar(32) DEFAULT NULL COMMENT '知识库类型（knowledge 知识库 ）/（help 帮助平台）/（ask 问答）';
-ALTER TABLE uk_ekm_knowbase ADD kbviewid varchar(32) DEFAULT NULL COMMENT '知识库访问短ID';
+ALTER TABLE uk_ekm_knowbase ADD kbviewid varchar(32) DEFAULT NULL COMMENT '知识库访问短ID';>>>>>>> .r1373
