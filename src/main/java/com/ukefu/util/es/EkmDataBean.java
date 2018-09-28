@@ -1,11 +1,6 @@
 package com.ukefu.util.es;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.ukefu.webim.web.model.EkmDimension;
-import com.ukefu.webim.web.model.EkmKnowledgeMaster;
 import com.ukefu.webim.web.model.Organ;
 import com.ukefu.webim.web.model.User;
 
