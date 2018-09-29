@@ -79,7 +79,9 @@ public class EkmKnowledgeCollectRepositoryImpl implements EkmKnowledgeCollectESR
 	public Page<EkmKnowledgeCollect> findByCreaterAndStatusAndOrgi(BoolQueryBuilder boolQuery,
 			String creater, String status, String orgi, Pageable pageable) {
 		HasParentQueryBuilder hasParentQueryBuilder=QueryBuilders.hasParentQuery("uk_ekm_kb_master",QueryBuilders.termQuery("datastatus", false));
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQuery).withSort(new FieldSortBuilder("createtime").unmappedType("date").order(SortOrder.DESC)).withQuery(hasParentQueryBuilder);
+		boolQuery.must(hasParentQueryBuilder) ;
+		boolQuery.must(QueryBuilders.termQuery("status", status)) ;
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQuery).withSort(new FieldSortBuilder("createtime").unmappedType("date").order(SortOrder.DESC));
 		searchQueryBuilder.withPageable(pageable) ;
 		Page<EkmKnowledgeCollect> knowledgeCollectList = null ;
 		if(elasticsearchTemplate.indexExists(EkmKnowledgeTimes.class)){
@@ -111,10 +113,12 @@ public class EkmKnowledgeCollectRepositoryImpl implements EkmKnowledgeCollectESR
 	@Override
 	public Page<EkmKnowledgeCollect> findByKnowledgeowerAndStatusAndOrgi(BoolQueryBuilder boolQuery,
 			String knowledgeower, String status, String orgi, Pageable pageable) {
+		
+		HasParentQueryBuilder hasParentQueryBuilder=QueryBuilders.hasParentQuery("uk_ekm_kb_master",QueryBuilders.termQuery("datastatus", false));
+		boolQuery.must(hasParentQueryBuilder) ;
 		boolQuery.must(QueryBuilders.termQuery("status", status)) ;
 		boolQuery.must(QueryBuilders.termQuery("knowledgeower", knowledgeower)) ;
-		HasParentQueryBuilder hasParentQueryBuilder=QueryBuilders.hasParentQuery("uk_ekm_kb_master",QueryBuilders.termQuery("datastatus", false));
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQuery).withQuery(hasParentQueryBuilder) ;
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQuery) ;
 		searchQueryBuilder.withPageable(pageable) ;
 		Page<EkmKnowledgeCollect> knowledgeCollectList = null ;
 		if(elasticsearchTemplate.indexExists(EkmKnowledgeCollect.class)){

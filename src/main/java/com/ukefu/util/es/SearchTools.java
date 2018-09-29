@@ -3,22 +3,31 @@ package com.ukefu.util.es;
 import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.index.query.QueryStringQueryBuilder.Operator;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import com.ukefu.core.UKDataContext;
+import com.ukefu.webim.service.es.EkmKnowledgeMasterRepository;
+import com.ukefu.webim.service.es.EkmKnowledgeTimesRepository;
 import com.ukefu.webim.service.impl.ESDataExchangeImpl;
+import com.ukefu.webim.web.model.EkmDimension;
+import com.ukefu.webim.web.model.EkmKnowledgeMaster;
+import com.ukefu.webim.web.model.EkmKnowledgeTimes;
 import com.ukefu.webim.web.model.FormFilter;
 import com.ukefu.webim.web.model.FormFilterItem;
 import com.ukefu.webim.web.model.MetadataTable;
+import com.ukefu.webim.web.model.User;
 
 public class SearchTools {
 	
@@ -388,5 +397,40 @@ public class SearchTools {
 	public static PageImpl<EkmDataBean> aggregationEkm(BoolQueryBuilder queryBuilder , boolean loadRef , int p, int ps){
 		ESDataExchangeImpl esDataExchange = UKDataContext.getContext().getBean(ESDataExchangeImpl.class);
 		return esDataExchange.findAllPageAggResultEkm(queryBuilder ,   new PageRequest(p, ps , Sort.Direction.ASC, "createtime") , loadRef , "uk_ekm_kb_master") ;
+	}
+	
+	/**
+	 * EKM 知识库维度
+	 */
+	public static List<EkmDataBean> sumEkmDimension(BoolQueryBuilder queryBuilder ,String orgi,User user, List<EkmDimension> ekmDimensionList , int p, int ps){
+		
+		EkmKnowledgeMasterRepository ekmKnowledgeEsRes = UKDataContext.getContext().getBean(EkmKnowledgeMasterRepository.class) ;
+		EkmKnowledgeTimesRepository ekmKnowledgeTimesRes = UKDataContext.getContext().getBean(EkmKnowledgeTimesRepository.class) ;
+		List<EkmDataBean> dataBeanList = new ArrayList<EkmDataBean>() ;
+		if (ekmDimensionList!=null && ekmDimensionList.size()>0) {
+			for(EkmDimension dimension : ekmDimensionList){
+				int collectResult = 0 ;
+				int viewnumResult = 0 ;
+				BoolQueryBuilder boolQueryBuild = QueryBuilders.boolQuery();
+				boolQueryBuild.must(QueryBuilders.wildcardQuery("dimenid", "*"+dimension.getId()+"*"));
+				Page<EkmKnowledgeMaster> ekmKnowledgeList = ekmKnowledgeEsRes.findByKnowledge(boolQueryBuild, false, null, orgi, user, new PageRequest(p, ps , Sort.Direction.ASC, "createtime")) ;
+				if (ekmKnowledgeList!=null && ekmKnowledgeList.getContent().size()>0) {
+					for(EkmKnowledgeMaster knowledgeMaster : ekmKnowledgeList.getContent()){
+						List<EkmKnowledgeTimes> ekmKnowledgeTimesList = ekmKnowledgeTimesRes.findByKbidAndOrgi(knowledgeMaster.getId(), orgi) ;
+						if (ekmKnowledgeTimesList!=null && ekmKnowledgeTimesList.size()>0) {
+							collectResult = ekmKnowledgeTimesList.get(0)!=null?collectResult+ekmKnowledgeTimesList.get(0).getCollectimes():0 ;
+							viewnumResult = ekmKnowledgeTimesList.get(0)!=null?viewnumResult+ekmKnowledgeTimesList.get(0).getViewtimes():0;
+						}
+					}
+				}
+				dimension.setCollectnum(collectResult);
+				dimension.setViewnum(viewnumResult);
+				EkmDataBean ekmDataBean = new EkmDataBean() ;
+				ekmDataBean.setEkmdimension(dimension);
+				ekmDataBean.setType("dimenid");
+				dataBeanList.add(ekmDataBean) ;
+			}
+		}
+		return dataBeanList;
 	}
 }

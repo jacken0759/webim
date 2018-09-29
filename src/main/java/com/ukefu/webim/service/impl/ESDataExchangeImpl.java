@@ -32,7 +32,6 @@ import org.springframework.stereotype.Repository;
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.es.EkmDataBean;
 import com.ukefu.util.es.UKDataBean;
-import com.ukefu.util.extra.EkmDataInterface;
 import com.ukefu.webim.service.repository.CallOutTaskRepository;
 import com.ukefu.webim.service.repository.EkmDimensionRepository;
 import com.ukefu.webim.service.repository.OrganRepository;
