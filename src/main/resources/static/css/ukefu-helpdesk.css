@@ -97,3 +97,34 @@ body{
 .uckefu-helpdesk-title-icon i{
 	font-size:36px;
 }
+.uckefu-sum{
+	background-color:#FFFFFF;	
+}
+.uckefu-sum .uckefu-summary{
+	max-width:1330px;
+	margin: 0 auto;
+}
+.uckefu-summary .uckefu-helpdesk-title{
+	
+	font-size:26px;
+}
+.uckefu-summary-title{
+	padding-top: 10px;
+}
+
+.ukefu-left-title h2{
+	background-color: #FFFFFF;
+}
+.ukefu-sumleft-title{
+	font-size: 24px;
+    line-height: 33px;
+    font-weight: 400;
+    color: #000;
+    margin-bottom: 30px;
+    margin-top: 20px;
+    text-align: -webkit-center;
+}
+.layui-card-header a:hover{
+	color:#009688;
+	transition:0.5s;
+}
