@@ -111,6 +111,16 @@
 				</div>
 			</div>
 		</div>
+		<div class="layui-form-item">
+			<div class="layui-inline">
+				<label class="layui-form-label">数据处理：</label>
+				<div class="layui-input-inline" style="line-height: 25px;width:380px;">
+					<input type="radio" name="plugin" value="" <#if tp.plugin?? && tp.plugin == "">checked="checked"</#if> title="无处理">
+					 <input type="radio" name="plugin" value="sectime" <#if tp.plugin?? && tp.plugin == "sectime">checked="checked"</#if> title="秒转时间">
+					 <input type="radio" name="plugin" value="mintime" <#if tp.plugin?? && tp.plugin == "mintime">checked="checked"</#if> title="毫秒转时间">
+				</div>
+			</div>
+		</div>
 		<div class="layui-form-button">
 			<div class="layui-button-block">
 				<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>

@@ -19,6 +19,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import com.ukefu.core.UKDataContext;
+import com.ukefu.util.UCKeFuTime;
 import com.ukefu.util.UKTools;
 import com.ukefu.util.extra.DataExchangeInterface;
 import com.ukefu.webim.web.model.MetadataTable;
@@ -177,7 +178,16 @@ public class ExcelExporterProcess {
 								}
 							}
 							if(writed == false){
-								cell2.setCellValue(new HSSFRichTextString(String.valueOf(value.get(tp.getFieldname()))));
+								if(!StringUtils.isBlank(tp.getPlugin())) {
+									if(tp.getPlugin().equals("sectime") && String.valueOf(value.get(tp.getFieldname())).matches("[\\d]{1,}")) {
+										cell2.setCellValue(new HSSFRichTextString(new UCKeFuTime(String.valueOf(value.get(tp.getFieldname())), ":").toString())) ;
+									}else if(tp.getPlugin().equals("mintime") && String.valueOf(value.get(tp.getFieldname())).matches("[\\d]{1,}")) {
+										long mintime = Long.parseLong(String.valueOf(value.get(tp.getFieldname()))) ;
+										cell2.setCellValue(new HSSFRichTextString(new UCKeFuTime(String.valueOf(mintime), ":").toString())) ;
+									}
+								}else {
+									cell2.setCellValue(new HSSFRichTextString(String.valueOf(value.get(tp.getFieldname()))));
+								}
 							}
 						}
 					}

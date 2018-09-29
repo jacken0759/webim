@@ -186,6 +186,8 @@ public class MetadataController extends Handler{
     	
     	tableProperties.setSystemfield(tp.isSystemfield());
     	
+    	tableProperties.setPlugin(tp.getPlugin());
+    	
     	tableProperties.setImpfield(tp.isImpfield());
     	
     	tableProperties.setSortindex(tp.getSortindex());
@@ -206,8 +208,6 @@ public class MetadataController extends Handler{
     @Menu(type = "admin" , subtype = "metadata" , admin = true)
     public ModelAndView updateMultiple(ModelMap map , HttpServletRequest request , @Valid TableProperties table, @Valid String[] porids, @Valid String tbid) throws SQLException {
     	
-    	String bdtableid = null;
-
     	if(porids != null && porids.length > 0) {
     		List<TableProperties> proList = new ArrayList<TableProperties>();
     		for(String proid : porids) {
@@ -219,7 +219,6 @@ public class MetadataController extends Handler{
         	}
     		if(proList.size() > 0) {
     			tablePropertiesRes.save(proList);
-    			bdtableid = proList.get(0).getDbtableid();
     		}
     	}
     	

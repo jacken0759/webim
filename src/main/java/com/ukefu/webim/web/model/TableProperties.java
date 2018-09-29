@@ -115,6 +115,10 @@ public class TableProperties implements java.io.Serializable,Cloneable{
 	private boolean privatefield ;			//本地字段 ， 数据类型为接口推送数据的时候，标记为私密字段的 数据不会推送到远端服务
 	
 	private boolean sysfield ; 				//系统字段
+	
+	
+	private String plugin ;				//插件处理方式
+	
 	/**
 	 * @return the id
 	 */
@@ -501,6 +505,12 @@ public class TableProperties implements java.io.Serializable,Cloneable{
 	}
 	public void setPrivatefield(boolean privatefield) {
 		this.privatefield = privatefield;
+	}
+	public String getPlugin() {
+		return plugin;
+	}
+	public void setPlugin(String plugin) {
+		this.plugin = plugin;
 	}
 	@Transient
 	public String getKey() {
