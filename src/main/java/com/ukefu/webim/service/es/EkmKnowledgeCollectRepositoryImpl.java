@@ -138,7 +138,8 @@ public class EkmKnowledgeCollectRepositoryImpl implements EkmKnowledgeCollectESR
 		bq.must(QueryBuilders.termQuery("orgi", orgi)) ;
 		bq.must(QueryBuilders.termQuery("status", status)) ;
 		boolQueryBuilder.must(bq); 
-		
+		HasParentQueryBuilder hasParentQueryBuilder=QueryBuilders.hasParentQuery("uk_ekm_kb_master",QueryBuilders.termQuery("datastatus", false));
+		boolQueryBuilder.must(hasParentQueryBuilder) ;
 		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
 		Page<EkmKnowledgeCollect> knowledgeCollectList = null ;
 		if(elasticsearchTemplate.indexExists(EkmKnowledgeCollect.class)){
