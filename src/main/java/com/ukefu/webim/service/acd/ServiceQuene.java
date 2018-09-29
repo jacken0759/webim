@@ -540,8 +540,6 @@ public class ServiceQuene {
 			
 			agentService.setUserid(aiUser.getUserid());
 			
-			agentService.setEndby(endby);
-			
 			agentService.setAiid(aiUser.getAiid());
 			agentService.setAiservice(true);
 			agentService.setStatus(UKDataContext.AgentUserStatusEnum.INSERVICE.toString());
@@ -549,7 +547,9 @@ public class ServiceQuene {
 			agentService.setAppid(aiUser.getAppid());
 			agentService.setLeavemsg(false);
 		}
-		
+		if(agentService!=null) {
+			agentService.setEndby(endby);
+		}
 		agentServiceRes.save(agentService) ;
 		return agentService ;
 	}
