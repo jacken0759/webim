@@ -180,10 +180,11 @@ public class ExcelExporterProcess {
 							if(writed == false){
 								if(!StringUtils.isBlank(tp.getPlugin())) {
 									if(tp.getPlugin().equals("sectime") && String.valueOf(value.get(tp.getFieldname())).matches("[\\d]{1,}")) {
-										cell2.setCellValue(new HSSFRichTextString(new UCKeFuTime(String.valueOf(value.get(tp.getFieldname())), ":").toString())) ;
+										int sectime = (int)Long.parseLong(String.valueOf(value.get(tp.getFieldname()))) ;
+										cell2.setCellValue(new HSSFRichTextString(new UCKeFuTime(0,0,sectime).toString())) ;
 									}else if(tp.getPlugin().equals("mintime") && String.valueOf(value.get(tp.getFieldname())).matches("[\\d]{1,}")) {
-										long mintime = Long.parseLong(String.valueOf(value.get(tp.getFieldname()))) ;
-										cell2.setCellValue(new HSSFRichTextString(new UCKeFuTime(String.valueOf(mintime), ":").toString())) ;
+										int mintime = (int)Long.parseLong(String.valueOf(value.get(tp.getFieldname())))/1000 ;
+										cell2.setCellValue(new HSSFRichTextString(new UCKeFuTime(0,0,(int)mintime).toString())) ;
 									}
 								}else {
 									cell2.setCellValue(new HSSFRichTextString(String.valueOf(value.get(tp.getFieldname()))));
