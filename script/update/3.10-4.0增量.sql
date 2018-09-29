@@ -126,3 +126,8 @@ ALTER TABLE uk_chat_message modify expmsg text ;
 
 ALTER TABLE uk_ekm_knowbase ADD kbtype varchar(32) DEFAULT NULL COMMENT '知识库类型（knowledge 知识库 ）/（help 帮助平台）/（ask 问答）';
 ALTER TABLE uk_ekm_knowbase ADD kbviewid varchar(32) DEFAULT NULL COMMENT '知识库访问短ID';
+
+
+ALTER TABLE uk_chat_message ADD plugin varchar(100) DEFAULT NULL COMMENT '插件';
+ALTER TABLE uk_ekm_knowbase ADD kbviewid varchar(32) DEFAULT NULL COMMENT '知识库访问短ID';
+ALTER TABLE uk_ekm_knowbase ADD kbviewid varchar(32) DEFAULT NULL COMMENT '知识库访问短ID';
