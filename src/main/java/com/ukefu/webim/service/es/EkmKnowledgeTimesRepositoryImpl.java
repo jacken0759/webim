@@ -1,5 +1,7 @@
 package com.ukefu.webim.service.es;
 
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+
 import java.util.List;
 
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import com.ukefu.core.UKDataContext;
 import com.ukefu.webim.web.model.EkmKnowledgeTimes;
+import com.ukefu.webim.web.model.User;
 
 @Component
 public class EkmKnowledgeTimesRepositoryImpl implements EkmKnowledgeTimesESRepository{
@@ -52,6 +55,7 @@ public class EkmKnowledgeTimesRepositoryImpl implements EkmKnowledgeTimesESRepos
 	public Page<EkmKnowledgeTimes> findByOrgi(String orgi, Pageable pageable) {
 		
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		
 		boolQueryBuilder.must(QueryBuilders.termQuery("orgi", orgi)) ;
 		HasParentQueryBuilder hasParentQueryBuilder=QueryBuilders.hasParentQuery("uk_ekm_kb_master",QueryBuilders.termQuery("datastatus", false));
 		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).withSort(new FieldSortBuilder("viewtimes").unmappedType("long").order(SortOrder.DESC)).withQuery(hasParentQueryBuilder);
@@ -89,5 +93,33 @@ public class EkmKnowledgeTimesRepositoryImpl implements EkmKnowledgeTimesESRepos
 	    }
 		
 		return knowledgeTimesList.getContent();
+	}
+
+	@Override
+	public Page<EkmKnowledgeTimes> findByOrgi(String orgi, User user,
+			List<String> ekmKnowledgeMasterid, Pageable pageable) {
+		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		BoolQueryBuilder bq = QueryBuilders.boolQuery();
+		if(user.isSuperuser() != true){
+			if(ekmKnowledgeMasterid.size() > 0){
+				for(String id : ekmKnowledgeMasterid){
+					bq.should(termQuery("kbid" ,id)) ;
+				}
+			}else{
+				bq.must(termQuery("kbid" ,UKDataContext.UKEFU_SYSTEM_NO_DAT)) ;
+			}
+		}
+		boolQueryBuilder.must(bq) ;
+		boolQueryBuilder.must(QueryBuilders.termQuery("orgi", orgi)) ;
+		HasParentQueryBuilder hasParentQueryBuilder=QueryBuilders.hasParentQuery("uk_ekm_kb_master",QueryBuilders.termQuery("datastatus", false));
+		boolQueryBuilder.must(hasParentQueryBuilder) ;
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).withSort(new FieldSortBuilder("viewtimes").unmappedType("long").order(SortOrder.DESC));
+		searchQueryBuilder.withPageable(pageable) ;
+		Page<EkmKnowledgeTimes> knowledgeTimesList = null ;
+		if(elasticsearchTemplate.indexExists(EkmKnowledgeTimes.class)){
+			knowledgeTimesList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeTimes.class ) ;
+	    }
+		
+		return knowledgeTimesList;
 	}
 }
