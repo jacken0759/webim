@@ -413,7 +413,7 @@ public class SearchTools {
 				int viewnumResult = 0 ;
 				BoolQueryBuilder boolQueryBuild = QueryBuilders.boolQuery();
 				boolQueryBuild.must(QueryBuilders.wildcardQuery("dimenid", "*"+dimension.getId()+"*"));
-				Page<EkmKnowledgeMaster> ekmKnowledgeList = ekmKnowledgeEsRes.findByKnowledge(boolQueryBuild, false, null, orgi, user, new PageRequest(p, ps , Sort.Direction.ASC, "createtime")) ;
+				Page<EkmKnowledgeMaster> ekmKnowledgeList = ekmKnowledgeEsRes.findByKnowledge(boolQueryBuild, false, new ArrayList<String>(), orgi, user, new PageRequest(p, ps)) ;
 				if (ekmKnowledgeList!=null && ekmKnowledgeList.getContent().size()>0) {
 					for(EkmKnowledgeMaster knowledgeMaster : ekmKnowledgeList.getContent()){
 						List<EkmKnowledgeTimes> ekmKnowledgeTimesList = ekmKnowledgeTimesRes.findByKbidAndOrgi(knowledgeMaster.getId(), orgi) ;
