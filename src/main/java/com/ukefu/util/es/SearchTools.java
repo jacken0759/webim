@@ -12,7 +12,6 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.index.query.QueryStringQueryBuilder.Operator;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -402,7 +401,7 @@ public class SearchTools {
 	/**
 	 * EKM 知识库维度
 	 */
-	public static List<EkmDataBean> sumEkmDimension(BoolQueryBuilder queryBuilder ,String orgi,User user, List<EkmDimension> ekmDimensionList , int p, int ps){
+	public static List<EkmDataBean> sumEkmDimension(BoolQueryBuilder queryBuilder ,String orgi,User user, List<EkmDimension> ekmDimensionList){
 		
 		EkmKnowledgeMasterRepository ekmKnowledgeEsRes = UKDataContext.getContext().getBean(EkmKnowledgeMasterRepository.class) ;
 		EkmKnowledgeTimesRepository ekmKnowledgeTimesRes = UKDataContext.getContext().getBean(EkmKnowledgeTimesRepository.class) ;
@@ -413,9 +412,9 @@ public class SearchTools {
 				int viewnumResult = 0 ;
 				BoolQueryBuilder boolQueryBuild = QueryBuilders.boolQuery();
 				boolQueryBuild.must(QueryBuilders.wildcardQuery("dimenid", "*"+dimension.getId()+"*"));
-				Page<EkmKnowledgeMaster> ekmKnowledgeList = ekmKnowledgeEsRes.findByKnowledge(boolQueryBuild, false, new ArrayList<String>(), orgi, user, new PageRequest(p, ps)) ;
-				if (ekmKnowledgeList!=null && ekmKnowledgeList.getContent().size()>0) {
-					for(EkmKnowledgeMaster knowledgeMaster : ekmKnowledgeList.getContent()){
+				List<EkmKnowledgeMaster> ekmKnowledgeList = ekmKnowledgeEsRes.findByDatastatusAndOrgi(boolQueryBuild,false,orgi) ;
+				if (ekmKnowledgeList!=null && ekmKnowledgeList.size()>0) {
+					for(EkmKnowledgeMaster knowledgeMaster : ekmKnowledgeList){
 						List<EkmKnowledgeTimes> ekmKnowledgeTimesList = ekmKnowledgeTimesRes.findByKbidAndOrgi(knowledgeMaster.getId(), orgi) ;
 						if (ekmKnowledgeTimesList!=null && ekmKnowledgeTimesList.size()>0) {
 							collectResult = ekmKnowledgeTimesList.get(0)!=null?collectResult+ekmKnowledgeTimesList.get(0).getCollectimes():0 ;

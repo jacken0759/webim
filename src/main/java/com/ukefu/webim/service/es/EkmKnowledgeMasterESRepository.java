@@ -47,5 +47,7 @@ public abstract interface EkmKnowledgeMasterESRepository
 	public abstract List<EkmKnowledgeMaster> findByOrganAndDatastatusAndOrgi(String organ,boolean datastatus ,String orgi);
 	
 	public abstract Page<EkmKnowledgeMaster> findByDatastatusAndOrgi(boolean datastatus ,String orgi,Pageable pageable);
+	
+	public abstract List<EkmKnowledgeMaster> findByDatastatusAndOrgi(BoolQueryBuilder boolQueryBuilder,boolean datastatus ,String orgi);
 }
 

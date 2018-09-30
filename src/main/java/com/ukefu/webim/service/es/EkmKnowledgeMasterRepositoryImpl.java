@@ -412,4 +412,21 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 		return knowledgeList.getContent();
 	}
 
+	@Override
+	public List<EkmKnowledgeMaster> findByDatastatusAndOrgi(BoolQueryBuilder boolQueryBuilder,boolean datastatus,
+			String orgi) {
+		BoolQueryBuilder bq = QueryBuilders.boolQuery() ; 
+		bq.must(QueryBuilders.termQuery("orgi", orgi)) ;
+		bq.must(QueryBuilders.termQuery("datastatus", datastatus)) ;
+		boolQueryBuilder.must(bq); 
+		
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
+		Page<EkmKnowledgeMaster> knowledgeList = null ;
+		if(elasticsearchTemplate.indexExists(EkmKnowledgeMaster.class)){
+			knowledgeList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeMaster.class ) ;
+	    }
+		
+		return knowledgeList.getContent();
+	}
+
 }

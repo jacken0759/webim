@@ -81,6 +81,8 @@ public class EkmKnowledgeCollectRepositoryImpl implements EkmKnowledgeCollectESR
 		HasParentQueryBuilder hasParentQueryBuilder=QueryBuilders.hasParentQuery("uk_ekm_kb_master",QueryBuilders.termQuery("datastatus", false));
 		boolQuery.must(hasParentQueryBuilder) ;
 		boolQuery.must(QueryBuilders.termQuery("status", status)) ;
+		boolQuery.must(QueryBuilders.termQuery("creater", creater)) ;
+		boolQuery.must(QueryBuilders.termQuery("orgi", orgi)) ;
 		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQuery).withSort(new FieldSortBuilder("createtime").unmappedType("date").order(SortOrder.DESC));
 		searchQueryBuilder.withPageable(pageable) ;
 		Page<EkmKnowledgeCollect> knowledgeCollectList = null ;
@@ -118,6 +120,7 @@ public class EkmKnowledgeCollectRepositoryImpl implements EkmKnowledgeCollectESR
 		HasParentQueryBuilder hasParentQueryBuilder=QueryBuilders.hasParentQuery("uk_ekm_kb_master",QueryBuilders.termQuery("datastatus", false));
 		boolQuery.must(hasParentQueryBuilder) ;
 		boolQuery.must(QueryBuilders.termQuery("status", status)) ;
+		boolQuery.must(QueryBuilders.termQuery("orgi", orgi)) ;
 		boolQuery.must(QueryBuilders.termQuery("knowledgeower", knowledgeower)) ;
 		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQuery) ;
 		searchQueryBuilder.withPageable(pageable) ;
