@@ -57,6 +57,10 @@ public class SessionConfig implements java.io.Serializable{
 	private String successmsg ;		//坐席分配成功提示消息
 	private String finessmsg ;		//服务结束提示消息
 	
+	private boolean tipagent ;		//在坐席端弹出气泡提示
+	private String tipagenticon ;		//坐席端气泡提醒的图标
+	private String tipagenttitle ;		//坐席端气泡提醒的标题
+	
 	private boolean agentreplaytimeout ;	//启用坐席回复超时
 	private int agenttimeout;
 	private String agenttimeoutmsg ;
@@ -413,6 +417,24 @@ public class SessionConfig implements java.io.Serializable{
 	}
 	public void setServicekind(boolean servicekind) {
 		this.servicekind = servicekind;
+	}
+	public boolean isTipagent() {
+		return tipagent;
+	}
+	public void setTipagent(boolean tipagent) {
+		this.tipagent = tipagent;
+	}
+	public String getTipagenticon() {
+		return tipagenticon;
+	}
+	public void setTipagenticon(String tipagenticon) {
+		this.tipagenticon = tipagenticon;
+	}
+	public String getTipagenttitle() {
+		return tipagenttitle;
+	}
+	public void setTipagenttitle(String tipagenttitle) {
+		this.tipagenttitle = tipagenttitle;
 	}
 	@Transient
 	public List<SessionConfigItem> getConfig(){

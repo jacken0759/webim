@@ -18,12 +18,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.Menu;
@@ -107,7 +107,7 @@ public class IMAgentController extends Handler{
     
     @RequestMapping("/agent/sessionconfig/save")
     @Menu(type = "setting" , subtype = "sessionconfig" , admin= false)
-    public ModelAndView sessionconfig(ModelMap map , HttpServletRequest request , @Valid SessionConfig sessionConfig) throws JsonProcessingException{
+    public ModelAndView sessionconfig(ModelMap map , HttpServletRequest request , @Valid SessionConfig sessionConfig,BindingResult result,  @RequestParam(value = "tipagenticon", required = false) MultipartFile tipagenticon) throws IOException{
     	SessionConfig tempSessionConfig = sessionConfigRes.findByOrgi(super.getOrgi(request)) ;
     	if(tempSessionConfig == null){
     		tempSessionConfig = sessionConfig;
@@ -132,6 +132,16 @@ public class IMAgentController extends Handler{
     	}
     	
     	tempSessionConfig.setOrgi(super.getOrgi(request));
+    	
+    	if(tipagenticon!=null && !StringUtils.isBlank(tipagenticon.getName()) && tipagenticon.getBytes()!=null && tipagenticon.getBytes().length >0){
+			String fileName = "logo/"+UKTools.md5("tipagenticon_"+tempSessionConfig.getOrgi())+tipagenticon.getOriginalFilename().substring(tipagenticon.getOriginalFilename().lastIndexOf(".")) ;
+			File file = new File(path , fileName) ;
+			if(!file.getParentFile().exists()){
+				file.getParentFile().mkdirs();
+			}
+    		FileCopyUtils.copy(tipagenticon.getBytes(), file);
+    		tempSessionConfig.setTipagenticon(fileName);
+		}
     	sessionConfigRes.save(tempSessionConfig) ;
     	
     	CacheHelper.getSystemCacheBean().put(UKDataContext.SYSTEM_CACHE_SESSION_CONFIG+"_"+super.getOrgi(request),tempSessionConfig, super.getOrgi(request)) ;
