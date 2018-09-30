@@ -186,7 +186,7 @@ body{
 	padding-top:0;
 	padding-bottom:0;
 }
-.uckefu-helpdesk-search2 .hot-keyword a,.hot-keyword a:hover{
+.uckefu-helpdesk-search2 ,.hot-keyword{
 	color:#666666;
 	margin: 0 5px 0 0;
 	font-size:12px;
