@@ -132,9 +132,25 @@ ALTER TABLE uk_ekm_knowbase ADD kbviewid varchar(32) DEFAULT NULL COMMENT '知�
 
 ALTER TABLE uk_chat_message ADD plugin varchar(100) DEFAULT NULL COMMENT '插件';
 ALTER TABLE uk_ekm_knowbase ADD kbviewid varchar(32) DEFAULT NULL COMMENT '知识库访问短ID';
-ALTER TABLE uk_ekm_knowbase ADD kbviewid varchar(32) DEFAULT NULL COMMENT '知识库访问短ID';
 
 ALTER TABLE uk_sessionconfig ADD tipagent tinyint DEFAULT 0 COMMENT '在坐席端弹出气泡提示';
 ALTER TABLE uk_sessionconfig ADD tipagenticon varchar(255) DEFAULT NULL COMMENT '坐席端气泡提醒的图标';
 ALTER TABLE uk_sessionconfig ADD tipagenttitle varchar(100) DEFAULT NULL COMMENT '坐席端气泡提醒的标题';
+<<<<<<< .mine
 
+CREATE TABLE `uk_ekm_helpdesk_times` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `knowid` varchar(32) DEFAULT NULL COMMENT '知识ID',
+  `kbid` varchar(32) DEFAULT NULL COMMENT '知识库ID',
+  `ktid` varchar(32) DEFAULT NULL COMMENT '知识分类ID',
+  `helps` tinyint(4) DEFAULT '0' COMMENT '该知识是否有帮助',
+  `version` int(11) DEFAULT '0' COMMENT '版本号',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+	`creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+	`createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM-知识帮助平台（知识评价表）';
+||||||| .r1411
+=======
+
+>>>>>>> .r1413
