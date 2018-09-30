@@ -131,3 +131,7 @@ ALTER TABLE uk_ekm_knowbase ADD kbviewid varchar(32) DEFAULT NULL COMMENT '知�
 ALTER TABLE uk_chat_message ADD plugin varchar(100) DEFAULT NULL COMMENT '插件';
 ALTER TABLE uk_ekm_knowbase ADD kbviewid varchar(32) DEFAULT NULL COMMENT '知识库访问短ID';
 ALTER TABLE uk_ekm_knowbase ADD kbviewid varchar(32) DEFAULT NULL COMMENT '知识库访问短ID';
+
+ALTER TABLE uk_sessionconfig ADD tipagent tinyint DEFAULT 0 COMMENT '在坐席端弹出气泡提示';
+ALTER TABLE uk_sessionconfig ADD tipagenticon varchar(255) DEFAULT NULL COMMENT '坐席端气泡提醒的图标';
+ALTER TABLE uk_sessionconfig ADD tipagenttitle varchar(100) DEFAULT NULL COMMENT '坐席端气泡提醒的标题';
