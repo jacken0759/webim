@@ -139,12 +139,12 @@ body{
 	color: #999;
 }
 .ukefu-help-btn{
-	margin-top: 15px;
+	margin: 20px 0 20px 0;
 }
 .ukefu-help-btn .help-btn-item{
 	display: inline-block;
 	vertical-align: top;
-	margin-right: 30px;
+	margin: 0 30px 15px 0;
 }
 .help-btn-item a{
 	color: #333;
@@ -256,4 +256,35 @@ body{
 	padding:5px;
 	margin: 0 auto;
 	width: 840px;
+}
+.ukefu-helpdesk-left{
+	position: fixed;
+	left:20px;
+	top:20px;
+	
+}
+.ukefu-helpdesk-right{
+	margin-left:320px;
+	width: 990px;
+    min-height: 900px;
+    padding: 20px 0 10px 0px;
+}
+.ukefu-helpdesk-left .site-tree {
+    position: fixed;
+    top: 60px;
+    bottom: 0;
+    z-index: 666;
+    min-height: 0;
+    overflow: auto;
+    background-color: #fff;
+    
+}
+.layui-tree {
+    line-height: 32px;
+        width:250px;
+}
+.layui-tree li {
+    text-overflow: ellipsis;
+    overflow: auto;
+    white-space: nowrap;
 }
