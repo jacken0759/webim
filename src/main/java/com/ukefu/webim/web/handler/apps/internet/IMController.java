@@ -660,7 +660,7 @@ public class IMController extends Handler{
     	ModelAndView view = request(super.createRequestPageTempletResponse("/apps/im/suggest/pc")) ;
     	CousultInvite invite = OnlineUserUtils.cousult(appid, orgi, inviteRepository) ;
     	map.addAttribute("invite" , invite) ;
-    	map.addAttribute("contentList" , OnlineUserUtils.suggest(q, orgi, userid,invite, aiid , skill )) ;;
+    	map.addAttribute("contentList" , OnlineUserUtils.suggest(q, orgi, userid,invite, aiid , skill )) ;
 		return view;
     }
     

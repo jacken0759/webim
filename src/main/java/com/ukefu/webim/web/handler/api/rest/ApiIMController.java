@@ -110,6 +110,21 @@ public class ApiIMController extends Handler{
     }
 	
 	/**
+	 * 返回热点知识
+	 * @param request
+	 * @param username	搜索用户名，精确搜索
+	 * @return
+	 * @throws TemplateException 
+	 * @throws IOException 
+	 */
+	@RequestMapping(value = "/hot", method = RequestMethod.GET)
+	@Menu(type = "apps" , subtype = "webim" , access = true)
+	@ApiOperation("获取推荐知识")
+    public ResponseEntity<RestResult> hot(HttpServletRequest request,@Valid String q , @Valid String aiid) throws IOException, TemplateException {
+        return new ResponseEntity<>(new RestResult(RestResultType.OK, OnlineUserUtils.suggest(q, super.getOrgi(request), super.getUser(request).getId(),null, aiid , null)), HttpStatus.OK);
+    }
+	
+	/**
 	 * 返回AI配置信息
 	 * @param request
 	 * @param aiid    , AI标识	
