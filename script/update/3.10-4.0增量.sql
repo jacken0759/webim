@@ -120,6 +120,8 @@ ALTER TABLE uk_xiaoe_config ADD smartsuggestappsec varchar(100) COMMENT '推荐A
 ALTER TABLE uk_xiaoe_config ADD smartsuggestparam varchar(255) COMMENT '推荐AppSec';
 ALTER TABLE uk_xiaoe_config ADD smartsuggestmethod varchar(50) COMMENT '外部推荐请求方式';
 ALTER TABLE uk_xiaoe_config ADD smartsuggesttempletinput varchar(50) COMMENT '外部推荐输入格式化模板';
+ALTER TABLE uk_xiaoe_config ADD suggestnum int DEFAULT 0 COMMENT '显示外部推荐条数';
+
 
 ALTER TABLE uk_chat_message modify expmsg text ;
 
@@ -135,3 +137,4 @@ ALTER TABLE uk_ekm_knowbase ADD kbviewid varchar(32) DEFAULT NULL COMMENT '知�
 ALTER TABLE uk_sessionconfig ADD tipagent tinyint DEFAULT 0 COMMENT '在坐席端弹出气泡提示';
 ALTER TABLE uk_sessionconfig ADD tipagenticon varchar(255) DEFAULT NULL COMMENT '坐席端气泡提醒的图标';
 ALTER TABLE uk_sessionconfig ADD tipagenttitle varchar(100) DEFAULT NULL COMMENT '坐席端气泡提醒的标题';
+
