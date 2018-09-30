@@ -38,6 +38,7 @@ import com.ukefu.util.IP;
 import com.ukefu.util.IPTools;
 import com.ukefu.util.Menu;
 import com.ukefu.util.UKTools;
+import com.ukefu.util.ai.AiUtils;
 import com.ukefu.util.extra.DataExchangeInterface;
 import com.ukefu.util.webim.WebIMClient;
 import com.ukefu.webim.service.acd.ServiceQuene;
@@ -648,7 +649,8 @@ public class IMController extends Handler{
     public ModelAndView mobilesuggest(ModelMap map , HttpServletRequest request , HttpServletResponse response,  @PathVariable String appid ,@Valid String q ,@Valid String traceid,@Valid String aiid ,@Valid String p ,@Valid String exchange, @Valid String title ,@Valid String url, @Valid String skill, @Valid String id , @Valid String userid , @Valid String agent , @Valid String name , @Valid String email ,@Valid String phone,@Valid String ai,@Valid String orgi ,@Valid String product,@Valid String description,@Valid String imgurl,@Valid String pid,@Valid String purl) throws Exception {
     	ModelAndView view = request(super.createRequestPageTempletResponse("/apps/im/suggest/mobile")) ;
     	CousultInvite invite = OnlineUserUtils.cousult(appid, orgi, inviteRepository) ;
-    	map.addAttribute("invite" , invite) ;
+    	
+    	map.addAttribute("aiConfig" , AiUtils.initAiConfig(aiid,orgi) ) ;
     	map.addAttribute("contentList" , OnlineUserUtils.suggest(q, orgi, userid,invite , aiid , skill)) ;
 		return view;
     }

@@ -109,6 +109,8 @@ public class AiConfig implements java.io.Serializable{
 	private String smartsuggesttempletinput ;	//外部推荐输入格式化模板
 	private String smartsuggesttempletoutput ;	//外部推荐输出格式化模板
 	
+	private int suggestnum ;
+	
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -518,6 +520,12 @@ public class AiConfig implements java.io.Serializable{
 	}
 	public void setSmartsuggesttempletoutput(String smartsuggesttempletoutput) {
 		this.smartsuggesttempletoutput = smartsuggesttempletoutput;
+	}
+	public int getSuggestnum() {
+		return suggestnum;
+	}
+	public void setSuggestnum(int suggestnum) {
+		this.suggestnum = suggestnum;
 	}
 	@Transient
 	public List<OtherMessageItem> getHot(){
