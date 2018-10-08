@@ -2,6 +2,9 @@ package com.ukefu.util.freeswitch.model;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.ukefu.util.UCKeFuTime;
 import com.ukefu.webim.web.model.Extention;
 
 public class CallCenterAgent implements java.io.Serializable{
@@ -20,6 +23,8 @@ public class CallCenterAgent implements java.io.Serializable{
 	private String status ;
 	private String workstatus ;
 	private String siptrunk ;
+	
+	private String phonenum ;	//通话中的电话号码
 	
 	private String eventid ;
 	
@@ -120,5 +125,33 @@ public class CallCenterAgent implements java.io.Serializable{
 
 	public void setOrgan(String organ) {
 		this.organ = organ;
+	}
+	public String getPhonenum() {
+		return phonenum;
+	}
+
+	public void setPhonenum(String phonenum) {
+		this.phonenum = phonenum;
+	}
+
+	public String getTime() {
+		String formattime = null;
+		if(updatetime!=null) {
+			long time = System.currentTimeMillis() - this.updatetime.getTime() ;
+			formattime = new UCKeFuTime(0, 0, (int)time/1000).toString() ; 
+		}
+		return formattime ;
+	}
+	
+	public String toString() {
+		String status = "offline";
+		if(!StringUtils.isBlank(this.status)) {
+			switch(this.status) {
+				case "ready" : status = "ready" ; break ;
+				case "notready" : status = "notready" ;break ;
+				default : status = this.status ;
+			}
+		}
+		return status ;
 	}
 }

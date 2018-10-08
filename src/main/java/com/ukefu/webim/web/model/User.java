@@ -16,6 +16,8 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.ukefu.util.freeswitch.model.CallCenterAgent;
+
 
 /**
  * @author jaddy0302 Rivulet User.java 2010-3-17
@@ -81,6 +83,8 @@ public class User implements java.io.Serializable{
 	
 	
 	private Date lastlogintime = new Date();	//最后登录时间
+	
+	private CallCenterAgent ccagent ;		//呼叫中心坐席状态
 	
 	private AgentStatus agentStatus ;
 	
@@ -491,5 +495,12 @@ public class User implements java.io.Serializable{
 	}
 	public void setOrdertype(String ordertype) {
 		this.ordertype = ordertype;
+	}
+	@Transient
+	public CallCenterAgent getCcagent() {
+		return ccagent;
+	}
+	public void setCcagent(CallCenterAgent ccagent) {
+		this.ccagent = ccagent;
 	}
 }

@@ -510,7 +510,7 @@ public class UKDataContext {
 		NOTBUSY,
 		IDLE,
 		OFFLINE,
-		SERVICES;
+		SERVICES, ONLINE, INCALL;
 		public String toString(){
 			return super.toString().toLowerCase() ;
 		}
