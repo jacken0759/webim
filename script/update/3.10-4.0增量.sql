@@ -136,7 +136,7 @@ ALTER TABLE uk_ekm_knowbase ADD kbviewid varchar(32) DEFAULT NULL COMMENT '知�
 ALTER TABLE uk_sessionconfig ADD tipagent tinyint DEFAULT 0 COMMENT '在坐席端弹出气泡提示';
 ALTER TABLE uk_sessionconfig ADD tipagenticon varchar(255) DEFAULT NULL COMMENT '坐席端气泡提醒的图标';
 ALTER TABLE uk_sessionconfig ADD tipagenttitle varchar(100) DEFAULT NULL COMMENT '坐席端气泡提醒的标题';
-<<<<<<< .mine
+
 
 CREATE TABLE `uk_ekm_helpdesk_times` (
   `id` varchar(32) NOT NULL COMMENT '主键ID',
@@ -150,7 +150,4 @@ CREATE TABLE `uk_ekm_helpdesk_times` (
 	`createtime` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM-知识帮助平台（知识评价表）';
-||||||| .r1411
-=======
 
->>>>>>> .r1413
