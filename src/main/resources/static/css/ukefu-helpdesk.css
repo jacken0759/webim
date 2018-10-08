@@ -183,16 +183,22 @@ body{
 }
 .uckefu-helpdesk-search2 .search-history-title{
 	margin:0 auto;
+	margin-top:5px;
 	padding-top:0;
 	padding-bottom:0;
 }
-.uckefu-helpdesk-search2 ,.hot-keyword{
+.uckefu-helpdesk-search2 {
 	color:#666666;
 	margin: 0 5px 0 0;
+	font-size:14px;
+}
+.search2-hot-keyword a{
+	color:#666666;
+	margin-right:12px;
 	font-size:12px;
 }
-.uckefu-helpdesk-search2 .hot-keyword a:hover{
-	color:#009688;
+.search2-hot-keyword a:hover{
+	color:#1E90FF;
 	transition:0.5s;
 }
 .uckefu-helpdesk-tab{
