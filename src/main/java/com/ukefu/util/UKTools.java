@@ -1565,4 +1565,20 @@ public class UKTools {
 		}
 		return convertSuccess;
 	}
+	
+	public static String format(Long time) {
+		String formatstr = null ;
+		if(time!=null) {
+			formatstr = new UCKeFuTime(0, 0, time.intValue()/1000).toString() ; 
+		}
+		return formatstr ;
+	}
+	
+	public static String format(Integer time) {
+		String formatstr = null ;
+		if(time!=null) {
+			formatstr = new UCKeFuTime(0, 0, time.intValue()).toString() ; 
+		}
+		return formatstr ;
+	}
 }

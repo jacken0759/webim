@@ -106,4 +106,33 @@ public abstract interface OnlineUserRepository extends JpaRepository<OnlineUser,
 	
 	@Query("select topicid,title from ChatMessage c where orgi = ?1 and chatype = 'aireply' and topicid is not null AND title is not null  group by topicid,title order by count(topicid) desc")
 	Page<Object> findByOrgiAndMessage(String orgi, Pageable paramPageable);
+	
+	//查询当天通话总数
+	@Query("select count(id) from StatusEvent where orgi = ?1 and ?2 < createtime and createtime < ?3")
+	Long countByToadyCalledFromStatusEvent(String orgi, Date begin, Date end);
+	
+	//查询当天是否漏话总数
+	@Query("select count(id) from StatusEvent where orgi = ?1 and misscall = ?2 and ?3 < createtime and createtime < ?4")
+	Long countByToadyMissCalledFromStatusEvent(String orgi, boolean misscall, Date begin, Date end);
+	
+	//查询当天呼入与呼出-通话总数
+	@Query("select count(id) from StatusEvent where orgi = ?1 and calltype = ?2 and ?3 < createtime and createtime < ?4")
+	Long countByToadyDirectionFromStatusEvent(String orgi, String calltype, Date begin, Date end);
+	
+	//查询当天指定分机的 呼出-通话总数
+	@Query("select count(id) from StatusEvent where orgi = ?1 and calltype = ?2 and ani = ?3 and ?4 < createtime and createtime < ?5")
+	Long countByToadyAniFromStatusEvent(String orgi, String calltype, String ani, Date begin, Date end);
+
+	//查询指定分机当天-通话总数
+	@Query("select count(id) from StatusEvent where orgi = ?1 and (ani = ?2 or called = ?3) and ?4 < createtime and createtime < ?5")
+	Long countByToadyExtentionFromStatusEvent(String orgi, String ani, String called, Date begin, Date end);
+	
+	//查询指定分机当天-平均通话时长
+	@Query("select AVG(duration) from StatusEvent where orgi = ?1 and (ani = ?2 or called = ?3) and ?4 < createtime and createtime < ?5")
+	Long countByToadyExtDurFromStatusEvent(String orgi, String ani, String called, Date begin, Date end);
+	
+	//查询指定分机当天-平均振铃时长
+	@Query("select AVG(ringduration) from StatusEvent where orgi = ?1 and (ani = ?2 or called = ?3) and ?4 < createtime and createtime < ?5")
+	Long countByToadyExtRingFromStatusEvent(String orgi, String ani, String called, Date begin, Date end);
+	
 }
