@@ -104,8 +104,8 @@ public abstract interface OnlineUserRepository extends JpaRepository<OnlineUser,
 	@Query("select e from EkmKwSearchTag e where orgi = ?1  group by tag order by count(id) desc")
 	List<Object> findByOrgiAndTag(String orgi);
 	
-	@Query("select topicid,title from ChatMessage c where orgi = ?1 and chatype = 'aireply' and topicid is not null AND title is not null  group by topicid,title order by count(topicid) desc")
-	Page<Object> findByOrgiAndMessage(String orgi, Pageable paramPageable);
+	@Query("select topicid,title from ChatMessage c where orgi = ?1 and aiid = ?2 and chatype = 'aireply' and topicid is not null AND title is not null  group by topicid,title order by count(topicid) desc")
+	Page<Object> findByOrgiAndMessage(String orgi, String aiid, Pageable paramPageable);
 	
 	//查询当天通话总数
 	@Query("select count(id) from StatusEvent where orgi = ?1 and ?2 < createtime and createtime < ?3")
