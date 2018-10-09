@@ -29,5 +29,7 @@ public abstract interface EkmKnowledgeTypeRepository  extends JpaRepository<EkmK
 	
 	public abstract List<EkmKnowledgeType> findByParentidAndOrgi(String parentid , String orgi);
 	
+	public abstract List<EkmKnowledgeType> findByKnowbaseidAndParentidAndOrgi(String knowbaseid,String parentid,String orgi);
+	
 }
 
