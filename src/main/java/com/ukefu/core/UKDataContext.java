@@ -519,6 +519,10 @@ public class UKDataContext {
 	public enum WorkStatusEnum{
 		IDLE,
 		WAITTING,
+		RING,
+		OUTRING,
+		INCALL,
+		OUTCALL,
 		CALLOUT,
 		PREVIEW,
 		OUTBOUNDCALL;
