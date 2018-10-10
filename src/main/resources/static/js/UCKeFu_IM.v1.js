@@ -97,7 +97,11 @@ var WebIM = {
 	    });  
 	}, 
 	ping : function(){
-		loadURL("/message/ping.html","#system_time") ;	
+		loadURL("/message/ping.html","#system_time",function(data){
+			if(data!=''  && data.indexOf('login') >=0){
+				window.location.href = "/login.html" ;
+			}
+		}) ;	
 	},
 	audioplayer:function(id, file, loop) {
 	    var audioplayer = document.getElementById(id);

@@ -409,7 +409,9 @@
        document.getElementById('connect-message').innerHTML=data.message;
     })
     socket.on("status",function(data){
-		output('<span id="connect-message">'+data.message+'</span>' , 'message connect-message');     
+    	if(data.message!=""){
+			output('<span id="connect-message">'+data.message+'</span>' , 'message connect-message');
+    	}
 		if(data.messageType == "end"){
 			service_end = true ;
 			//editor.readonly();

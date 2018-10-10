@@ -499,7 +499,7 @@
     			message = data.message ; 	
     		}
 			output('<span id="connect-message">'+message+'</span>' , 'message connect-message' , true);
-    	}else{
+    	}else if(data.message!=""){
     		output('<span id="connect-message">'+data.message+'</span>' , 'message connect-message' , true);
     	}
 		</#if>     
