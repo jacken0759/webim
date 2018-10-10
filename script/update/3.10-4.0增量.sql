@@ -158,5 +158,8 @@ INSERT INTO `uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENT
 
 
 
-ALTER TABLE uk_chat_message ADD ckind varchar(100) COMMENT '分类ID';
+ALTER TABLE uk_chat_message ADD ckind varchar(100) COMMENT '分类';
 ALTER TABLE uk_chat_message ADD ckindname varchar(255) COMMENT '分类名称';
+
+ALTER TABLE uk_chat_message ADD clabel varchar(100) COMMENT '标签';
+ALTER TABLE uk_chat_message ADD clabelname varchar(255) COMMENT '标签名称';
