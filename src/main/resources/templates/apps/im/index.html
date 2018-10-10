@@ -514,7 +514,7 @@
 			</#if>
 		}
 		<#if sessionConfig?? && sessionConfig.satisfaction?? && sessionConfig.satisfaction>
-		if(data.messageType == "invit"){
+		if(data.messageType == "invit" || data.messageType == "end"){
 			<#if sessionConfig?? && sessionConfig.satisfaction?? && sessionConfig.satisfaction>
 			if(invite == false){
 				document.getElementById("diaShade").style.display = "block" ;
