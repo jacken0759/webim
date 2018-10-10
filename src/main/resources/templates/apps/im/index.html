@@ -506,12 +506,6 @@
 		if(data.messageType == "end"){
 			service_end = true ;
 			editor.readonly();
-			<#if sessionConfig?? && sessionConfig.satisfaction?? && sessionConfig.satisfaction>
-			if(invite == false){
-				document.getElementById("diaShade").style.display = "block" ;
-				document.getElementById("dialogWrap").style.display = "block" ;
-			}
-			</#if>
 		}
 		<#if sessionConfig?? && sessionConfig.satisfaction?? && sessionConfig.satisfaction>
 		if(data.messageType == "invit" || data.messageType == "end"){
