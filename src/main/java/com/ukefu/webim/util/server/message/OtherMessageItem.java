@@ -18,6 +18,9 @@ public class OtherMessageItem implements java.io.Serializable{
 	private String ckind ;
 	private String ckindname ;
 	
+	private String clabel ;
+	private String clabelname ;
+	
 	private int duration ;
 	
 	public String getMsgtype() {
@@ -79,5 +82,17 @@ public class OtherMessageItem implements java.io.Serializable{
 	}
 	public void setCkindname(String ckindname) {
 		this.ckindname = ckindname;
+	}
+	public String getClabel() {
+		return clabel;
+	}
+	public void setClabel(String clabel) {
+		this.clabel = clabel;
+	}
+	public String getClabelname() {
+		return clabelname;
+	}
+	public void setClabelname(String clabelname) {
+		this.clabelname = clabelname;
 	}
 }
