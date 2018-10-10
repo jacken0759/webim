@@ -160,9 +160,12 @@ INSERT INTO `uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENT
 
 ALTER TABLE uk_chat_message ADD ckind varchar(100) COMMENT '分类';
 ALTER TABLE uk_chat_message ADD ckindname varchar(255) COMMENT '分类名称';
-
-ALTER TABLE uk_chat_message ADD clabel varchar(100) COMMENT '标签';
 ALTER TABLE uk_chat_message ADD clabelname varchar(255) COMMENT '标签名称';
+ALTER TABLE uk_chat_message ADD clabelname varchar(255) COMMENT '标签名称';
+
+ALTER TABLE uk_webim_monitor ADD incall int DEFAULT 0 COMMENT '通话中';
+ALTER TABLE uk_webim_monitor ADD readyagents int DEFAULT 0 COMMENT '就绪坐席数量';
+
 
 ALTER TABLE uk_ekm_knowledge_type ADD navshow int(11) DEFAULT '0' COMMENT '导航栏显示（1是/0否）';
 ALTER TABLE uk_ekm_knowledge_type ADD deskshow int(11) DEFAULT '0' COMMENT '首页显示（1是/0否）';
