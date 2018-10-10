@@ -199,7 +199,7 @@ body{
 	font-size:12px;
 }
 .search2-hot-keyword a:hover{
-	color:#1E90FF;
+	color:#009688;
 	transition:0.5s;
 }
 .uckefu-helpdesk-tab{
@@ -224,15 +224,18 @@ body{
 	margin-right: 50px;
 }
 .uckefu-helpdesk-tab .uckefu-helpdesk-brief ul a:hover{
-	color: #00a4ff;
+	color: #009688;
 }
 .uckefu-helpdesk-tab .uckefu-helpdesk-brief ul .layui-this a{
-	color: #00a4ff;
+	color: #009688;
 }
 .uckefu-helpdesk-knowlist{
 	margin-left: 0;
     width: 840px;
     margin: 0 auto;
+}
+.uckefu-helpdesk-knowlist a:hover{
+	color: #009688;
 }
 .uckefu-helpdesk-knowlist ul li{
     margin: 0 0 35px;
@@ -249,8 +252,9 @@ body{
 	font-style: normal;
 }
 .uckefu-helpdesk-knowlist-keyword{
-	color: #00a4ff;
+	color: #009688;
 }
+
 .uckefu-helpdesk-knowlist-ct{
 	font-size: 14px;
     word-break: break-all;
