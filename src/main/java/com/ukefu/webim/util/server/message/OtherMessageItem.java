@@ -14,6 +14,10 @@ public class OtherMessageItem implements java.io.Serializable{
 	private String type ;		//图文消息类型
 	private String url ;		//图文消息跳转URL
 	
+	
+	private String ckind ;
+	private String ckindname ;
+	
 	private int duration ;
 	
 	public String getMsgtype() {
@@ -63,5 +67,17 @@ public class OtherMessageItem implements java.io.Serializable{
 	}
 	public void setDuration(int duration) {
 		this.duration = duration;
+	}
+	public String getCkind() {
+		return ckind;
+	}
+	public void setCkind(String ckind) {
+		this.ckind = ckind;
+	}
+	public String getCkindname() {
+		return ckindname;
+	}
+	public void setCkindname(String ckindname) {
+		this.ckindname = ckindname;
 	}
 }

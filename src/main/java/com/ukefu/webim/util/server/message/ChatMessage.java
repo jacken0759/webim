@@ -81,6 +81,9 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	
 	private boolean datastatus ;	//数据状态，是否已撤回消息	
 	
+	private String ckind ;			//问答分类ID
+	private String ckindname ;		//问答分类名称
+	
 	private String matchtype ;		//匹配状态
 	
 	private String mediaid ;
@@ -481,6 +484,18 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	}
 	public void setMatchtype(String matchtype) {
 		this.matchtype = matchtype;
+	}
+	public String getCkind() {
+		return ckind;
+	}
+	public void setCkind(String ckind) {
+		this.ckind = ckind;
+	}
+	public String getCkindname() {
+		return ckindname;
+	}
+	public void setCkindname(String ckindname) {
+		this.ckindname = ckindname;
 	}
 	@Transient
 	public List<OtherMessageItem> getSuggest(){

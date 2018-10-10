@@ -19,6 +19,9 @@ public class OtherMessage implements java.io.Serializable{
 	private boolean detail ;
 	private String matchtype ;
 	
+	private String ckind ;
+	private String ckindname ;
+	
 	private int duration ;
 	
 	private List<OtherMessageItem> items ;
@@ -95,4 +98,17 @@ public class OtherMessage implements java.io.Serializable{
 	public void setMatchtype(String matchtype) {
 		this.matchtype = matchtype;
 	}
+	public String getCkind() {
+		return ckind;
+	}
+	public void setCkind(String ckind) {
+		this.ckind = ckind;
+	}
+	public String getCkindname() {
+		return ckindname;
+	}
+	public void setCkindname(String ckindname) {
+		this.ckindname = ckindname;
+	}
+	
 }
