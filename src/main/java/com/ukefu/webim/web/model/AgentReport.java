@@ -26,6 +26,8 @@ public class AgentReport implements java.io.Serializable{
 	private String id ;
 	private Date createtime = new Date();
 	private int agents ;		//坐席数量
+	private int readyagents ;	//就绪坐席
+	private int incall;			//通话中
 	private int users ;			//服务中的用户
 	private int inquene ;		//队列中的用户
 	private int busy ;			//队列中忙的坐席
@@ -127,5 +129,17 @@ public class AgentReport implements java.io.Serializable{
 	}
 	public void setDataid(String dataid) {
 		this.dataid = dataid;
+	}
+	public int getReadyagents() {
+		return readyagents;
+	}
+	public void setReadyagents(int readyagents) {
+		this.readyagents = readyagents;
+	}
+	public int getIncall() {
+		return incall;
+	}
+	public void setIncall(int incall) {
+		this.incall = incall;
 	}
 }

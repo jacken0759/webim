@@ -18,6 +18,8 @@ public class CallCenterAgent implements java.io.Serializable{
 	
 	private String extno ;
 	
+	private boolean ready ;
+	
 	private String orgi ;
 	private Date updatetime ;
 	private String status ;
@@ -132,6 +134,14 @@ public class CallCenterAgent implements java.io.Serializable{
 
 	public void setPhonenum(String phonenum) {
 		this.phonenum = phonenum;
+	}
+	
+	public boolean isReady() {
+		return ready;
+	}
+
+	public void setReady(boolean ready) {
+		this.ready = ready;
 	}
 
 	public String getTime() {

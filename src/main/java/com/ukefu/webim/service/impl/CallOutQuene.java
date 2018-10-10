@@ -14,6 +14,10 @@ import com.ukefu.util.freeswitch.model.CallCenterAgent;
 import com.ukefu.webim.service.cache.CacheHelper;
 import com.ukefu.webim.service.quene.AgentCallOutFilter;
 import com.ukefu.webim.service.quene.AiCallOutFilter;
+import com.ukefu.webim.service.quene.CallCenterAgentOrgiFilter;
+import com.ukefu.webim.service.quene.CallCenterAgentReadyOrgiFilter;
+import com.ukefu.webim.service.quene.CallCenterInCallOrgiFilter;
+import com.ukefu.webim.web.model.AgentReport;
 import com.ukefu.webim.web.model.CallOutNames;
 
 @SuppressWarnings("deprecation")
@@ -45,6 +49,33 @@ public class CallOutQuene {
 			agentList.addAll(((IMap<String , CallCenterAgent>) CacheHelper.getCallCenterAgentCacheBean().getCache()).values(pagingPredicate)) ;
 		}
 		return agentList ;
+	}
+	
+	
+	/**
+	 * 获得 当前服务状态
+	 * @param orgi
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static AgentReport getCallCenterAgentReport(String orgi){
+		/**
+		 * 统计当前在线的坐席数量
+		 */
+		AgentReport report = new AgentReport() ;
+		IMap callCenterAgentMap = (IMap<String, Object>) CacheHelper.getCallCenterAgentCacheBean().getCache() ;
+		CallCenterAgentOrgiFilter filter = new CallCenterAgentOrgiFilter(orgi) ;
+		Long agents = (Long) callCenterAgentMap.aggregate(Supplier.fromKeyPredicate(filter), Aggregations.count()) ;
+		report.setAgents(agents.intValue());
+		
+		Long readyAgent = (Long) callCenterAgentMap.aggregate(Supplier.fromKeyPredicate(new CallCenterAgentReadyOrgiFilter(orgi)), Aggregations.count()) ;
+		report.setReadyagents(readyAgent.intValue());
+		
+		Long inCallAgent = (Long) callCenterAgentMap.aggregate(Supplier.fromKeyPredicate(new CallCenterInCallOrgiFilter(orgi)), Aggregations.count()) ;
+		report.setIncall(inCallAgent.intValue());
+		
+		report.setOrgi(orgi);
+		return report;
 	}
 	
 	/**
