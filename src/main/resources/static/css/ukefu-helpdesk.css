@@ -102,11 +102,12 @@ body{
 	font-size:36px;
 }
 .uckefu-sum{
-	background-color:#FFFFFF;	
+	background-color:#f7f8fa;	
 }
 .uckefu-sum .uckefu-summary{
 	max-width:1330px;
 	margin: 0 auto;
+	background-color:#FFFFFF;
 }
 .uckefu-summary .uckefu-helpdesk-title{
 	
@@ -265,8 +266,6 @@ body{
 }
 .ukefu-helpdesk-left{
 	position: fixed;
-	left:20px;
-	top:20px;
 	
 }
 .ukefu-helpdesk-right{
@@ -282,13 +281,12 @@ body{
     z-index: 666;
     min-height: 0;
     overflow: auto;
-    background-color: #fff;
+    background-color: #f7f8fa;
+    border-right: #e5e5e5 1px solid;
+    padding-top: 32px;
     
 }
-.layui-tree {
-    line-height: 32px;
-        width:250px;
-}
+
 .layui-tree li {
     text-overflow: ellipsis;
     overflow: auto;

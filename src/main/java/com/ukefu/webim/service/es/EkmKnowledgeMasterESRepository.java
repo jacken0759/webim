@@ -1,6 +1,5 @@
 package com.ukefu.webim.service.es;
 
-import java.util.Date;
 import java.util.List;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -42,7 +41,7 @@ public abstract interface EkmKnowledgeMasterESRepository
 	public abstract Page<EkmKnowledgeMaster> findByKnowledge(BoolQueryBuilder boolQueryBuilder,boolean datastatus,List<String>  EkmKnowledgeMasterType,String orgi, User user,Pageable pageable);
 	
 	//知识地图查询
-	public abstract Page<EkmKnowledgeMaster> findBySearchKnowledge(boolean datastatus,String  q , String tag, String knowledgetype,String orgi, User user, Date begin, Date end,Pageable pageable);
+	public abstract Page<EkmKnowledgeMaster> findBySearchKnowledge(boolean datastatus,String  q ,String knowbaseid, String knowledgetype,String orgi,Pageable pageable);
 	
 	public abstract List<EkmKnowledgeMaster> findByOrganAndDatastatusAndOrgi(String organ,boolean datastatus ,String orgi);
 	

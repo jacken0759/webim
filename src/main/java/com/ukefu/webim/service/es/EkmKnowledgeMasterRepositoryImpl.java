@@ -3,12 +3,13 @@ package com.ukefu.webim.service.es;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.QueryStringQueryBuilder;
+import org.elasticsearch.index.query.QueryStringQueryBuilder.Operator;
 import org.elasticsearch.search.highlight.HighlightBuilder.Field;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -359,13 +360,6 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 	}
 
 	@Override
-	public Page<EkmKnowledgeMaster> findBySearchKnowledge(boolean datastatus, String q, String tag, String knowledgetype,
-			String orgi, User user, Date begin, Date end, Pageable pageable) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<EkmKnowledgeMaster> findByOrganAndDatastatusAndOrgi(
 			String organ, boolean datastatus, String orgi) {
 
@@ -427,6 +421,28 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 	    }
 		
 		return knowledgeList.getContent();
+	}
+
+	@Override
+	public Page<EkmKnowledgeMaster> findBySearchKnowledge(boolean datastatus,
+			String q,String knowbaseid, String knowledgetype, String orgi, Pageable pageable) {
+		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		BoolQueryBuilder boolQueryBuilder1 = new BoolQueryBuilder();
+		if(!StringUtils.isBlank(q)){
+			q = q.replaceAll("(OR|AND|NOT|:|\\(|\\))", "") ;
+			boolQueryBuilder1.must(QueryBuilders.boolQuery().must(new QueryStringQueryBuilder(q).defaultOperator(Operator.AND))) ;
+		}
+		if (!StringUtils.isBlank(knowledgetype)) {
+			boolQueryBuilder.must(termQuery("knowledgetype" , knowledgetype)) ;
+		}
+		if (!StringUtils.isBlank(knowbaseid)) {
+			boolQueryBuilder.must(termQuery("knowbaseid" , knowbaseid)) ;
+		}
+		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
+		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
+		boolQueryBuilder.must(boolQueryBuilder1) ;
+		//boolQueryBuilder.must(termQuery("pubstatus" , UKDataContext.PubStatusEnum.PASS.toString())) ;//审核通过
+		return processQuery(boolQueryBuilder , pageable);
 	}
 
 }

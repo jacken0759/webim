@@ -39,6 +39,9 @@ public class EkmKnowledgeType implements java.io.Serializable{
 	private String orgi ;
 	private boolean datastatus;
 	
+	private boolean navshow;//导航栏显示（1是/0否）
+	private boolean deskshow;//首页显示（1是/0否）
+	
 	
 	@Id
 	@Column(length = 32)
@@ -127,6 +130,18 @@ public class EkmKnowledgeType implements java.io.Serializable{
 	}
 	public void setDatastatus(boolean datastatus) {
 		this.datastatus = datastatus;
+	}
+	public boolean isNavshow() {
+		return navshow;
+	}
+	public void setNavshow(boolean navshow) {
+		this.navshow = navshow;
+	}
+	public boolean isDeskshow() {
+		return deskshow;
+	}
+	public void setDeskshow(boolean deskshow) {
+		this.deskshow = deskshow;
 	}
 	
 	
