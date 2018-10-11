@@ -26,5 +26,7 @@ public abstract interface EkmKnowbaseRepository  extends JpaRepository<EkmKnowba
 	
 	public abstract EkmKnowbase findByKbviewidAndOrgi(String kbviewid , String orgi);
 	
+	public abstract List<EkmKnowbase> findByDomainAndOrgi(String domain , String orgi);
+	
 }
 
