@@ -8,6 +8,7 @@ import com.ukefu.webim.web.model.Log;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.ThrowableProxyUtil;
 
 public class UKeFuAppender extends ch.qos.logback.core.ConsoleAppender<ILoggingEvent> {
 	@Override
@@ -23,7 +24,7 @@ public class UKeFuAppender extends ch.qos.logback.core.ConsoleAppender<ILoggingE
 					log.setMemo(event.getFormattedMessage().substring(0 ,255));
 				}
 				if(event.getThrowableProxy()!=null){
-					log.setMsg(event.getThrowableProxy().getMessage());
+					log.setMsg(ThrowableProxyUtil.asString(event.getThrowableProxy()));
 				}
 				
 				log.setMethod(event.getThreadName());
