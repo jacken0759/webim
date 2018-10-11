@@ -29,8 +29,6 @@ public class EkmKnowbase implements java.io.Serializable{
 	private int audit;//是否审核（0是/1否）
 	private String organ ;//用户所属部门ID
 	
-	private String domain ;	//绑定域名
-
 	private Date createtime ;
 	private String creater;
 	private String orgi ;
@@ -128,11 +126,5 @@ public class EkmKnowbase implements java.io.Serializable{
 	}
 	public void setKbviewid(String kbviewid) {
 		this.kbviewid = kbviewid;
-	}
-	public String getDomain() {
-		return domain;
-	}
-	public void setDomain(String domain) {
-		this.domain = domain;
 	}
 }

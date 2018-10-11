@@ -1,7 +1,5 @@
 package com.ukefu.webim.web.handler;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,8 +12,10 @@ import com.ukefu.core.UKDataContext;
 import com.ukefu.util.Menu;
 import com.ukefu.webim.service.acd.ServiceQuene;
 import com.ukefu.webim.service.cache.CacheHelper;
+import com.ukefu.webim.service.repository.EkmKnowbaseConfigRepository;
 import com.ukefu.webim.service.repository.EkmKnowbaseRepository;
 import com.ukefu.webim.web.model.EkmKnowbase;
+import com.ukefu.webim.web.model.EkmKnowbaseConfig;
 import com.ukefu.webim.web.model.User;
 
 @Controller
@@ -24,14 +24,17 @@ public class ApplicationController extends Handler{
 	@Autowired
 	private EkmKnowbaseRepository ekmKnowbaseRes;
 	
+	@Autowired
+	private EkmKnowbaseConfigRepository ekmKnowbaseConfigRes;
+	
 	@RequestMapping("/")
 	@Menu(type = "apps" , subtype = "root" , access=true)
     public ModelAndView root(HttpServletRequest request) {
 		ModelAndView view = request(super.createRequestPageTempletResponse("redirect:/console.html"));
 		if(!StringUtils.isBlank(request.getServerName())) {
-			List<EkmKnowbase> kws = ekmKnowbaseRes.findByDomain(request.getServerName()) ;
-			if(kws.size() > 0) {
-				EkmKnowbase base = kws.get(0) ;
+			EkmKnowbaseConfig kbconfig = ekmKnowbaseConfigRes.findByBasehost(request.getServerName()) ;
+			if(kbconfig != null) {
+				EkmKnowbase base = ekmKnowbaseRes.findOne(kbconfig.getKnowbaseid()) ;
 				view = request(super.createRequestPageTempletResponse("redirect:/ekm/view/"+base.getKbviewid()+".html"));
 			}
 		}
