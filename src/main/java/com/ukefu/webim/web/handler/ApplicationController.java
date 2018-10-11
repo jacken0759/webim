@@ -35,7 +35,7 @@ public class ApplicationController extends Handler{
 			EkmKnowbaseConfig kbconfig = ekmKnowbaseConfigRes.findByBasehost(request.getServerName()) ;
 			if(kbconfig != null) {
 				EkmKnowbase base = ekmKnowbaseRes.findOne(kbconfig.getKnowbaseid()) ;
-				view = request(super.createRequestPageTempletResponse("redirect:/ekm/view/"+base.getKbviewid()+".html"));
+				view = request(super.createRequestPageTempletResponse("redirect:/helpdesk/"+base.getKbviewid()+".html"));
 			}
 		}
 		return view ;
