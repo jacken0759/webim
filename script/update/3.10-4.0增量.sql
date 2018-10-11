@@ -170,4 +170,3 @@ ALTER TABLE uk_webim_monitor ADD readyagents int DEFAULT 0 COMMENT '就绪坐席
 ALTER TABLE uk_ekm_knowledge_type ADD navshow int(11) DEFAULT '0' COMMENT '导航栏显示（1是/0否）';
 ALTER TABLE uk_ekm_knowledge_type ADD deskshow int(11) DEFAULT '0' COMMENT '首页显示（1是/0否）';
 
-ALTER TABLE uk_ekm_knowbase ADD domain varchar(255) COMMENT '绑定域名';
