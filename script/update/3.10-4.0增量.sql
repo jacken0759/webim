@@ -170,3 +170,21 @@ ALTER TABLE uk_webim_monitor ADD readyagents int DEFAULT 0 COMMENT '就绪坐席
 ALTER TABLE uk_ekm_knowledge_type ADD navshow int(11) DEFAULT '0' COMMENT '导航栏显示（1是/0否）';
 ALTER TABLE uk_ekm_knowledge_type ADD deskshow int(11) DEFAULT '0' COMMENT '首页显示（1是/0否）';
 
+
+CREATE TABLE `uk_ekm_knowbase_config` (
+  `id` varchar(32) NOT NULL,
+  `knowbaseid` varchar(32) DEFAULT NULL COMMENT '知识库id',
+  `basehost` text  COMMENT '站点根网址',
+  `webname` text  COMMENT '网站名称',
+  `powerby` text  COMMENT '网站版权信息',
+  `keywords` text  COMMENT '站点关键字',
+  `description` text  COMMENT '站点描述',
+  `beian` text  COMMENT '网站备案号',
+  `footer` text  COMMENT '页脚',
+  `indexlog` text  COMMENT '首页图标',
+  `hotwords` text  COMMENT '搜索热词',
+  `banner` text  COMMENT '海报图片',
+  `creater` varchar(32) DEFAULT NULL,
+  `orgi` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM知识库配置表';
