@@ -28,10 +28,12 @@ public class ApplicationController extends Handler{
 	@Menu(type = "apps" , subtype = "root" , access=true)
     public ModelAndView root(HttpServletRequest request) {
 		ModelAndView view = request(super.createRequestPageTempletResponse("redirect:/console.html"));
-		List<EkmKnowbase> kws = ekmKnowbaseRes.findByDomainAndOrgi(request.getServerName(), super.getOrgi(request)) ;
-		if(kws.size() > 0) {
-			EkmKnowbase base = kws.get(0) ;
-			view = request(super.createRequestPageTempletResponse("redirect:/ekm/view/"+base.getKbviewid()+".html"));
+		if(!StringUtils.isBlank(request.getServerName())) {
+			List<EkmKnowbase> kws = ekmKnowbaseRes.findByDomain(request.getServerName()) ;
+			if(kws.size() > 0) {
+				EkmKnowbase base = kws.get(0) ;
+				view = request(super.createRequestPageTempletResponse("redirect:/ekm/view/"+base.getKbviewid()+".html"));
+			}
 		}
 		return view ;
 	}
