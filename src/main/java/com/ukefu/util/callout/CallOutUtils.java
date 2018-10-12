@@ -131,18 +131,20 @@ public class CallOutUtils {
 		
 		if(batch!=null && !StringUtils.isBlank(batch.getActid())) {
 			MetadataTable table = UKDataContext.getContext().getBean(MetadataRepository.class).findByTablename(batch.getActid()) ;
-			for(TableProperties tp : table.getTableproperty()) {
-				if(tp.isPhonenumber()) {
-					if(tp.isPrivatefield()) {
-						if(!tp.isSystemfield()) {
-							dial_number = (String) name.getValues().get("pri_"+tp.getFieldname()) ;
+			if(table!=null) {
+				for(TableProperties tp : table.getTableproperty()) {
+					if(tp.isPhonenumber()) {
+						if(tp.isPrivatefield()) {
+							if(!tp.isSystemfield()) {
+								dial_number = (String) name.getValues().get("pri_"+tp.getFieldname()) ;
+							}
+						}else {
+							dial_number = (String) name.getValues().get(tp.getFieldname()) ;
 						}
-					}else {
-						dial_number = (String) name.getValues().get(tp.getFieldname()) ;
+						disphonenum = tp.isSecfield() ;
+						distype = tp.getSecdistype() ;
+						break ;
 					}
-					disphonenum = tp.isSecfield() ;
-					distype = tp.getSecdistype() ;
-					break ;
 				}
 			}
 		}

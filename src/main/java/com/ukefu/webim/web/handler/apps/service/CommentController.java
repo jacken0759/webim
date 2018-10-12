@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ public class CommentController extends Handler{
 	@RequestMapping("/comment/index")
     @Menu(type = "service" , subtype = "comment" , admin= true)
     public ModelAndView index(ModelMap map , HttpServletRequest request , String userid , String agentservice , @Valid String channel) {
-		Page<AgentService> agentServiceList = agentServiceRes.findByOrgiAndSatisfaction(super.getOrgi(request) , true ,new PageRequest(super.getP(request), super.getPs(request))) ;
+		Page<AgentService> agentServiceList = agentServiceRes.findByOrgiAndSatisfaction(super.getOrgi(request) , true ,new PageRequest(super.getP(request), super.getPs(request), Direction.DESC , "createtime")) ;
 		map.addAttribute("serviceList", agentServiceList) ;
 		return request(super.createAppsTempletResponse("/apps/service/comment/index"));
     }
