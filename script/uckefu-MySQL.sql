@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-10-12 09:49:52
+Date: 2018-10-12 10:10:11
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -2364,6 +2364,32 @@ CREATE TABLE `uk_ekm_knowbase` (
 
 -- ----------------------------
 -- Records of uk_ekm_knowbase
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_ekm_knowbase_config`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_ekm_knowbase_config`;
+CREATE TABLE `uk_ekm_knowbase_config` (
+  `id` varchar(32) NOT NULL,
+  `knowbaseid` varchar(32) DEFAULT NULL COMMENT '知识库id',
+  `basehost` text COMMENT '站点根网址',
+  `webname` text COMMENT '网站名称',
+  `powerby` text COMMENT '网站版权信息',
+  `keywords` text COMMENT '站点关键字',
+  `description` text COMMENT '站点描述',
+  `beian` text COMMENT '网站备案号',
+  `footer` text COMMENT '页脚',
+  `indexlog` text COMMENT '首页图标',
+  `hotwords` text COMMENT '搜索热词',
+  `banner` text COMMENT '海报图片',
+  `creater` varchar(32) DEFAULT NULL,
+  `orgi` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM知识库配置表';
+
+-- ----------------------------
+-- Records of uk_ekm_knowbase_config
 -- ----------------------------
 
 -- ----------------------------
