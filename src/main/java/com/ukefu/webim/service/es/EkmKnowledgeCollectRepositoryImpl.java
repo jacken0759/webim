@@ -231,4 +231,17 @@ public class EkmKnowledgeCollectRepositoryImpl implements EkmKnowledgeCollectESR
 	    }
 		return knowledgeCollectList.getContent();
 	}
+
+	@Override
+	public List<EkmKnowledgeCollect> findByCreaterAndKnowledgeidAndOrgi(String creater, String knowledgeid,
+			String orgi) {
+		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		BoolQueryBuilder bq = QueryBuilders.boolQuery() ; 
+		bq.must(QueryBuilders.termQuery("creater", creater)) ;
+		bq.must(QueryBuilders.termQuery("knowledgeid", knowledgeid)) ;
+		bq.must(QueryBuilders.termQuery("orgi", orgi)) ;
+		boolQueryBuilder.must(bq); 
+		
+		return this.proccessQuery(boolQueryBuilder);
+	}
 }
