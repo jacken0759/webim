@@ -33,6 +33,7 @@ public class EkmKnowbaseConfig implements java.io.Serializable{
 	private String banner ; //海报图片
 	private String creater ; //
 	private String orgi ; //
+	private String direction ;
 	
 	@Id
 	@Column(length = 32)
@@ -121,6 +122,12 @@ public class EkmKnowbaseConfig implements java.io.Serializable{
 	}
 	public void setOrgi(String orgi) {
 		this.orgi = orgi;
+	}
+	public String getDirection() {
+		return direction;
+	}
+	public void setDirection(String direction) {
+		this.direction = direction;
 	}
 
 }

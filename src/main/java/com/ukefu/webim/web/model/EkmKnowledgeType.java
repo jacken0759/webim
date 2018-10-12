@@ -42,6 +42,8 @@ public class EkmKnowledgeType implements java.io.Serializable{
 	private boolean navshow;//导航栏显示（1是/0否）
 	private boolean deskshow;//首页显示（1是/0否）
 	
+	private String icon ;
+	
 	
 	@Id
 	@Column(length = 32)
@@ -142,6 +144,12 @@ public class EkmKnowledgeType implements java.io.Serializable{
 	}
 	public void setDeskshow(boolean deskshow) {
 		this.deskshow = deskshow;
+	}
+	public String getIcon() {
+		return icon;
+	}
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 	
 	
