@@ -188,3 +188,6 @@ CREATE TABLE `uk_ekm_knowbase_config` (
   `orgi` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM知识库配置表';
+
+ALTER TABLE uk_ekm_knowbase_config ADD direction text  COMMENT '知识库说明';
+ALTER TABLE uk_ekm_knowledge_type ADD icon varchar(255)  COMMENT '图标';
