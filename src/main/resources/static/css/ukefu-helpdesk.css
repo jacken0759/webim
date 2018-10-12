@@ -318,4 +318,30 @@ body{
 	max-width:800px;
 }
 
+.uckefu-footer-subtitle{
+	font-size:18px;
+	padding-left:10px;
+	
+	color:#FFFFFF;
+}
+.uckefu-footer-ul{
+	list-style: none;
+	margin-top:10px;
+	
+	margin-left:5px;
+	margin-right: 20px;
+}
+.uckefu-footer-ul li{
+	height:20px;
+	padding:10px 10px 10px 5px;
 
+	color:#FFFFFF;
+}
+.uckefu-footer-ul li a{
+
+	color: #ccc;
+}
+.uckefu-footer-ul li a:hover{
+
+	color:#009688;
+}
