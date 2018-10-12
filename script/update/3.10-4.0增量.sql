@@ -8,7 +8,7 @@ ALTER TABLE uk_chat_message ADD score varchar(32) COMMENT '机器人回答置信
 ALTER TABLE uk_chat_message ADD url varchar(255) COMMENT '图文跳转URL';
 
 ALTER TABLE uk_chat_message ADD bustype varchar(32) COMMENT '扩展消息类型';
-
+											 
 ALTER TABLE uk_xiaoe_config ADD hotmsg text COMMENT '热点问题';
 ALTER TABLE uk_xiaoe_config ADD topicshot tinyint(4) DEFAULT '0' COMMENT '是否开启热点问题推荐';
 
@@ -160,7 +160,7 @@ INSERT INTO `uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENT
 
 ALTER TABLE uk_chat_message ADD ckind varchar(100) COMMENT '分类';
 ALTER TABLE uk_chat_message ADD ckindname varchar(255) COMMENT '分类名称';
-ALTER TABLE uk_chat_message ADD clabelname varchar(255) COMMENT '标签名称';
+ALTER TABLE uk_chat_message ADD clabel varchar(255) COMMENT '标签';
 ALTER TABLE uk_chat_message ADD clabelname varchar(255) COMMENT '标签名称';
 
 ALTER TABLE uk_webim_monitor ADD incall int DEFAULT 0 COMMENT '通话中';
