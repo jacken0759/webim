@@ -83,7 +83,7 @@ public class ExcelImportUtils{
 							if(titleValue.equalsIgnoreCase("id")) {
 								findId = true ;
 							}
-							TableProperties tp  = initProperties("f"+UKTools.genIDByKey(titleValue+"String") , titleValue, "String", event.getOrgi() , event.getTablename() , false) ;
+							TableProperties tp  = initProperties("f"+UKTools.genIDByKey(event.getTablename()+titleValue+"String") , titleValue, "String", event.getOrgi() , event.getTablename() , false) ;
 							tp.setViewtype("list,add,edit,detail");
 							metaDataTable.getTableproperty().add(tp) ;
 						}

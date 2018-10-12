@@ -29,7 +29,7 @@ public class ESTools {
 		for(TableProperties tp:tb.getTableproperty()){
 			builder.startObject(tp.getFieldname().toLowerCase()) ;
 			if(tp.getDatatypename().equalsIgnoreCase("text") && !tp.getFieldname().equalsIgnoreCase("id")){
-				builder.field("type", "string").field("index", tp.isToken() ? "analyzed":"not_analyzed") ;
+				builder.field("type", "string");
 				if(tp.isToken() && "keyword".equalsIgnoreCase(tp.getTokentype())){
 					builder.field("analyzer" , "whitespace") ;
 				}
@@ -37,25 +37,25 @@ public class ESTools {
 					builder.field("ignore_above" , "256") ;
 				}
 			}else if(tp.getDatatypename().toLowerCase().equals("date") ){
-				builder.field("type", "long").field("index", "not_analyzed") ;
+				builder.field("type", "long");
 			}else if(tp.getDatatypename().toLowerCase().equals("datetime")){
-				builder.field("type", "long").field("index", "not_analyzed");
+				builder.field("type", "long");
 			}else if(tp.getDatatypename().toLowerCase().equals("long")){
-				builder.field("type", "long").field("index", "not_analyzed");
+				builder.field("type", "long");
 			}else if(tp.getDatatypename().toLowerCase().equals("textarea")){
-				builder.field("type", "string").field("index", "analyzed") ;
+				builder.field("type", "string");
 			}else if(tp.getDatatypename().toLowerCase().equals("nlp")){
-				builder.field("type", "string").field("index", "not_analyzed").field("ignore_above" , "256") ;
+				builder.field("type", "string");
 			}else if(tp.getDatatypename().toLowerCase().equals("url")){
-				builder.field("type", "string").field("index", "not_analyzed") ;
+				builder.field("type", "string");
 			}else if(tp.getDatatypename().toLowerCase().equals("email")){
-				builder.field("type", "string").field("index", "not_analyzed") ;
+				builder.field("type", "string");
 			}else if(tp.getDatatypename().toLowerCase().equals("number") ){
-				builder.field("type", "float").field("index", "not_analyzed");
+				builder.field("type", "float");
 			}else if(tp.getDatatypename().toLowerCase().equals("boolean") ){
-				builder.field("type", "boolean").field("index", "not_analyzed");
+				builder.field("type", "boolean");
 			}else{
-				builder.field("type", "string").field("index", tp.isToken() ? "analyzed"  : "not_analyzed") ;
+				builder.field("type", "string");
 			}
 			builder.endObject() ;
 		}
