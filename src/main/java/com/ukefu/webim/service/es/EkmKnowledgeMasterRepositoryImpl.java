@@ -3,10 +3,12 @@ package com.ukefu.webim.service.es;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.index.query.QueryStringQueryBuilder.Operator;
@@ -251,9 +253,15 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
 		return processQuery(boolQueryBuilder , pageable);
 	}
-	
+	@SuppressWarnings("deprecation")
 	private Page<EkmKnowledgeMaster> processQuery(BoolQueryBuilder boolQueryBuilder, Pageable page){
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).withSort(new FieldSortBuilder("createtime").unmappedType("date").order(SortOrder.DESC));
+		
+		
+		QueryBuilder beginFilter = QueryBuilders.boolQuery().should(QueryBuilders.missingQuery("begintime")).should(QueryBuilders.rangeQuery("begintime").to(new Date().getTime())) ;
+		QueryBuilder endFilter = QueryBuilders.boolQuery().should(QueryBuilders.missingQuery("endtime")).should(QueryBuilders.rangeQuery("endtime").from(new Date().getTime())) ;
+		
+		
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).withFilter(QueryBuilders.boolQuery().must(beginFilter).must(endFilter)).withSort(new FieldSortBuilder("createtime").unmappedType("date").order(SortOrder.DESC));
 		searchQueryBuilder.withHighlightFields(new Field("title") , new Field("content")) ;
 		
 		searchQueryBuilder.withPageable(page) ;
@@ -262,6 +270,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 		if(elasticsearchTemplate.indexExists(EkmKnowledgeMaster.class)){
 			knowledgeList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeMaster.class , new EKMResultMapper()) ;
 		}
+		
 		return knowledgeList;
 	}
 
@@ -303,59 +312,24 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 	}
 
 	@Override
-	public Page<EkmKnowledgeMaster> findByKnowledge(BoolQueryBuilder boolQueryBuilder,boolean datastatus, List<String> EkmKnowledgeMasterType, String orgi, User user,
+	public Page<EkmKnowledgeMaster> findByKnowledge(BoolQueryBuilder boolQueryBuilder,boolean datastatus, List<String> ktList, String orgi, User user,
 			Pageable pageable) {
-		BoolQueryBuilder boolQueryBuilder1 = new BoolQueryBuilder();
-		
-		/*final List<String> knowbaseRoleList = new ArrayList<>();
-		final List<String> knowbaseOrganList = new ArrayList<>();
-		
-		List<UserRole> userRoleList = userRoleRes.findByOrgiAndUser(orgi, user);
-		for(UserRole userRole :userRoleList){
-			List<EkmKnowbaseRole> tempRoleList = ekmKnowbaseRoleRes.findByRoleidAndOrgi(userRole.getRole().getId(), orgi);
-			for(EkmKnowbaseRole knowbaseRole : tempRoleList){
-				knowbaseRoleList.add(knowbaseRole.getKnowbaseid());
-			}
-		}
-		
-		List<EkmKnowbaseOrgan> tempOrganList = ekmKnowbaseOrganRes.findByOrganidAndOrgi(user.getOrgan(), orgi);
-		for(EkmKnowbaseOrgan knowbaseOrgan : tempOrganList){
-			knowbaseOrganList.add(knowbaseOrgan.getKnowbaseid());
-		}
-		
-		if(knowbaseRoleList.size() > 0){
-			for(String id : knowbaseRoleList){
-				boolQueryBuilder1.should(termQuery("knowbaseid" , id));
-			}
-		}
-		if(knowbaseOrganList.size() > 0){
-			for(String id : knowbaseOrganList){
-				boolQueryBuilder1.should(termQuery("knowbaseid" , id));
-			}
-		}*/
-		
+		BoolQueryBuilder bool = new BoolQueryBuilder();
 		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
 		if(user.isSuperuser() == true){
-			boolQueryBuilder.must(boolQueryBuilder1) ;
+			boolQueryBuilder.must(bool) ;
 		}else{
 			 
-			if(EkmKnowledgeMasterType.size() > 0){
-				for(String id : EkmKnowledgeMasterType){
-					boolQueryBuilder1.should(termQuery("knowledgetypeid" ,id)) ;
+			if(ktList.size() > 0){
+				for(String id : ktList){
+					bool.should(termQuery("knowledgetypeid" ,id)) ;
 				}
 			}else{
-				boolQueryBuilder1.must(termQuery("knowledgetypeid" ,UKDataContext.UKEFU_SYSTEM_NO_DAT)) ;
+				bool.must(termQuery("knowledgetypeid" ,UKDataContext.UKEFU_SYSTEM_NO_DAT)) ;
 			}
-			boolQueryBuilder.must(boolQueryBuilder1) ;
+			boolQueryBuilder.must(bool) ;
 		}
-		
-		
-		//boolQueryBuild.must(boolQueryBuilder1) ;
-		//boolQueryBuilder.must(boolQueryBuilder1) ;
-//		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
-//		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
-//		boolQueryBuilder.must(termQuery("pubstatus" , UKDataContext.PubStatusEnum.PASS.toString())) ;//审核通过
-//		
+	
 		return processQuery(boolQueryBuilder , pageable);
 	}
 
