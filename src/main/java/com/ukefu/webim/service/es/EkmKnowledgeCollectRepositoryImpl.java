@@ -49,13 +49,7 @@ public class EkmKnowledgeCollectRepositoryImpl implements EkmKnowledgeCollectESR
 		bq.must(QueryBuilders.termQuery("orgi", orgi)) ;
 		boolQueryBuilder.must(bq); 
 		
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
-		Page<EkmKnowledgeCollect> knowledgeCollectList = null ;
-		if(elasticsearchTemplate.indexExists(EkmKnowledgeCollect.class)){
-			knowledgeCollectList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeCollect.class ) ;
-	    }
-		
-		return knowledgeCollectList.getContent();
+		return this.proccessQuery(boolQueryBuilder);
 	}
 
 	@Override
@@ -66,13 +60,7 @@ public class EkmKnowledgeCollectRepositoryImpl implements EkmKnowledgeCollectESR
 		bq.must(QueryBuilders.termQuery("orgi", orgi)) ;
 		boolQueryBuilder.must(bq); 
 		
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
-		Page<EkmKnowledgeCollect> knowledgeCollectList = null ;
-		if(elasticsearchTemplate.indexExists(EkmKnowledgeCollect.class)){
-			knowledgeCollectList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeCollect.class ) ;
-	    }
-		
-		return knowledgeCollectList.getContent();
+		return this.proccessQuery(boolQueryBuilder);
 	}
 
 	@Override
@@ -104,13 +92,8 @@ public class EkmKnowledgeCollectRepositoryImpl implements EkmKnowledgeCollectESR
 		boolQueryBuilder.must(bq); 
 		HasParentQueryBuilder hasParentQueryBuilder=QueryBuilders.hasParentQuery("uk_ekm_kb_master",QueryBuilders.termQuery("datastatus", false));
 		boolQueryBuilder.must(hasParentQueryBuilder) ;
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
-		Page<EkmKnowledgeCollect> knowledgeCollectList = null ;
-		if(elasticsearchTemplate.indexExists(EkmKnowledgeCollect.class)){
-			knowledgeCollectList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeCollect.class ) ;
-	    }
 		
-		return knowledgeCollectList.getContent();
+		return this.proccessQuery(boolQueryBuilder);
 	}
 
 	@Override
@@ -143,13 +126,8 @@ public class EkmKnowledgeCollectRepositoryImpl implements EkmKnowledgeCollectESR
 		boolQueryBuilder.must(bq); 
 		HasParentQueryBuilder hasParentQueryBuilder=QueryBuilders.hasParentQuery("uk_ekm_kb_master",QueryBuilders.termQuery("datastatus", false));
 		boolQueryBuilder.must(hasParentQueryBuilder) ;
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
-		Page<EkmKnowledgeCollect> knowledgeCollectList = null ;
-		if(elasticsearchTemplate.indexExists(EkmKnowledgeCollect.class)){
-			knowledgeCollectList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeCollect.class ) ;
-	    }
 		
-		return knowledgeCollectList.getContent();
+		return this.proccessQuery(boolQueryBuilder);
 	}
 
 	@Override
@@ -163,13 +141,7 @@ public class EkmKnowledgeCollectRepositoryImpl implements EkmKnowledgeCollectESR
 		bq.must(QueryBuilders.termQuery("folderid", folderid)) ;
 		boolQueryBuilder.must(bq); 
 		
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
-		Page<EkmKnowledgeCollect> knowledgeCollectList = null ;
-		if(elasticsearchTemplate.indexExists(EkmKnowledgeCollect.class)){
-			knowledgeCollectList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeCollect.class ) ;
-	    }
-		
-		return knowledgeCollectList.getContent();
+		return this.proccessQuery(boolQueryBuilder);
 	}
 
 	@Override
@@ -182,13 +154,7 @@ public class EkmKnowledgeCollectRepositoryImpl implements EkmKnowledgeCollectESR
 		bq.must(QueryBuilders.termQuery("status", status)) ;
 		boolQueryBuilder.must(bq); 
 		
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
-		Page<EkmKnowledgeCollect> knowledgeCollectList = null ;
-		if(elasticsearchTemplate.indexExists(EkmKnowledgeCollect.class)){
-			knowledgeCollectList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeCollect.class ) ;
-	    }
-		
-		return knowledgeCollectList.getContent();
+		return this.proccessQuery(boolQueryBuilder);
 	}
 
 	@Override
@@ -247,12 +213,22 @@ public class EkmKnowledgeCollectRepositoryImpl implements EkmKnowledgeCollectESR
 		bq.must(QueryBuilders.termQuery("orgi", orgi)) ;
 		boolQueryBuilder.must(bq); 
 		
+		return this.proccessQuery(boolQueryBuilder);
+	}
+
+	@Override
+	public List<EkmKnowledgeCollect> findByOrgi(String orgi) {
+		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		boolQueryBuilder.must(QueryBuilders.termQuery("orgi", orgi)) ;
+		return this.proccessQuery(boolQueryBuilder);
+	}
+	
+	public List<EkmKnowledgeCollect> proccessQuery(BoolQueryBuilder boolQueryBuilder){
 		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
 		Page<EkmKnowledgeCollect> knowledgeCollectList = null ;
 		if(elasticsearchTemplate.indexExists(EkmKnowledgeCollect.class)){
 			knowledgeCollectList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeCollect.class ) ;
 	    }
-		
 		return knowledgeCollectList.getContent();
 	}
 }

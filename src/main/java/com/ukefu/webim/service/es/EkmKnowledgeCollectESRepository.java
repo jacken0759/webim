@@ -35,5 +35,6 @@ public abstract interface EkmKnowledgeCollectESRepository
 	
 	public void delete(List<EkmKnowledgeCollect> ekmKnowledgeCollectList) ;
 	
+	public abstract List<EkmKnowledgeCollect> findByOrgi(String orgi );
 }
 
