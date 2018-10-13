@@ -193,3 +193,11 @@ ALTER TABLE uk_ekm_knowbase_config ADD direction text  COMMENT '知识库说明'
 ALTER TABLE uk_ekm_knowledge_type ADD icon varchar(255)  COMMENT '图标';
 
 ALTER TABLE uk_ekm_comments ADD title text COMMENT '标题';
+
+CREATE TABLE `uk_ekm_configitem` (
+  `id` varchar(32) NOT NULL,
+  `upfilesize` varchar(32) DEFAULT NULL COMMENT '知识附件上传的限制尺寸',
+	`createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `orgi` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM 配置表';
