@@ -104,8 +104,10 @@ body{
 .uckefu-sum{
 	background-color:#f7f8fa;	
 }
+.uckefu-maxwidth{
+	width:1200px;
+}
 .uckefu-sum .uckefu-summary{
-	max-width:1330px;
 	margin: 0 auto;
 	background-color:#FFFFFF;
 }
@@ -269,8 +271,14 @@ body{
 	width: 840px;
 }
 .ukefu-helpdesk-left{
-	position: fixed;
-	
+	position: absolute;
+    top: 0px;
+    bottom: 0;
+    z-index: 666;
+    min-height: 0;
+    overflow: auto;
+    border-right: #e5e5e5 1px solid;
+    padding-top: 32px;
 }
 .ukefu-helpdesk-right{
 	margin-left:320px;
@@ -279,15 +287,6 @@ body{
     padding: 20px 0 10px 0px;
 }
 .ukefu-helpdesk-left .site-tree {
-    position: fixed;
-    top: 60px;
-    bottom: 0;
-    z-index: 666;
-    min-height: 0;
-    overflow: auto;
-    background-color: #f7f8fa;
-    border-right: #e5e5e5 1px solid;
-    padding-top: 32px;
     
 }
 
@@ -343,5 +342,45 @@ body{
 }
 .uckefu-footer-ul li a:hover{
 
+	color:#009688;
+}
+
+.uckefu-footer-box{
+	
+}
+
+.ukefu-foot-span{
+	font-size:12px;
+	display:inline;
+	line-height:30px;
+	margin-top:5px;
+	margin-left:5px;
+}
+.ukefu-foot-span a{
+	color:#ccc;
+}
+.ukefu-foot-span a:hover{
+	color:#009688;
+}
+
+.ukefu-foot-li{
+	display:inline-block;width:275px;
+}
+.ukefu-foot-ul{
+	padding:18px 0;color:#fff;text-align:center;margin:0 auto;width:1200px;border-bottom:1px solid #666666;
+}
+.uckefu-foot-content{
+	max-width:1200px;
+	margin: 0 auto;
+	padding:10px 50px 5px 0px;
+}
+.ukefu-footer-span{
+	line-height: 20px;
+}
+.ukefu-footer-span a{
+	color:#ccc;
+	font-size: 12px;
+}
+.ukefu-footer-span a:hover{
 	color:#009688;
 }
