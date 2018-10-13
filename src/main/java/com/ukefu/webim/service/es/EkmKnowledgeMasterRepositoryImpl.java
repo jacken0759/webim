@@ -315,6 +315,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 			Pageable pageable) {
 		BoolQueryBuilder bool = new BoolQueryBuilder();
 		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
+		boolQueryBuilder.must(termQuery("orgi" , orgi)) ;
 		if(user.isSuperuser() == true){
 			boolQueryBuilder.must(bool) ;
 		}else{
