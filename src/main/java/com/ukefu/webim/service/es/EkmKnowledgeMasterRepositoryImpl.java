@@ -272,6 +272,25 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 		
 		return knowledgeList;
 	}
+	@SuppressWarnings("deprecation")
+	private Page<EkmKnowledgeMaster> processQueryItem(BoolQueryBuilder boolQueryBuilder, Pageable page){
+		
+		//过滤掉已过期的知识
+		//QueryBuilder beginFilter = QueryBuilders.boolQuery().should(QueryBuilders.missingQuery("begintime")).should(QueryBuilders.rangeQuery("begintime").to(new Date().getTime())) ;
+		//QueryBuilder endFilter = QueryBuilders.boolQuery().should(QueryBuilders.missingQuery("endtime")).should(QueryBuilders.rangeQuery("endtime").from(new Date().getTime())) ;
+		
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).withSort(new FieldSortBuilder("createtime").unmappedType("date").order(SortOrder.DESC));
+		searchQueryBuilder.withHighlightFields(new Field("title") , new Field("content")) ;
+		
+		searchQueryBuilder.withPageable(page) ;
+		
+		Page<EkmKnowledgeMaster> knowledgeList = null ;
+		if(elasticsearchTemplate.indexExists(EkmKnowledgeMaster.class)){
+			knowledgeList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeMaster.class , new EKMResultMapper()) ;
+		}
+		
+		return knowledgeList;
+	}
 
 
 	@Override
@@ -360,7 +379,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
 		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
-		return processQuery(boolQueryBuilder , pageable);
+		return processQueryItem(boolQueryBuilder , pageable);
 	}
 
 	@Override
@@ -417,6 +436,16 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 		boolQueryBuilder.must(boolQueryBuilder1) ;
 		//boolQueryBuilder.must(termQuery("pubstatus" , UKDataContext.PubStatusEnum.PASS.toString())) ;//审核通过
 		return processQuery(boolQueryBuilder , pageable);
+	}
+
+	@Override
+	public Page<EkmKnowledgeMaster> findByOverdue(boolean datastatus, String orgi, Pageable pageable) {
+		
+		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
+		boolQueryBuilder.must(termQuery("orgi" ,orgi)) ;
+		
+		return this.processQueryItem(boolQueryBuilder, pageable);
 	}
 
 }
