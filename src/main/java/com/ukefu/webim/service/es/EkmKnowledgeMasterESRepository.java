@@ -49,6 +49,6 @@ public abstract interface EkmKnowledgeMasterESRepository
 	
 	public abstract List<EkmKnowledgeMaster> findByDatastatusAndOrgi(BoolQueryBuilder boolQueryBuilder,boolean datastatus ,String orgi);
 	
-	public abstract Page<EkmKnowledgeMaster> findByOverdue(boolean datastatus ,String orgi,Pageable pageable);
+	public abstract Page<EkmKnowledgeMaster> findByAllKnowledge(boolean datastatus ,String orgi,Pageable pageable);
 }
 

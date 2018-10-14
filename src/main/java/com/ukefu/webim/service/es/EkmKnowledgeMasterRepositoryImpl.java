@@ -439,7 +439,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 	}
 
 	@Override
-	public Page<EkmKnowledgeMaster> findByOverdue(boolean datastatus, String orgi, Pageable pageable) {
+	public Page<EkmKnowledgeMaster> findByAllKnowledge(boolean datastatus, String orgi, Pageable pageable) {
 		
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 		boolQueryBuilder.must(termQuery("datastatus" , datastatus)) ;
