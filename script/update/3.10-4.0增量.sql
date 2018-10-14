@@ -201,3 +201,5 @@ CREATE TABLE `uk_ekm_configitem` (
   `orgi` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM 配置表';
+
+ALTER TABLE uk_ekm_knowbase_config ADD notfoundtip varchar(255)  COMMENT '未搜索到结果提示语';
