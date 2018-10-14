@@ -384,3 +384,13 @@ body{
 .ukefu-footer-span a:hover{
 	color:#009688;
 }
+
+.layui-layout-admin .layui-header {
+    border-bottom: 0px solid #1AA094;
+    height: 50px;
+}
+
+
+
+
+
