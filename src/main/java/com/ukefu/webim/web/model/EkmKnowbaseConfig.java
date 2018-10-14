@@ -34,6 +34,7 @@ public class EkmKnowbaseConfig implements java.io.Serializable{
 	private String creater ; //
 	private String orgi ; //
 	private String direction ;
+	private String notfoundtip ;//未搜索到结果提示语
 	
 	@Id
 	@Column(length = 32)
@@ -129,5 +130,11 @@ public class EkmKnowbaseConfig implements java.io.Serializable{
 	public void setDirection(String direction) {
 		this.direction = direction;
 	}
-
+	public String getNotfoundtip() {
+		return notfoundtip;
+	}
+	public void setNotfoundtip(String notfoundtip) {
+		this.notfoundtip = notfoundtip;
+	}
+	
 }

@@ -390,7 +390,9 @@ body{
     height: 50px;
 }
 
-
+.ukefu-helpdesk-bg{
+	border-bottom-color: #009688; ${systemConfig.backgroundColor!'background-color: #32c24d;'}
+}
 
 
 
