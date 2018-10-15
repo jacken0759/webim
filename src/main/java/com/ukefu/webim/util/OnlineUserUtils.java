@@ -1076,6 +1076,7 @@ public class OnlineUserUtils {
 					values.put("q", q) ;
 					values.put("skill", skill) ;
 					values.put("userid", userid) ;
+					values.put("aiid", aiConfig.getId()) ;
 					param = UKTools.getTemplet(templet.getTemplettext(), values) ;
 				}
 				String result = HttpClientUtil.doPost(aiConfig.getSmartsuggesturl(), param)  , text = null;
