@@ -44,6 +44,7 @@ import com.ukefu.webim.util.server.message.OtherMessageItem;
 import com.ukefu.webim.web.model.AgentReport;
 import com.ukefu.webim.web.model.AgentUser;
 import com.ukefu.webim.web.model.AiConfig;
+import com.ukefu.webim.web.model.AiUser;
 import com.ukefu.webim.web.model.AreaType;
 import com.ukefu.webim.web.model.Contacts;
 import com.ukefu.webim.web.model.CousultInvite;
@@ -1133,7 +1134,7 @@ public class OnlineUserUtils {
 		return otherMessageItemList ;
 	}
 	
-	public static OtherMessageItem suggestdetail(AiConfig aiCofig , String id , String orgi , User user){
+	public static OtherMessageItem suggestdetail(AiUser aiUser,AiConfig aiCofig , String id , String orgi , User user){
 		OtherMessageItem otherMessageItem = null ;
 		String param = "" ;
 		try {
@@ -1142,6 +1143,8 @@ public class OnlineUserUtils {
 				Map<String,Object> values = new HashMap<String,Object>();
 				values.put("id", id) ;
 				values.put("user", user) ;
+				values.put("aiuser", aiUser) ;
+				values.put("aiid", aiCofig.getId()) ;
 				param = UKTools.getTemplet(templet.getTemplettext(), values) ;
 			}
 			if(!StringUtils.isBlank(aiCofig.getOqrdetailurl())) {
