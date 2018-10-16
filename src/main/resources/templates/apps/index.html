@@ -338,11 +338,15 @@
 								</a>
 							</dd>
 							</#if>
-							<dd class="ukefu-left-menu" data-tooltip="质检系统">
-								<a href="javascript:void(0)" data-title="质检系统" data-href="/apps/qc/index.html" class="iframe_btn" data-id="maincontent" data-type="tabChange"> 
-								<i class="kfont"	style="position: relative;">&#xe656;</i>
-								</a>
-							</dd>
+							<#if models?? && models["qc"]?? && models["qc"] == true>
+								<#if user?? && (user.roleAuthMap["A15"]?? || user.usertype == "0") >
+									<dd class="ukefu-left-menu" data-tooltip="质检系统">
+										<a href="javascript:void(0)" data-title="质检系统" data-href="/apps/qc/index.html" class="iframe_btn" data-id="maincontent" data-type="tabChange"> 
+										<i class="kfont"	style="position: relative;">&#xe656;</i>
+										</a>
+									</dd>
+								</#if>
+							</#if>
 						</dl>
 					</li>
 					<li class="layui-nav-item" style="height: 30px; text-align: center"></li>
