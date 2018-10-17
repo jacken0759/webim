@@ -19,6 +19,11 @@
 				<a href="/setting/workservice/index.html">坐席服务日期设置</a>
 			</dd>
 			</#if>
+			<#if user?? && (user.roleAuthMap["A06_A01_A04"]?? || user.usertype == "0") >
+			<dd class="<#if subtype?? && subtype == "role">layui-this</#if>">
+				<a href="/setting/role/index.html">角色授权</a>
+			</dd>
+			</#if>
 			<!-- 
 			<dd <#if subtype?? && subtype == 'acd'>class="layui-this"</#if>>
 				<a href="/setting/acd.html">ACD策略</a>
