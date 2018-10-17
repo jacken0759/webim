@@ -2,9 +2,15 @@
 	<#if topicList?? && topicList?size gt 0>
 	<#list topicList as topic>
 	<li class="ukefu-agentservice-list">
-		<a href="/agent/other/topic/detail?knowledgeid=${topic.id!''}" data-height="700" data-width="1150"  data-toggle="ajax" class="othertopicdetail" data-id="${topic.id!''}">
+		<#if sessionConfig?? && sessionConfig.otherquickplay?? && sessionConfig.otherquickplay == true>
+		<a href="javascript:void(0)" class="othertopicdetail" data-href="/agent/other/topic/detail.html?id=${topic.id!''}">
 			${topic.title!''}
 		</a>
+		<#else>
+		<a href="/agent/other/topic/detail?id=${topic.id!''}" data-height="700" data-width="1150"  data-toggle="ajax" data-id="${topic.id!''}">
+			${topic.title!''}
+		</a>
+		</#if>
 	</li>
 	</#list>
 	<#else>
@@ -17,7 +23,7 @@
 	</#if>
 </ul>
 <script language="javascript">
-/* $('.othertopicdetail').on("dblclick",function(){
+$('.othertopicdetail').on("dblclick",function(){
 	loadURLWithTip($(this).data("href") , null , function(data){
 		if(editor.count("text") == 0 ){
 			editor.html(data);
@@ -28,6 +34,5 @@
 			});
 		}
 	} , false , true);
-}); */
-
+});
 </script>

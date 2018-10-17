@@ -222,7 +222,7 @@ public class AgentController extends Handler {
 		
 		view.addObject("sessionConfig", sessionConfig) ;
 		if(sessionConfig.isOtherquickplay() && !StringUtils.isBlank(sessionConfig.getOqrsearchurl())) {
-			
+			view.addObject("topicList", OnlineUserUtils.search(null, super.getOrgi(request), super.getUser(request))) ;
 		}else{//ekm知识库
 			if(UKDataContext.model.get("ekm")!=null ){
 			EkmDataInterface dataExchange = (EkmDataInterface) UKDataContext.getContext().getBean("ekm") ;
@@ -471,7 +471,7 @@ public class AgentController extends Handler {
 		SessionConfig sessionConfig = ServiceQuene.initSessionConfig(super.getOrgi(request)) ;
 		map.put("sessionConfig", sessionConfig) ;
 		if(sessionConfig.isOtherquickplay()) {
-			
+			map.put("topicList", OnlineUserUtils.search(q, super.getOrgi(request), super.getUser(request))) ;
 		}else {//ekm知识库
 			if(UKDataContext.model.get("ekm")!=null ){
 			EkmDataInterface dataExchange = (EkmDataInterface) UKDataContext.getContext().getBean("ekm") ;
@@ -487,16 +487,16 @@ public class AgentController extends Handler {
 	
 	@RequestMapping("/other/topic/detail")
 	@Menu(type = "apps", subtype = "othertopicdetail")
-	public ModelAndView othertopicdetail(ModelMap map ,HttpServletRequest request , String knowledgeid) throws IOException, TemplateException {
+	public ModelAndView othertopicdetail(ModelMap map ,HttpServletRequest request , String id) throws IOException, TemplateException {
 		SessionConfig sessionConfig = ServiceQuene.initSessionConfig(super.getOrgi(request)) ;
 		
 		map.put("sessionConfig", sessionConfig) ;
 		if(sessionConfig.isOtherquickplay()) {
-			
+			map.put("topic", OnlineUserUtils.detail(id, super.getOrgi(request), super.getUser(request))) ;
 		}else {//ekm知识库
-			if(UKDataContext.model.get("ekm")!=null && !StringUtils.isBlank(knowledgeid)){
+			if(UKDataContext.model.get("ekm")!=null && !StringUtils.isBlank(id)){
 				EkmDataInterface dataExchange = (EkmDataInterface) UKDataContext.getContext().getBean("ekm") ;
-				dataExchange.getKnowledgeDetail(map, request, knowledgeid, super.getOrgi(request), super.getUser(request), super.getP(request), super.get50Ps(request));
+				dataExchange.getKnowledgeDetail(map, request, id, super.getOrgi(request), super.getUser(request), super.getP(request), super.get50Ps(request));
 			}
 				
 		}
