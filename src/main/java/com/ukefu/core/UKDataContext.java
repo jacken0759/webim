@@ -884,7 +884,15 @@ public class UKDataContext {
 			return super.toString().toLowerCase() ;
 		}
 	}
-
+	public enum QcFormFilterTypeEnum{
+		CALLEVENT,//通话质检
+		WORKORDERS,//工单质检
+		AGENTSERVICE;//会话质检（文字客服）
+		
+		public String toString(){
+			return super.toString().toLowerCase() ;
+		}
+	}
 	/**
 	 * 
 	 * @param resource
