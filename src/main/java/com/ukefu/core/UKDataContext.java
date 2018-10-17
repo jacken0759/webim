@@ -875,6 +875,15 @@ public class UKDataContext {
 			return super.toString().toLowerCase() ;
 		}
 	}
+	
+	public enum QcTemplateStatus{
+		START,
+		STOP;
+		
+		public String toString(){
+			return super.toString().toLowerCase() ;
+		}
+	}
 
 	/**
 	 * 
