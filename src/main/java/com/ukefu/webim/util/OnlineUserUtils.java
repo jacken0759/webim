@@ -1075,6 +1075,7 @@ public class OnlineUserUtils {
 					Map<String,Object> values = new HashMap<String,Object>();
 					values.put("q", q) ;
 					values.put("skill", skill) ;
+					values.put("appid", invite.getSnsaccountid()) ;
 					values.put("userid", userid) ;
 					values.put("aiid", aiConfig.getId()) ;
 					param = UKTools.getTemplet(templet.getTemplettext(), values) ;
@@ -1135,7 +1136,7 @@ public class OnlineUserUtils {
 		return otherMessageItemList ;
 	}
 	
-	public static OtherMessageItem suggestdetail(AiUser aiUser,AiConfig aiCofig , String id , String orgi , User user){
+	public static OtherMessageItem suggestdetail(AiUser aiUser,AiConfig aiCofig , String id , String orgi ,String appid, User user){
 		OtherMessageItem otherMessageItem = null ;
 		String param = "" ;
 		try {
@@ -1145,6 +1146,7 @@ public class OnlineUserUtils {
 				values.put("id", id) ;
 				values.put("user", user) ;
 				values.put("aiuser", aiUser) ;
+				values.put("appid", appid) ;
 				values.put("aiid", aiCofig.getId()) ;
 				param = UKTools.getTemplet(templet.getTemplettext(), values) ;
 			}
