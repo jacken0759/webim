@@ -203,3 +203,42 @@ CREATE TABLE `uk_ekm_configitem` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='EKM 配置表';
 
 ALTER TABLE uk_ekm_knowbase_config ADD notfoundtip varchar(255)  COMMENT '未搜索到结果提示语';
+
+CREATE TABLE `uk_qc_template` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `name` varchar(32) DEFAULT NULL COMMENT '名称',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `organ` varchar(32) DEFAULT NULL COMMENT '所属部门',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `arithmetic` varchar(32) DEFAULT NULL COMMENT '算分机制(plus评分/minus扣分)',
+  `type` varchar(32) DEFAULT NULL COMMENT '模板类型',
+  `status` varchar(32) DEFAULT NULL COMMENT '模板状态',
+  `totalscore` int(32) DEFAULT NULL COMMENT '总分',
+  `passscore` int(32) DEFAULT NULL COMMENT '合格分',
+  `remarks` text COMMENT '备注',
+  `isvp` int(11) DEFAULT '0' COMMENT '是否有否决权（1是/0否）',
+  `isadcom` int(11) DEFAULT '0' COMMENT '是否有优点评语（1是/0否）',
+  `isqacom` int(11) DEFAULT '0' COMMENT '是否QA评语（1是/0否）',
+  `isimcom` int(11) DEFAULT '0' COMMENT '是否有改进评语（1是/0否）',
+  `isrmk` int(11) DEFAULT '0' COMMENT '质检时是否有备注（1是/0否）',
+  `isitemrmk` int(11) DEFAULT '0' COMMENT '质检项是否能填备注（1是/0否）',
+  `isitemdir` int(11) DEFAULT '0' COMMENT '质检项是否有说明（1是/0否）',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='质检 - 模板表';
+
+CREATE TABLE `uk_qc_template_item` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `name` varchar(32) DEFAULT NULL COMMENT '名称',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `maxscore` int(32) DEFAULT NULL COMMENT '最高分数',
+  `minscore` int(32) DEFAULT NULL COMMENT '最低分数',
+  `scheme` text COMMENT '评分方案',
+  `templateid` varchar(32) DEFAULT '0' COMMENT '质检模板id',
+  `parentid` varchar(32) DEFAULT '0' COMMENT '父级id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='质检 - 模板质检项表';
+
