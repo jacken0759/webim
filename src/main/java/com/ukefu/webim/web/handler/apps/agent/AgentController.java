@@ -488,19 +488,22 @@ public class AgentController extends Handler {
 	@RequestMapping("/other/topic/detail")
 	@Menu(type = "apps", subtype = "othertopicdetail")
 	public ModelAndView othertopicdetail(ModelMap map ,HttpServletRequest request , String id) throws IOException, TemplateException {
+		ModelAndView view = request(super.createRequestPageTempletResponse("/apps/agent/mainagentuser")) ;
 		SessionConfig sessionConfig = ServiceQuene.initSessionConfig(super.getOrgi(request)) ;
 		
 		map.put("sessionConfig", sessionConfig) ;
 		if(sessionConfig.isOtherquickplay()) {
 			map.put("topic", OnlineUserUtils.detail(id, super.getOrgi(request), super.getUser(request))) ;
+			view = request(super.createRequestPageTempletResponse("/apps/agent/topicdetail")) ;
 		}else {//ekm知识库
 			if(UKDataContext.model.get("ekm")!=null && !StringUtils.isBlank(id)){
 				EkmDataInterface dataExchange = (EkmDataInterface) UKDataContext.getContext().getBean("ekm") ;
 				dataExchange.getKnowledgeDetail(map, request, id, super.getOrgi(request), super.getUser(request), super.getP(request), super.get50Ps(request));
+				view = request(super.createRequestPageTempletResponse("/apps/agent/ekmdetail")) ;
 			}
 				
 		}
-		return request(super.createRequestPageTempletResponse("/apps/agent/topicdetail")) ;
+		return view ;
 	}
 	
 	
