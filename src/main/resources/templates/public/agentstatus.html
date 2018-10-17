@@ -1,4 +1,4 @@
-	<div class="agent-title" id="system_time" style="margin-right:20px;">${.now?string('yyyy-MM-dd HH:mm:ss')}</div>
+	<div class="agent-title" id="system_time" style="margin-right:20px;"></div>
 	<div class="agent-title" id="agents_status">服务人数：${agentStatusReport.users!''}人，排队数：${agentStatusReport.inquene!''}人，在线坐席：${agentStatusReport.agents!''}人，坐席忙：${agentStatusReport.busy!0}人</div>
 	<div id="agentstatus"
 		class="layui-unselect layui-form-switch <#if agentStatus??>layui-form-onswitch</#if>">

@@ -21,11 +21,11 @@ public class QuickReplyResourceController extends Handler{
 	
 	@RequestMapping("/res/quickreply")
     @Menu(type = "res" , subtype = "quickreply")
-    public ModelAndView add(ModelMap map , HttpServletRequest request , @Valid String q) throws IOException, TemplateException {
+    public ModelAndView add(ModelMap map , HttpServletRequest request , @Valid String q,@Valid String appid) throws IOException, TemplateException {
 		if(q==null){
 			q = "" ;
 		}
-    	map.addAttribute("quickReplyList", OnlineUserUtils.search(q, super.getOrgi(request), super.getUser(request))) ;
+    	map.addAttribute("quickReplyList", OnlineUserUtils.search(q, super.getOrgi(request), super.getUser(request) , appid)) ;
         return request(super.createRequestPageTempletResponse("/public/quickreply"));
     }
 }

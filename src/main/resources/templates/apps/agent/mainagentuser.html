@@ -472,4 +472,7 @@
 	function updateType(data){
 		$('#agenttype').html(data);
 	}
+	function otherTopicSearch(){
+		loadURLWithTip("/agent/other/topic.html?appid=${inviteData.snsaccountid!''}&q="+ encodeURIComponent($("#otherSearchQuery").val()), "#topiclist" , null , false , true);
+	}
 </script>

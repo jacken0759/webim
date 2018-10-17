@@ -58,7 +58,7 @@ $(document).ready(function(){
 	/****每分钟执行一次，与服务器交互，保持会话****/
 	setInterval(function(){
 		WebIM.ping();	
-	} , 1000);				
+	} , 30000);				
 }) ;
 
 var WebIM = {
@@ -97,7 +97,7 @@ var WebIM = {
 	    });  
 	}, 
 	ping : function(){
-		loadURL("/message/ping.html","#system_time",function(data){
+		loadURL("/message/ping.html",null,function(data){
 			if(data!=''  && data.indexOf('login') >=0){
 				window.location.href = "/login.html" ;
 			}

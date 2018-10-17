@@ -105,8 +105,8 @@ public class ApiIMController extends Handler{
 	@RequestMapping(value = "/query", method = RequestMethod.GET)
 	@Menu(type = "apps" , subtype = "webim" , access = true)
 	@ApiOperation("获取推荐知识")
-    public ResponseEntity<RestResult> query(HttpServletRequest request,@Valid String q) throws IOException, TemplateException {
-        return new ResponseEntity<>(new RestResult(RestResultType.OK, OnlineUserUtils.search(q, super.getOrgi(request), super.getUser(request))), HttpStatus.OK);
+    public ResponseEntity<RestResult> query(HttpServletRequest request,@Valid String q,@Valid String appid) throws IOException, TemplateException {
+        return new ResponseEntity<>(new RestResult(RestResultType.OK, OnlineUserUtils.search(q, super.getOrgi(request), super.getUser(request) , appid)), HttpStatus.OK);
     }
 	
 	/**

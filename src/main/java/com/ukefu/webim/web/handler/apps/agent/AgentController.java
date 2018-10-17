@@ -221,17 +221,6 @@ public class AgentController extends Handler {
 		SessionConfig sessionConfig = ServiceQuene.initSessionConfig(super.getOrgi(request)) ;
 		
 		view.addObject("sessionConfig", sessionConfig) ;
-		if(sessionConfig.isOtherquickplay() && !StringUtils.isBlank(sessionConfig.getOqrsearchurl())) {
-			view.addObject("topicList", OnlineUserUtils.search(null, super.getOrgi(request), super.getUser(request))) ;
-		}else{//ekm知识库
-			if(UKDataContext.model.get("ekm")!=null ){
-			EkmDataInterface dataExchange = (EkmDataInterface) UKDataContext.getContext().getBean("ekm") ;
-			Page<EkmKnowledgeMaster> knowledgeList = dataExchange.findByOrgi(map, request, super.getOrgi(request), super.getUser(request), new PageRequest(super.getP(request), 10000)) ;
-				
-			view.addObject("topicList", knowledgeList.getContent()) ;
-			}
-		}
-		
 		
 		if(agentUserList.size() > 0){
 			AgentUser agentUser = agentUserList.get(0) ;
@@ -245,6 +234,17 @@ public class AgentController extends Handler {
 				}
 			}
 
+			if(sessionConfig.isOtherquickplay() && !StringUtils.isBlank(sessionConfig.getOqrsearchurl())) {
+				view.addObject("topicList", OnlineUserUtils.search(null, super.getOrgi(request), super.getUser(request) , agentUser.getAppid())) ;
+			}else{//ekm知识库
+				if(UKDataContext.model.get("ekm")!=null ){
+				EkmDataInterface dataExchange = (EkmDataInterface) UKDataContext.getContext().getBean("ekm") ;
+				Page<EkmKnowledgeMaster> knowledgeList = dataExchange.findByOrgi(map, request, super.getOrgi(request), super.getUser(request), new PageRequest(super.getP(request), 10000)) ;
+					
+				view.addObject("topicList", knowledgeList.getContent()) ;
+				}
+			}
+			
 			view.addObject("agentUserMessageList", this.chatMessageRepository.findByUsessionAndOrgi(agentUser.getUserid() , super.getOrgi(request), new PageRequest(0, 20, Direction.DESC , "updatetime")));
 			AgentService agentService = null ;
 			if(!StringUtils.isBlank(agentUser.getAgentserviceid())){
@@ -451,7 +451,7 @@ public class AgentController extends Handler {
 		
 		view.addObject("sessionConfig", sessionConfig) ;
 		if(sessionConfig.isOtherquickplay()) {
-			view.addObject("topicList", OnlineUserUtils.search(null, super.getOrgi(request), super.getUser(request))) ;
+			view.addObject("topicList", OnlineUserUtils.search(null, super.getOrgi(request), super.getUser(request) , agentUser.getAppid())) ;
 		}
 		
 		
@@ -467,11 +467,14 @@ public class AgentController extends Handler {
 	
 	@RequestMapping("/other/topic")
 	@Menu(type = "apps", subtype = "othertopic")
-	public ModelAndView othertopic(ModelMap map ,HttpServletRequest request , String q) throws IOException, TemplateException {
+	public ModelAndView othertopic(ModelMap map ,HttpServletRequest request , String q, String appid) throws IOException, TemplateException {
 		SessionConfig sessionConfig = ServiceQuene.initSessionConfig(super.getOrgi(request)) ;
 		map.put("sessionConfig", sessionConfig) ;
+		if(!StringUtils.isBlank(appid)) {
+			map.put("inviteData",  OnlineUserUtils.cousult(appid, super.getOrgi(request), inviteRepository));
+		}
 		if(sessionConfig.isOtherquickplay()) {
-			map.put("topicList", OnlineUserUtils.search(q, super.getOrgi(request), super.getUser(request))) ;
+			map.put("topicList", OnlineUserUtils.search(q, super.getOrgi(request), super.getUser(request) , appid)) ;
 		}else {//ekm知识库
 			if(UKDataContext.model.get("ekm")!=null ){
 			EkmDataInterface dataExchange = (EkmDataInterface) UKDataContext.getContext().getBean("ekm") ;
@@ -487,13 +490,15 @@ public class AgentController extends Handler {
 	
 	@RequestMapping("/other/topic/detail")
 	@Menu(type = "apps", subtype = "othertopicdetail")
-	public ModelAndView othertopicdetail(ModelMap map ,HttpServletRequest request , String id) throws IOException, TemplateException {
+	public ModelAndView othertopicdetail(ModelMap map ,HttpServletRequest request , String id, String appid) throws IOException, TemplateException {
 		ModelAndView view = request(super.createRequestPageTempletResponse("/apps/agent/mainagentuser")) ;
 		SessionConfig sessionConfig = ServiceQuene.initSessionConfig(super.getOrgi(request)) ;
-		
+		if(!StringUtils.isBlank(appid)) {
+			map.put("inviteData",  OnlineUserUtils.cousult(appid, super.getOrgi(request), inviteRepository));
+		}
 		map.put("sessionConfig", sessionConfig) ;
 		if(sessionConfig.isOtherquickplay()) {
-			map.put("topic", OnlineUserUtils.detail(id, super.getOrgi(request), super.getUser(request))) ;
+			map.put("topic", OnlineUserUtils.detail(id, super.getOrgi(request), super.getUser(request) , appid , appid)) ;
 			view = request(super.createRequestPageTempletResponse("/apps/agent/topicdetail")) ;
 		}else {//ekm知识库
 			if(UKDataContext.model.get("ekm")!=null && !StringUtils.isBlank(id)){

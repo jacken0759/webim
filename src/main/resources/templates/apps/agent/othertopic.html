@@ -3,7 +3,7 @@
 	<#list topicList as topic>
 	<li class="ukefu-agentservice-list">
 		<#if sessionConfig?? && sessionConfig.otherquickplay?? && sessionConfig.otherquickplay == true>
-		<a href="javascript:void(0)" class="othertopicdetail" data-href="/agent/other/topic/detail.html?id=${topic.id!''}">
+		<a href="javascript:void(0)" class="othertopicdetail" data-href="/agent/other/topic/detail.html?appid=<#if inviteData??>${inviteData.snsaccountid!''}</#if>&id=${topic.id!''}">
 			${topic.title!''}
 		</a>
 		<#else>

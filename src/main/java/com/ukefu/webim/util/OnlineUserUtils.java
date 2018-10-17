@@ -1103,7 +1103,7 @@ public class OnlineUserUtils {
 		return suggestItemList ;
 	}
 	
-	public static List<OtherMessageItem> search(String q , String orgi , User user) {
+	public static List<OtherMessageItem> search(String q , String orgi , User user , String appid) {
 		List<OtherMessageItem> otherMessageItemList = null ;
 		String param = "" ;
 		SessionConfig sessionConfig = ServiceQuene.initSessionConfig(orgi) ;
@@ -1112,6 +1112,7 @@ public class OnlineUserUtils {
 				Template templet = UKTools.getTemplate(sessionConfig.getOqrsearchinput()) ;
 				Map<String,Object> values = new HashMap<String,Object>();
 				values.put("q", q) ;
+				values.put("appid", appid) ;
 				values.put("user", user) ;
 				param = UKTools.getTemplet(templet.getTemplettext(), values) ;
 			}
@@ -1172,7 +1173,7 @@ public class OnlineUserUtils {
 		return otherMessageItem ;
 	}
 	
-	public static OtherMessageItem detail(String id , String orgi , User user){
+	public static OtherMessageItem detail(String id , String orgi , User user , String aiid , String appid){
 		OtherMessageItem otherMessageItem = null ;
 		String param = "" ;
 		try {
@@ -1182,6 +1183,8 @@ public class OnlineUserUtils {
 				Map<String,Object> values = new HashMap<String,Object>();
 				values.put("id", id) ;
 				values.put("user", user) ;
+				values.put("appid", appid) ;
+				values.put("aiid", aiid) ;
 				param = UKTools.getTemplet(templet.getTemplettext(), values) ;
 			}
 			if(!StringUtils.isBlank(sessionConfig.getOqrdetailurl())) {
