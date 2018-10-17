@@ -380,16 +380,23 @@ public class ReportCubeService{
 		 if(model!=null && !model.getFilters().isEmpty()){
 			 for(ReportFilter filter : model.getFilters()){
 				 if("range".toString().equals(filter.getValuefiltertype())){
-					 filter.setRequeststartvalue(request.getParameter(filter.getCode())) ;
-					 filter.setRequestendvalue(request.getParameter(filter.getCode()+"_endvalue")) ;
 					 
-					 filter.setRequeststartvalue(getStartValue(filter, request)) ;
-					 filter.setRequestendvalue(getEndValue(filter, request)) ;
-					 
+					 if(!StringUtils.isBlank(request.getParameter(filter.getCode()))) {
+						 filter.setRequeststartvalue(request.getParameter(filter.getCode())) ;
+					 }else {
+						 filter.setRequeststartvalue(getStartValue(filter, request)) ;
+					 }
+					 if(!StringUtils.isBlank(request.getParameter(filter.getCode()+"_endvalue"))) {
+						 filter.setRequestendvalue(request.getParameter(filter.getCode()+"_endvalue")) ;
+					 }else {
+						 filter.setRequestendvalue(getEndValue(filter, request)) ;
+					 }
 				 }else{
-					 filter.setRequestvalue(request.getParameter(filter.getCode())) ;
-					 
-					 filter.setRequestvalue(getDefaultValue(filter, request)) ;
+					 if(!StringUtils.isBlank(request.getParameter(filter.getCode()))) {
+						 filter.setRequestvalue(request.getParameter(filter.getCode())) ;
+					 }else {
+						 filter.setRequestvalue(getDefaultValue(filter, request)) ;
+					 }
 	        	 }
 			 }
 			 for(ReportFilter filter : model.getFilters()){
@@ -401,10 +408,22 @@ public class ReportCubeService{
 		 if(model!=null && !model.getFilters().isEmpty()){
 			 for(ReportFilter filter : model.getFilters()){
 				 if("range".toString().equals(filter.getValuefiltertype())){
-					 filter.setRequeststartvalue(request.getParameter(filter.getCode()+"_start")) ;
-					 filter.setRequestendvalue(request.getParameter(filter.getCode()+"_end")) ;
+					 if(!StringUtils.isBlank(request.getParameter(filter.getCode()+"_start"))) {
+						 filter.setRequeststartvalue(request.getParameter(filter.getCode()+"_start")) ;
+					 }else {
+						 filter.setRequeststartvalue(getStartValue(filter, request)) ;
+					 }
+					 if(!StringUtils.isBlank(request.getParameter(filter.getCode()+"_end"))) {
+						 filter.setRequestendvalue(request.getParameter(filter.getCode()+"_end")) ;
+					 }else {
+						 filter.setRequeststartvalue(getEndValue(filter, request)) ;
+					 }
 				 }else{
-					 filter.setRequestvalue(request.getParameter(filter.getCode())) ;
+					 if(!StringUtils.isBlank(request.getParameter(filter.getCode()))) {
+						 filter.setRequestvalue(request.getParameter(filter.getCode())) ;
+					 }else {
+						 filter.setRequestvalue(getDefaultValue(filter, request)) ;
+					 }
 	        	 }
 			 }
 			 return createCubeFilter(curFilter, cube, request);
