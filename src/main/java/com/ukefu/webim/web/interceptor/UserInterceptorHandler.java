@@ -118,6 +118,8 @@ public class UserInterceptorHandler extends HandlerInterceptorAdapter {
 				systemConfig.setLoglevel(logger.getLevel().toString());
 			}
  			view.addObject("ip", arg0.getRemoteAddr()) ;
+ 			
+ 			view.addObject("statusList",UKeFuDic.getInstance().getDic("com.dic.callout.activity"));
     	}
     }
 
