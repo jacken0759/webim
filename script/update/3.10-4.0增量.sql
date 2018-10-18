@@ -316,3 +316,13 @@ CREATE TABLE `uk_qc_activity_task` (
   `assignedai` int(11) DEFAULT '0' COMMENT '分配到AI的名单数量',
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='质检活动 - 任务表';
+
+
+ALTER TABLE uk_workorders ADD qualitystatus varchar(20) DEFAULT NULL COMMENT '质检状态',
+ALTER TABLE uk_workorders ADD qualitydisorgan varchar(32) DEFAULT NULL COMMENT '分配的质检部门',
+ALTER TABLE uk_workorders ADD qualitydisuser varchar(32) DEFAULT NULL COMMENT '分配的质检用户',
+ALTER TABLE uk_workorders ADD qualityorgan varchar(32) DEFAULT NULL COMMENT '实际质检部门',
+ALTER TABLE uk_workorders ADD qualityuser varchar(32) DEFAULT NULL COMMENT '实际质检人',
+ALTER TABLE uk_workorders ADD qualityscore int(11) DEFAULT '0' COMMENT '质检得分',
+ALTER TABLE uk_workorders ADD qualitytime datetime DEFAULT NULL COMMENT '质检时间',
+ALTER TABLE uk_workorders ADD qualitytype varchar(20) DEFAULT NULL COMMENT '质检类型',
