@@ -877,8 +877,8 @@ public class UKDataContext {
 	}
 	
 	public enum QcTemplateStatus{
-		START,
-		STOP;
+		START,//启用
+		STOP;//停用
 		
 		public String toString(){
 			return super.toString().toLowerCase() ;
@@ -888,6 +888,15 @@ public class UKDataContext {
 		CALLEVENT,//通话质检
 		WORKORDERS,//工单质检
 		AGENTSERVICE;//会话质检（文字客服）
+		
+		public String toString(){
+			return super.toString().toLowerCase() ;
+		}
+	}
+	public enum QcTemplateItemType{
+		PLUS,//评分
+		MINUS,//扣分
+		TABOO;//禁忌项
 		
 		public String toString(){
 			return super.toString().toLowerCase() ;

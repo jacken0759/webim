@@ -18,7 +18,18 @@ public abstract interface QualityTemplateItemRepository extends JpaRepository<Qu
 	
 	public abstract QualityTemplateItem findByNameAndOrgi(String name, String orgi);
 	
-	public abstract List<QualityTemplateItem> findByParentidAndOrgi(String parentid,String orgi , Pageable page) ;
+	public abstract QualityTemplateItem findByTemplateidAndNameAndOrgi(String templateid,String name, String orgi);
 	
-	public abstract Page<QualityTemplateItem> findByTemplateidAndOrgi(String templateid,String orgi , Pageable page) ;
+	public abstract QualityTemplateItem findByNameAndParentidAndOrgi(String name,String parentid, String orgi);
+	
+	public abstract QualityTemplateItem findByTemplateidAndNameAndParentidAndOrgi(String templateid,String name,String parentid, String orgi);
+	
+	public abstract List<QualityTemplateItem> findByParentidAndOrgi(String parentid,String orgi) ;
+	
+	public abstract List<QualityTemplateItem> findByTemplateidAndParentidAndOrgi(String templateid,String parentid,String orgi) ;
+	
+	public abstract Page<QualityTemplateItem> findByParentidAndOrgi(String parentid,String orgi, Pageable page) ;
+	
+	public abstract List<QualityTemplateItem> findByTemplateidAndOrgi(String templateid,String orgi) ;
+	
 }

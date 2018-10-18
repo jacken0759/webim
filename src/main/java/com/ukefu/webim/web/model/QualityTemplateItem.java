@@ -34,6 +34,7 @@ public class QualityTemplateItem implements java.io.Serializable{
 	private String scheme ;//评分方案
 	private String templateid ;//质检模板id
 	private String parentid ;//父级id
+	private String type ;//质检项分类（plus评分/minus扣分/taboo禁忌项）
 	
 	@Id
 	@Column(length = 32)
@@ -98,6 +99,12 @@ public class QualityTemplateItem implements java.io.Serializable{
 	}
 	public void setParentid(String parentid) {
 		this.parentid = parentid;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 }
