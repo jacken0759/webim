@@ -208,8 +208,11 @@ public class OnlineUserController extends Handler{
 			map.addAttribute("sesTypeList", sessionTypeRes.findByOrgiAndCtype(super.getOrgi(request), sysDic.getId()));
 		}
 		
-		map.addAttribute("sesTemp", sessionTypeRes.findById(sesid));
-		map.addAttribute("sesid", sesid);
+		AgentService agentSer = agentServiceRes.findByIdAndOrgi(agentservice, super.getOrgi(request));
+		if(agentSer != null) {
+			map.addAttribute("sesid", agentSer.getSessiontype());
+			map.addAttribute("sesTemp", sessionTypeRes.findById(agentSer.getSessiontype()));
+		}
 		map.addAttribute("userid", userid);
 		map.addAttribute("agentservice", agentservice);
 		map.addAttribute("channel", channel);
@@ -234,7 +237,7 @@ public class OnlineUserController extends Handler{
 			}
 		}
 		map.addAttribute("agentService", agentService);
-		
+		map.addAttribute("sesid", sesid);
 		return request(super.createRequestPageTempletResponse("/apps/service/online/agenttype"));
 	}
 	@RequestMapping("/sessionmemo")

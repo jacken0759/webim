@@ -26,7 +26,9 @@
 	</form>
 </div>
 
-<script>
+<script type="text/javascript">
+
+	
 //Demo
 layui.use('form', function(){
   var form = layui.form;
@@ -53,17 +55,18 @@ layui.use('form', function(){
 		}
 	};
 	
-	function beforeClick(treeId, treeNode) {
+	function beforeClick(e,treeId, treeNode) {
 		var zTree = $.fn.zTree.getZTreeObj("organTree")
 		nodes = zTree.getSelectedNodes();
 		var allow = true , lastnode ;
+		e = e||window.event;
 		for (var i=0, l=nodes.length; i<l; i++) {
 			lastnode = nodes[i].type ;
-			if(nodes[i].organ && (nodes.length >= 1 && (event.ctrlKey || event.shiftKey))){
+			if(nodes[i].organ && (nodes.length >= 1 && (e.ctrlKey || e.shiftKey))){
 				allow = false ; break ;
 			}
 		}
-		if(lastnode != treeNode.type && (event.ctrlKey || event.shiftKey)){
+		if(lastnode != treeNode.type && (e.ctrlKey || e.shiftKey)){
 			allow = false ;
 		}
 		
@@ -80,6 +83,7 @@ layui.use('form', function(){
 		var zTree = $.fn.zTree.getZTreeObj("organTree"),
 		nodes = zTree.getSelectedNodes(),
 		v = "" , value = "";
+		e = e||window.event;
 		nodes.sort(function compare(a,b){return a.id-b.id;});
 		for (var i=0, l=nodes.length; i<l; i++) {
 			v += nodes[i].name + ",";
@@ -98,7 +102,7 @@ layui.use('form', function(){
 			$("#parent").attr("value", value);
 			$("#area").attr("value", "");
 		}
-		if (!event.ctrlKey && !event.shiftKey) {
+		if (!e.ctrlKey && !e.shiftKey) {
 			hideMenu() ;
 		}
 	}
@@ -129,8 +133,9 @@ layui.use('form', function(){
 		$("#menuContent").hide();
 		$("body").unbind("mousedown", onBodyDown);
 	}
-	function onBodyDown(event) {
-		if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+	function onBodyDown(e) {
+		e = e||window.event;
+		if (!(e.target.id == "menuBtn" || e.target.id == "menuContent" || $(e.target).parents("#menuContent").length>0)) {
 			hideMenu();
 		}
 	}
