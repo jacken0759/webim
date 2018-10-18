@@ -327,4 +327,5 @@ ALTER TABLE uk_workorders ADD qualityscore int(11) DEFAULT '0' COMMENT '质检�
 ALTER TABLE uk_workorders ADD qualitytime datetime DEFAULT NULL COMMENT '质检时间';
 ALTER TABLE uk_workorders ADD qualitytype varchar(20) DEFAULT NULL COMMENT '质检类型';
 
-ALTER TABLE uk_qc_template_item ADD type varchar(32) DEFAULT NULL COMMENT '质检项分类（plus评分/minus扣分/taboo禁忌项）';
+
+

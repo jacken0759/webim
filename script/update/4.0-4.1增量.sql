@@ -1,0 +1,32 @@
+CREATE TABLE `uk_qc_mission` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `name` varchar(50) DEFAULT NULL COMMENT '任务名称（系统分配生成）',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `assuser` varchar(50) DEFAULT NULL COMMENT '分配执行人',
+  `asstime` datetime DEFAULT NULL COMMENT '分配时间',
+  `status` varchar(50) DEFAULT NULL COMMENT '状态',
+  `filtertype` varchar(32) DEFAULT NULL COMMENT '筛选类型（callevent通话筛选/workorders工单筛选/agentservice会话筛选）',
+  `dataid` varchar(50) DEFAULT NULL COMMENT '数据ID（通话记录ID/工单记录ID/会话记录ID）',
+  `datakey` text DEFAULT NULL COMMENT '数据（通话（主叫号码）/工单记录（工单标题）/会话记录（访客用户名））',
+  `datavalue` text DEFAULT NULL COMMENT '数据（通话（被叫号码）/工单记录（处理人）/会话记录（服务坐席））',
+  `templateid` varchar(32) DEFAULT NULL COMMENT '质检模板ID',
+  `actid` varchar(32) DEFAULT NULL COMMENT '质检活动ID',
+  `formfilterid` varchar(32) DEFAULT NULL COMMENT '质检筛选表单ID',
+  `filterid` varchar(32) DEFAULT NULL COMMENT '质检筛选记录ID',
+  `taskid` varchar(32) DEFAULT NULL COMMENT '质检任务ID',
+  `datastatus` tinyint(4) DEFAULT '0' COMMENT '数据状态',
+  `qualitystatus` varchar(20) DEFAULT NULL COMMENT '质检状态',
+  `qualitydisorgan` varchar(32) DEFAULT NULL COMMENT '分配的质检部门',
+  `qualitydisuser` varchar(32) DEFAULT NULL COMMENT '分配的质检用户',
+  `qualityorgan` varchar(32) DEFAULT NULL COMMENT '实际质检部门',
+  `qualityuser` varchar(32) DEFAULT NULL COMMENT '实际质检人',
+  `qualityscore` int(11) DEFAULT '0' COMMENT '质检得分',
+  `qualitytime` datetime DEFAULT NULL COMMENT '质检时间',
+  `qualitytype` varchar(20) DEFAULT NULL COMMENT '质检类型',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='QC质检 - 任务主表';
+
+ALTER TABLE uk_qc_template_item ADD type varchar(32) DEFAULT NULL COMMENT '质检项分类（plus评分/minus扣分/taboo禁忌项）';
