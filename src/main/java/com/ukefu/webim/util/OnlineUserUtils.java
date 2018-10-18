@@ -1075,7 +1075,9 @@ public class OnlineUserUtils {
 					Map<String,Object> values = new HashMap<String,Object>();
 					values.put("q", q) ;
 					values.put("skill", skill) ;
-					values.put("appid", invite.getSnsaccountid()) ;
+					if(invite!=null) {
+						values.put("appid", invite.getSnsaccountid()) ;
+					}
 					values.put("userid", userid) ;
 					values.put("aiid", aiConfig.getId()) ;
 					param = UKTools.getTemplet(templet.getTemplettext(), values) ;
