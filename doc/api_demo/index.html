@@ -13,14 +13,19 @@
 			var authorization ;
 			var demo =  {
 				login:function(username , password){
-					$.post("http://uk.ukewo.cn:880/tokens" , "username=admin&password=123456" , function(data){
+					$.post("http://uk.ukewo.cn/tokens" , "username=admin&password=123456" , function(data){
 						authorization = data ;
 					}).error(function() { alert("error"); });
 				},
 				ajax:function(url , callback){
 					$.ajax({
 						type: "get",
-						url:url , 
+						url:url+"&authorization="+authorization , 
+						headers:{"authorization":authorization},
+						beforeSend: function(xhr) {
+							xhr.setRequestHeader("authorization", authorization);
+
+						 },
 						success: function (data) {
 							console.log(data);
 						}
@@ -31,10 +36,9 @@
 					var param = 'title=测试API创建工单';
 					$.ajax({
 						type: "PUT",
-						url:"http://127.0.0.1/api/workorders" , 
+						url:"http://uk.ukewo.cn/api/workorders" , 
 						data: param,
 						beforeSend: function(xhr) {
-							//headers:{"authorization":authorization},
 							 xhr.setRequestHeader("authorization", authorization);
 
 						 },
@@ -47,7 +51,7 @@
 					var param = 'name=张天翼';
 					$.ajax({
 						type: "PUT",
-						url:"http://127.0.0.1/api/contacts" , 
+						url:"http://uk.ukewo.cn/api/contacts" , 
 						data: param,
 						success: function (data) {
 							console.log(data);
@@ -55,24 +59,24 @@
 					});
 				},
 				getUser:function(current){
-					demo.ajax("http://127.0.0.1/api/user?username="+current,function(data){
+					demo.ajax("http://uk.ukewo.cn/api/user?username="+current,function(data){
 						$("#temp").html(data);
 						console.log(data);
 						
 					});
 				},
 				qualityList:function(){
-					demo.ajax("http://127.0.0.1/api/quality",function(data){
+					demo.ajax("http://uk.ukewo.cn/api/quality",function(data){
 						console.log(data);
 					});
 				},
 				leavemsgList:function(){
-					demo.ajax("http://127.0.0.1/api/leavemsg",function(data){
+					demo.ajax("http://uk.ukewo.cn/api/leavemsg",function(data){
 						console.log(data);
 					});
 				},
 				chatMsgList:function(){
-					demo.ajax("http://127.0.0.1/api/chatmessage?serviceid=4028b46f62d309c10162d30e7fcd0366",function(data){
+					demo.ajax("http://uk.ukewo.cn/api/chatmessage?serviceid=4028b46f62d309c10162d30e7fcd0366",function(data){
 						console.log(data);
 					});
 				},
