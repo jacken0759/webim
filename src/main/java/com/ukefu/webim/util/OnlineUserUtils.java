@@ -1079,7 +1079,7 @@ public class OnlineUserUtils {
 						values.put("appid", invite.getSnsaccountid()) ;
 					}
 					values.put("userid", userid) ;
-					values.put("aiid", aiConfig.getId()) ;
+					values.put("aiid", aiConfig.getAiid()) ;
 					param = UKTools.getTemplet(templet.getTemplettext(), values) ;
 				}
 				String result = HttpClientUtil.doPost(aiConfig.getSmartsuggesturl(), param)  , text = null;
