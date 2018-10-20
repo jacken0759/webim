@@ -1,8 +1,5 @@
 package com.ukefu.webim.web.handler.api.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,8 +20,12 @@ import com.ukefu.webim.service.es.ContactsRepository;
 import com.ukefu.webim.util.RestResult;
 import com.ukefu.webim.util.RestResultType;
 import com.ukefu.webim.web.handler.Handler;
+import com.ukefu.webim.web.handler.api.request.SearchData;
 import com.ukefu.webim.web.model.Contacts;
 import com.ukefu.webim.web.model.User;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api/contacts")
@@ -51,7 +52,7 @@ public class ApiContactsController extends Handler{
 		}else{
 			contactsList = contactsRepository.findByOrgi(super.getOrgi(request), false , q , new PageRequest(super.getP(request), super.getPs(request))) ;
 		}
-        return new ResponseEntity<>(new RestResult(RestResultType.OK, contactsList), HttpStatus.OK);
+        return new ResponseEntity<>(new RestResult(RestResultType.OK, new SearchData<Contacts>(contactsList)), HttpStatus.OK);
     }
 	
 	/**

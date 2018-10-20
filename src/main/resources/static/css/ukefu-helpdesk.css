@@ -10,8 +10,8 @@ body{
 }
 .uckefu-helpdesk-search{
 	background-color: #FFFFFF;
-	height:240px;
-	background-image: url(https://imgcache.qq.com/open_proj/proj_qcloud_v2/gateway/documentation/documentation-v4/css/img/banner_pc.png);
+	height:400px;
+	background-image: url(/images/default_bg.jpg);
 	min-width: 320px;
     background-position: center;
     background-repeat: no-repeat;
@@ -59,7 +59,7 @@ body{
 	line-height:22px; 
 }
 .history-title{
-	color:#aaaaaa;
+	color:#FFF;
 	font-size:16px;
 }
 .hot-keyword a,.hot-keyword a:hover{
@@ -68,7 +68,6 @@ body{
 	font-size:16px;
 }
 .hot-keyword a:hover{
-	color:#009688;
 	transition:0.5s;
 }
 .uckefu-cat-subtitle{
@@ -237,7 +236,6 @@ body{
     margin: 0 auto;
 }
 .uckefu-helpdesk-knowlist a:hover{
-	color: #009688;
 }
 .uckefu-helpdesk-knowlist ul li{
     margin: 0 0 35px;
@@ -387,12 +385,57 @@ body{
 
 .layui-layout-admin .layui-header {
     border-bottom: 0px solid #1AA094;
-    height: 50px;
 }
 
 .ukefu-helpdesk-bg{
 	border-bottom-color: #009688; ${systemConfig.backgroundColor!'background-color: #32c24d;'}
 }
 
+.common_topin {
+	margin: auto;
+	width: 1200px;
+	height: 80px;
+	line-height: 80px;
+}
 
+.common_topin a img {
+	vertical-align: middle;
+	margin-top:20px;
+}
 
+.common_topin .logo {
+	margin-right: 189px;
+}
+
+.commmon_nav {
+	margin-right: 45px;
+	display: inline-block;
+	font-size: 16px;
+	color: #fff;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	vertical-align: top;
+	cursor: pointer;
+}
+
+.commmon_nav span,
+.commmon_nav .a {
+	position: relative;
+	display: inline-block;
+}
+
+.header-ukefu-menu{
+	width:100%;
+	height:100%;
+    margin: auto;
+	position: relative;
+    width: 1200px;
+}
+
+.header-ukefu-menu .layui-nav .layui-nav-item a{
+	color:#FFFFFF;
+	font-size:16px;
+}
+
+.ukefu-helpdesk-logo .logo{
+	height:30px;
+}

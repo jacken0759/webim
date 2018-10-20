@@ -1,8 +1,5 @@
 package com.ukefu.webim.web.handler.api.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -21,7 +18,11 @@ import com.ukefu.webim.service.es.QuickReplyRepository;
 import com.ukefu.webim.util.RestResult;
 import com.ukefu.webim.util.RestResultType;
 import com.ukefu.webim.web.handler.Handler;
+import com.ukefu.webim.web.handler.api.request.SearchData;
 import com.ukefu.webim.web.model.QuickReply;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api/quickreply")
@@ -47,7 +48,7 @@ public class ApiQuickReplyController extends Handler {
 
         Page<QuickReply> replyList = quickReplyRepository.getByOrgiAndCate(getOrgi(request), cate, q,
                 new PageRequest(p == null ? 1 : p, ps == null ? 20 : ps));
-        return new ResponseEntity<>(new RestResult(RestResultType.OK, replyList), HttpStatus.OK);
+        return new ResponseEntity<>(new RestResult(RestResultType.OK, new SearchData<QuickReply>(replyList)), HttpStatus.OK);
     }
 
     /**
