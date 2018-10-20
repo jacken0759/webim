@@ -1,8 +1,11 @@
 body{
-	background-color: #F2F2F2;
+	background-color: #f4f8ff;
+	font-size: 12px;
+    font-family: "microsoft yahei";
+    color: #333;
 }
 .uckefu-con{
-	background-color:#FFFFFF;	
+	background-color: #f4f8ff;
 }
 .uckefu-con .uckefu-content{
 	max-width:1200px;
@@ -44,7 +47,7 @@ body{
 }
 
 .uckefu-content{
-	padding:50px 50px 10px 50px;
+	padding:50px;
 }
 
 .uckefu-content .uckefu-helpdesk-title{
@@ -100,15 +103,18 @@ body{
 .uckefu-helpdesk-title-icon i{
 	font-size:36px;
 }
-.uckefu-sum{
-	background-color:#f7f8fa;	
+.help_bread {
+    height: 50px;
+    border-bottom: 1px solid #eee;
+    line-height: 50px;
+    font-size: 14px;
+    color: #999;
 }
 .uckefu-maxwidth{
 	width:1200px;
 }
 .uckefu-sum .uckefu-summary{
 	margin: 0 auto;
-	background-color:#FFFFFF;
 }
 .uckefu-summary .uckefu-helpdesk-title{
 	
@@ -161,7 +167,7 @@ body{
 	
 }
 .uckefu-helpdesk-search2{
-	background-color: #f5f6f9;
+	background-color: #f4f8ff;
 	height:120px;
 	min-width: 320px;
     background-position: center;
@@ -169,6 +175,8 @@ body{
     background-size: cover;
     border-bottom: #e5e5e5 solid 1px;
     -webkit-font-smoothing: antialiased;
+    margin:0 auto;
+    width:1200px;
 }
 .uckefu-helpdesk-search2 .btn{
 	position: absolute;
@@ -180,7 +188,7 @@ body{
 	font-size:26px;
 }
 .uckefu-helpdesk-search2 .search-input{
-	margin:24px auto;
+	margin:24px 0;
 	margin-bottom:0;
 }
 .uckefu-helpdesk-search2 .search-history-title{
@@ -191,13 +199,13 @@ body{
 }
 .uckefu-helpdesk-search2 {
 	color:#666666;
-	margin: 0 5px 0 0;
+	margin: 0 auto;;
 	font-size:14px;
 }
 .search2-hot-keyword a{
 	color:#666666;
 	margin-right:12px;
-	font-size:12px;
+	font-size:16px;
 }
 .search2-hot-keyword a:hover{
 	color:#009688;
@@ -211,12 +219,14 @@ body{
 .uckefu-helpdesk-tab .uckefu-helpdesk-brief{
 	height: 39px;
 	padding: 0;
+	border-bottom:1px solid #dedede;
+	margin-bottom:30px;
 }
 .uckefu-helpdesk-tab .uckefu-helpdesk-brief ul{
 	margin: 0 auto;
 	padding: 0 auto;
 	border-bottom: 0;
-	width: 840px;
+	width: 1200px;
 	text-align: center;
 }
 .uckefu-helpdesk-tab .uckefu-helpdesk-brief ul li{
@@ -232,7 +242,7 @@ body{
 }
 .uckefu-helpdesk-knowlist{
 	margin-left: 0;
-    width: 840px;
+    width:1200px;
     margin: 0 auto;
 }
 .uckefu-helpdesk-knowlist a:hover{
@@ -241,7 +251,6 @@ body{
     margin: 0 0 35px;
     line-height: 1.84;
     color: #666;
-    width: 630px;
 }
 .uckefu-helpdesk-knowlist ul li h4{
     font-size: 18px;
@@ -266,7 +275,7 @@ body{
 .uckefu-helpdesk-knowlist-page{
 	padding:5px;
 	margin: 0 auto;
-	width: 840px;
+	width: 1200px;
 }
 .ukefu-helpdesk-left{
 	position: absolute;
@@ -276,13 +285,23 @@ body{
     min-height: 0;
     overflow: auto;
     border-right: #e5e5e5 1px solid;
-    padding-top: 32px;
 }
 .ukefu-helpdesk-right{
-	margin-left:320px;
+	margin-left:220px;
 	width: 990px;
     min-height: 900px;
-    padding: 20px 0 10px 0px;
+    padding: 20px 0 10px 40px;
+    background-color:#fff;
+}
+.help_bread a:hover, .help_bread a.on {
+    color: #2d94fd;
+}
+.helpr_title {
+    position: relative;
+    padding: 25px 0 30px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 32px!important;
+    color:#333;
 }
 .ukefu-helpdesk-left .site-tree {
     
@@ -306,9 +325,10 @@ body{
 	margin: 30px 0 0 0;
 	line-height:30px;
 	text-indent:2em;
-	padding: 15px;
+	padding: 5px 15px 25px 0px;
 	background: #FFFFFF;
 	font-size: 15px;
+    border-bottom: 1px solid #eee;
 }
 
 .uckefu-helpdesk-content img{
@@ -435,7 +455,107 @@ body{
 	color:#FFFFFF;
 	font-size:16px;
 }
-
+.ukefu-helpdesk-logo {
+	text-align:left !important;
+}
 .ukefu-helpdesk-logo .logo{
 	height:30px;
+}
+
+.ukefu-helpdesk-content-title{
+	height: 98px;
+    border-bottom: 1px solid #e5e5e5;
+    font-size: 26px;
+    width: 220px;
+    line-height:98px;
+    overflow:hidden;
+}
+
+.helpr_tjbox {
+	margin-top:20px;
+    height: 137px;
+    padding-right:20px;
+}
+
+.not_tj {
+    padding: 25px 0 0 20px;
+    font-size: 16px;
+    color: #666;
+    background: #f4f8ff;
+    border-radius: 4px;
+}
+
+.helpr_label {
+    margin-right: 35px;
+    position: relative;
+    display: inline-block;
+    height: 32px;
+    padding-left: 40px;
+    line-height: 32px;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+
+.footer {
+	height: 320px;
+	background: #30343e;
+}
+
+.footer_in {
+	margin: auto;
+	width: 1200px;
+	padding-top: 25px;
+	overflow: hidden;
+}
+
+.footer_type {
+	float: left;
+	width: 232px;
+}
+
+.footer_type:nth-of-type(3) {
+	width: 363px;
+}
+
+.footer_type:nth-of-type(4) {
+	width: 297px;
+}
+
+.footer_type:nth-of-type(5) {
+	width: 72px;
+}
+
+.ft_t {
+	margin-bottom: 16px;
+	font-size: 16px;
+	color: #fff;
+	line-height: 48px;
+}
+
+.footer_a {
+	display: block;
+	font-size: 14px;
+	color: #878a93;
+	line-height: 31px;
+	transition: all 0.15s;
+}
+
+.footer_msg {
+	display: block;
+	font-size: 14px;
+	color: #878a93;
+	line-height: 31px;
+}
+
+.footer_a:hover {
+	color: #fff;
+}
+.footer_line {
+    height: 60px;
+    background: #292c33;
+    font-size: 14px;
+    color: #878a93;
+    line-height: 60px;
+    text-align: center;
 }
