@@ -20,7 +20,7 @@
 				ajax:function(url , callback){
 					$.ajax({
 						type: "get",
-						url:url+"&authorization="+authorization , 
+						url:url+"?authorization="+authorization , 
 						headers:{"authorization":authorization},
 						beforeSend: function(xhr) {
 							xhr.setRequestHeader("authorization", authorization);
@@ -28,6 +28,7 @@
 						 },
 						success: function (data) {
 							console.log(data);
+							$("#temp").empty().html(JSON.stringify(data));
 						}
 					});
 
@@ -44,6 +45,7 @@
 						 },
 						success: function (data) {
 							console.log(data);
+							$("#temp").empty().html(JSON.stringify(data));
 						}
 					});
 				},
@@ -55,39 +57,51 @@
 						data: param,
 						success: function (data) {
 							console.log(data);
+							$("#temp").empty().html(JSON.stringify(data));
 						}
 					});
 				},
 				getUser:function(current){
 					demo.ajax("http://uk.ukewo.cn/api/user?username="+current,function(data){
-						$("#temp").html(data);
+						$("#temp").empty().html(data);
 						console.log(data);
+							$("#temp").empty().html(JSON.stringify(data));
 						
 					});
 				},
 				qualityList:function(){
 					demo.ajax("http://uk.ukewo.cn/api/quality",function(data){
 						console.log(data);
+							$("#temp").empty().html(JSON.stringify(data));
 					});
 				},
 				leavemsgList:function(){
 					demo.ajax("http://uk.ukewo.cn/api/leavemsg",function(data){
 						console.log(data);
+							$("#temp").empty().html(JSON.stringify(data));
+					});
+				},
+				topicList:function(){
+					demo.ajax("http://uk.ukewo.cn/api/xiaoe/topic",function(data){
+						console.log(data);
+							$("#temp").empty().html(JSON.stringify(data));
 					});
 				},
 				chatMsgList:function(){
 					demo.ajax("http://uk.ukewo.cn/api/chatmessage?serviceid=4028b46f62d309c10162d30e7fcd0366",function(data){
 						console.log(data);
+							$("#temp").empty().html(JSON.stringify(data));
 					});
 				},
 				agentStatus:function(){
 					var param = 'status=ready';
 					$.ajax({
 						type: "PUT",
-						url:"http://uk.ukewo.cn:880/api/servicequene" , 
+						url:"http://uk.ukewo.cn/api/servicequene" , 
 						data: param,
 						success: function (data) {
 							console.log(data);
+							$("#temp").empty().html(JSON.stringify(data));
 						}
 					});
 				},
@@ -111,6 +125,9 @@
 		<a href="javascript:void(0)" onclick="demo.leavemsgList()">获取留言列表</a>
 
 		<a href="javascript:void(0)" onclick="demo.chatMsgList()">获取对话内容列表</a>
+
+
+		<a href="javascript:void(0)" onclick="demo.topicList()">获取知识库列表</a>
 
 
 		<a href="javascript:void(0)" onclick="demo.agentStatus()">坐席状态</a>
