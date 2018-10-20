@@ -4,7 +4,7 @@ body{
     font-family: "microsoft yahei";
     color: #333;
 }
-.uckefu-con{
+.uckefu-con,.uckefu-sum{
 	background-color: #f4f8ff;
 }
 .uckefu-con .uckefu-content{
