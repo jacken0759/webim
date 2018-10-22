@@ -250,3 +250,37 @@ CREATE TABLE `uk_qc_formfilter_item` (
   `comp` varchar(50) DEFAULT NULL COMMENT '逻辑条件',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='QC质检 - 筛选项';
+
+CREATE TABLE `uk_qc_filter_his` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '筛选名称',
+  `CODE` varchar(50) DEFAULT NULL COMMENT '筛选代码',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `UPDATETIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `USERNAME` varchar(50) DEFAULT NULL COMMENT '用户名',
+  `STATUS` varchar(50) DEFAULT NULL COMMENT '状态',
+  `PARENTID` varchar(32) DEFAULT NULL COMMENT '上级ID',
+  `ACTID` varchar(32) DEFAULT NULL COMMENT '活动ID',
+  `INX` int(11) DEFAULT '0' COMMENT '分类排序序号',
+  `NAMENUM` int(11) DEFAULT '0' COMMENT '批次包含的名单总数',
+  `VALIDNUM` int(11) DEFAULT '0' COMMENT '批次包含的有效名单总数',
+  `INVALIDNUM` int(11) DEFAULT '0' COMMENT '批次包含的无效名单总数',
+  `ASSIGNED` int(11) DEFAULT '0' COMMENT '已分配名单总数',
+  `NOTASSIGNED` int(11) DEFAULT '0' COMMENT '未分配名单总数',
+  `ENABLE` tinyint(4) DEFAULT '0' COMMENT '分类状态',
+  `DATASTATUS` tinyint(4) DEFAULT '0' COMMENT '数据状态',
+  `ORGAN` varchar(32) DEFAULT NULL COMMENT '部门',
+  `DESCRIPTION` text COMMENT '备注',
+  `execnum` int(11) DEFAULT '0' COMMENT '导入次数',
+  `SOURCE` varchar(255) DEFAULT NULL COMMENT '来源',
+  `BATID` varchar(32) DEFAULT NULL COMMENT '批次ID',
+  `FILTERID` varchar(32) DEFAULT NULL COMMENT '筛选表单ID',
+  `ASSIGNEDORGAN` int(11) DEFAULT '0' COMMENT '分配部门',
+  `exectype` varchar(32) DEFAULT NULL COMMENT '执行类型',
+  `renum` int(11) DEFAULT '0' COMMENT '分配数量',
+  `reorgannum` int(11) DEFAULT '0' COMMENT '部门分配数量',
+  `assignedai` int(11) DEFAULT '0' COMMENT '分配到AI的名单数量',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='筛选记录表';
