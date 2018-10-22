@@ -73,4 +73,4 @@ INSERT INTO `uk_sysdic` VALUES ('402888816686bff70166876563ed00f6', '知识总�
 INSERT INTO `uk_sysdic` VALUES ('402888816686bff7016687649b8300f1', '知识库', 'pub', 'A14', NULL, 'auth', '402888815d2fe37f015d2fe75cc80002', NULL, NULL, '<i class=\"kfont\" style=\"position: relative;\">&#xe62a;</i>', NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-10-18 21:36:49', NULL, 0, 0, '402888815d2fe37f015d2fe75cc80002', 0, 0, '/apps/ekm/index.html', 'webim', '1', NULL, 'left');
  
  
- ALTER TABLE uk_qc_mission ADD uk_qc_mission text DEFAULT NULL COMMENT '会话质检（访客用户名）';
+ ALTER TABLE uk_qc_mission ADD agentdata text DEFAULT NULL COMMENT '会话质检（访客用户名）';
