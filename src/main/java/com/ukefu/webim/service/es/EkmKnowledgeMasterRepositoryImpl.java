@@ -17,6 +17,7 @@ import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
@@ -142,7 +143,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 		bq.must(QueryBuilders.termQuery("orgi", orgi)) ;
 		boolQueryBuilder.must(bq); 
 		
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).withPageable(new PageRequest(0, 100000)) ;
 		Page<EkmKnowledgeMaster> knowledgeList = null ;
 		if(elasticsearchTemplate.indexExists(EkmKnowledgeMaster.class)){
 			knowledgeList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeMaster.class ) ;
@@ -187,7 +188,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 		}
 		boolQueryBuilder.must(bq); 
 		
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).withPageable(new PageRequest(0, 100000)) ;
 		Page<EkmKnowledgeMaster> knowledgeList = null ;
 		if(elasticsearchTemplate.indexExists(EkmKnowledgeMaster.class)){
 			knowledgeList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeMaster.class ) ;
@@ -363,7 +364,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 		bq.must(QueryBuilders.termQuery("orgi", orgi)) ;
 		boolQueryBuilder.must(bq); 
 		
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).withPageable(new PageRequest(0, 100000)) ;
 		Page<EkmKnowledgeMaster> knowledgeList = null ;
 		if(elasticsearchTemplate.indexExists(EkmKnowledgeMaster.class)){
 			knowledgeList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeMaster.class ) ;
@@ -390,7 +391,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 		bq.must(QueryBuilders.termQuery("orgi", orgi)) ;
 		boolQueryBuilder.must(bq); 
 		
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).withPageable(new PageRequest(0, 100000)) ;
 		Page<EkmKnowledgeMaster> knowledgeList = null ;
 		if(elasticsearchTemplate.indexExists(EkmKnowledgeMaster.class)){
 			knowledgeList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeMaster.class ) ;
@@ -407,7 +408,7 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 		bq.must(QueryBuilders.termQuery("datastatus", datastatus)) ;
 		boolQueryBuilder.must(bq); 
 		
-		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder) ;
+		NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).withPageable(new PageRequest(0, 100000)) ;
 		Page<EkmKnowledgeMaster> knowledgeList = null ;
 		if(elasticsearchTemplate.indexExists(EkmKnowledgeMaster.class)){
 			knowledgeList = elasticsearchTemplate.queryForPage(searchQueryBuilder.build() , EkmKnowledgeMaster.class ) ;
