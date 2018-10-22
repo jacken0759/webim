@@ -72,5 +72,16 @@ INSERT INTO `uk_sysdic` VALUES ('402888816686bff701668765e45c00f9', '我的知�
 INSERT INTO `uk_sysdic` VALUES ('402888816686bff70166876563ed00f6', '知识总览', 'pub', 'A14_A01', NULL, 'auth', '402888816686bff7016687649b8300f1', NULL, NULL, '&#x756e646566696e6564;', NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-10-18 21:37:40', NULL, 0, 0, '402888815d2fe37f015d2fe75cc80002', 0, 0, 'javascript:;', 'webim', '2', NULL, 'left');
 INSERT INTO `uk_sysdic` VALUES ('402888816686bff7016687649b8300f1', '知识库', 'pub', 'A14', NULL, 'auth', '402888815d2fe37f015d2fe75cc80002', NULL, NULL, '<i class=\"kfont\" style=\"position: relative;\">&#xe62a;</i>', NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-10-18 21:36:49', NULL, 0, 0, '402888815d2fe37f015d2fe75cc80002', 0, 0, '/apps/ekm/index.html', 'webim', '1', NULL, 'left');
  
+
+alter table uk_agentservice modify session varchar(50);
+alter table uk_agentuser modify sessionid varchar(50);
+
+alter table uk_blacklist modify sessionid varchar(50);
+
+alter table uk_kbs_topic modify sessionid varchar(50);
+alter table uk_userevent modify sessionid varchar(50);
+alter table uk_workorders modify sessionid varchar(50);
+alter table uk_xiaoe_scene modify sessionid varchar(50);
+alter table uk_xiaoe_topic modify sessionid varchar(50);
  
  ALTER TABLE uk_qc_mission ADD agentdata text DEFAULT NULL COMMENT '会话质检（访客用户名）';

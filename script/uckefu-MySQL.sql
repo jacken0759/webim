@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-10-19 08:50:28
+Date: 2018-10-22 11:17:36
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -559,7 +559,7 @@ CREATE TABLE `uk_agentservice` (
   `agentreplys` int(11) DEFAULT NULL COMMENT '坐席回复消息数量',
   `userasks` int(11) DEFAULT NULL COMMENT '访客发送消息数量',
   `agentuserid` varchar(32) DEFAULT NULL COMMENT '访客ID',
-  `sessionid` varchar(32) DEFAULT NULL COMMENT '会话ID',
+  `sessionid` varchar(50) DEFAULT NULL,
   `qualitystatus` varchar(20) DEFAULT NULL COMMENT '质检状态',
   `qualitydisorgan` varchar(32) DEFAULT NULL COMMENT '质检分配部门',
   `qualitydisuser` varchar(32) DEFAULT NULL COMMENT '质检分配用户',
@@ -705,7 +705,7 @@ CREATE TABLE `uk_agentuser` (
   `userasks` int(11) DEFAULT '0' COMMENT '访客提问次数',
   `avgreplyinterval` int(11) DEFAULT '0' COMMENT '平均回复间隔',
   `avgreplytime` int(11) DEFAULT '0' COMMENT '平均回复时长',
-  `sessionid` varchar(32) DEFAULT NULL COMMENT '会话ID',
+  `sessionid` varchar(50) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL COMMENT '标题',
   `url` varchar(255) DEFAULT NULL COMMENT 'URL',
   `traceid` varchar(32) DEFAULT NULL COMMENT '跟踪ID',
@@ -852,7 +852,7 @@ CREATE TABLE `uk_blacklist` (
   `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
   `userid` varchar(32) DEFAULT NULL COMMENT '用户ID',
   `contactid` varchar(32) DEFAULT NULL COMMENT '联系人ID',
-  `sessionid` varchar(32) DEFAULT NULL COMMENT '会话ID',
+  `sessionid` varchar(50) DEFAULT NULL,
   `createtime` datetime DEFAULT NULL COMMENT '创建时间',
   `channel` varchar(20) DEFAULT NULL COMMENT '渠道',
   `creater` varchar(32) DEFAULT NULL COMMENT '创家人',
@@ -3223,7 +3223,7 @@ CREATE TABLE `uk_kbs_expert` (
 DROP TABLE IF EXISTS `uk_kbs_topic`;
 CREATE TABLE `uk_kbs_topic` (
   `id` varchar(32) NOT NULL COMMENT '主键ID',
-  `sessionid` varchar(32) DEFAULT NULL COMMENT '会话ID',
+  `sessionid` varchar(50) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL COMMENT '主题',
   `content` text COMMENT '知识库内容',
   `keyword` text COMMENT '关键词',
@@ -3751,6 +3751,199 @@ CREATE TABLE `uk_publishedreport` (
 
 -- ----------------------------
 -- Records of uk_publishedreport
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_qc_activity_task`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_qc_activity_task`;
+CREATE TABLE `uk_qc_activity_task` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '任务名称',
+  `CODE` varchar(50) DEFAULT NULL COMMENT '任务代码',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `UPDATETIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `USERNAME` varchar(50) DEFAULT NULL COMMENT '创建人名称',
+  `STATUS` varchar(50) DEFAULT NULL COMMENT '状态',
+  `PARENTID` varchar(32) DEFAULT NULL COMMENT '上级ID',
+  `ACTID` varchar(32) DEFAULT NULL COMMENT '活动ID',
+  `INX` int(11) DEFAULT '0' COMMENT '分类排序序号',
+  `NAMENUM` int(11) DEFAULT '0' COMMENT '批次包含的名单总数',
+  `VALIDNUM` int(11) DEFAULT '0' COMMENT '批次包含的有效名单总数',
+  `INVALIDNUM` int(11) DEFAULT '0' COMMENT '批次包含的无效名单总数',
+  `ASSIGNED` int(11) DEFAULT '0' COMMENT '已分配名单总数',
+  `NOTASSIGNED` int(11) DEFAULT '0' COMMENT '未分配名单总数',
+  `ENABLE` tinyint(4) DEFAULT '0' COMMENT '分类状态',
+  `DATASTATUS` tinyint(4) DEFAULT '0' COMMENT '数据状态',
+  `ORGAN` varchar(32) DEFAULT NULL COMMENT '部门',
+  `DESCRIPTION` text COMMENT '备注信息',
+  `execnum` int(11) DEFAULT '0' COMMENT '导入次数',
+  `SOURCE` varchar(255) DEFAULT NULL COMMENT '来源信息',
+  `BATID` varchar(32) DEFAULT NULL COMMENT '批次ID',
+  `FILTERID` varchar(32) DEFAULT NULL COMMENT '筛选ID',
+  `ASSIGNEDORGAN` int(11) DEFAULT '0' COMMENT '分配给部门',
+  `exectype` varchar(32) DEFAULT NULL COMMENT '执行类型',
+  `renum` int(11) DEFAULT '0' COMMENT '分配数量',
+  `reorgannum` int(11) DEFAULT '0' COMMENT '分配到部门数量',
+  `assignedai` int(11) DEFAULT '0' COMMENT '分配到AI的名单数量',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='质检活动 - 任务表';
+
+-- ----------------------------
+-- Records of uk_qc_activity_task
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_qc_callagent`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_qc_callagent`;
+CREATE TABLE `uk_qc_callagent` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '坐席名称',
+  `CODE` varchar(50) DEFAULT NULL COMMENT '坐席代码',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `UPDATETIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `USERNAME` varchar(50) DEFAULT NULL COMMENT '用户名',
+  `STATUS` varchar(50) DEFAULT NULL COMMENT '坐席状态',
+  `PARENTID` varchar(32) DEFAULT NULL COMMENT '上级ID',
+  `FILTERTYPE` varchar(32) DEFAULT NULL COMMENT '筛选类型（callevent通话筛选/workorders工单筛选/agentservice会话筛选）',
+  `BATID` varchar(32) DEFAULT NULL COMMENT '筛选表单使用的批次ID',
+  `TABLEID` varchar(32) DEFAULT NULL COMMENT '筛选表单使用元数据ID',
+  `DATASTATUS` tinyint(4) DEFAULT '0' COMMENT '数据状态',
+  `INX` int(11) DEFAULT '0' COMMENT '分类排序序号',
+  `ORGAN` varchar(32) DEFAULT NULL COMMENT '部门',
+  `DESCRIPTION` text COMMENT '描述信息',
+  `distype` varchar(32) DEFAULT NULL COMMENT '分配类型',
+  `distarget` varchar(32) DEFAULT NULL COMMENT '分配对象',
+  `disnum` varchar(32) DEFAULT NULL COMMENT '分配数据',
+  `ACTID` varchar(32) DEFAULT NULL COMMENT '活动ID',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='质检活动 - 数据分配表';
+
+-- ----------------------------
+-- Records of uk_qc_callagent
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_qc_formfilter_item`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_qc_formfilter_item`;
+CREATE TABLE `uk_qc_formfilter_item` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `qcformfilterid` varchar(32) DEFAULT NULL COMMENT '筛选器ID',
+  `field` varchar(32) DEFAULT NULL COMMENT '字段',
+  `cond` varchar(32) DEFAULT NULL COMMENT '条件',
+  `value` varchar(32) DEFAULT NULL COMMENT '取值',
+  `contype` varchar(32) DEFAULT NULL COMMENT '条件类型',
+  `itemtype` varchar(32) DEFAULT NULL COMMENT '类型',
+  `comp` varchar(50) DEFAULT NULL COMMENT '逻辑条件',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='QC质检 - 筛选项';
+
+-- ----------------------------
+-- Records of uk_qc_formfilter_item
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_qc_mission`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_qc_mission`;
+CREATE TABLE `uk_qc_mission` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `name` varchar(50) DEFAULT NULL COMMENT '任务名称（系统分配生成）',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `assuser` varchar(50) DEFAULT NULL COMMENT '分配执行人',
+  `asstime` datetime DEFAULT NULL COMMENT '分配时间',
+  `status` varchar(50) DEFAULT NULL COMMENT '状态',
+  `filtertype` varchar(32) DEFAULT NULL COMMENT '筛选类型（callevent通话筛选/workorders工单筛选/agentservice会话筛选）',
+  `dataid` varchar(50) DEFAULT NULL COMMENT '数据ID（通话记录ID/工单记录ID/会话记录ID）',
+  `datakey` text COMMENT '数据（通话（主叫号码）/工单记录（工单标题）/会话记录（访客用户名））',
+  `datavalue` text COMMENT '数据（通话（被叫号码）/工单记录（处理人）/会话记录（服务坐席））',
+  `templateid` varchar(32) DEFAULT NULL COMMENT '质检模板ID',
+  `actid` varchar(32) DEFAULT NULL COMMENT '质检活动ID',
+  `formfilterid` varchar(32) DEFAULT NULL COMMENT '质检筛选表单ID',
+  `filterid` varchar(32) DEFAULT NULL COMMENT '质检筛选记录ID',
+  `taskid` varchar(32) DEFAULT NULL COMMENT '质检任务ID',
+  `datastatus` tinyint(4) DEFAULT '0' COMMENT '数据状态',
+  `qualitystatus` varchar(20) DEFAULT NULL COMMENT '质检状态',
+  `qualitydisorgan` varchar(32) DEFAULT NULL COMMENT '分配的质检部门',
+  `qualitydisuser` varchar(32) DEFAULT NULL COMMENT '分配的质检用户',
+  `qualityorgan` varchar(32) DEFAULT NULL COMMENT '实际质检部门',
+  `qualityuser` varchar(32) DEFAULT NULL COMMENT '实际质检人',
+  `qualityscore` int(11) DEFAULT '0' COMMENT '质检得分',
+  `qualitytime` datetime DEFAULT NULL COMMENT '质检时间',
+  `qualitytype` varchar(20) DEFAULT NULL COMMENT '质检类型',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='QC质检 - 任务主表';
+
+-- ----------------------------
+-- Records of uk_qc_mission
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_qc_template`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_qc_template`;
+CREATE TABLE `uk_qc_template` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `name` varchar(32) DEFAULT NULL COMMENT '名称',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `organ` varchar(32) DEFAULT NULL COMMENT '所属部门',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `arithmetic` varchar(32) DEFAULT NULL COMMENT '算分机制(plus评分/minus扣分)',
+  `type` varchar(32) DEFAULT NULL COMMENT '模板类型',
+  `status` varchar(32) DEFAULT NULL COMMENT '模板状态',
+  `totalscore` int(32) DEFAULT NULL COMMENT '总分',
+  `passscore` int(32) DEFAULT NULL COMMENT '合格分',
+  `remarks` text COMMENT '备注',
+  `isvp` int(11) DEFAULT '0' COMMENT '是否有否决权（1是/0否）',
+  `isadcom` int(11) DEFAULT '0' COMMENT '是否有优点评语（1是/0否）',
+  `isqacom` int(11) DEFAULT '0' COMMENT '是否QA评语（1是/0否）',
+  `isimcom` int(11) DEFAULT '0' COMMENT '是否有改进评语（1是/0否）',
+  `isrmk` int(11) DEFAULT '0' COMMENT '质检时是否有备注（1是/0否）',
+  `isitemrmk` int(11) DEFAULT '0' COMMENT '质检项是否能填备注（1是/0否）',
+  `isitemdir` int(11) DEFAULT '0' COMMENT '质检项是否有说明（1是/0否）',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='质检 - 模板表';
+
+-- ----------------------------
+-- Records of uk_qc_template
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_qc_template_item`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_qc_template_item`;
+CREATE TABLE `uk_qc_template_item` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `name` varchar(32) DEFAULT NULL COMMENT '名称',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `maxscore` int(32) DEFAULT NULL COMMENT '最高分数',
+  `minscore` int(32) DEFAULT NULL COMMENT '最低分数',
+  `scheme` text COMMENT '评分方案',
+  `templateid` varchar(32) DEFAULT '0' COMMENT '质检模板id',
+  `parentid` varchar(32) DEFAULT '0' COMMENT '父级id',
+  `type` varchar(32) DEFAULT NULL COMMENT '质检项分类（plus评分/minus扣分/taboo禁忌项）',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='质检 - 模板质检项表';
+
+-- ----------------------------
+-- Records of uk_qc_template_item
 -- ----------------------------
 
 -- ----------------------------
@@ -9478,7 +9671,7 @@ CREATE TABLE `uk_user` (
 INSERT INTO `uk_user` VALUES ('4028811b61834723016183ec57760392', null, 'chenfarong', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'chen@ukewo.cn', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-02-11 16:12:39', null, '2018-06-29 17:40:30', null, '18510129455', '2018-02-11 16:12:39', null, '0', '陈法蓉', null, '0', null, null, null, '0', '0', '0', '2018-06-29 17:40:37', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b642f5f8c01642f60ed440683', null, 'test1', '130811dbd239c97bd9ce933de7349f20', '5', 'ad@te.com', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-06-24 09:20:38', null, '2018-10-09 11:01:09', null, '18510129433', '2018-06-24 09:20:38', null, '0', 'test1', null, '1', null, null, null, '0', '0', '0', '2018-10-10 15:13:33', null, null, null, '0', '1', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b645dc08f01645e0512ce0935', null, 'yiliao', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'asd@ac.com', null, null, null, null, null, null, null, null, null, null, null, '4028811b645dc08f01645e005f3d08dd', 'ukewo', null, '2018-07-03 10:42:28', null, '2018-07-03 10:43:31', null, '18512212955', '2018-07-03 10:42:28', null, '0', '医疗', null, '0', null, null, null, '0', '0', '0', '2018-07-03 10:43:39', null, null, null, '0', '0', '0', '0', null);
-INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-10-18 17:54:11', null, null, null, '0', '1', '1', '0', null);
+INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-10-20 18:18:37', null, null, null, '0', '1', '1', '0', null);
 
 -- ----------------------------
 -- Table structure for `uk_userevent`
@@ -9502,7 +9695,7 @@ CREATE TABLE `uk_userevent` (
   `isp` varchar(32) DEFAULT NULL COMMENT '运营商',
   `province` varchar(32) DEFAULT NULL COMMENT '省份',
   `url` varchar(255) DEFAULT NULL COMMENT '接入URL',
-  `sessionid` varchar(32) DEFAULT NULL COMMENT '会话ID',
+  `sessionid` varchar(50) DEFAULT NULL,
   `param` text COMMENT '请求参数',
   `times` int(11) DEFAULT NULL COMMENT '访问次数',
   `createtime` datetime DEFAULT NULL COMMENT '访问时间',
@@ -9613,7 +9806,7 @@ CREATE TABLE `uk_workorders` (
   `USERNAME` varchar(50) DEFAULT NULL COMMENT '创建人用户名',
   `PARENT` varchar(32) DEFAULT NULL COMMENT 'PARENT',
   `ORDERNO` int(11) DEFAULT NULL COMMENT '工单编号',
-  `SESSIONID` varchar(32) DEFAULT NULL COMMENT '会话ID',
+  `sessionid` varchar(50) DEFAULT NULL,
   `TITLE` varchar(255) DEFAULT NULL COMMENT '标题',
   `CONTENT` text COMMENT '内容',
   `PRICE` int(11) DEFAULT NULL COMMENT 'PRICE',
@@ -9981,7 +10174,7 @@ CREATE TABLE `uk_xiaoe_kbs_type` (
 DROP TABLE IF EXISTS `uk_xiaoe_scene`;
 CREATE TABLE `uk_xiaoe_scene` (
   `id` varchar(32) NOT NULL COMMENT '主键ID',
-  `sessionid` varchar(32) DEFAULT NULL COMMENT '会话ID',
+  `sessionid` varchar(50) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL COMMENT '标题',
   `content` text COMMENT '内容',
   `keyword` varchar(100) DEFAULT NULL COMMENT '关键词',
@@ -10076,7 +10269,7 @@ CREATE TABLE `uk_xiaoe_scene_type` (
 DROP TABLE IF EXISTS `uk_xiaoe_topic`;
 CREATE TABLE `uk_xiaoe_topic` (
   `id` varchar(32) NOT NULL COMMENT '主键ID',
-  `sessionid` varchar(32) DEFAULT NULL COMMENT '会话ID',
+  `sessionid` varchar(50) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL COMMENT '主题',
   `content` text COMMENT '知识库内容',
   `keyword` varchar(100) DEFAULT NULL COMMENT '关键词',
