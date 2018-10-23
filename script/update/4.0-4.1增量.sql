@@ -284,3 +284,8 @@ CREATE TABLE `uk_qc_filter_his` (
   `assignedai` int(11) DEFAULT '0' COMMENT '分配到AI的名单数量',
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='筛选记录表';
+
+ALTER TABLE uk_ekm_knowledge ADD attr text DEFAULT NULL COMMENT '知识分类id,维度分类id';
+ALTER TABLE uk_ekm_knowledge_master ADD attr text DEFAULT NULL COMMENT '知识分类id,维度分类id';
+ALTER TABLE uk_ekm_knowledge_publish ADD attr text DEFAULT NULL COMMENT '知识分类id,维度分类id';
+ALTER TABLE uk_ekm_knowledge_verison ADD attr text DEFAULT NULL COMMENT '知识分类id,维度分类id';
