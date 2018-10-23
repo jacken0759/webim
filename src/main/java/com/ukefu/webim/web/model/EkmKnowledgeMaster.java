@@ -67,6 +67,7 @@ public class EkmKnowledgeMaster implements java.io.Serializable{
 	private String keyphrase;//关键短语
 	
 	private Date updatetime;
+	private String attr;
 
 	@Id
 	@Column(length = 32)
@@ -263,7 +264,11 @@ public class EkmKnowledgeMaster implements java.io.Serializable{
 	public void setKbid(String kbid) {
 		this.kbid = kbid;
 	}
-	
-	
+	public String getAttr() {
+		return attr;
+	}
+	public void setAttr(String attr) {
+		this.attr = attr;
+	}
 	
 }

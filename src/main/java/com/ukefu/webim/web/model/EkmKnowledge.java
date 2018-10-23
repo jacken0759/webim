@@ -61,6 +61,9 @@ public class EkmKnowledge implements java.io.Serializable{
 	private Date updatetime;
 	
 	private String own;
+	
+	private String attr;
+	
 
 	@Id
 	@Column(length = 32)
@@ -235,7 +238,12 @@ public class EkmKnowledge implements java.io.Serializable{
 	public void setOwn(String own) {
 		this.own = own;
 	}
-	
+	public String getAttr() {
+		return attr;
+	}
+	public void setAttr(String attr) {
+		this.attr = attr;
+	}
 	
 	
 }

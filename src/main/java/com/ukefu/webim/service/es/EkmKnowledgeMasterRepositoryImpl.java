@@ -12,6 +12,7 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.index.query.QueryStringQueryBuilder.Operator;
+import org.elasticsearch.index.query.WildcardQueryBuilder;
 import org.elasticsearch.search.highlight.HighlightBuilder.Field;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -167,7 +168,9 @@ public class EkmKnowledgeMasterRepositoryImpl implements EkmKnowledgeMasterESRep
 			boolQueryBuilder.must(termQuery("knowbaseid" , UKDataContext.UKEFU_SYSTEM_NO_DAT)) ;
 		}
 		if(!StringUtils.isBlank(knowledgetypeid)){
-			boolQueryBuilder.must(termQuery("knowledgetypeid" , knowledgetypeid)) ;
+//			boolQueryBuilder.must(termQuery("knowledgetypeid" , knowledgetypeid)) ;
+			WildcardQueryBuilder wildcardqueryBuilder = QueryBuilders.wildcardQuery("attr", "*"+knowledgetypeid+"*");
+			boolQueryBuilder.must(wildcardqueryBuilder) ;
 		}else{
 			boolQueryBuilder.must(termQuery("knowledgetypeid" , UKDataContext.UKEFU_SYSTEM_NO_DAT)) ;
 		}
