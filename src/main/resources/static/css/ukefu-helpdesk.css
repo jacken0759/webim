@@ -278,18 +278,16 @@ body{
 	width: 1200px;
 }
 .ukefu-helpdesk-left{
-	position: absolute;
-    top: 0px;
-    bottom: 0;
+	width:220px;
+	display: inline-block;
     z-index: 666;
     min-height: 0;
-    overflow: auto;
     border-right: #e5e5e5 1px solid;
 }
 .ukefu-helpdesk-right{
-	margin-left:220px;
-	width: 990px;
+	width: 930px;
     min-height: 900px;
+    float:right;
     padding: 20px 0 10px 40px;
     background-color:#fff;
 }
