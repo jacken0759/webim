@@ -3,13 +3,13 @@ package com.ukefu.webim.service.acd;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.Lock;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.hazelcast.aggregation.Aggregators;
 import com.hazelcast.core.IMap;
-import com.hazelcast.mapreduce.aggregation.Aggregations;
-import com.hazelcast.mapreduce.aggregation.Supplier;
 import com.hazelcast.query.PagingPredicate;
 import com.hazelcast.query.SqlPredicate;
 import com.ukefu.core.UKDataContext;
@@ -17,9 +17,9 @@ import com.ukefu.util.UKTools;
 import com.ukefu.util.WebIMReport;
 import com.ukefu.util.client.NettyClients;
 import com.ukefu.webim.service.cache.CacheHelper;
-import com.ukefu.webim.service.quene.AgentStatusBusyOrgiFilter;
-import com.ukefu.webim.service.quene.AgentStatusOrgiFilter;
-import com.ukefu.webim.service.quene.AgentUserOrgiFilter;
+import com.ukefu.webim.service.quene.AgentStatusBusyOrgiFilterPredicate;
+import com.ukefu.webim.service.quene.AgentStatusOrgiFilterPredicate;
+import com.ukefu.webim.service.quene.AgentUserOrgiFilterPredicate;
 import com.ukefu.webim.service.repository.AgentReportRepository;
 import com.ukefu.webim.service.repository.AgentServiceRepository;
 import com.ukefu.webim.service.repository.AgentStatusRepository;
@@ -40,7 +40,6 @@ import com.ukefu.webim.web.model.OnlineUser;
 import com.ukefu.webim.web.model.SessionConfig;
 import com.ukefu.webim.web.model.WorkMonitor;
 
-@SuppressWarnings("deprecation")
 public class ServiceQuene {
 	
 	/**
@@ -91,11 +90,10 @@ public class ServiceQuene {
 		 */
 		AgentReport report = new AgentReport() ;
 		IMap agentStatusMap = (IMap<String, Object>) CacheHelper.getAgentStatusCacheBean().getCache() ;
-		AgentStatusOrgiFilter filter = new AgentStatusOrgiFilter(orgi) ;
-		Long agents = (Long) agentStatusMap.aggregate(Supplier.fromKeyPredicate(filter), Aggregations.count()) ;
+		Long agents = (Long) agentStatusMap.aggregate(Aggregators.<Map.Entry<String, AgentStatus>>count(), new AgentStatusOrgiFilterPredicate(orgi)) ;
 		report.setAgents(agents.intValue());
 		
-		Long busyAgent = (Long) agentStatusMap.aggregate(Supplier.fromKeyPredicate(new AgentStatusBusyOrgiFilter(orgi)), Aggregations.count()) ;
+		Long busyAgent = (Long) agentStatusMap.aggregate(Aggregators.<Map.Entry<String, AgentStatus>>count(), new AgentStatusBusyOrgiFilterPredicate(orgi)) ;
 		report.setBusy(busyAgent.intValue());
 		report.setOrgi(orgi);
 		
@@ -103,10 +101,10 @@ public class ServiceQuene {
 		 * 统计当前服务中的用户数量
 		 */
 		IMap agentUserMap = (IMap<String, Object>) CacheHelper.getAgentUserCacheBean().getCache() ;
-		Long users = (Long) agentUserMap.aggregate(Supplier.fromKeyPredicate(new AgentUserOrgiFilter(orgi , UKDataContext.AgentUserStatusEnum.INSERVICE.toString())), Aggregations.count()) ;
+		Long users = (Long) agentUserMap.aggregate(Aggregators.<Map.Entry<String, AgentUser>>count(), new AgentUserOrgiFilterPredicate(orgi,UKDataContext.AgentUserStatusEnum.INSERVICE.toString())) ;
 		report.setUsers(users.intValue());
 		
-		Long queneUsers = (Long) agentUserMap.aggregate(Supplier.fromKeyPredicate(new AgentUserOrgiFilter(orgi , UKDataContext.AgentUserStatusEnum.INQUENE.toString())), Aggregations.count()) ;
+		Long queneUsers = (Long) agentUserMap.aggregate(Aggregators.<Map.Entry<String, AgentUser>>count(), new AgentUserOrgiFilterPredicate(orgi,UKDataContext.AgentUserStatusEnum.INQUENE.toString())) ;
 		report.setInquene(queneUsers.intValue());
 		
 		return report;

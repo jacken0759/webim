@@ -12,7 +12,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import com.hazelcast.core.HazelcastInstance;
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.UKTools;
 import com.ukefu.webim.service.cache.CacheHelper;
@@ -21,10 +20,6 @@ import com.ukefu.webim.service.repository.GenerationRepository;
 import com.ukefu.webim.service.repository.SysDicRepository;
 import com.ukefu.webim.service.repository.SystemConfigRepository;
 import com.ukefu.webim.service.repository.TablePropertiesRepository;
-import com.ukefu.webim.service.rpc.AgentTopicListener;
-import com.ukefu.webim.service.rpc.CallCenterTopicListener;
-import com.ukefu.webim.service.rpc.EntIMTopicListener;
-import com.ukefu.webim.service.rpc.IMTopicListener;
 import com.ukefu.webim.web.model.BlackEntity;
 import com.ukefu.webim.web.model.Generation;
 import com.ukefu.webim.web.model.SysDic;
