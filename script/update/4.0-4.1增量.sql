@@ -289,3 +289,29 @@ ALTER TABLE uk_ekm_knowledge ADD attr text DEFAULT NULL COMMENT '知识分类id,
 ALTER TABLE uk_ekm_knowledge_master ADD attr text DEFAULT NULL COMMENT '知识分类id,维度分类id';
 ALTER TABLE uk_ekm_knowledge_publish ADD attr text DEFAULT NULL COMMENT '知识分类id,维度分类id';
 ALTER TABLE uk_ekm_knowledge_verison ADD attr text DEFAULT NULL COMMENT '知识分类id,维度分类id';
+
+CREATE TABLE `uk_spt_salespatter` (
+  `id` varchar(32) NOT NULL,
+  `name` varchar(32) DEFAULT NULL COMMENT '话术名称',
+  `type` varchar(32) DEFAULT NULL COMMENT '话术类型',
+  `scene` varchar(32) DEFAULT NULL COMMENT '话术适用场景',
+  `welword` varchar(255) DEFAULT NULL COMMENT '话术欢迎语（文字）',
+  `welvoice` varchar(255) DEFAULT NULL COMMENT '话术欢迎语ID（语音）',
+  `weltype` varchar(32) DEFAULT NULL COMMENT '话术欢迎语类型',
+  `endword` varchar(255) DEFAULT NULL COMMENT '话术结束语（文字）',
+  `endvoice` varchar(255) DEFAULT NULL COMMENT '话术结束语ID（语音）',
+  `endtype` varchar(32) DEFAULT NULL COMMENT '话术结束语类型',
+  `totalscore` varchar(32) DEFAULT NULL COMMENT '参考评分值',
+  `score` varchar(32) DEFAULT '0' COMMENT '是否评分（0否1是）',
+  `memo` text COMMENT '备注',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `prostatus` varchar(32) DEFAULT '0' COMMENT '话术状态（0未发布1发布）',
+  `sumscore` varchar(32) DEFAULT NULL COMMENT '总评分值',
+  `description` text COMMENT '描述',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='话术调查表';
+
