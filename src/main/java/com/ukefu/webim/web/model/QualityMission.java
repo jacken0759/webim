@@ -50,7 +50,7 @@ public class QualityMission implements Serializable{
 	private String qualityorgan ;  //实际质检部门 
 	private String qualityuser ;  //实际质检人 
 	private int qualityscore;  //质检得分 
-	private String qualitytime ;  //质检时间 
+	private Date qualitytime ;  //质检时间 
 	private String qualitytype ;  //质检类型 
 	
 	private String agentdata ;  //会话质检（访客用户名）
@@ -209,10 +209,10 @@ public class QualityMission implements Serializable{
 	public void setQualityscore(int qualityscore) {
 		this.qualityscore = qualityscore;
 	}
-	public String getQualitytime() {
+	public Date getQualitytime() {
 		return qualitytime;
 	}
-	public void setQualitytime(String qualitytime) {
+	public void setQualitytime(Date qualitytime) {
 		this.qualitytime = qualitytime;
 	}
 	public String getQualitytype() {

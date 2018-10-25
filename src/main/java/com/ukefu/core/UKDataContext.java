@@ -272,7 +272,8 @@ public class UKDataContext {
 	public enum QualityStatus{
 		NO,		//未开启质检
 		DIS,		//已分配			
-		NODIS;		//未分配
+		NODIS,		//未分配
+		DONE;		//已质检
 		
 		public String toString(){
 			return super.toString().toLowerCase() ;

@@ -123,7 +123,7 @@ public class WorkOrders extends ESBean implements UKAgg{
 	private String qualityuser;			//实际的质检人
 	private int qualityscore ;			//质检评分
 	private Date qualitytime ;			//质检时间
-	private Date qualitytype ;			//质检类型
+	private String qualitytype ;			//质检类型
 	
 	/**
 	 * @return the id
@@ -615,11 +615,11 @@ public class WorkOrders extends ESBean implements UKAgg{
 		this.qualitytime = qualitytime;
 	}
 
-	public Date getQualitytype() {
+	public String getQualitytype() {
 		return qualitytype;
 	}
 
-	public void setQualitytype(Date qualitytype) {
+	public void setQualitytype(String qualitytype) {
 		this.qualitytype = qualitytype;
 	}
 	

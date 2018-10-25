@@ -129,7 +129,7 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>{
 	private String qualityuser;			//实际的质检人
 	private int qualityscore ;			//质检评分
 	private Date qualitytime ;			//质检时间
-	private Date qualitytype ;			//质检类型
+	private String qualitytype ;			//质检类型
 	
 	
 	
@@ -747,10 +747,10 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>{
 	public void setQualitytime(Date qualitytime) {
 		this.qualitytime = qualitytime;
 	}
-	public Date getQualitytype() {
+	public String getQualitytype() {
 		return qualitytype;
 	}
-	public void setQualitytype(Date qualitytype) {
+	public void setQualitytype(String qualitytype) {
 		this.qualitytype = qualitytype;
 	}
 }
