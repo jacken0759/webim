@@ -320,3 +320,43 @@ ALTER TABLE uk_workorders ADD qualitydistime datetime DEFAULT NULL COMMENT '质�
 ALTER TABLE uk_agentservice ADD qualitydistime datetime DEFAULT NULL COMMENT '质检分配的时间';
 
 ALTER TABLE uk_qc_formfilter ADD execnum int DEFAULT '0' COMMENT '执行次数';
+
+CREATE TABLE `uk_qc_result` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `remarks` text COMMENT '质检备注',
+  `adcom` text COMMENT '优点评语',
+  `qacom` text COMMENT 'QA评语',
+  `imcom` text COMMENT '改进评语',
+  `score` int(11) DEFAULT '0' COMMENT '实际得分',
+  `totalscore` int(11) DEFAULT '0' COMMENT '总分',
+  `passscore` int(11) DEFAULT '0' COMMENT '合格分',
+  `arithmetic` varchar(32) DEFAULT NULL COMMENT '算分机制(plus评分/minus扣分)',
+  `missionid` varchar(32) DEFAULT NULL COMMENT '质检任务id',
+  `dataid` varchar(32) DEFAULT NULL COMMENT '数据ID（通话记录ID/工单记录ID/会话记录ID）',
+  `qualityuser` varchar(32) DEFAULT NULL COMMENT '实际质检人',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='QC质检 - 结果主表';
+
+CREATE TABLE `uk_qc_result_item` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `name` varchar(32) DEFAULT NULL COMMENT '名称',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `maxscore` int(32) DEFAULT NULL COMMENT '最高分数',
+  `minscore` int(32) DEFAULT NULL COMMENT '最低分数',
+  `score` int(32) DEFAULT NULL COMMENT '评分',
+  `scheme` text COMMENT '评分方案',
+  `remarks` text COMMENT '质检备注',
+  `parentid` varchar(32) DEFAULT NULL COMMENT '质检项父级id',
+  `type` varchar(32) DEFAULT NULL COMMENT '质检项分类（plus评分/minus扣分/taboo禁忌项）',
+  `resultid` varchar(32) DEFAULT NULL COMMENT '质检结果id',
+  `itemid` varchar(32) DEFAULT NULL COMMENT '质检项id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='QC质检 - 结果子表';
+
+
+
