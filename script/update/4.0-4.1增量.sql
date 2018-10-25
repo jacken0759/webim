@@ -318,3 +318,5 @@ CREATE TABLE `uk_spt_salespatter` (
 ALTER TABLE uk_callcenter_event ADD qualitydistime datetime DEFAULT NULL COMMENT '质检分配的时间';
 ALTER TABLE uk_workorders ADD qualitydistime datetime DEFAULT NULL COMMENT '质检分配的时间';
 ALTER TABLE uk_agentservice ADD qualitydistime datetime DEFAULT NULL COMMENT '质检分配的时间';
+
+ALTER TABLE uk_qc_formfilter ADD execnum int DEFAULT '0' COMMENT '执行次数';
