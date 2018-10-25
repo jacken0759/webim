@@ -17,6 +17,8 @@ import javax.validation.Valid;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.ui.ModelMap;
 
@@ -299,24 +301,40 @@ public class CallCenterUtils {
 	 * @param ownerdept
 	 * @param actid
 	 */
-	public static void getAllCallOutList(ModelMap map, User user,String ownerdept, String actid){
+	public static void getAllCallOutList(ModelMap map, final User user,String ownerdept, String actid){
 		JobDetailRepository batchRes = UKDataContext.getContext().getBean(JobDetailRepository.class) ;
 		UserRoleRepository userRoleRes = UKDataContext.getContext().getBean(UserRoleRepository.class) ;
 		CallOutRoleRepository callOutRoleRes = UKDataContext.getContext().getBean(CallOutRoleRepository.class) ;
 		FormFilterRepository filterRes = UKDataContext.getContext().getBean(FormFilterRepository.class) ;
 		OrganRepository organRes = UKDataContext.getContext().getBean(OrganRepository.class) ;
+		SaleStatusRepository saleStatusRes = UKDataContext.getContext().getBean(SaleStatusRepository.class);
 		
 		List<JobDetail> activityList = CallCenterUtils.getActivityList(batchRes,userRoleRes, callOutRoleRes,user);
-		List<SaleStatus> salestatusList = new ArrayList<>();
+		final List<String> actidList = new ArrayList<String>();
 		for(JobDetail act :activityList){
-			List<SaleStatus> salestastus = UKDataContext.getContext().getBean(SaleStatusRepository.class).findByOrgiAndActivityid(user.getOrgi(), act.getDicid());
-			salestatusList.addAll(salestastus);
-			
+			actidList.add(act.getDicid());
 		}
-		LinkedHashSet<SaleStatus> set = new LinkedHashSet<SaleStatus>(salestatusList.size());
-	    set.addAll(salestatusList);
-	    salestatusList.clear();
-	    salestatusList.addAll(set);
+		List<SaleStatus> salestatusList = saleStatusRes.findAll(new Specification<SaleStatus>(){
+			@Override
+			public Predicate toPredicate(Root<SaleStatus> root, CriteriaQuery<?> query,
+					CriteriaBuilder cb) {
+				List<Predicate> list = new ArrayList<Predicate>();  
+				In<Object> in = cb.in(root.get("activityid"));
+
+				list.add(cb.equal(root.get("orgi").as(String.class), user.getOrgi()));
+
+				if(actidList.size() > 0){
+					for(String id : actidList){
+						in.value(id) ;
+					}
+				}else{
+					in.value(UKDataContext.UKEFU_SYSTEM_NO_DAT) ;
+				}	
+				list.add(in) ;
+
+				Predicate[] p = new Predicate[list.size()];  
+				return cb.and(list.toArray(p));   
+			}});
 		map.put("salestatusList", salestatusList);
 		map.put("batchList", CallCenterUtils.getBatchList(batchRes, userRoleRes, callOutRoleRes,user));
 		map.put("activityList", CallCenterUtils.getActivityList(batchRes,userRoleRes, callOutRoleRes,user));
