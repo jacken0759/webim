@@ -12,6 +12,7 @@ public class QcFormFilterRequest {
 	private String adcom ;//优点评语
 	private String qacom ;//QA评语
 	private String imcom ;//改进评语
+	private int totalscore ;//总分
 	
 	public String[] getItemid() {
 		return itemid;
@@ -72,6 +73,12 @@ public class QcFormFilterRequest {
 	}
 	public void setImcom(String imcom) {
 		this.imcom = imcom;
+	}
+	public int getTotalscore() {
+		return totalscore;
+	}
+	public void setTotalscore(int totalscore) {
+		this.totalscore = totalscore;
 	}
 	
 	
