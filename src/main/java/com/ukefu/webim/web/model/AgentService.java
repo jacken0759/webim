@@ -109,6 +109,7 @@ public class AgentService implements Serializable {
 	private String qualitystatus ;//质检状态  ， 已分配/未分配
 	private String qualitydisorgan ;	//分配的质检部门
 	private String qualitydisuser;		//分配的质检人
+	private Date qualitydistime;		//分配的时间
 	
 	private String qualityorgan ;		//实际的质检部门
 	private String qualityuser;			//实际的质检人
@@ -898,5 +899,13 @@ public class AgentService implements Serializable {
 
 	public void setMemo(String memo) {
 		this.memo = memo;
+	}
+
+	public Date getQualitydistime() {
+		return qualitydistime;
+	}
+
+	public void setQualitydistime(Date qualitydistime) {
+		this.qualitydistime = qualitydistime;
 	}
 }
