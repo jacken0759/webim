@@ -315,3 +315,6 @@ CREATE TABLE `uk_spt_salespatter` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='话术调查表';
 
+ALTER TABLE uk_callcenter_event ADD qualitydistime datetime DEFAULT NULL COMMENT '质检分配的时间';
+ALTER TABLE uk_workorders ADD qualitydistime datetime DEFAULT NULL COMMENT '质检分配的时间';
+ALTER TABLE uk_agentservice ADD qualitydistime datetime DEFAULT NULL COMMENT '质检分配的时间';
