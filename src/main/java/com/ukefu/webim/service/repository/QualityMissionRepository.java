@@ -11,4 +11,5 @@ public abstract interface QualityMissionRepository extends JpaRepository<Quality
 	public Page<QualityMission> findByOrgi(String orgi, Pageable page);
 	
 	public QualityMission findByIdAndOrgi(String id ,String orgi);
+	
 }

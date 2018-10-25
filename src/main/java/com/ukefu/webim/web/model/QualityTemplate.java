@@ -45,6 +45,7 @@ public class QualityTemplate implements java.io.Serializable{
 	private boolean isitemrmk ;//质检项是否能填备注（1是/0否）
 	private boolean isitemdir ;//质检项是否有说明（1是/0否）
 	
+	
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")

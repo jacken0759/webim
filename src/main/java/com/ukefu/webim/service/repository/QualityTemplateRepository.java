@@ -17,4 +17,6 @@ public abstract interface QualityTemplateRepository extends JpaRepository<Qualit
 	public abstract QualityTemplate findByIdAndOrgi(String id, String orgi);
 	
 	public abstract QualityTemplate findByNameAndOrgi(String name, String orgi);
+	
+	public abstract List<QualityTemplate> findByTypeAndStatusAndOrgi(String type , String status, String orgi) ;
 }

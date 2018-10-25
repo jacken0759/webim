@@ -10,20 +10,16 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-/**
- * 质检-模板质检项表
- *
- */
 @Entity
-@Table(name = "uk_qc_template_item")
+@Table(name = "uk_qc_result_item")
 @org.hibernate.annotations.Proxy(lazy = false)
-public class QualityTemplateItem implements java.io.Serializable{
-	
+public class QualityResultItem implements java.io.Serializable{
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4814525962510834222L;
-
+	private static final long serialVersionUID = 608284169849125614L;
+	
 	private String id ;
 	private String name ;//名称
 	private Date createtime ;
@@ -31,15 +27,19 @@ public class QualityTemplateItem implements java.io.Serializable{
 	private String orgi ;
 	private int maxscore ;//最高分数
 	private int minscore ;//最低分数
+	private int score ;//评分
 	private String scheme ;//评分方案
-	private String templateid ;//质检模板id
-	private String parentid ;//父级id
+	private String resultid ;//结果id
+	private String parentid ;//质检项父级id
 	private String type ;//质检项分类（plus评分/minus扣分/taboo禁忌项）
+	private String remarks ;//质检项备注
+	private String itemid ;//质检项id
+	
 	
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy = "uuid")	
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	public String getId() {
 		return id;
 	}
@@ -88,11 +88,11 @@ public class QualityTemplateItem implements java.io.Serializable{
 	public void setScheme(String scheme) {
 		this.scheme = scheme;
 	}
-	public String getTemplateid() {
-		return templateid;
+	public String getResultid() {
+		return resultid;
 	}
-	public void setTemplateid(String templateid) {
-		this.templateid = templateid;
+	public void setResultid(String resultid) {
+		this.resultid = resultid;
 	}
 	public String getParentid() {
 		return parentid;
@@ -106,6 +106,26 @@ public class QualityTemplateItem implements java.io.Serializable{
 	public void setType(String type) {
 		this.type = type;
 	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
+	public String getItemid() {
+		return itemid;
+	}
+	public void setItemid(String itemid) {
+		this.itemid = itemid;
+	}
 	
 	
+	
+
 }
