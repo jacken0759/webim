@@ -360,3 +360,4 @@ CREATE TABLE `uk_qc_result_item` (
 
 
  ALTER TABLE uk_jobdetail ADD filtertype varchar(50) DEFAULT NULL COMMENT '活动筛选类型';
+  ALTER TABLE uk_qc_mission ADD organ varchar(50) DEFAULT NULL COMMENT '部门';
