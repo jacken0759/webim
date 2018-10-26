@@ -371,3 +371,19 @@ ALTER TABLE uk_agentservice ADD templateid varchar(50) DEFAULT NULL COMMENT '质
 
 ALTER TABLE uk_qc_result ADD status varchar(32) DEFAULT NULL COMMENT '状态（已质检done、已归档archive、复检中recheck）';
 ALTER TABLE uk_qc_result ADD archivedate datetime DEFAULT NULL COMMENT '归档日期';
+
+ALTER TABLE uk_qc_result ADD qualitytype varchar(32) DEFAULT NULL COMMENT '质检类型（callevent通话/workorders工单/agentservice会话）';
+
+CREATE TABLE `uk_qc_appeal` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `remarks` text COMMENT '申诉备注',
+  `dataid` varchar(32) DEFAULT NULL COMMENT '数据ID（通话记录ID/工单记录ID/会话记录ID）',
+  `resultid` varchar(32) DEFAULT NULL COMMENT '质检结果id',
+  `appealuser` varchar(32) DEFAULT NULL COMMENT '申诉人',
+  `status` varchar(32) DEFAULT NULL COMMENT '状态',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='QC质检 - 质检申诉表';
+
