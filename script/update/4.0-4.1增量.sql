@@ -360,4 +360,12 @@ CREATE TABLE `uk_qc_result_item` (
 
 
  ALTER TABLE uk_jobdetail ADD filtertype varchar(50) DEFAULT NULL COMMENT '活动筛选类型';
+ 
+ALTER TABLE uk_workorders ADD assuser varchar(50) DEFAULT NULL COMMENT '分配执行人';
+ALTER TABLE uk_callcenter_event ADD assuser varchar(50) DEFAULT NULL COMMENT '分配执行人';
+ALTER TABLE uk_agentservice ADD assuser varchar(50) DEFAULT NULL COMMENT '分配执行人';
+
+ALTER TABLE uk_workorders ADD templateid varchar(50) DEFAULT NULL COMMENT '质检模板id';
+ALTER TABLE uk_callcenter_event ADD templateid varchar(50) DEFAULT NULL COMMENT '质检模板id';
+ALTER TABLE uk_agentservice ADD templateid varchar(50) DEFAULT NULL COMMENT '质检模板id';
 
