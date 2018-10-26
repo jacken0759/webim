@@ -10,6 +10,10 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+/**
+ * QC质检 - 质检结果子表
+ *
+ */
 @Entity
 @Table(name = "uk_qc_result_item")
 @org.hibernate.annotations.Proxy(lazy = false)

@@ -9,7 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
-
+/**
+ * QC质检 - 质检结果主表
+ *
+ */
 @Entity
 @Table(name = "uk_qc_result")
 @org.hibernate.annotations.Proxy(lazy = false)
@@ -40,6 +43,8 @@ public class QualityResult implements java.io.Serializable{
 	
 	private String status ;//	状态（已质检、已归档）
 	private Date archivedate ; //归档日期
+	
+	private String qualitytype ; //质检类型
 	
 	
 	@Id
@@ -147,6 +152,12 @@ public class QualityResult implements java.io.Serializable{
 	}
 	public void setArchivedate(Date archivedate) {
 		this.archivedate = archivedate;
+	}
+	public String getQualitytype() {
+		return qualitytype;
+	}
+	public void setQualitytype(String qualitytype) {
+		this.qualitytype = qualitytype;
 	}
 	
 	
