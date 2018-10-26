@@ -140,6 +140,8 @@ public class JobDetail implements Serializable{
 
 	@Transient
 	private Reporter report ;
+	
+	private String filtertype;//筛选类型
 
 	@Id
 	@Column(length = 32)
@@ -820,5 +822,13 @@ public class JobDetail implements Serializable{
 
 	public void setLocalserver(String localserver) {
 		this.localserver = localserver;
+	}
+
+	public String getFiltertype() {
+		return filtertype;
+	}
+
+	public void setFiltertype(String filtertype) {
+		this.filtertype = filtertype;
 	}
 }

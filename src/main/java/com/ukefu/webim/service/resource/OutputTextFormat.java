@@ -14,6 +14,7 @@ public class OutputTextFormat {
 	private Map<String , Object> data = new HashMap<String , Object>();
 	private JobDetail job ;
 	private UKDataBean dataBean ;
+	private Object object ;
 	
 	public OutputTextFormat(JobDetail job){
 		this.job = job ;
@@ -53,5 +54,11 @@ public class OutputTextFormat {
 	}
 	public void setDataBean(UKDataBean dataBean) {
 		this.dataBean = dataBean;
+	}
+	public Object getObject() {
+		return object;
+	}
+	public void setObject(Object object) {
+		this.object = object;
 	}
 }

@@ -1,16 +1,25 @@
 package com.ukefu.webim.service.resource;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ukefu.core.UKDataContext;
-import com.ukefu.util.es.UKDataBean;
+import com.ukefu.util.UKTools;
+import com.ukefu.util.es.SearchTools;
+import com.ukefu.webim.service.es.WorkOrdersRepository;
+import com.ukefu.webim.service.repository.AgentServiceRepository;
 import com.ukefu.webim.service.repository.JobDetailRepository;
 import com.ukefu.webim.service.repository.MetadataRepository;
 import com.ukefu.webim.service.repository.QualityActivityTaskRepository;
+import com.ukefu.webim.service.repository.QualityAgentRepository;
 import com.ukefu.webim.service.repository.QualityFilterRepository;
 import com.ukefu.webim.service.repository.QualityFormFilterItemRepository;
 import com.ukefu.webim.service.repository.QualityFormFilterRepository;
+import com.ukefu.webim.service.repository.StatusEventRepository;
+import com.ukefu.webim.web.model.AgentService;
 import com.ukefu.webim.web.model.JobDetail;
 import com.ukefu.webim.web.model.MetadataTable;
 import com.ukefu.webim.web.model.QualityActivityTask;
@@ -18,6 +27,9 @@ import com.ukefu.webim.web.model.QualityAgent;
 import com.ukefu.webim.web.model.QualityFilter;
 import com.ukefu.webim.web.model.QualityFormFilter;
 import com.ukefu.webim.web.model.QualityFormFilterItem;
+import com.ukefu.webim.web.model.QualityMission;
+import com.ukefu.webim.web.model.StatusEvent;
+import com.ukefu.webim.web.model.WorkOrders;
 
 public class QualityResource extends Resource{
 	
@@ -42,6 +54,15 @@ public class QualityResource extends Resource{
 	private QualityActivityTask qcActTask;
 	private QualityActivityTaskRepository qcActTaskRes;
 	
+	private List<?> dataList ;
+	
+	//语音通话
+	private StatusEventRepository statusEventRes;
+	private WorkOrdersRepository workOrdersRes ;
+	
+	//会话质检
+	private AgentServiceRepository agentServiceRes;
+	
 	private AtomicInteger assignorganInt = new AtomicInteger() /***分配到坐席***/, assignInt = new AtomicInteger() /***分配到部门***/ , assignAiInt = new AtomicInteger() /***分配到AI***/ ,atomInt = new AtomicInteger() ;
 	
 	public QualityResource(JobDetail jobDetail) {
@@ -52,49 +73,303 @@ public class QualityResource extends Resource{
 		this.qcFormFilterItemRes = UKDataContext.getContext().getBean(QualityFormFilterItemRepository.class);
 		this.qcActTaskRes = UKDataContext.getContext().getBean(QualityActivityTaskRepository.class);
 		this.metadataRes = UKDataContext.getContext().getBean(MetadataRepository.class);
+		this.statusEventRes = UKDataContext.getContext().getBean(StatusEventRepository.class);
+		this.workOrdersRes = UKDataContext.getContext().getBean(WorkOrdersRepository.class);
+		this.agentServiceRes = UKDataContext.getContext().getBean(AgentServiceRepository.class);
 		
 	}
 
 	@Override
 	public void begin() throws Exception {
 		
+		if(!StringUtils.isBlank(this.jobDetail.getFilterid())) {//筛选表单id是否为空，作为数据的筛选依据
+			qcFormFilter = this.qcFormFilterRes.findByIdAndOrgi(this.jobDetail.getFilterid(), this.jobDetail.getOrgi());
+			final List<QualityFormFilterItem> qcFormFilterItemList = this.qcFormFilterItemRes.findByOrgiAndQcformfilterid(this.jobDetail.getOrgi(), this.jobDetail.getFilterid());
+			if(qcFormFilter != null) {
+				
+				if(isRecovery()) {
+					
+				}else {
+					final String orgi = this.jobDetail.getOrgi();
+					if(UKDataContext.QcFormFilterTypeEnum.CALLEVENT.toString().equals(qcFormFilter.getFiltertype())) {
+						//语音质检
+						dataList = SearchTools.searchQualityStatusEvent(orgi, qcFormFilterItemList);
+					}else if(UKDataContext.QcFormFilterTypeEnum.WORKORDERS.toString().equals(qcFormFilter.getFiltertype())) {
+						//工单质检
+						dataList = SearchTools.searchQualityWorkOrders(orgi, qcFormFilterItemList);
+					}else if(UKDataContext.QcFormFilterTypeEnum.AGENTSERVICE.toString().equals(qcFormFilter.getFiltertype())) {
+						//会话质检
+						dataList = SearchTools.searchQualityAgentService(orgi, qcFormFilterItemList);
+					}
+				}
+			}
+			
+			this.qcAgentList = UKDataContext.getContext().getBean(QualityAgentRepository.class).findByActidAndOrgi(this.jobDetail.getId(), this.jobDetail.getOrgi());
+			
+			if(this.qcAgentList != null && this.qcAgentList.size() > 0) {
+				this.qcAgent = this.qcAgentList.remove(0);
+			}
+			
+			this.jobDetail.setExecnum(this.jobDetail.getExecnum() + 1);
+			
+			if(this.isRecovery() && !StringUtils.isBlank(this.jobDetail.getExectype()) 
+					&& (this.jobDetail.getExectype().equals("filterid") || this.jobDetail.getExectype().equals("filterskill") || this.jobDetail.getExectype().equals("taskid") || this.jobDetail.getExectype().equals("taskskill"))) {
+				if(this.jobDetail.getExectype().equals("filterid") || this.jobDetail.getExectype().equals("filterskill")) {
+					this.qcFilter = this.qcFilterRes.findByIdAndOrgi(this.jobDetail.getExectarget(), this.jobDetail.getOrgi());
+				}else if(this.jobDetail.getExectype().equals("taskid") || this.jobDetail.getExectype().equals("taskskill")) {
+					this.qcActTask = this.qcActTaskRes.findByIdAndOrgi(this.jobDetail.getExectarget(), this.jobDetail.getOrgi());
+				}
+			}else {
+				
+				qcActTask = new QualityActivityTask();
+				qcActTask.setName(this.jobDetail.getName() + "_" + UKTools.dateFormate.format(new Date()));
+				qcActTask.setOrgi(this.jobDetail.getOrgi());
+				qcActTask.setOrgan(this.jobDetail.getOrgan());
+				qcActTask.setCreater(this.jobDetail.getCreater());
+				qcActTask.setCreatetime(new Date());
+				if(this.isRecovery()) {
+					qcActTask.setExectype(UKDataContext.ActivityExecType.RECOVERY.toString());
+				}else {
+					qcActTask.setExectype(UKDataContext.ActivityExecType.DEFAULT.toString());
+				}
+				qcActTask.setFilterid(this.qcFormFilter.getId());
+				qcActTask.setActid(this.jobDetail.getId());
+				qcActTask.setExecnum(this.jobDetail.getExecnum());
+				
+				
+				this.qcActTaskRes.save(qcActTask);
+				
+				qcFilter = new QualityFilter();
+				
+				qcFormFilter.setExecnum(qcFormFilter.getExecnum() + 1);
+				UKTools.copyProperties(qcActTask, qcFilter);
+				qcFilter.setName(this.qcFormFilter.getName() + "_" + UKTools.dateFormate.format(new Date()));
+				qcFilter.setExecnum(qcFormFilter.getExecnum());
+				this.qcFilterRes.save(qcFilter);
+			}
+		}
 		
 	}
 
 	@Override
 	public void end(boolean clear) throws Exception {
-		// TODO Auto-generated method stub
 		
+		/**
+		 * FormFilter的执行信息更新，执行次数
+		 */
+		if(qcFormFilterRes!=null && this.qcFormFilter != null) {
+			this.qcFormFilter.setFilternum(this.qcFormFilter.getFilternum()+1);
+			qcFormFilterRes.save(this.qcFormFilter) ;
+		}
+		
+		if(this.qcActTask!=null) {
+			if(this.isRecovery()) {
+				if(!StringUtils.isBlank(this.jobDetail.getExecto())) {
+					this.qcActTask.setReorgannum(this.atomInt.intValue());
+				}else {
+					this.qcActTask.setRenum(this.atomInt.intValue());
+				}
+			}else {
+				this.qcActTask.setAssigned(this.assignInt.intValue());
+				this.qcActTask.setAssignedorgan(this.assignorganInt.intValue());
+				this.qcActTask.setAssignedai(this.assignAiInt.intValue());
+				this.qcActTask.setNotassigned(this.qcActTask.getNamenum() - this.assignInt.intValue() - this.assignorganInt.intValue() - this.assignAiInt.intValue());
+			}
+			this.qcActTaskRes.save(this.qcActTask) ;
+		}
+		if(this.qcFilter!=null) {
+			if(this.isRecovery()) {
+				if(!StringUtils.isBlank(this.jobDetail.getExecto())) {
+					this.qcFilter.setReorgannum(this.atomInt.intValue());
+				}else {
+					this.qcFilter.setRenum(this.atomInt.intValue());
+				}
+			}else {
+				this.qcFilter.setAssigned(this.assignInt.intValue());
+				this.qcFilter.setAssignedorgan(this.assignorganInt.intValue());
+				this.qcFilter.setAssignedai(this.assignAiInt.intValue());
+				this.qcFilter.setNotassigned(this.qcActTask.getNamenum() - this.assignInt.intValue() - this.assignorganInt.intValue() - this.assignAiInt.intValue());
+			}
+			this.qcFilterRes.save(this.qcFilter) ;
+		}
+		
+		/**
+		 * 更新任务状态，记录生成的任务信息
+		 */
+		this.jobDetail.setExecmd(null);
+		this.jobDetail.setExectype(null);
+		this.jobDetail.setExectarget(null);
+		this.jobDetail.setExecto(null);
 	}
 
 	@Override
 	public JobDetail getJob() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.jobDetail;
 	}
 
 	@Override
 	public void process(OutputTextFormat meta, JobDetail job) throws Exception {
-		// TODO Auto-generated method stub
 		
+		if(meta.getObject() != null) {
+			this.qcAgent.getDisnames().incrementAndGet() ;
+			if(this.isRecovery()) {
+				//回收
+				if(meta.getObject().equals(StatusEvent.class)) {
+					//通话质检
+					StatusEvent statusEvent = (StatusEvent)meta.getObject();
+					statusEvent.setQualitydistime(null);
+					statusEvent.setQualitydisuser(null);
+					if(!StringUtils.isBlank(this.jobDetail.getExecto())) {
+						//回收到部门
+						statusEvent.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
+						statusEvent.setQualitydisorgan(this.qcAgent.getDistarget());
+					}else {
+						//回收到池子
+						statusEvent.setQualitystatus(null);
+						statusEvent.setQualitydisorgan(null);
+					}
+					
+					this.statusEventRes.save(statusEvent);
+				}else if(meta.getObject().equals(WorkOrders.class)) {
+					//工单质检
+					WorkOrders workOrders = (WorkOrders)meta.getObject();
+					workOrders.setQualitydistime(null);
+					workOrders.setQualitydisuser(null);
+					if(!StringUtils.isBlank(this.jobDetail.getExecto())) {
+						//回收到部门
+						workOrders.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
+						workOrders.setQualitydisorgan(this.qcAgent.getDistarget());
+					}else {
+						//回收到池子
+						workOrders.setQualitystatus(null);
+						workOrders.setQualitydisorgan(null);
+					}
+					this.workOrdersRes.save(workOrders);
+				}else if(meta.getObject().equals(AgentService.class)) {
+					//会话质检
+					AgentService agentService = (AgentService)meta.getObject();
+					agentService.setQualitydistime(null);
+					agentService.setQualitydisuser(null);
+					if(!StringUtils.isBlank(this.jobDetail.getExecto())) {
+						//回收到部门
+						agentService.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
+						agentService.setQualitydisorgan(this.qcAgent.getDistarget());
+					}else {
+						//回收到池子
+						agentService.setQualitystatus(null);
+						agentService.setQualitydisorgan(null);
+					}
+					this.agentServiceRes.save(agentService);
+				}
+			}else {
+				if(meta.getObject() instanceof StatusEvent) {
+					//通话质检
+					StatusEvent statusEvent = (StatusEvent)meta.getObject();
+					statusEvent.setQualitydistime(new Date());
+					if("agent".equals(this.qcAgent.getDistype())) {
+						statusEvent.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
+						statusEvent.setQualitydisorgan(this.qcAgent.getOrgan());
+						statusEvent.setQualitydisuser(this.qcAgent.getDistarget());
+						this.assignInt.incrementAndGet() ;
+					}else if("skill".equals(this.qcAgent.getDistype())) {
+						statusEvent.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
+						statusEvent.setQualitydisorgan(this.qcAgent.getDistarget());
+						this.assignorganInt.incrementAndGet() ;
+					}
+					this.statusEventRes.save(statusEvent);
+				}else if(meta.getObject() instanceof WorkOrders) {
+					//工单质检
+					WorkOrders workOrders = (WorkOrders)meta.getObject();
+					workOrders.setQualitydistime(new Date());
+					if("agent".equals(this.qcAgent.getDistype())) {
+						workOrders.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
+						workOrders.setQualitydisorgan(this.qcAgent.getOrgan());
+						workOrders.setQualitydisuser(this.qcAgent.getDistarget());
+						this.assignInt.incrementAndGet() ;
+					}else if("skill".equals(this.qcAgent.getDistype())) {
+						workOrders.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
+						workOrders.setQualitydisorgan(this.qcAgent.getDistarget());
+						this.assignorganInt.incrementAndGet() ;
+					}
+					this.workOrdersRes.save(workOrders);
+				}else if(meta.getObject() instanceof AgentService) {
+					//会话质检
+					AgentService agentService = (AgentService)meta.getObject();
+					agentService.setQualitydistime(new Date());
+					if("agent".equals(this.qcAgent.getDistype())) {
+						agentService.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
+						agentService.setQualitydisorgan(this.qcAgent.getOrgan());
+						agentService.setQualitydisuser(this.qcAgent.getDistarget());
+						this.assignInt.incrementAndGet() ;
+					}else if("skill".equals(this.qcAgent.getDistype())) {
+						agentService.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
+						agentService.setQualitydisorgan(this.qcAgent.getDistarget());
+						this.assignorganInt.incrementAndGet() ;
+					}
+					this.agentServiceRes.save(agentService);
+				}
+			}
+		}
 	}
 
 	@Override
 	public OutputTextFormat next() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		OutputTextFormat outputTextFormat = null;
+		if(this.dataList!=null && this.qcAgent!=null) {
+			synchronized (this.dataList) {
+				if(atomInt.intValue() < this.dataList.size()) {
+					if(this.isRecovery()) {
+						Object object = this.dataList.get(atomInt.intValue()) ;
+						outputTextFormat = new OutputTextFormat(this.jobDetail);
+						if(this.qcFormFilter!=null) {
+							outputTextFormat.setTitle(this.qcFormFilter.getName());
+						}
+						outputTextFormat.setObject(object);
+						atomInt.incrementAndGet() ;
+					}else if(this.dataList!=null) {
+						if(this.qcAgent.getDisnames().intValue() >= this.qcAgent.getDisnum() ) {
+							if(this.qcAgentList.size() > 0) {
+								this.qcAgent = this.qcAgentList.remove(0) ;
+							}else {
+								this.qcAgent = null ;
+							}
+						}
+						if(this.qcAgent != null) {
+							Object object = this.dataList.get(atomInt.intValue()) ;
+							outputTextFormat = new OutputTextFormat(this.jobDetail);
+							if(this.qcFormFilter!=null) {
+								outputTextFormat.setTitle(this.qcFormFilter.getName());
+							}
+							outputTextFormat.setObject(object);
+		
+							atomInt.incrementAndGet() ;
+							
+							/**
+							 * 修改为平均分配的方式 ， 每个坐席或者部门评价分配
+							 */
+							this.qcAgentList.add(this.qcAgent) ;
+							if(this.qcAgentList.size() > 0) {
+								this.qcAgent = this.qcAgentList.remove(0) ;
+							}
+						}
+					}
+				}
+			}
+		}
+		return outputTextFormat;
 	}
 
 	@Override
 	public boolean isAvailable() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public OutputTextFormat getText(OutputTextFormat object) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return object;
 	}
 
 	@Override
@@ -105,9 +380,16 @@ public class QualityResource extends Resource{
 
 	@Override
 	public void updateTask() throws Exception {
-		// TODO Auto-generated method stub
-		
+		/**
+		 * 更新任务状态，记录生成的任务信息
+		 */
+		this.jobDetail.setExecmd(null);
+		this.jobDetail.setExectype(null);
+		this.jobDetail.setExectarget(null);
+		this.jobDetail.setExecto(null);
 	}
 
-	
+	private boolean isRecovery() {
+		return !StringUtils.isBlank(this.jobDetail.getExecmd()) && this.jobDetail.getExecmd().equals("recovery") ;
+	}
 }

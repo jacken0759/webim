@@ -41,6 +41,7 @@ public class QualityFormFilter implements Serializable {
 	private String description;//备注
 	private int filternum;//筛选次数
 	private int conditional;//条件个数
+	private int execnum	;	//执行次数
 
 	@Id
 	@Column(length = 32)
@@ -172,6 +173,14 @@ public class QualityFormFilter implements Serializable {
 
 	public void setTablename(String tablename) {
 		this.tablename = tablename;
+	}
+
+	public int getExecnum() {
+		return execnum;
+	}
+
+	public void setExecnum(int execnum) {
+		this.execnum = execnum;
 	}
 
 	

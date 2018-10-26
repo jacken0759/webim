@@ -55,6 +55,8 @@ public class QualityMission implements Serializable{
 	
 	private String agentdata ;  //会话质检（访客用户名）
 	
+	private String organ ;  //部门
+	
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -226,6 +228,12 @@ public class QualityMission implements Serializable{
 	}
 	public void setAgentdata(String agentdata) {
 		this.agentdata = agentdata;
+	}
+	public String getOrgan() {
+		return organ;
+	}
+	public void setOrgan(String organ) {
+		this.organ = organ;
 	}
 	
 	

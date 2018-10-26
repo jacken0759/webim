@@ -3,8 +3,15 @@ package com.ukefu.util.es;
 import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -12,21 +19,30 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.index.query.QueryStringQueryBuilder.Operator;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 
 import com.ukefu.core.UKDataContext;
 import com.ukefu.webim.service.es.EkmKnowledgeMasterRepository;
 import com.ukefu.webim.service.es.EkmKnowledgeTimesRepository;
+import com.ukefu.webim.service.es.WorkOrdersRepository;
 import com.ukefu.webim.service.impl.ESDataExchangeImpl;
+import com.ukefu.webim.service.repository.AgentServiceRepository;
+import com.ukefu.webim.service.repository.StatusEventRepository;
+import com.ukefu.webim.web.model.AgentService;
 import com.ukefu.webim.web.model.EkmDimension;
 import com.ukefu.webim.web.model.EkmKnowledgeMaster;
 import com.ukefu.webim.web.model.EkmKnowledgeTimes;
 import com.ukefu.webim.web.model.FormFilter;
 import com.ukefu.webim.web.model.FormFilterItem;
 import com.ukefu.webim.web.model.MetadataTable;
+import com.ukefu.webim.web.model.QualityFormFilterItem;
+import com.ukefu.webim.web.model.StatusEvent;
 import com.ukefu.webim.web.model.User;
+import com.ukefu.webim.web.model.WorkOrders;
 
 public class SearchTools {
 	
@@ -431,5 +447,275 @@ public class SearchTools {
 			}
 		}
 		return dataBeanList;
+	}
+	/**
+	 * 	查询参与质检的通话记录
+	 * @param orgi
+	 * @param qcFormFilterItemList
+	 * @return
+	 */
+	public static List<StatusEvent> searchQualityStatusEvent(final String orgi, final List<QualityFormFilterItem> qcFormFilterItemList){
+		
+		StatusEventRepository statusEventRes = UKDataContext.getContext().getBean(StatusEventRepository.class);
+		Page<StatusEvent> page = statusEventRes.findAll(new Specification<StatusEvent>(){
+			@Override
+			public Predicate toPredicate(Root<StatusEvent> root, CriteriaQuery<?> query,
+					CriteriaBuilder cb) {
+				List<Predicate> list = new ArrayList<Predicate>();  //and关系
+				List<Predicate> inlist = new ArrayList<Predicate>();  //or关系
+				
+				list.add(cb.equal(root.get("orgi").as(String.class), orgi)) ;
+				list.add(cb.equal(root.get("record").as(boolean.class), true)) ;
+				list.add(cb.notEqual(root.get("qualitystatus").as(String.class), UKDataContext.QualityStatus.DIS.toString())) ;
+				
+				if(qcFormFilterItemList.size() > 0) {
+					try {
+						for(QualityFormFilterItem formFilterItem : qcFormFilterItemList) {
+							if(formFilterItem.getField().equals("q")) {
+								list.add(cb.like(root.get("discaller").as(String.class), "%" + formFilterItem.getValue() + "%")) ;
+							}else {
+								Number number = null ;
+								if(!StringUtils.isBlank(formFilterItem.getValue()) && formFilterItem.getValue().matches("[+-.]{0,1}[\\d.]{1,}")) {
+									number = NumberFormat.getInstance().parse(formFilterItem.getValue()) ;
+								}
+								if(number == null){
+									number = 0;
+								}
+								switch(formFilterItem.getCond()) {
+									case "01" : 
+										if("AND".equals(formFilterItem.getComp())) {
+											list.add(cb.gt(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+										}else if("OR".equals(formFilterItem.getComp())) {
+											inlist.add(cb.gt(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+										}
+										break ;
+									case "02" : 
+										if("AND".equals(formFilterItem.getComp())) {
+											list.add(cb.ge(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+										}else if("OR".equals(formFilterItem.getComp())) {
+											inlist.add(cb.ge(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+										}
+										break ;
+									case "03" : 
+										if("AND".equals(formFilterItem.getComp())) {
+											list.add(cb.lt(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+										}else if("OR".equals(formFilterItem.getComp())) {
+											inlist.add(cb.lt(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+										}
+										break ;
+									case "04" : 
+										if("AND".equals(formFilterItem.getComp())) {
+											list.add(cb.le(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+										}else if("OR".equals(formFilterItem.getComp())) {
+											inlist.add(cb.le(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+										}
+										break ;
+									case "05" : 
+										if("AND".equals(formFilterItem.getComp())) {
+											list.add(cb.equal(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+										}else if("OR".equals(formFilterItem.getComp())) {
+											inlist.add(cb.equal(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+										}
+										break ;
+									case "06" : 
+										if("AND".equals(formFilterItem.getComp())) {
+											list.add(cb.notEqual(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+										}else if("OR".equals(formFilterItem.getComp())) {
+											inlist.add(cb.notEqual(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+										}
+										break ;
+									case "07" : 
+										if("AND".equals(formFilterItem.getComp())) {
+											list.add(cb.like(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+										}else if("OR".equals(formFilterItem.getComp())) {
+											inlist.add(cb.like(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+										}
+										break ;
+									default :
+										break ;
+								}
+							}
+						}
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+				Predicate[] p = new Predicate[list.size()];  
+				Predicate[] inp = new Predicate[inlist.size()]; 
+				cb.or(inlist.toArray(inp));
+				
+			    return cb.and(list.toArray(p));  
+			}}, new PageRequest(0, 10000 , Sort.Direction.DESC, "starttime")) ;
+		return page.getContent();
+	}
+	/**
+	 * 查询参与质检的工单
+	 * @param orgi
+	 * @param qcFormFilterItemList
+	 * @return
+	 */
+	public static List<WorkOrders> searchQualityWorkOrders(String orgi, List<QualityFormFilterItem> qcFormFilterItemList){
+		
+		WorkOrdersRepository workOrdersRes = UKDataContext.getContext().getBean(WorkOrdersRepository.class);
+		//工单质检
+		BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+		//筛选未分配质检的工单
+		boolQueryBuilder.mustNot(termQuery("qualitystatus",UKDataContext.QualityStatus.DIS.toString()));
+		
+		BoolQueryBuilder orBuilder = new BoolQueryBuilder();
+		int orNums = 0 ;
+		for(QualityFormFilterItem formFilterItem : qcFormFilterItemList) {
+			QueryBuilder tempQueryBuilder = null ;
+			if(formFilterItem.getField().equals("q")) {
+				tempQueryBuilder = new QueryStringQueryBuilder(formFilterItem.getValue()).defaultOperator(Operator.AND) ;
+			}else {
+				switch(formFilterItem.getCond()) {
+					case "01" : 
+						tempQueryBuilder = rangeQuery(formFilterItem.getField()).from(formFilterItem.getValue()).includeLower(false) ;
+						break ;
+					case "02" : 
+						tempQueryBuilder = rangeQuery(formFilterItem.getField()).from(formFilterItem.getValue()).includeLower(true) ;
+						break ;
+					case "03" : 
+						tempQueryBuilder = rangeQuery(formFilterItem.getField()).to(formFilterItem.getValue()).includeUpper(false) ;
+						break ;
+					case "04" : 
+						tempQueryBuilder = rangeQuery(formFilterItem.getField()).to(formFilterItem.getValue()).includeUpper(true) ;
+						break ;
+					case "05" : 
+						tempQueryBuilder = termQuery(formFilterItem.getField() , formFilterItem.getValue()) ;
+						break ;
+					case "06" : 
+						tempQueryBuilder = termQuery(formFilterItem.getField() , formFilterItem.getValue()) ;
+						break ;
+					case "07" : 
+						tempQueryBuilder = new QueryStringQueryBuilder(formFilterItem.getValue()).field(formFilterItem.getField()).defaultOperator(Operator.AND) ;
+						break ;
+					default :
+						break ;
+				}
+			}
+			if("AND".equalsIgnoreCase(formFilterItem.getComp())) {
+				if("06".equals(formFilterItem.getCond())) {
+					boolQueryBuilder.mustNot(tempQueryBuilder) ;
+				}else {
+					boolQueryBuilder.must(tempQueryBuilder) ;
+				}
+			}else {
+				orNums ++ ;
+				if("06".equals(formFilterItem.getCond())) {
+					orBuilder.mustNot(tempQueryBuilder) ;
+				}else {
+					orBuilder.should(tempQueryBuilder) ;
+				}
+			}
+		}
+		if(orNums > 0) {
+			boolQueryBuilder.must(orBuilder) ;
+		}
+		Page<WorkOrders> page = workOrdersRes.findByAllQuery(boolQueryBuilder, false, orgi,new PageRequest(0, 10000 , Sort.Direction.DESC, "createtime"));
+		return page.getContent();
+	}
+	/**
+	 * 	查询参与质检的文字客服会话记录
+	 * @param orgi
+	 * @param qcFormFilterItemList
+	 * @return
+	 */
+	public static List<AgentService> searchQualityAgentService(final String orgi, final List<QualityFormFilterItem> qcFormFilterItemList){
+		
+		AgentServiceRepository agentServiceRes = UKDataContext.getContext().getBean(AgentServiceRepository.class);
+		Page<AgentService> page = agentServiceRes.findAll(new Specification<AgentService>(){
+			@Override
+			public Predicate toPredicate(Root<AgentService> root, CriteriaQuery<?> query,
+					CriteriaBuilder cb) {
+				List<Predicate> list = new ArrayList<Predicate>();  //and关系
+				List<Predicate> inlist = new ArrayList<Predicate>();  //or关系
+				
+				list.add(cb.equal(root.get("orgi").as(String.class), orgi)) ;
+				list.add(cb.notEqual(root.get("qualitystatus").as(String.class), UKDataContext.QualityStatus.DIS.toString())) ;
+				
+				if(qcFormFilterItemList.size() > 0) {
+					try {
+						for(QualityFormFilterItem formFilterItem : qcFormFilterItemList) {
+							if(formFilterItem.getField().equals("q")) {
+								list.add(cb.like(root.get("agentusername").as(String.class), "%" + formFilterItem.getValue() + "%")) ;
+							}else {
+								Number number = null ;
+								if(!StringUtils.isBlank(formFilterItem.getValue()) && formFilterItem.getValue().matches("[+-.]{0,1}[\\d.]{1,}")) {
+									number = NumberFormat.getInstance().parse(formFilterItem.getValue()) ;
+								}
+								if(number == null){
+									number = 0;
+								}
+								switch(formFilterItem.getCond()) {
+								case "01" : 
+									if("AND".equals(formFilterItem.getComp())) {
+										list.add(cb.gt(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+									}else if("OR".equals(formFilterItem.getComp())) {
+										inlist.add(cb.gt(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+									}
+									break ;
+								case "02" : 
+									if("AND".equals(formFilterItem.getComp())) {
+										list.add(cb.ge(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+									}else if("OR".equals(formFilterItem.getComp())) {
+										inlist.add(cb.ge(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+									}
+									break ;
+								case "03" : 
+									if("AND".equals(formFilterItem.getComp())) {
+										list.add(cb.lt(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+									}else if("OR".equals(formFilterItem.getComp())) {
+										inlist.add(cb.lt(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+									}
+									break ;
+								case "04" : 
+									if("AND".equals(formFilterItem.getComp())) {
+										list.add(cb.le(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+									}else if("OR".equals(formFilterItem.getComp())) {
+										inlist.add(cb.le(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+									}
+									break ;
+								case "05" : 
+									if("AND".equals(formFilterItem.getComp())) {
+										list.add(cb.equal(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+									}else if("OR".equals(formFilterItem.getComp())) {
+										inlist.add(cb.equal(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+									}
+									break ;
+								case "06" : 
+									if("AND".equals(formFilterItem.getComp())) {
+										list.add(cb.notEqual(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+									}else if("OR".equals(formFilterItem.getComp())) {
+										inlist.add(cb.notEqual(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+									}
+									break ;
+								case "07" : 
+									if("AND".equals(formFilterItem.getComp())) {
+										list.add(cb.like(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+									}else if("OR".equals(formFilterItem.getComp())) {
+										inlist.add(cb.like(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+									}
+									break ;
+								default :
+									break ;
+							}
+							}
+						}
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+				
+				Predicate[] p = new Predicate[list.size()];  
+				Predicate[] inp = new Predicate[inlist.size()];  
+			    return cb.and(list.toArray(p));  
+			}}, new PageRequest(0, 10000 , Sort.Direction.DESC, "createtime")) ;
+		return page.getContent();
 	}
 }
