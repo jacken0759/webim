@@ -359,4 +359,4 @@ CREATE TABLE `uk_qc_result_item` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='QC质检 - 结果子表';
 
 
-
+ ALTER TABLE uk_jobdetail ADD filtertype varchar(50) DEFAULT NULL COMMENT '活动筛选类型';
