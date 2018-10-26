@@ -615,7 +615,7 @@ public class SearchTools {
 		if(orNums > 0) {
 			boolQueryBuilder.must(orBuilder) ;
 		}
-		Page<WorkOrders> page = workOrdersRes.findByAllQuery(boolQueryBuilder, false, orgi,new PageRequest(0, 10000 , Sort.Direction.DESC, "createtime"));
+		Page<WorkOrders> page = workOrdersRes.findById(boolQueryBuilder, false, orgi,new PageRequest(0, 10000 , Sort.Direction.DESC, "createtime"));
 		return page.getContent();
 	}
 	/**
