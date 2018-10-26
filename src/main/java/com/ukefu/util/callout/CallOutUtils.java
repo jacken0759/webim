@@ -1,5 +1,6 @@
 package com.ukefu.util.callout;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -69,8 +70,12 @@ public class CallOutUtils {
 	 * @return
 	 */
 	public static List<CallOutConfig> initCallOutConfig(){
-		CallOutConfigRepository callOutConfigRepository = UKDataContext.getContext().getBean(CallOutConfigRepository.class) ;
-		return callOutConfigRepository.findAll()  ;
+		List<CallOutConfig> configList = new ArrayList<CallOutConfig>() ;
+		if(UKDataContext.getContext()!=null) {
+			CallOutConfigRepository callOutConfigRepository = UKDataContext.getContext().getBean(CallOutConfigRepository.class) ;
+			configList = callOutConfigRepository.findAll() ;
+		}
+		return configList;
 	}
 	
 	

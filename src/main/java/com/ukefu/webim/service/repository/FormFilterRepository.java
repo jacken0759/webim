@@ -8,7 +8,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ukefu.webim.web.model.FormFilter;
-import com.ukefu.webim.web.model.JobDetail;
 
 public abstract interface FormFilterRepository extends JpaRepository<FormFilter, String> {
 	

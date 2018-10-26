@@ -77,6 +77,9 @@
 	<li class="layui-nav-item layui-nav-itemed">
 		<a class="layui-nav-title" href="javascript:;">数据报表</a>
 		<dl class="layui-nav-child">
+			<dd <#if subtype?? && subtype == 'database'>class="layui-this"</#if>>
+				<a href="/apps/database/index.html">数据源管理</a>
+			</dd>
 			<dd <#if subtype?? && subtype == 'cube'>class="layui-this"</#if>>
 				<a href="/apps/report/cube/index.html">模型设计</a>
 			</dd>

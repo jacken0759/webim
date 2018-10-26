@@ -1,5 +1,7 @@
 package com.ukefu.webim.service.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +12,8 @@ public abstract interface DatabaseRepository extends JpaRepository<Database, Str
 	
 	public Database findByIdAndOrgi(String id,String orgi);
 	
-	public abstract Page<Database> findByOrgi(String orgi , Pageable page);
+	public Page<Database> findByOrgi(String orgi , Pageable page);
+	
+	public List<Database> findByOrgi(String orgi);
 	
 }

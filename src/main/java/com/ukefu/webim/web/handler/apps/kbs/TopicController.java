@@ -87,7 +87,7 @@ public class TopicController extends Handler{
     @RequestMapping("/topic")
     @Menu(type = "xiaoe" , subtype = "knowledge")
     public ModelAndView knowledge(ModelMap map , HttpServletRequest request , @Valid String q , @Valid String type, @Valid String aiid) {
-    	List<KnowledgeType> knowledgeTypeList = knowledgeTypeRes.findByOrgi(super.getOrgi(request))  ; 
+    	List<KnowledgeType> knowledgeTypeList = knowledgeTypeRes.findByOrgiAndTypeid(super.getOrgi(request) , "0")  ; 
     	map.put("knowledgeTypeList", knowledgeTypeList);
     	KnowledgeType ktype = null ;
     	if(!StringUtils.isBlank(type)){

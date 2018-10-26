@@ -123,7 +123,7 @@ public class IMController extends Handler{
     	ModelAndView view = request(super.createRequestPageTempletResponse("/apps/im/point")) ; 
     	String sessionid = UKTools.getContextID(request.getSession().getId()) ;
     	if(!StringUtils.isBlank(appid)){
-	    	view.addObject("hostname", request.getServerName()) ;
+    		
 	    	
 			SystemConfig systemConfig = UKTools.getSystemConfig();
 			if(systemConfig!=null && systemConfig.isEnablessl()) {
@@ -139,6 +139,7 @@ public class IMController extends Handler{
 			}
 			view.addObject("appid", appid) ;
 			
+    		view.addObject("hostname", request.getServerName()) ;
 			
 			view.addObject("client", UKTools.getUUID()) ;
 			view.addObject("sessionid", sessionid) ;
@@ -337,7 +338,6 @@ public class IMController extends Handler{
 			map.addAttribute("sessionConfig", sessionConfig);
 			
     		
-    		map.addAttribute("hostname", request.getServerName()) ;
 			map.addAttribute("port", port) ;
 			
 			SystemConfig systemConfig = UKTools.getSystemConfig();
@@ -346,6 +346,7 @@ public class IMController extends Handler{
 			}else {
 				map.addAttribute("schema",request.getScheme()) ;
 			}
+			view.addObject("hostname", request.getServerName()) ;
 			
 			map.addAttribute("appid", appid) ;
 			map.addAttribute("userid", userid) ;
@@ -579,6 +580,7 @@ public class IMController extends Handler{
     	ModelAndView view = request(super.createRequestPageTempletResponse("/apps/im/text")) ; 
     	
     	view.addObject("hostname", request.getServerName()) ;
+    	
 		view.addObject("port", request.getServerPort()) ;
 		view.addObject("schema", request.getScheme()) ;
 		view.addObject("appid", appid) ;

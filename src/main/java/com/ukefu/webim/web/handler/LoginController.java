@@ -201,6 +201,7 @@ public class LoginController extends Handler{
     @RequestMapping("/logout")  
     public String logout(HttpServletRequest request  , HttpServletResponse response){  
     	request.getSession().removeAttribute(UKDataContext.USER_SESSION_NAME) ;
+    	request.getSession().invalidate();
     	Cookie[] cookies = request.getCookies();
     	if(cookies!=null) {
     		for(Cookie cookie : cookies){
