@@ -79,12 +79,16 @@ public class DatabaseController extends Handler{
     @Menu(type = "setting" , subtype = "database" , admin= true)
     public ModelAndView quickreplyupdate(ModelMap map , HttpServletRequest request , @Valid Database db) throws NoSuchAlgorithmException {
     	if(!StringUtils.isBlank(db.getId())){
+    		Database temp = databaseRes.findByIdAndOrgi(db.getId() , super.getOrgi(request)) ;
+    		
     		db.setOrgi(super.getOrgi(request));
     		db.setCreatetime(new Date());
     		db.setCreateuser(super.getUser(request).getId());
     		
     		if(!StringUtils.isBlank(db.getPassword())) {
     			db.setPassword(UKTools.encryption(db.getPassword()));
+    		}else if(temp!=null && temp.getPassword()!=null){
+    			db.setPassword(temp.getPassword());
     		}
 			databaseRes.save(db) ;
     	}
@@ -100,7 +104,7 @@ public class DatabaseController extends Handler{
     			Database database = databaseRes.findByIdAndOrgi(db.getId() , super.getOrgi(request)) ;
 				if(database!=null && !StringUtils.isBlank(database.getDriverclazz())) {
 					Class.forName(database.getDriverclazz()) ;
-					conn = DriverManager.getConnection(database.getDatabaseurl() , database.getAccount() , database.getPassword()) ;
+					conn = DriverManager.getConnection(database.getDatabaseurl() , database.getAccount() , UKTools.decryption(database.getPassword())) ;
 					map.addAttribute("result", true) ;
 				}
     		} catch (Exception e) {

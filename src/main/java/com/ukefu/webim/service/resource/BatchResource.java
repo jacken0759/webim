@@ -12,11 +12,15 @@ import com.ukefu.core.UKDataContext;
 import com.ukefu.util.UKTools;
 import com.ukefu.util.task.DSData;
 import com.ukefu.util.task.DSDataEvent;
+import com.ukefu.util.task.DataProcess;
+import com.ukefu.util.task.DatabaseImportProecess;
 import com.ukefu.util.task.ExcelImportProecess;
 import com.ukefu.webim.service.impl.BatchDataProcess;
 import com.ukefu.webim.service.impl.ESDataExchangeImpl;
+import com.ukefu.webim.service.repository.DatabaseRepository;
 import com.ukefu.webim.service.repository.MetadataRepository;
 import com.ukefu.webim.service.repository.ReporterRepository;
+import com.ukefu.webim.web.model.Database;
 import com.ukefu.webim.web.model.JobDetail;
 import com.ukefu.webim.web.model.MetadataTable;
 
@@ -28,6 +32,8 @@ public class BatchResource extends Resource{
 	
 	private MetadataRepository metadataRes ;
 	
+	private DatabaseRepository databaseRes ;
+	
 	private ReporterRepository reporterRes ;
 	
 	public BatchResource(JobDetail jobDetail) {
@@ -35,6 +41,7 @@ public class BatchResource extends Resource{
 		this.metadataRes =  UKDataContext.getContext().getBean(MetadataRepository.class);
 		this.reporterRes =  UKDataContext.getContext().getBean(ReporterRepository.class);
 		this.esDataExchange = UKDataContext.getContext().getBean(ESDataExchangeImpl.class);
+		this.databaseRes =  UKDataContext.getContext().getBean(DatabaseRepository.class);
 	}
 	
 	@Override
@@ -42,6 +49,7 @@ public class BatchResource extends Resource{
 		if(!StringUtils.isBlank(jobDetail.getActid())) {
 			metadataTable = metadataRes.findByTablename(jobDetail.getActid()) ;
 		}
+		DataProcess process = null ;
 		DSDataEvent event = new DSDataEvent();
 		String path = UKDataContext.getContext().getEnvironment().getProperty("web.upload-path") ;
 		File tempFile = null ;
@@ -53,37 +61,46 @@ public class BatchResource extends Resource{
 					FileUtils.copyURLToFile(new URL(UKTools.getTemplet(this.jobDetail.getImpurl(), new HashMap<String,Object>())), tempFile = File.createTempFile("UKeFu-CallOut-Temp", ".xls"));
 				}
 			}
-			if(tempFile.exists()) {
+			event.setTablename(metadataTable.getTablename());
+	    	event.setOrgi(this.jobDetail.getOrgi());
+	    	event.getValues().put("creater", this.jobDetail.getCreater()) ;
+	    	
+	    	
+	    	event.getDSData().setTask(metadataTable);
+	    	event.getDSData().setProcess(new BatchDataProcess(metadataTable, esDataExchange));
+	    	event.setOrgi(this.jobDetail.getOrgi());
+	    	event.setBatid(this.jobDetail.getId());
+	    	event.getDSData().setJobDetail(this.jobDetail);
+	    	
+	    	event.getDSData().getReport().setOrgi(this.jobDetail.getOrgi());
+	    	event.getDSData().getReport().setDataid(this.jobDetail.getId());
+	    	event.getDSData().getReport().setTitle(this.jobDetail.getName() + "_" + UKTools.dateFormate.format(new Date()));
+	    	
+	    	if(this.jobDetail.getImptype().equals("db")){
+	    		Database database = databaseRes.findByIdAndOrgi(this.jobDetail.getJdbcurl(), this.jobDetail.getOrgi()) ;
+	    		event.setDSData(new DSData(null , this.jobDetail , database));
+	    		process = new DatabaseImportProecess(event) ;		//启动导入任务
+			}else if(tempFile.exists()) {
 				String fileName = "callout/batch/"+UKTools.getUUID() + tempFile.getName().substring(tempFile.getName().lastIndexOf(".")) ;
 		    	File excelFile = new File(path , fileName) ;
 		    	if(!excelFile.getParentFile().exists()){
 		    		excelFile.getParentFile().mkdirs() ;
 		    	}
 				
-				event.setTablename(metadataTable.getTablename());
 		    	event.setDSData(new DSData(null ,excelFile , tempFile.getName(), null));
-		    	event.setOrgi(this.jobDetail.getOrgi());
-		    	event.getValues().put("creater", this.jobDetail.getCreater()) ;
-		    	
 		    	FileUtils.copyFile(tempFile, new File(path , fileName));
 		    	
-		    	event.getDSData().setTask(metadataTable);
-		    	event.getDSData().setProcess(new BatchDataProcess(metadataTable, esDataExchange));
-		    	event.setOrgi(this.jobDetail.getOrgi());
-		    	event.setBatid(this.jobDetail.getId());
-		    	event.getDSData().setJobDetail(this.jobDetail);
-		    	
-		    	event.getDSData().getReport().setOrgi(this.jobDetail.getOrgi());
-		    	event.getDSData().getReport().setDataid(this.jobDetail.getId());
-		    	event.getDSData().getReport().setTitle(this.jobDetail.getName() + "_" + UKTools.dateFormate.format(new Date()));
-			}else {
+		    	process = new ExcelImportProecess(event) ;		//启动导入任务
+			} else {
 				event.getDSData().getReport().setError(true);
 				if(tempFile!=null) {
 					event.getDSData().getReport().setErrormsg(tempFile.getAbsolutePath() + " Not Exist!");
 				}
 			}
+			if(process!=null) {
+				process.process(); 
+			}
 			reporterRes.save(event.getDSData().getReport()) ;
-	    	new ExcelImportProecess(event).process() ;		//启动导入任务
 		}
 	}
 

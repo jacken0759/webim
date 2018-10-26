@@ -374,7 +374,7 @@ public class MetadataController extends Handler{
         return request(super.createRequestPageTempletResponse("redirect:/admin/metadata/index.html"));
     }
     
-    private MetadataTable processMetadataTable(UKTableMetaData metaData , MetadataTable table){
+    public MetadataTable processMetadataTable(UKTableMetaData metaData , MetadataTable table){
     	table.setTableproperty(new ArrayList<TableProperties>()); 
     	if(metaData!=null){
 	    	for(UKColumnMetadata colum : metaData.getColumnMetadatas()){
