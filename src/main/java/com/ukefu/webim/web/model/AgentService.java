@@ -110,6 +110,8 @@ public class AgentService implements Serializable {
 	private String qualitydisorgan ;	//分配的质检部门
 	private String qualitydisuser;		//分配的质检人
 	private Date qualitydistime;		//分配的时间
+	private String assuser ;			//分配执行人
+	private String templateid ;			//分配的质检模板
 	
 	private String qualityorgan ;		//实际的质检部门
 	private String qualityuser;			//实际的质检人
@@ -907,5 +909,21 @@ public class AgentService implements Serializable {
 
 	public void setQualitydistime(Date qualitydistime) {
 		this.qualitydistime = qualitydistime;
+	}
+
+	public String getAssuser() {
+		return assuser;
+	}
+
+	public void setAssuser(String assuser) {
+		this.assuser = assuser;
+	}
+
+	public String getTemplateid() {
+		return templateid;
+	}
+
+	public void setTemplateid(String templateid) {
+		this.templateid = templateid;
 	}
 }
