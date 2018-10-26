@@ -369,3 +369,5 @@ ALTER TABLE uk_workorders ADD templateid varchar(50) DEFAULT NULL COMMENT '质�
 ALTER TABLE uk_callcenter_event ADD templateid varchar(50) DEFAULT NULL COMMENT '质检模板id';
 ALTER TABLE uk_agentservice ADD templateid varchar(50) DEFAULT NULL COMMENT '质检模板id';
 
+ALTER TABLE uk_qc_result ADD status varchar(32) DEFAULT NULL COMMENT '状态（已质检done、已归档archive、复检中recheck）';
+ALTER TABLE uk_qc_result ADD archivedate datetime DEFAULT NULL COMMENT '归档日期';
