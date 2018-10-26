@@ -12,4 +12,5 @@ public abstract interface QualityMissionRepository extends JpaRepository<Quality
 	
 	public QualityMission findByIdAndOrgi(String id ,String orgi);
 	
+	
 }

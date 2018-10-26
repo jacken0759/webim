@@ -273,8 +273,10 @@ public class UKDataContext {
 		NO,		//未开启质检
 		DIS,		//已分配			
 		NODIS,		//未分配
-		DONE;		//已质检
-		
+		DONE,     //已质检
+		ARCHIVE,   //已归档
+		DISABLE,  //无效
+		RECHECK;  //复检中
 		public String toString(){
 			return super.toString().toLowerCase() ;
 		}

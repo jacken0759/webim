@@ -38,6 +38,10 @@ public class QualityResult implements java.io.Serializable{
 	private int totalscore ;//总分
 	private String qualityuser ;//实际质检人
 	
+	private String status ;//	状态（已质检、已归档）
+	private Date archivedate ; //归档日期
+	
+	
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -131,6 +135,18 @@ public class QualityResult implements java.io.Serializable{
 	}
 	public void setQualityuser(String qualityuser) {
 		this.qualityuser = qualityuser;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public Date getArchivedate() {
+		return archivedate;
+	}
+	public void setArchivedate(Date archivedate) {
+		this.archivedate = archivedate;
 	}
 	
 	

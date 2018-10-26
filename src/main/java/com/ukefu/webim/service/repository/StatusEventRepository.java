@@ -1,5 +1,7 @@
 package com.ukefu.webim.service.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -40,5 +42,7 @@ public interface StatusEventRepository extends JpaRepository<StatusEvent, String
 	public int countByCalled(String called);
 	
 	public Page<StatusEvent> findByRecordAndUseridAndOrgi(boolean record ,String userid,String orgi , Pageable page) ;
+	
+	public List<StatusEvent> findByTemplateidAndQualitystatus(String templateid,String qualitystatus ) ;
 	
 }

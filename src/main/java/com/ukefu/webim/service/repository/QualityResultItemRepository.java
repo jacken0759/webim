@@ -19,5 +19,7 @@ public abstract Page<QualityResultItem> findByOrgi(String orgi , Pageable page) 
 	public abstract QualityResultItem findByResultidAndItemidAndOrgi(String resultid,String itemid ,String orgi);
 	
 	public abstract List<QualityResultItem> findByResultidAndParentidAndOrgi(String resultid,String parentid ,String orgi);
+	
+	public abstract List<QualityResultItem> findByResultidAndOrgi(String resultid ,String orgi);
 
 }
