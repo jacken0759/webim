@@ -911,6 +911,17 @@ public class UKDataContext {
 		}
 	}
 	/**
+	 * 	回收类型
+	 */
+	public enum RecycleType{
+		ORGAN,//回收到部门
+		PUBLIC;//回收到公共池子
+		
+		public String toString(){
+			return super.toString().toLowerCase() ;
+		}
+	}
+	/**
 	 * 
 	 * @param resource
 	 * @return
