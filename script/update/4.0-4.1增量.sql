@@ -388,3 +388,27 @@ CREATE TABLE `uk_qc_appeal` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='QC质检 - 质检申诉表';
 
  ALTER TABLE uk_jobdetail ADD templateid varchar(50) DEFAULT NULL COMMENT '质检模板ID';
+ 
+ CREATE TABLE `uk_qc_mission_his` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `dataid` varchar(50) DEFAULT NULL COMMENT '数据ID（uk_callcenter_event 通话/uk_workorders 工单/uk_agentservice 在线客服）',
+  `templateid` varchar(50) DEFAULT NULL COMMENT '质检模板ID',
+  `actid` varchar(50) DEFAULT NULL COMMENT '质检活动ID',
+  `formfilterid` varchar(32) DEFAULT NULL COMMENT '质检筛选表单ID',
+  `filterid` varchar(32) DEFAULT NULL COMMENT '质检筛选记录ID',
+  `taskid` varchar(32) DEFAULT NULL COMMENT '质检任务ID',
+  `datastatus` tinyint(4) DEFAULT '0' COMMENT '数据状态',
+  `qualitystatus` varchar(20) DEFAULT NULL COMMENT '质检状态',
+  `qualitydisorgan` varchar(32) DEFAULT NULL COMMENT '分配的质检部门',
+  `qualitydisuser` varchar(32) DEFAULT NULL COMMENT '分配的质检用户',
+  `qualityorgan` varchar(32) DEFAULT NULL COMMENT '实际质检部门',
+  `qualityuser` varchar(32) DEFAULT NULL COMMENT '实际质检人',
+  `qualityscore` int(11) DEFAULT '0' COMMENT '质检得分',
+  `qualitytime` datetime DEFAULT NULL COMMENT '质检时间',
+  `qualitytype` varchar(20) DEFAULT NULL COMMENT '质检类型',
+  `agentdata` text COMMENT '会话质检（访客用户名）',
+  `organ` varchar(50) DEFAULT NULL COMMENT '部门',
+  `orgi` varchar(50) DEFAULT NULL COMMENT '租户ID',
+  `assuser` varchar(50) DEFAULT NULL COMMENT '分配执行人',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='QC质检 - 任务历史表';
