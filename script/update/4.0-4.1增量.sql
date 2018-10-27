@@ -387,3 +387,4 @@ CREATE TABLE `uk_qc_appeal` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='QC质检 - 质检申诉表';
 
+ ALTER TABLE uk_jobdetail ADD templateid varchar(50) DEFAULT NULL COMMENT '质检模板ID';
