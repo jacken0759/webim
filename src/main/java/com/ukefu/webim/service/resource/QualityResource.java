@@ -267,13 +267,15 @@ public class QualityResource extends Resource{
 					//通话质检
 					StatusEvent statusEvent = (StatusEvent)meta.getObject();
 					statusEvent.setQualitydistime(new Date());
+					statusEvent.setQualitytype(UKDataContext.QcFormFilterTypeEnum.CALLEVENT.toString());
+					statusEvent.setAssuser(this.jobDetail.getCreater());
+					statusEvent.setTemplateid(this.jobDetail.getTemplateid());
+					statusEvent.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
 					if("agent".equals(this.qcAgent.getDistype())) {
-						statusEvent.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
 						statusEvent.setQualitydisorgan(this.qcAgent.getOrgan());
 						statusEvent.setQualitydisuser(this.qcAgent.getDistarget());
 						this.assignInt.incrementAndGet() ;
 					}else if("skill".equals(this.qcAgent.getDistype())) {
-						statusEvent.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
 						statusEvent.setQualitydisorgan(this.qcAgent.getDistarget());
 						this.assignorganInt.incrementAndGet() ;
 					}
@@ -282,13 +284,15 @@ public class QualityResource extends Resource{
 					//工单质检
 					WorkOrders workOrders = (WorkOrders)meta.getObject();
 					workOrders.setQualitydistime(new Date());
+					workOrders.setQualitytype(UKDataContext.QcFormFilterTypeEnum.WORKORDERS.toString());
+					workOrders.setAssuser(this.jobDetail.getCreater());
+					workOrders.setTemplateid(this.jobDetail.getTemplateid());
+					workOrders.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
 					if("agent".equals(this.qcAgent.getDistype())) {
-						workOrders.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
 						workOrders.setQualitydisorgan(this.qcAgent.getOrgan());
 						workOrders.setQualitydisuser(this.qcAgent.getDistarget());
 						this.assignInt.incrementAndGet() ;
 					}else if("skill".equals(this.qcAgent.getDistype())) {
-						workOrders.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
 						workOrders.setQualitydisorgan(this.qcAgent.getDistarget());
 						this.assignorganInt.incrementAndGet() ;
 					}
@@ -297,13 +301,15 @@ public class QualityResource extends Resource{
 					//会话质检
 					AgentService agentService = (AgentService)meta.getObject();
 					agentService.setQualitydistime(new Date());
+					agentService.setQualitytype(UKDataContext.QcFormFilterTypeEnum.AGENTSERVICE.toString());
+					agentService.setAssuser(this.jobDetail.getCreater());
+					agentService.setTemplateid(this.jobDetail.getTemplateid());
+					agentService.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
 					if("agent".equals(this.qcAgent.getDistype())) {
-						agentService.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
 						agentService.setQualitydisorgan(this.qcAgent.getOrgan());
 						agentService.setQualitydisuser(this.qcAgent.getDistarget());
 						this.assignInt.incrementAndGet() ;
 					}else if("skill".equals(this.qcAgent.getDistype())) {
-						agentService.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
 						agentService.setQualitydisorgan(this.qcAgent.getDistarget());
 						this.assignorganInt.incrementAndGet() ;
 					}

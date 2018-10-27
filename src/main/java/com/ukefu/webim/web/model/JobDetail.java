@@ -142,6 +142,7 @@ public class JobDetail implements Serializable{
 	private Reporter report ;
 	
 	private String filtertype;//筛选类型
+	private String templateid;//质检模板
 
 	@Id
 	@Column(length = 32)
@@ -830,5 +831,13 @@ public class JobDetail implements Serializable{
 
 	public void setFiltertype(String filtertype) {
 		this.filtertype = filtertype;
+	}
+
+	public String getTemplateid() {
+		return templateid;
+	}
+
+	public void setTemplateid(String templateid) {
+		this.templateid = templateid;
 	}
 }
