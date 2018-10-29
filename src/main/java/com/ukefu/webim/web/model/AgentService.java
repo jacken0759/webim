@@ -95,7 +95,6 @@ public class AgentService implements Serializable {
 	
 	private String initiator ;	//对话发起方
 	
-	
 	private String endby ;				//终止方 ， agent  ， user ， system
 	private String aiid ;				//AI 的ID
 	private boolean aiservice ;//是否是AI在提供服务
@@ -106,22 +105,19 @@ public class AgentService implements Serializable {
 	private String leavemsgstatus = UKDataContext.LeaveMsgStatus.NOTPROCESS.toString();	//已处理、未处理
 	
 	
-	private String qualitystatus ;//质检状态  ， 已分配/未分配
+	private String qualitystatus ;//质检状态
 	private String qualitydisorgan ;	//分配的质检部门
 	private String qualitydisuser;		//分配的质检人
 	private Date qualitydistime;		//分配的时间
 	private String assuser ;			//分配执行人
 	private String templateid ;			//分配的质检模板
+	private String qualitydistype;				//分配状态  ，未分配not/分配到部门disorgan/分配到坐席disagent
 	
 	private String qualityorgan ;		//实际的质检部门
 	private String qualityuser;			//实际的质检人
 	private int qualityscore ;			//质检评分
 	private Date qualitytime ;			//质检时间
 	private String qualitytype ;			//质检类型
-	
-	
-	
-	
 	
 	private String name ;
 	private String email ;
@@ -925,5 +921,13 @@ public class AgentService implements Serializable {
 
 	public void setTemplateid(String templateid) {
 		this.templateid = templateid;
+	}
+
+	public String getQualitydistype() {
+		return qualitydistype;
+	}
+
+	public void setQualitydistype(String qualitydistype) {
+		this.qualitydistype = qualitydistype;
 	}
 }

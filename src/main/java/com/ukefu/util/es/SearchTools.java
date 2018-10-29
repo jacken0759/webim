@@ -466,8 +466,7 @@ public class SearchTools {
 				
 				list.add(cb.equal(root.get("orgi").as(String.class), orgi)) ;
 				list.add(cb.equal(root.get("record").as(boolean.class), true)) ;
-				list.add(cb.notEqual(root.get("qualitystatus").as(String.class), UKDataContext.QualityStatus.DIS.toString())) ;
-				
+				list.add(cb.and(cb.or(cb.and(root.get("qualitydistype").as(String.class).isNull()),cb.equal(root.get("qualitydistype").as(String.class), UKDataContext.QualityDisStatusType.NOT.toString())))) ;
 				if(qcFormFilterItemList.size() > 0) {
 					try {
 						for(QualityFormFilterItem formFilterItem : qcFormFilterItemList) {
@@ -544,9 +543,15 @@ public class SearchTools {
 				
 				Predicate[] p = new Predicate[list.size()];  
 				Predicate[] inp = new Predicate[inlist.size()]; 
-				cb.or(inlist.toArray(inp));
 				
-			    return cb.and(list.toArray(p));  
+				Predicate pb = null;
+				if(inp != null && inp.length > 0) {
+					pb = cb.and(list.toArray(p)).in(inlist.toArray(inp));
+				}else {
+					pb = cb.and(list.toArray(p));
+				}
+				
+			    return pb; 
 			}}, new PageRequest(0, 10000 , Sort.Direction.DESC, "starttime")) ;
 		return page.getContent();
 	}
@@ -562,7 +567,10 @@ public class SearchTools {
 		//工单质检
 		BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
 		//筛选未分配质检的工单
-		boolQueryBuilder.mustNot(termQuery("qualitystatus",UKDataContext.QualityStatus.DIS.toString()));
+		BoolQueryBuilder bool = new BoolQueryBuilder();
+		bool.should(termQuery("qualitydistype",UKDataContext.QualityDisStatusType.DISAGENT.toString()));
+		bool.should(termQuery("qualitydistype",UKDataContext.QualityDisStatusType.DISORGAN.toString()));
+		boolQueryBuilder.mustNot(bool);
 		
 		BoolQueryBuilder orBuilder = new BoolQueryBuilder();
 		int orNums = 0 ;
@@ -635,7 +643,7 @@ public class SearchTools {
 				List<Predicate> inlist = new ArrayList<Predicate>();  //or关系
 				
 				list.add(cb.equal(root.get("orgi").as(String.class), orgi)) ;
-				list.add(cb.notEqual(root.get("qualitystatus").as(String.class), UKDataContext.QualityStatus.DIS.toString())) ;
+				list.add(cb.and(cb.or(cb.and(root.get("qualitydistype").as(String.class).isNull()),cb.equal(root.get("qualitydistype").as(String.class), UKDataContext.QualityDisStatusType.NOT.toString())))) ;
 				
 				if(qcFormFilterItemList.size() > 0) {
 					try {
@@ -714,7 +722,15 @@ public class SearchTools {
 				
 				Predicate[] p = new Predicate[list.size()];  
 				Predicate[] inp = new Predicate[inlist.size()];  
-			    return cb.and(list.toArray(p));  
+				
+				Predicate pb = null;
+				if(inp != null && inp.length > 0) {
+					pb = cb.and(list.toArray(p)).in(inlist.toArray(inp));
+				}else {
+					pb = cb.and(list.toArray(p));
+				}
+				
+			    return pb;  
 			}}, new PageRequest(0, 10000 , Sort.Direction.DESC, "createtime")) ;
 		return page.getContent();
 	}

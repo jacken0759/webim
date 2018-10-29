@@ -207,54 +207,7 @@ public class QualityResource extends Resource{
 		if(meta.getObject() != null) {
 			this.qcAgent.getDisnames().incrementAndGet() ;
 			if(this.isRecovery()) {
-				//回收
-				if(meta.getObject().equals(StatusEvent.class)) {
-					//通话质检
-					StatusEvent statusEvent = (StatusEvent)meta.getObject();
-					statusEvent.setQualitydistime(null);
-					statusEvent.setQualitydisuser(null);
-					if(!StringUtils.isBlank(this.jobDetail.getExecto())) {
-						//回收到部门
-						statusEvent.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
-						statusEvent.setQualitydisorgan(this.qcAgent.getDistarget());
-					}else {
-						//回收到池子
-						statusEvent.setQualitystatus(null);
-						statusEvent.setQualitydisorgan(null);
-					}
-					
-					this.statusEventRes.save(statusEvent);
-				}else if(meta.getObject().equals(WorkOrders.class)) {
-					//工单质检
-					WorkOrders workOrders = (WorkOrders)meta.getObject();
-					workOrders.setQualitydistime(null);
-					workOrders.setQualitydisuser(null);
-					if(!StringUtils.isBlank(this.jobDetail.getExecto())) {
-						//回收到部门
-						workOrders.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
-						workOrders.setQualitydisorgan(this.qcAgent.getDistarget());
-					}else {
-						//回收到池子
-						workOrders.setQualitystatus(null);
-						workOrders.setQualitydisorgan(null);
-					}
-					this.workOrdersRes.save(workOrders);
-				}else if(meta.getObject().equals(AgentService.class)) {
-					//会话质检
-					AgentService agentService = (AgentService)meta.getObject();
-					agentService.setQualitydistime(null);
-					agentService.setQualitydisuser(null);
-					if(!StringUtils.isBlank(this.jobDetail.getExecto())) {
-						//回收到部门
-						agentService.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
-						agentService.setQualitydisorgan(this.qcAgent.getDistarget());
-					}else {
-						//回收到池子
-						agentService.setQualitystatus(null);
-						agentService.setQualitydisorgan(null);
-					}
-					this.agentServiceRes.save(agentService);
-				}
+				
 			}else {
 				QualityMissionHis qcMissionHis = new QualityMissionHis();
 				if(meta.getObject() instanceof StatusEvent) {
@@ -264,17 +217,19 @@ public class QualityResource extends Resource{
 					statusEvent.setQualitytype(UKDataContext.QcFormFilterTypeEnum.CALLEVENT.toString());
 					statusEvent.setAssuser(this.jobDetail.getCreater());
 					statusEvent.setTemplateid(this.jobDetail.getTemplateid());
-					statusEvent.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
+					
 					if("agent".equals(this.qcAgent.getDistype())) {
 						statusEvent.setQualitydisorgan(this.qcAgent.getOrgan());
 						statusEvent.setQualitydisuser(this.qcAgent.getDistarget());
 						this.assignInt.incrementAndGet() ;
 						qcMissionHis.setQualitydisorgan(this.qcAgent.getOrgan());
 						qcMissionHis.setQualitydisuser(this.qcAgent.getDistarget());
+						statusEvent.setQualitydistype(UKDataContext.QualityDisStatusType.DISAGENT.toString());
 					}else if("skill".equals(this.qcAgent.getDistype())) {
 						statusEvent.setQualitydisorgan(this.qcAgent.getDistarget());
 						this.assignorganInt.incrementAndGet() ;
 						qcMissionHis.setQualitydisorgan(this.qcAgent.getDistarget());
+						statusEvent.setQualitydistype(UKDataContext.QualityDisStatusType.DISORGAN.toString());
 					}
 					this.statusEventRes.save(statusEvent);
 					qcMissionHis.setDataid(statusEvent.getId());
@@ -293,10 +248,12 @@ public class QualityResource extends Resource{
 						this.assignInt.incrementAndGet() ;
 						qcMissionHis.setQualitydisorgan(this.qcAgent.getOrgan());
 						qcMissionHis.setQualitydisuser(this.qcAgent.getDistarget());
+						workOrders.setQualitydistype(UKDataContext.QualityDisStatusType.DISAGENT.toString());
 					}else if("skill".equals(this.qcAgent.getDistype())) {
 						workOrders.setQualitydisorgan(this.qcAgent.getDistarget());
 						this.assignorganInt.incrementAndGet() ;
 						qcMissionHis.setQualitydisorgan(this.qcAgent.getDistarget());
+						workOrders.setQualitydistype(UKDataContext.QualityDisStatusType.DISORGAN.toString());
 					}
 					this.workOrdersRes.save(workOrders);
 					qcMissionHis.setDataid(workOrders.getId());
@@ -315,10 +272,12 @@ public class QualityResource extends Resource{
 						this.assignInt.incrementAndGet() ;
 						qcMissionHis.setQualitydisorgan(this.qcAgent.getOrgan());
 						qcMissionHis.setQualitydisuser(this.qcAgent.getDistarget());
+						agentService.setQualitydistype(UKDataContext.QualityDisStatusType.DISAGENT.toString());
 					}else if("skill".equals(this.qcAgent.getDistype())) {
 						agentService.setQualitydisorgan(this.qcAgent.getDistarget());
 						this.assignorganInt.incrementAndGet() ;
 						qcMissionHis.setQualitydisorgan(this.qcAgent.getDistarget());
+						agentService.setQualitydistype(UKDataContext.QualityDisStatusType.DISORGAN.toString());
 					}
 					this.agentServiceRes.save(agentService);
 					qcMissionHis.setDataid(agentService.getId());

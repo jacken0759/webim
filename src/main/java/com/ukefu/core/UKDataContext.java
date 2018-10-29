@@ -922,6 +922,18 @@ public class UKDataContext {
 		}
 	}
 	/**
+	 * 质检分配状态：已分配|未分配
+	 * 通话质检，工单质检，会话质检
+	 * @author iceworld
+	 *
+	 */
+	public enum QualityDisStatusType{
+		NOT,DISAGENT,DISORGAN;
+		public String toString(){
+			return super.toString().toLowerCase() ;
+		}
+	}
+	/**
 	 * 
 	 * @param resource
 	 * @return

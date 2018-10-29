@@ -121,6 +121,7 @@ public class WorkOrders extends ESBean implements UKAgg{
 	private Date qualitydistime;		//分配的时间
 	private String assuser ;			//分配执行人
 	private String templateid ;			//分配的质检模板
+	private String qualitydistype;				//分配状态  ，未分配not/分配到部门disorgan/分配到坐席disagent
 	
 	private String qualityorgan ;		//实际的质检部门
 	private String qualityuser;			//实际的质检人
@@ -648,6 +649,14 @@ public class WorkOrders extends ESBean implements UKAgg{
 
 	public void setTemplateid(String templateid) {
 		this.templateid = templateid;
+	}
+
+	public String getQualitydistype() {
+		return qualitydistype;
+	}
+
+	public void setQualitydistype(String qualitydistype) {
+		this.qualitydistype = qualitydistype;
 	}
 	
 }
