@@ -11,6 +11,7 @@ import com.ukefu.util.UKTools;
 import com.ukefu.util.es.SearchTools;
 import com.ukefu.webim.service.es.WorkOrdersRepository;
 import com.ukefu.webim.service.repository.AgentServiceRepository;
+import com.ukefu.webim.service.repository.JobDetailRepository;
 import com.ukefu.webim.service.repository.QualityActivityTaskRepository;
 import com.ukefu.webim.service.repository.QualityAgentRepository;
 import com.ukefu.webim.service.repository.QualityFilterRepository;
@@ -18,6 +19,7 @@ import com.ukefu.webim.service.repository.QualityFormFilterItemRepository;
 import com.ukefu.webim.service.repository.QualityFormFilterRepository;
 import com.ukefu.webim.service.repository.QualityMissionHisRepository;
 import com.ukefu.webim.service.repository.StatusEventRepository;
+import com.ukefu.webim.service.repository.UserRepository;
 import com.ukefu.webim.web.model.AgentService;
 import com.ukefu.webim.web.model.JobDetail;
 import com.ukefu.webim.web.model.QualityActivityTask;
@@ -27,11 +29,13 @@ import com.ukefu.webim.web.model.QualityFormFilter;
 import com.ukefu.webim.web.model.QualityFormFilterItem;
 import com.ukefu.webim.web.model.QualityMissionHis;
 import com.ukefu.webim.web.model.StatusEvent;
+import com.ukefu.webim.web.model.User;
 import com.ukefu.webim.web.model.WorkOrders;
 
 public class QualityResource extends Resource{
 	
 	private JobDetail jobDetail;
+	private UserRepository userRes;
 	
 	private QualityFormFilter qcFormFilter = null;
 	private QualityFormFilterRepository qcFormFilterRes;
@@ -70,6 +74,7 @@ public class QualityResource extends Resource{
 		this.workOrdersRes = UKDataContext.getContext().getBean(WorkOrdersRepository.class);
 		this.agentServiceRes = UKDataContext.getContext().getBean(AgentServiceRepository.class);
 		this.qcMissionHisRes = UKDataContext.getContext().getBean(QualityMissionHisRepository.class);
+		this.userRes = UKDataContext.getContext().getBean(UserRepository.class);
 	}
 
 	@Override
@@ -84,15 +89,16 @@ public class QualityResource extends Resource{
 					
 				}else {
 					final String orgi = this.jobDetail.getOrgi();
+					User user = userRes.findByIdAndOrgi(this.jobDetail.getCreater(), orgi);
 					if(UKDataContext.QcFormFilterTypeEnum.CALLEVENT.toString().equals(qcFormFilter.getFiltertype())) {
 						//语音质检
-						dataList = SearchTools.searchQualityStatusEvent(orgi, qcFormFilterItemList);
+						dataList = SearchTools.searchQualityStatusEvent(orgi, qcFormFilterItemList,user);
 					}else if(UKDataContext.QcFormFilterTypeEnum.WORKORDERS.toString().equals(qcFormFilter.getFiltertype())) {
 						//工单质检
-						dataList = SearchTools.searchQualityWorkOrders(orgi, qcFormFilterItemList);
+						dataList = SearchTools.searchQualityWorkOrders(orgi, qcFormFilterItemList,user);
 					}else if(UKDataContext.QcFormFilterTypeEnum.AGENTSERVICE.toString().equals(qcFormFilter.getFiltertype())) {
 						//会话质检
-						dataList = SearchTools.searchQualityAgentService(orgi, qcFormFilterItemList);
+						dataList = SearchTools.searchQualityAgentService(orgi, qcFormFilterItemList,user);
 					}
 				}
 			}
