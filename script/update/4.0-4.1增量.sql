@@ -412,3 +412,9 @@ CREATE TABLE `uk_qc_appeal` (
   `assuser` varchar(50) DEFAULT NULL COMMENT '分配执行人',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='QC质检 - 任务历史表';
+
+ALTER TABLE uk_workorders ADD qualitydistype varchar(32) DEFAULT NULL COMMENT '分配状态  ，未分配not/分配到部门disorgan/分配到坐席disagent';
+ALTER TABLE uk_callcenter_event ADD qualitydistype varchar(32) DEFAULT NULL COMMENT '分配状态  ，未分配not/分配到部门disorgan/分配到坐席disagent';
+ALTER TABLE uk_agentservice ADD qualitydistype varchar(32) DEFAULT NULL COMMENT '分配状态  ，未分配not/分配到部门disorgan/分配到坐席disagent';
+ALTER TABLE uk_qc_result modify column dataid varchar(50)DEFAULT NULL COMMENT '数据id';
+ALTER TABLE uk_qc_appeal modify column dataid varchar(50)DEFAULT NULL COMMENT '数据id';
