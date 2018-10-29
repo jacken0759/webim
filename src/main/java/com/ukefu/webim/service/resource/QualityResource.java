@@ -217,6 +217,8 @@ public class QualityResource extends Resource{
 					statusEvent.setQualitytype(UKDataContext.QcFormFilterTypeEnum.CALLEVENT.toString());
 					statusEvent.setAssuser(this.jobDetail.getCreater());
 					statusEvent.setTemplateid(this.jobDetail.getTemplateid());
+					statusEvent.setQualityactid(this.jobDetail.getId());
+					statusEvent.setQualityfilterid(this.jobDetail.getFilterid());
 					
 					if("agent".equals(this.qcAgent.getDistype())) {
 						statusEvent.setQualitydisorgan(this.qcAgent.getOrgan());
@@ -242,6 +244,9 @@ public class QualityResource extends Resource{
 					workOrders.setAssuser(this.jobDetail.getCreater());
 					workOrders.setTemplateid(this.jobDetail.getTemplateid());
 					workOrders.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
+					workOrders.setQualityactid(this.jobDetail.getId());
+					workOrders.setQualityfilterid(this.jobDetail.getFilterid());
+					
 					if("agent".equals(this.qcAgent.getDistype())) {
 						workOrders.setQualitydisorgan(this.qcAgent.getOrgan());
 						workOrders.setQualitydisuser(this.qcAgent.getDistarget());
@@ -266,6 +271,9 @@ public class QualityResource extends Resource{
 					agentService.setAssuser(this.jobDetail.getCreater());
 					agentService.setTemplateid(this.jobDetail.getTemplateid());
 					agentService.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
+					agentService.setQualityactid(this.jobDetail.getId());
+					agentService.setQualityfilterid(this.jobDetail.getFilterid());
+					
 					if("agent".equals(this.qcAgent.getDistype())) {
 						agentService.setQualitydisorgan(this.qcAgent.getOrgan());
 						agentService.setQualitydisuser(this.qcAgent.getDistarget());

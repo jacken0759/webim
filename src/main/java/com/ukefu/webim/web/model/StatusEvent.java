@@ -135,6 +135,8 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>{
 	private Date qualitytime ;			//质检时间
 	private String qualitytype ;			//质检类型
 	
+	private String qualityactid;	//质检活动id
+	private String qualityfilterid;	//质检筛选表单id
 	
 	
 	private boolean record ;//是否录音
@@ -780,5 +782,17 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>{
 	}
 	public void setQualitydistype(String qualitydistype) {
 		this.qualitydistype = qualitydistype;
+	}
+	public String getQualityactid() {
+		return qualityactid;
+	}
+	public void setQualityactid(String qualityactid) {
+		this.qualityactid = qualityactid;
+	}
+	public String getQualityfilterid() {
+		return qualityfilterid;
+	}
+	public void setQualityfilterid(String qualityfilterid) {
+		this.qualityfilterid = qualityfilterid;
 	}
 }

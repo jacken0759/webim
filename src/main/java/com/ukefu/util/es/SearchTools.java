@@ -12,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.CriteriaBuilder.In;
 
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -32,6 +33,7 @@ import com.ukefu.webim.service.es.WorkOrdersRepository;
 import com.ukefu.webim.service.impl.ESDataExchangeImpl;
 import com.ukefu.webim.service.repository.AgentServiceRepository;
 import com.ukefu.webim.service.repository.StatusEventRepository;
+import com.ukefu.webim.util.CallCenterUtils;
 import com.ukefu.webim.web.model.AgentService;
 import com.ukefu.webim.web.model.EkmDimension;
 import com.ukefu.webim.web.model.EkmKnowledgeMaster;
@@ -454,8 +456,8 @@ public class SearchTools {
 	 * @param qcFormFilterItemList
 	 * @return
 	 */
-	public static List<StatusEvent> searchQualityStatusEvent(final String orgi, final List<QualityFormFilterItem> qcFormFilterItemList){
-		
+	public static List<StatusEvent> searchQualityStatusEvent(final String orgi, final List<QualityFormFilterItem> qcFormFilterItemList, User user){
+		final List<String> organList = CallCenterUtils.getExistOrgan(user);
 		StatusEventRepository statusEventRes = UKDataContext.getContext().getBean(StatusEventRepository.class);
 		Page<StatusEvent> page = statusEventRes.findAll(new Specification<StatusEvent>(){
 			@Override
@@ -467,6 +469,19 @@ public class SearchTools {
 				list.add(cb.equal(root.get("orgi").as(String.class), orgi)) ;
 				list.add(cb.equal(root.get("record").as(boolean.class), true)) ;
 				list.add(cb.and(cb.or(cb.and(root.get("qualitydistype").as(String.class).isNull()),cb.equal(root.get("qualitydistype").as(String.class), UKDataContext.QualityDisStatusType.NOT.toString())))) ;
+				
+				//权限控制
+				In<Object> in = cb.in(root.get("organ"));
+				if(organList.size() > 0){
+					
+					for(String id : organList){
+						in.value(id) ;
+					}
+				}else{
+					in.value(UKDataContext.UKEFU_SYSTEM_NO_DAT) ;
+				}
+				list.add(in) ;
+				
 				if(qcFormFilterItemList.size() > 0) {
 					try {
 						for(QualityFormFilterItem formFilterItem : qcFormFilterItemList) {
@@ -561,7 +576,7 @@ public class SearchTools {
 	 * @param qcFormFilterItemList
 	 * @return
 	 */
-	public static List<WorkOrders> searchQualityWorkOrders(String orgi, List<QualityFormFilterItem> qcFormFilterItemList){
+	public static List<WorkOrders> searchQualityWorkOrders(String orgi, List<QualityFormFilterItem> qcFormFilterItemList, User user){
 		
 		WorkOrdersRepository workOrdersRes = UKDataContext.getContext().getBean(WorkOrdersRepository.class);
 		//工单质检
@@ -571,6 +586,20 @@ public class SearchTools {
 		bool.should(termQuery("qualitydistype",UKDataContext.QualityDisStatusType.DISAGENT.toString()));
 		bool.should(termQuery("qualitydistype",UKDataContext.QualityDisStatusType.DISORGAN.toString()));
 		boolQueryBuilder.mustNot(bool);
+		
+		//权限控制
+		final List<String> organList = CallCenterUtils.getExistOrgan(user);
+		BoolQueryBuilder boolquery = new BoolQueryBuilder();
+		if(organList.size() > 0) {
+			for(String id : organList) {
+				boolquery.should(QueryBuilders.termQuery("organ" , id));
+			}
+		}else {
+			boolquery.should(QueryBuilders.termQuery("organ" , UKDataContext.UKEFU_SYSTEM_NO_DAT));
+		}
+		if(boolquery != null) {
+			boolQueryBuilder.must(boolquery);
+		}
 		
 		BoolQueryBuilder orBuilder = new BoolQueryBuilder();
 		int orNums = 0 ;
@@ -632,8 +661,8 @@ public class SearchTools {
 	 * @param qcFormFilterItemList
 	 * @return
 	 */
-	public static List<AgentService> searchQualityAgentService(final String orgi, final List<QualityFormFilterItem> qcFormFilterItemList){
-		
+	public static List<AgentService> searchQualityAgentService(final String orgi, final List<QualityFormFilterItem> qcFormFilterItemList, User user){
+		final List<String> organList = CallCenterUtils.getExistOrgan(user);
 		AgentServiceRepository agentServiceRes = UKDataContext.getContext().getBean(AgentServiceRepository.class);
 		Page<AgentService> page = agentServiceRes.findAll(new Specification<AgentService>(){
 			@Override
@@ -644,6 +673,18 @@ public class SearchTools {
 				
 				list.add(cb.equal(root.get("orgi").as(String.class), orgi)) ;
 				list.add(cb.and(cb.or(cb.and(root.get("qualitydistype").as(String.class).isNull()),cb.equal(root.get("qualitydistype").as(String.class), UKDataContext.QualityDisStatusType.NOT.toString())))) ;
+				
+				//权限控制
+				In<Object> in = cb.in(root.get("agentskill"));
+				if(organList.size() > 0){
+					
+					for(String id : organList){
+						in.value(id) ;
+					}
+				}else{
+					in.value(UKDataContext.UKEFU_SYSTEM_NO_DAT) ;
+				}
+				list.add(in) ;
 				
 				if(qcFormFilterItemList.size() > 0) {
 					try {
