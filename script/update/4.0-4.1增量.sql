@@ -418,3 +418,14 @@ ALTER TABLE uk_callcenter_event ADD qualitydistype varchar(32) DEFAULT NULL COMM
 ALTER TABLE uk_agentservice ADD qualitydistype varchar(32) DEFAULT NULL COMMENT '分配状态  ，未分配not/分配到部门disorgan/分配到坐席disagent';
 ALTER TABLE uk_qc_result modify column dataid varchar(50)DEFAULT NULL COMMENT '数据id';
 ALTER TABLE uk_qc_appeal modify column dataid varchar(50)DEFAULT NULL COMMENT '数据id';
+
+ALTER TABLE uk_workorders ADD qualityactid varchar(50) DEFAULT NULL COMMENT '质检活动id';
+ALTER TABLE uk_callcenter_event ADD qualityactid varchar(50) DEFAULT NULL COMMENT '质检活动id';
+ALTER TABLE uk_agentservice ADD qualityactid varchar(50) DEFAULT NULL COMMENT '质检活动id';
+
+ALTER TABLE uk_workorders ADD qualityfilterid varchar(50) DEFAULT NULL COMMENT '筛选表单id';
+ALTER TABLE uk_callcenter_event ADD qualityfilterid varchar(50) DEFAULT NULL COMMENT '筛选表单id';
+ALTER TABLE uk_agentservice ADD qualityfilterid varchar(50) DEFAULT NULL COMMENT '筛选表单id';
+
+ALTER TABLE uk_qc_mission_his ADD createtime datetime DEFAULT NULL;
+ALTER TABLE uk_qc_mission_his ADD updatetime datetime DEFAULT NULL;
