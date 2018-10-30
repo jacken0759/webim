@@ -66,19 +66,19 @@ public class BatchResource extends Resource{
 	    	event.getValues().put("creater", this.jobDetail.getCreater()) ;
 	    	
 	    	
-	    	event.getDSData().setTask(metadataTable);
-	    	event.getDSData().setProcess(new BatchDataProcess(metadataTable, esDataExchange));
 	    	event.setOrgi(this.jobDetail.getOrgi());
 	    	event.setBatid(this.jobDetail.getId());
-	    	event.getDSData().setJobDetail(this.jobDetail);
-	    	
-	    	event.getDSData().getReport().setOrgi(this.jobDetail.getOrgi());
-	    	event.getDSData().getReport().setDataid(this.jobDetail.getId());
-	    	event.getDSData().getReport().setTitle(this.jobDetail.getName() + "_" + UKTools.dateFormate.format(new Date()));
 	    	
 	    	if(this.jobDetail.getImptype().equals("db")){
 	    		Database database = databaseRes.findByIdAndOrgi(this.jobDetail.getJdbcurl(), this.jobDetail.getOrgi()) ;
 	    		event.setDSData(new DSData(null , this.jobDetail , database));
+
+	    		event.getDSData().setJobDetail(this.jobDetail);
+	    		event.getDSData().setTask(metadataTable);
+		    	event.getDSData().getReport().setOrgi(this.jobDetail.getOrgi());
+		    	event.getDSData().getReport().setDataid(this.jobDetail.getId());
+		    	event.getDSData().getReport().setTitle(this.jobDetail.getName() + "_" + UKTools.dateFormate.format(new Date()));
+		    	event.getDSData().setProcess(new BatchDataProcess(metadataTable, esDataExchange));
 	    		process = new DatabaseImportProecess(event) ;		//启动导入任务
 			}else if(tempFile.exists()) {
 				String fileName = "callout/batch/"+UKTools.getUUID() + tempFile.getName().substring(tempFile.getName().lastIndexOf(".")) ;
@@ -88,6 +88,12 @@ public class BatchResource extends Resource{
 		    	}
 				
 		    	event.setDSData(new DSData(null ,excelFile , tempFile.getName(), null));
+		    	event.getDSData().setJobDetail(this.jobDetail);
+		    	event.getDSData().getReport().setOrgi(this.jobDetail.getOrgi());
+		    	event.getDSData().getReport().setDataid(this.jobDetail.getId());
+		    	event.getDSData().getReport().setTitle(this.jobDetail.getName() + "_" + UKTools.dateFormate.format(new Date()));
+		    	event.getDSData().setTask(metadataTable);
+		    	event.getDSData().setProcess(new BatchDataProcess(metadataTable, esDataExchange));
 		    	FileUtils.copyFile(tempFile, new File(path , fileName));
 		    	
 		    	process = new ExcelImportProecess(event) ;		//启动导入任务

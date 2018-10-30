@@ -334,5 +334,7 @@ public class Reporter implements java.io.Serializable{
 	public void setOrgan(String organ) {
 		this.organ = organ;
 	}
-	
+	public String toString() {
+		return new StringBuffer().append("已处理：").append(this.getAtompages().intValue()).append(", 错误：").append(this.getErrors()).append("，处理速度：").append(this.getSpeed()).append("条/秒，线程数：").append(this.getThreads()).append(this.getDetailmsg()!=null ? "，详细信息："+this.getDetailmsg() : "").toString() ;
+	}	
 }

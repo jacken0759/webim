@@ -168,6 +168,7 @@ public class SystemConfigController extends Handler{
     	SystemConfig systemConfig = systemConfigRes.findByOrgi(UKDataContext.SYSTEM_ORGI) ;
     	config.setOrgi(UKDataContext.SYSTEM_ORGI);
     	String msg = "0" ;
+    	String jkspassword = null ;
     	if(StringUtils.isBlank(config.getJkspassword())){
     		config.setJkspassword(null);
     	}
@@ -175,7 +176,9 @@ public class SystemConfigController extends Handler{
     		config.setCreater(super.getUser(request).getId());
     		config.setCreatetime(new Date());
     		systemConfig = config ;
+    		jkspassword = systemConfig.getJkspassword() ;
     	}else{
+    		jkspassword = systemConfig.getJkspassword() ;
     		UKTools.copyProperties(config,systemConfig);
     	}
     	if(config.isEnablessl()){
@@ -246,6 +249,10 @@ public class SystemConfigController extends Handler{
 	    		msg = "2" ;
 	    	}
 	    	map.addAttribute("msg", msg) ;
+    	}
+    	
+    	if(!StringUtils.isBlank(jkspassword)) {
+    		systemConfig.setJkspassword(UKTools.encryption(jkspassword));
     	}
     	systemConfigRes.save(systemConfig) ;
     	

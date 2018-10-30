@@ -21,6 +21,11 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.ukefu.util.TabelSql;
+import com.ukefu.webim.web.model.Database;
+
 
 /**
  * @author jaddy0302 Rivulet DatabaseMetaDataHandler.java 2010-3-21
@@ -110,5 +115,59 @@ public class DatabaseMetaDataHandler{
 			}
 		}
 		return rivuTableMetaData;
+	}
+	
+	/**
+	 * 
+	 * @param properties
+	 * @param table
+	 * @param startindex
+	 * @param endindex
+	 * @param field
+	 * @param value
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws ClassNotFoundException
+	 */
+	public synchronized static TabelSql getSQL(Database database ,String tablename , int startindex ,int len) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+		TabelSql tableSQL = null ;
+		if(!StringUtils.isBlank(database.getDatabasetype())){
+			
+			if("oracle".equalsIgnoreCase(database.getDatabasetype())){
+				StringBuffer strb = new StringBuffer() ;
+				strb.append("select * from ( select row_.*, rownum rownum_ from ( ").append(tablename);
+				{
+					strb.append(")");
+					strb.append(" row_ where rownum <= ") ;
+					strb.append(startindex+len) ;
+					strb.append(") where rownum_ > ").append(startindex) ;
+					tableSQL = new TabelSql(strb.toString(),false , 1, null , null );
+				}
+			}else if("mysql".equalsIgnoreCase(database.getDatabasetype())){
+				StringBuffer strb = new StringBuffer() ;
+				strb.append("select * from ").append(tablename);
+				
+				strb.append(" limit ").append(startindex).append(",").append(len);
+				tableSQL = new TabelSql(strb.toString(),false , 1, null , null );
+			}else if("postgresql".equalsIgnoreCase(database.getDatabasetype())){
+				StringBuffer strb = new StringBuffer() ;
+				strb.append("select * from ( ").append(tablename).append(") ");
+				
+				strb.append("limit ").append(len).append(" offset ").append(startindex);
+				tableSQL = new TabelSql(strb.toString(),false , 1, null , null );
+				
+			}
+		}
+		if(tableSQL==null){
+			StringBuffer strb = new StringBuffer() ;
+			strb.append("select * ").append(" from ").append(tablename) ;
+			
+			String sql = strb.toString() ;
+			
+			tableSQL = new TabelSql(sql,false , 1, null  ,null);
+		}
+		
+		return  tableSQL;
 	}
 }
