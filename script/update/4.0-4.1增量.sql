@@ -334,3 +334,6 @@ ALTER TABLE uk_agentservice ADD qualityfilterid varchar(50) DEFAULT NULL COMMENT
 
 ALTER TABLE uk_qc_mission_his ADD createtime datetime DEFAULT NULL;
 ALTER TABLE uk_qc_mission_his ADD updatetime datetime DEFAULT NULL;
+
+
+ALTER TABLE uk_qc_appeal ADD datatype varchar(32) DEFAULT NULL COMMENT '数据类型（callevent通话/workorders工单/agentservice会话）';
