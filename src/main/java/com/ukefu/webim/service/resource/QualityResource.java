@@ -172,7 +172,7 @@ public class QualityResource extends Resource{
 				this.qcActTask.setAssigned(this.assignInt.intValue());
 				this.qcActTask.setAssignedorgan(this.assignorganInt.intValue());
 				this.qcActTask.setAssignedai(this.assignAiInt.intValue());
-				this.qcActTask.setNotassigned(this.qcActTask.getNamenum() - this.assignInt.intValue() - this.assignorganInt.intValue() - this.assignAiInt.intValue());
+				this.qcActTask.setNotassigned(this.dataList.size() - this.assignInt.intValue() - this.assignorganInt.intValue() - this.assignAiInt.intValue());
 			}
 			this.qcActTaskRes.save(this.qcActTask) ;
 		}
@@ -187,7 +187,7 @@ public class QualityResource extends Resource{
 				this.qcFilter.setAssigned(this.assignInt.intValue());
 				this.qcFilter.setAssignedorgan(this.assignorganInt.intValue());
 				this.qcFilter.setAssignedai(this.assignAiInt.intValue());
-				this.qcFilter.setNotassigned(this.qcActTask.getNamenum() - this.assignInt.intValue() - this.assignorganInt.intValue() - this.assignAiInt.intValue());
+				this.qcFilter.setNotassigned(this.dataList.size() - this.assignInt.intValue() - this.assignorganInt.intValue() - this.assignAiInt.intValue());
 			}
 			this.qcFilterRes.save(this.qcFilter) ;
 		}
