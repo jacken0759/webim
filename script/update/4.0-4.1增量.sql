@@ -337,3 +337,8 @@ ALTER TABLE uk_qc_mission_his ADD updatetime datetime DEFAULT NULL;
 
 
 ALTER TABLE uk_qc_appeal ADD datatype varchar(32) DEFAULT NULL COMMENT '数据类型（callevent通话/workorders工单/agentservice会话）';
+
+ALTER TABLE uk_qc_mission_his ADD appealremarks text DEFAULT NULL COMMENT '申诉备注';
+ALTER TABLE uk_qc_mission_his ADD arbremarks text DEFAULT NULL COMMENT '仲裁备注';
+ALTER TABLE uk_qc_mission_his ADD rejectremarks text DEFAULT NULL COMMENT '驳回备注';
+ALTER TABLE uk_qc_mission_his ADD resultid varchar(32) DEFAULT NULL COMMENT '结果id';
