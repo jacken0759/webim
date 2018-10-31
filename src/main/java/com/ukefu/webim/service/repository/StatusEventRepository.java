@@ -47,4 +47,6 @@ public interface StatusEventRepository extends JpaRepository<StatusEvent, String
 	
 	public List<StatusEvent> findByTemplateidAndQualitystatus(String templateid,String qualitystatus ) ;
 	
+	public List<StatusEvent> findAll(Specification<StatusEvent> spec); 
+	
 }
