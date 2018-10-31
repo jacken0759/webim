@@ -9,5 +9,11 @@ import com.ukefu.webim.web.model.QualityMissionHis;
 public abstract interface QualityMissionHisRepository  extends JpaRepository<QualityMissionHis,String>{
 	
 	
-	public abstract List<QualityMissionHis> findByOrgi(String Orgi);
+	public abstract List<QualityMissionHis> findByOrgi(String orgi);
+	
+	public abstract List<QualityMissionHis> findByDataidAndOrgi(String dataid, String orgi);
+	
+	public abstract List<QualityMissionHis> findByFormfilteridAndOrgi(String formfilterid, String orgi);
+	
+	public abstract List<QualityMissionHis> findByActidAndOrgi(String actid, String orgi);
 }

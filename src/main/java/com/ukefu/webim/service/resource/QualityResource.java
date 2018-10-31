@@ -298,10 +298,16 @@ public class QualityResource extends Resource{
 					qcMissionHis.setQualitytype(UKDataContext.QcFormFilterTypeEnum.AGENTSERVICE.toString());
 				}
 				if(!StringUtils.isBlank(qcMissionHis.getDataid())) {
+					qcMissionHis.setFormfilterid(this.jobDetail.getFilterid());
 					qcMissionHis.setQualitytime(new Date());
 					qcMissionHis.setAssuser(this.jobDetail.getCreater());
 					qcMissionHis.setTemplateid(this.jobDetail.getTemplateid());
 					qcMissionHis.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
+					qcMissionHis.setOrgi(this.jobDetail.getOrgi());
+					qcMissionHis.setActid(this.jobDetail.getId());
+					qcMissionHis.setOrgan(this.jobDetail.getOrgan());
+					qcMissionHis.setFilterid(this.qcFilter.getId());
+					qcMissionHis.setTaskid(this.qcActTask.getId());
 					this.qcMissionHisRes.save(qcMissionHis);
 				}
 			}
