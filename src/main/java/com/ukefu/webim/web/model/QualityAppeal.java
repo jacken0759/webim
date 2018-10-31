@@ -35,6 +35,8 @@ public class QualityAppeal implements java.io.Serializable{
 	private String appealuser ; //申诉人id
 	private String status ;		//状态
 	
+	private String  datatype; //数据类型
+	
 	
 	@Id
 	@Column(length = 32)
@@ -93,6 +95,12 @@ public class QualityAppeal implements java.io.Serializable{
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getDatatype() {
+		return datatype;
+	}
+	public void setDatatype(String datatype) {
+		this.datatype = datatype;
 	}
 	
 	
