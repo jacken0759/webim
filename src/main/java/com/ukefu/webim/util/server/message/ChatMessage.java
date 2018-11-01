@@ -517,7 +517,7 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 		List<OtherMessageItem> otherMessageItemList = null ;
 		if(!StringUtils.isBlank(this.getSuggestmsg())) {
 			try {
-				otherMessageItemList = OnlineUserUtils.objectMapper.readValue(this.getSuggestmsg(), OnlineUserUtils.getCollectionType(ArrayList.class, OtherMessageItem.class))  ;
+				otherMessageItemList = OnlineUserUtils.objectMapper.readValue(this.getSuggestmsg(), UKTools.getCollectionType(ArrayList.class, OtherMessageItem.class))  ;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

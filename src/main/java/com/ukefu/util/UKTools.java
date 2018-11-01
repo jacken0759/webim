@@ -84,6 +84,7 @@ import com.ukefu.webim.service.repository.SystemMessageRepository;
 import com.ukefu.webim.service.repository.TablePropertiesRepository;
 import com.ukefu.webim.service.repository.TemplateRepository;
 import com.ukefu.webim.service.repository.WorkserviceTimeRepository;
+import com.ukefu.webim.util.OnlineUserUtils;
 import com.ukefu.webim.util.server.message.SessionConfigItem;
 import com.ukefu.webim.web.model.AdType;
 import com.ukefu.webim.web.model.AiConfig;
@@ -1583,7 +1584,7 @@ public class UKTools {
 		return formatstr ;
 	}
 	
-	public static JavaType getCollectionType(ObjectMapper objectMapper , Class<?> collectionClass, Class<?>... elementClasses) {   
-		return objectMapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);   
+	public static JavaType getCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {   
+		return OnlineUserUtils.objectMapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);   
 	}
 }

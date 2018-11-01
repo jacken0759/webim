@@ -1094,7 +1094,7 @@ public class OnlineUserUtils {
 					text = UKTools.getTemplet(templet.getTemplettext(), values) ;
 				}
 				if(!StringUtils.isBlank(text)){
-					suggestItemList = objectMapper.readValue(text, UKTools.getCollectionType(objectMapper , ArrayList.class, OtherMessageItem.class)) ;
+					suggestItemList = objectMapper.readValue(text, UKTools.getCollectionType(ArrayList.class, OtherMessageItem.class)) ;
 				}
 			}catch(Exception ex) {
 				ex.printStackTrace();
@@ -1128,7 +1128,7 @@ public class OnlineUserUtils {
 				text = UKTools.getTemplet(templet.getTemplettext(), values) ;
 			}
 			if(!StringUtils.isBlank(text)){
-				otherMessageItemList = objectMapper.readValue(text, UKTools.getCollectionType(objectMapper,ArrayList.class, OtherMessageItem.class)) ;
+				otherMessageItemList = objectMapper.readValue(text, UKTools.getCollectionType(ArrayList.class, OtherMessageItem.class)) ;
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();

@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.ukefu.util.UKTools;
 import com.ukefu.webim.util.OnlineUserUtils;
 import com.ukefu.webim.util.server.message.SessionConfigItem;
 
@@ -441,7 +442,7 @@ public class SessionConfig implements java.io.Serializable{
 		List<SessionConfigItem> sessionConfigItemList = null ;
 		if(!StringUtils.isBlank(this.getWorkinghours())) {
 			try {
-				sessionConfigItemList = OnlineUserUtils.objectMapper.readValue(this.getWorkinghours(), OnlineUserUtils.getCollectionType(ArrayList.class, SessionConfigItem.class))  ;
+				sessionConfigItemList = OnlineUserUtils.objectMapper.readValue(this.getWorkinghours(), UKTools.getCollectionType(ArrayList.class, SessionConfigItem.class))  ;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

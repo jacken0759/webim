@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.ukefu.util.UKTools;
 import com.ukefu.webim.util.OnlineUserUtils;
 import com.ukefu.webim.util.server.message.OtherMessageItem;
 
@@ -532,7 +533,7 @@ public class AiConfig implements java.io.Serializable{
 		List<OtherMessageItem> otherMessageItemList = null ;
 		if(!StringUtils.isBlank(this.getHotmsg())) {
 			try {
-				otherMessageItemList = OnlineUserUtils.objectMapper.readValue(this.getHotmsg(), OnlineUserUtils.getCollectionType(ArrayList.class, OtherMessageItem.class))  ;
+				otherMessageItemList = OnlineUserUtils.objectMapper.readValue(this.getHotmsg(), UKTools.getCollectionType(ArrayList.class, OtherMessageItem.class))  ;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
