@@ -61,6 +61,7 @@ import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.googlecode.aviator.AviatorEvaluator;
@@ -1580,5 +1581,9 @@ public class UKTools {
 			formatstr = new UCKeFuTime(0, 0, time.intValue()).toString() ; 
 		}
 		return formatstr ;
+	}
+	
+	public static JavaType getCollectionType(ObjectMapper objectMapper , Class<?> collectionClass, Class<?>... elementClasses) {   
+		return objectMapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);   
 	}
 }

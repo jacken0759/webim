@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.BrowserClient;
@@ -1095,8 +1094,7 @@ public class OnlineUserUtils {
 					text = UKTools.getTemplet(templet.getTemplettext(), values) ;
 				}
 				if(!StringUtils.isBlank(text)){
-					JavaType javaType = getCollectionType(ArrayList.class, OtherMessageItem.class); 
-					suggestItemList = objectMapper.readValue(text, javaType) ;
+					suggestItemList = objectMapper.readValue(text, UKTools.getCollectionType(objectMapper , ArrayList.class, OtherMessageItem.class)) ;
 				}
 			}catch(Exception ex) {
 				ex.printStackTrace();
@@ -1130,8 +1128,7 @@ public class OnlineUserUtils {
 				text = UKTools.getTemplet(templet.getTemplettext(), values) ;
 			}
 			if(!StringUtils.isBlank(text)){
-				JavaType javaType = getCollectionType(ArrayList.class, OtherMessageItem.class); 
-				otherMessageItemList = objectMapper.readValue(text, javaType) ;
+				otherMessageItemList = objectMapper.readValue(text, UKTools.getCollectionType(objectMapper,ArrayList.class, OtherMessageItem.class)) ;
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
@@ -1155,7 +1152,7 @@ public class OnlineUserUtils {
 			}
 			if(!StringUtils.isBlank(aiCofig.getOqrdetailurl())) {
 				String result = HttpClientUtil.doPost(aiCofig.getOqrdetailurl(), param)  , text = null;
-				if(!StringUtils.isBlank(aiCofig.getOqrdetailoutput()) && !result.equals("error")) {
+				if(result!=null && !StringUtils.isBlank(aiCofig.getOqrdetailoutput()) && !result.equals("error")) {
 					Template templet = UKTools.getTemplate(aiCofig.getOqrdetailoutput()) ;
 					@SuppressWarnings("unchecked")
 					Map<String,Object> jsonData = objectMapper.readValue(result, Map.class) ;
@@ -1209,9 +1206,5 @@ public class OnlineUserUtils {
 			ex.printStackTrace();
 		}
 		return otherMessageItem ;
-	}
-	
-	public static JavaType getCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {   
-		return objectMapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);   
 	}
 }
