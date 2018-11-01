@@ -342,3 +342,11 @@ ALTER TABLE uk_qc_mission_his ADD appealremarks text DEFAULT NULL COMMENT '申�
 ALTER TABLE uk_qc_mission_his ADD arbremarks text DEFAULT NULL COMMENT '仲裁备注';
 ALTER TABLE uk_qc_mission_his ADD rejectremarks text DEFAULT NULL COMMENT '驳回备注';
 ALTER TABLE uk_qc_mission_his ADD resultid varchar(32) DEFAULT NULL COMMENT '结果id';
+
+ALTER TABLE uk_qc_result ADD isvp int(11) DEFAULT '0' COMMENT '是否有否决权（1是/0否）';
+ALTER TABLE uk_qc_result ADD isadcom int(11) DEFAULT '0' COMMENT '是否有优点评语（1是/0否）';
+ALTER TABLE uk_qc_result ADD isqacom int(11) DEFAULT '0' COMMENT '是否QA评语（1是/0否）';
+ALTER TABLE uk_qc_result ADD isimcom int(11) DEFAULT '0' COMMENT '是否有改进评语（1是/0否）';
+ALTER TABLE uk_qc_result ADD isrmk int(11) DEFAULT '0' COMMENT '质检时是否有备注（1是/0否）';
+ALTER TABLE uk_qc_result ADD isitemrmk int(11) DEFAULT '0' COMMENT '质检项是否能填备注（1是/0否）';
+ALTER TABLE uk_qc_result ADD isitemdir int(11) DEFAULT '0' COMMENT '质检项是否有说明（1是/0否）';
