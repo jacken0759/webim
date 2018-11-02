@@ -280,7 +280,8 @@ public class UKDataContext {
 		ARCHIVE,   //已归档
 		DISABLE,  //无效
 		RECHECK,  //复检中
-		APPEAL;   //申诉中
+		APPEAL,   //申诉中
+		ARBITRATE; //仲裁中
 		public String toString(){
 			return super.toString().toLowerCase() ;
 		}
@@ -596,7 +597,7 @@ public class UKDataContext {
 		NEW,
 		MESSAGE, 
 		END,
-		TRANS, STATUS , AGENTSTATUS , SERVICE, WRITING , MASTER;
+		TRANS, STATUS , AGENTSTATUS , SERVICE, WRITING;
 		
 		public String toString(){
 			return super.toString().toLowerCase() ;
@@ -817,8 +818,7 @@ public class UKDataContext {
 		TOPIC_IM,
 		TOPIC_AGENT,
 		TOPIC_CALLCENTER,
-		NAMESPACE,
-		TOPIC_VOTE;
+		NAMESPACE;
 		
 		public String toString(){
 			return super.toString().toLowerCase() ;
