@@ -46,14 +46,6 @@ public class QualityResult implements java.io.Serializable{
 	
 	private String qualitytype ; //质检类型
 	
-	private boolean isvp ;//是否有否决权（1是/0否）
-	private boolean isadcom ;//是否有优点评语（1是/0否）
-	private boolean isqacom ;//是否QA评语（1是/0否）
-	private boolean isimcom ;//是否有改进评语（1是/0否）
-	private boolean isrmk ;//质检时是否有备注（1是/0否）
-	private boolean isitemrmk ;//质检项是否能填备注（1是/0否）
-	private boolean isitemdir ;//质检项是否有说明（1是/0否）
-	
 	
 	@Id
 	@Column(length = 32)
@@ -166,48 +158,6 @@ public class QualityResult implements java.io.Serializable{
 	}
 	public void setQualitytype(String qualitytype) {
 		this.qualitytype = qualitytype;
-	}
-	public boolean isIsvp() {
-		return isvp;
-	}
-	public void setIsvp(boolean isvp) {
-		this.isvp = isvp;
-	}
-	public boolean isIsadcom() {
-		return isadcom;
-	}
-	public void setIsadcom(boolean isadcom) {
-		this.isadcom = isadcom;
-	}
-	public boolean isIsqacom() {
-		return isqacom;
-	}
-	public void setIsqacom(boolean isqacom) {
-		this.isqacom = isqacom;
-	}
-	public boolean isIsimcom() {
-		return isimcom;
-	}
-	public void setIsimcom(boolean isimcom) {
-		this.isimcom = isimcom;
-	}
-	public boolean isIsrmk() {
-		return isrmk;
-	}
-	public void setIsrmk(boolean isrmk) {
-		this.isrmk = isrmk;
-	}
-	public boolean isIsitemrmk() {
-		return isitemrmk;
-	}
-	public void setIsitemrmk(boolean isitemrmk) {
-		this.isitemrmk = isitemrmk;
-	}
-	public boolean isIsitemdir() {
-		return isitemdir;
-	}
-	public void setIsitemdir(boolean isitemdir) {
-		this.isitemdir = isitemdir;
 	}
 	
 	

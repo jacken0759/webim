@@ -50,11 +50,6 @@ public class QualityMissionHis implements Serializable{
 	private String agentdata ;  //会话质检（访客用户名） 
 	
 	private String assuser;//分配执行人
-	
-	private String appealremarks; //申诉备注
-	private String arbremarks; //仲裁备注
-	private String rejectremarks; //驳回备注
-	private String resultid; //结果id
 
 	
 	
@@ -193,30 +188,6 @@ public class QualityMissionHis implements Serializable{
 	}
 	public void setAssuser(String assuser) {
 		this.assuser = assuser;
-	}
-	public String getAppealremarks() {
-		return appealremarks;
-	}
-	public void setAppealremarks(String appealremarks) {
-		this.appealremarks = appealremarks;
-	}
-	public String getArbremarks() {
-		return arbremarks;
-	}
-	public void setArbremarks(String arbremarks) {
-		this.arbremarks = arbremarks;
-	}
-	public String getResultid() {
-		return resultid;
-	}
-	public void setResultid(String resultid) {
-		this.resultid = resultid;
-	}
-	public String getRejectremarks() {
-		return rejectremarks;
-	}
-	public void setRejectremarks(String rejectremarks) {
-		this.rejectremarks = rejectremarks;
 	}
 	
 	

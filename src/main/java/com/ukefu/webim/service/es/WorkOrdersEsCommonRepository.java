@@ -21,8 +21,4 @@ public interface WorkOrdersEsCommonRepository {
 	public WorkOrders findByIdAndOrgi(String id , String orgi) ;
 	
 	public List<WorkOrders> findByTemplateidAndQualitystatus(String templateid,String qualitystatus) ;
-	
-	public List<WorkOrders> findByOrgiAndQualitydistypeAndQualitydisuser(String orgi,String qualitydistype, String qualitydisuser) ;
-	
-	public List<WorkOrders> findByOrgiAndQualitydisorgan(BoolQueryBuilder boolQueryBuilder) ;
 }

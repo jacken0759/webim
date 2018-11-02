@@ -10,6 +10,7 @@ import com.ukefu.webim.service.cache.hazelcast.impl.CallCenterCache;
 import com.ukefu.webim.service.cache.hazelcast.impl.JobCache;
 import com.ukefu.webim.service.cache.hazelcast.impl.MultiCache;
 import com.ukefu.webim.service.cache.hazelcast.impl.OnlineCache;
+import com.ukefu.webim.service.cache.hazelcast.impl.QcQueueCache;
 import com.ukefu.webim.service.cache.hazelcast.impl.SystemCache;
 /**
  * Hazlcast缓存处理实例类
@@ -23,7 +24,7 @@ public class HazlcastCacheHelper implements CacheInstance{
 	 *
 	 */
 	public enum CacheServiceEnum{
-		HAZLCAST_CLUSTER_AGENT_USER_CACHE, HAZLCAST_CLUSTER_AGENT_STATUS_CACHE, HAZLCAST_CLUSTER_QUENE_USER_CACHE,HAZLCAST_ONLINE_CACHE , HAZLCAST_CULUSTER_SYSTEM , HAZLCAST_IMR_CACHE , API_USER_CACHE , CALLCENTER_CURRENT_CALL ,CALLCENTER_AGENT,JOB_CACHE,HAZLCAST_CALLOUT_CACHE;
+		HAZLCAST_CLUSTER_AGENT_USER_CACHE, HAZLCAST_CLUSTER_AGENT_STATUS_CACHE, HAZLCAST_CLUSTER_QUENE_USER_CACHE,HAZLCAST_ONLINE_CACHE , HAZLCAST_CULUSTER_SYSTEM , HAZLCAST_IMR_CACHE , API_USER_CACHE , CALLCENTER_CURRENT_CALL ,CALLCENTER_AGENT,JOB_CACHE,HAZLCAST_CALLOUT_CACHE , HAZLCAST_QC_QUEUE;
 		public String toString(){
 			return super.toString().toLowerCase();
 		}
@@ -71,5 +72,9 @@ public class HazlcastCacheHelper implements CacheInstance{
 	public CacheBean getCallOutCacheBean() {
 		// TODO Auto-generated method stub
 		return UKDataContext.getContext().getBean(JobCache.class).getCacheInstance(CacheServiceEnum.HAZLCAST_CALLOUT_CACHE.toString()) ;
+	}
+	@Override
+	public CacheBean getQcQueueBean() {
+		return UKDataContext.getContext().getBean(QcQueueCache.class).getCacheInstance(CacheServiceEnum.HAZLCAST_QC_QUEUE.toString()) ;
 	}
 }

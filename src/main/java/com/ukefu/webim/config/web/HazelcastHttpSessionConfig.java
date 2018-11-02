@@ -1,6 +1,6 @@
 package com.ukefu.webim.config.web;
 
-import java.util.Map;
+import java.util.Set;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +14,7 @@ import com.hazelcast.config.MapAttributeConfig;
 import com.hazelcast.config.MapIndexConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.Member;
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.UKTools;
 import com.ukefu.webim.service.rpc.AgentTopicListener;
@@ -49,6 +50,13 @@ public class HazelcastHttpSessionConfig {
     	hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.NAMESPACE.toString()).addMessageListener(new ClusterMasterListener()) ;
     	hazelcastInstance.getCluster().getLocalMember().setLongAttribute("start", System.currentTimeMillis()) ;
     	hazelcastInstance.getCluster().getLocalMember().setStringAttribute("id", UKTools.genID()) ;
+    	
+    	Set<Member> members = hazelcastInstance.getCluster().getMembers() ;
+    	Member master = null ;
+    	for(Member member : members) {
+//    		if(member!=null && member.getLongAttribute("start")!=null && )
+    	}
+    	
     	
         return hazelcastInstance; 
     }

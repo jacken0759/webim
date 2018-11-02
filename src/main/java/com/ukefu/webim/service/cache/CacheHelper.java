@@ -44,5 +44,7 @@ public class CacheHelper {
 	public static CacheBean getCallOutCacheBean() {
 		return cacheInstance!=null ? cacheInstance.getCallOutCacheBean(): null ;
 	}
-	
+	public static CacheBean getQcQueueCacheBean() {
+		return cacheInstance!=null ? cacheInstance.getQcQueueBean(): null ;
+	}
 }

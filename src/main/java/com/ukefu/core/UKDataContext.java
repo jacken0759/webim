@@ -280,8 +280,7 @@ public class UKDataContext {
 		ARCHIVE,   //已归档
 		DISABLE,  //无效
 		RECHECK,  //复检中
-		APPEAL,   //申诉中
-		ARBITRATE; //仲裁中
+		APPEAL;   //申诉中
 		public String toString(){
 			return super.toString().toLowerCase() ;
 		}

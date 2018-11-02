@@ -65,4 +65,11 @@ public interface CacheInstance {
 	 */
 	public CacheBean getCallOutCacheBean();
 	
+	
+	/**
+	 * QC队列
+	 * @return
+	 */
+	public CacheBean getQcQueueBean() ;
+	
 }
