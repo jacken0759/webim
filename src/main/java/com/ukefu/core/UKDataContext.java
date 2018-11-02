@@ -818,7 +818,8 @@ public class UKDataContext {
 		TOPIC_IM,
 		TOPIC_AGENT,
 		TOPIC_CALLCENTER,
-		NAMESPACE;
+		NAMESPACE,
+		TOPIC_VOTE;
 		
 		public String toString(){
 			return super.toString().toLowerCase() ;
