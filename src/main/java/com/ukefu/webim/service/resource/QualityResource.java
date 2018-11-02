@@ -11,7 +11,6 @@ import com.ukefu.util.UKTools;
 import com.ukefu.util.es.SearchTools;
 import com.ukefu.webim.service.es.WorkOrdersRepository;
 import com.ukefu.webim.service.repository.AgentServiceRepository;
-import com.ukefu.webim.service.repository.JobDetailRepository;
 import com.ukefu.webim.service.repository.QualityActivityTaskRepository;
 import com.ukefu.webim.service.repository.QualityAgentRepository;
 import com.ukefu.webim.service.repository.QualityFilterRepository;
@@ -172,6 +171,7 @@ public class QualityResource extends Resource{
 				this.qcActTask.setAssigned(this.assignInt.intValue());
 				this.qcActTask.setAssignedorgan(this.assignorganInt.intValue());
 				this.qcActTask.setAssignedai(this.assignAiInt.intValue());
+				this.qcActTask.setNamenum(this.assignInt.intValue() + this.assignorganInt.intValue() + this.assignAiInt.intValue());
 				this.qcActTask.setNotassigned(this.dataList.size() - this.assignInt.intValue() - this.assignorganInt.intValue() - this.assignAiInt.intValue());
 			}
 			this.qcActTaskRes.save(this.qcActTask) ;
@@ -225,6 +225,7 @@ public class QualityResource extends Resource{
 					statusEvent.setTemplateid(this.jobDetail.getTemplateid());
 					statusEvent.setQualityactid(this.jobDetail.getId());
 					statusEvent.setQualityfilterid(this.jobDetail.getFilterid());
+					statusEvent.setQualitystatus(UKDataContext.QualityStatus.NO.toString());
 					
 					if("agent".equals(this.qcAgent.getDistype())) {
 						statusEvent.setQualitydisorgan(this.qcAgent.getOrgan());
@@ -249,7 +250,7 @@ public class QualityResource extends Resource{
 					workOrders.setQualitytype(UKDataContext.QcFormFilterTypeEnum.WORKORDERS.toString());
 					workOrders.setAssuser(this.jobDetail.getCreater());
 					workOrders.setTemplateid(this.jobDetail.getTemplateid());
-					workOrders.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
+					workOrders.setQualitystatus(UKDataContext.QualityStatus.NO.toString());
 					workOrders.setQualityactid(this.jobDetail.getId());
 					workOrders.setQualityfilterid(this.jobDetail.getFilterid());
 					
@@ -276,7 +277,7 @@ public class QualityResource extends Resource{
 					agentService.setQualitytype(UKDataContext.QcFormFilterTypeEnum.AGENTSERVICE.toString());
 					agentService.setAssuser(this.jobDetail.getCreater());
 					agentService.setTemplateid(this.jobDetail.getTemplateid());
-					agentService.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
+					agentService.setQualitystatus(UKDataContext.QualityStatus.NO.toString());
 					agentService.setQualityactid(this.jobDetail.getId());
 					agentService.setQualityfilterid(this.jobDetail.getFilterid());
 					
