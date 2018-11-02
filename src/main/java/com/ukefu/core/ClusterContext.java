@@ -1,5 +1,10 @@
 package com.ukefu.core;
 
+/**
+ * 记录集群状态信息
+ * @author iceworld
+ *
+ */
 public class ClusterContext implements java.io.Serializable{
 	
 	/**
