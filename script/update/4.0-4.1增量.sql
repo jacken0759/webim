@@ -366,3 +366,22 @@ CREATE TABLE `uk_voice_transcription` (
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='录音转写表';
 
+CREATE TABLE `uk_qc_config` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `phonetic` tinyint(4) DEFAULT '0' COMMENT '是否开启语音转写（0关闭1打开）',
+  `engine` varchar(50) DEFAULT NULL COMMENT '转写引擎',
+  `appid` varchar(50) DEFAULT NULL COMMENT '引擎的 AppId',
+  `secretkey` varchar(50) DEFAULT NULL COMMENT '引擎的 secret_key',
+  `lfasrhost` text COMMENT '引擎的 api接口网址',
+  `filepiecesize` varchar(50) DEFAULT NULL COMMENT '引擎的上传录音文件最大尺寸',
+  `storepath` text COMMENT '引擎的转写结果保存位置',
+  `maxthreads` int(11) DEFAULT '0' COMMENT '最大线程数',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `organ` varchar(32) DEFAULT NULL COMMENT '企业ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='质监系统 - 配置表';
+
