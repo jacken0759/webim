@@ -350,3 +350,19 @@ ALTER TABLE uk_qc_result ADD isimcom int(11) DEFAULT '0' COMMENT '是否有改�
 ALTER TABLE uk_qc_result ADD isrmk int(11) DEFAULT '0' COMMENT '质检时是否有备注（1是/0否）';
 ALTER TABLE uk_qc_result ADD isitemrmk int(11) DEFAULT '0' COMMENT '质检项是否能填备注（1是/0否）';
 ALTER TABLE uk_qc_result ADD isitemdir int(11) DEFAULT '0' COMMENT '质检项是否有说明（1是/0否）';
+
+CREATE TABLE `uk_voice_transcription` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `callid` text NOT NULL COMMENT '通话记录ID',
+  `recordfile` text COMMENT '录音文件名',
+  `bg` varchar(50) DEFAULT NULL COMMENT '名称',
+  `ed` varchar(50) DEFAULT NULL COMMENT '代码',
+  `onebest` text COMMENT '代码',
+  `speaker` varchar(50) DEFAULT NULL COMMENT '代码',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `organ` varchar(32) DEFAULT NULL COMMENT '企业ID',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='录音转写表';
+
