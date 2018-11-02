@@ -385,3 +385,10 @@ CREATE TABLE `uk_qc_config` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='质监系统 - 配置表';
 
+
+ALTER TABLE uk_callcenter_event ADD transbegin datetime DEFAULT NULL COMMENT '语音转写开始时间';
+ALTER TABLE uk_callcenter_event ADD transend datetime DEFAULT NULL COMMENT '语音转写结束时间';
+ALTER TABLE uk_callcenter_event ADD transtime varchar(32) DEFAULT NULL COMMENT '语音转写用时';
+ALTER TABLE uk_callcenter_event ADD trans tinyint(4) DEFAULT '0' COMMENT '是否语音转写（0未转写1已转写）';
+ALTER TABLE uk_callcenter_event ADD transtatus varchar(32) DEFAULT NULL COMMENT '语音转写状态';
+ALTER TABLE uk_callcenter_event ADD transcost tinyint(4) DEFAULT '0' COMMENT '语音转写费用';
