@@ -17,7 +17,6 @@ public class ClusterContext implements java.io.Serializable{
 	
 	public void setMaster(boolean master) {
 		this.master = master ;
-		System.out.println("选举产生了新的Master服务 ： " +  this.master + " host:"+this.getHost() +" port:" +this.getPort() );
 	}
 	
 	public String getHost() {
