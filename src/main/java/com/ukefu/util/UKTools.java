@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -65,6 +66,8 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.googlecode.aviator.AviatorEvaluator;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.Member;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.asr.AsrResult;
@@ -73,6 +76,7 @@ import com.ukefu.util.event.MultiUpdateEvent;
 import com.ukefu.util.event.UserDataEvent;
 import com.ukefu.util.event.UserEvent;
 import com.ukefu.util.mail.MailSender;
+import com.ukefu.util.rpc.RPCDataBean;
 import com.ukefu.webim.service.cache.CacheHelper;
 import com.ukefu.webim.service.repository.AdTypeRepository;
 import com.ukefu.webim.service.repository.AiConfigRepository;
@@ -1586,5 +1590,21 @@ public class UKTools {
 	
 	public static JavaType getCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {   
 		return OnlineUserUtils.objectMapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);   
+	}
+	/**
+	 * 选出新的 Master服务器
+	 * @param hazelcastInstance
+	 */
+	public static void voteMaster(HazelcastInstance hazelcastInstance) {
+		Set<Member> members = hazelcastInstance.getCluster().getMembers() ;
+    	Member master = null ;
+    	for(Member member : members) {
+    		if(master == null || (member!=null && member.getLongAttribute("start")!=null && member.getLongAttribute("start") < master.getLongAttribute("start"))) {
+    			master = member ;
+    		}
+    	}
+    	if(master!=null) {
+    		hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.TOPIC_VOTE.toString()).publish(new RPCDataBean(master.getStringAttribute("id"), master.getAddress().getHost(), master.getAddress().getPort() , master.getLongAttribute("start")));
+    	}
 	}
 }

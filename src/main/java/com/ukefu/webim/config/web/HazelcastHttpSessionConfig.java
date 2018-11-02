@@ -1,7 +1,5 @@
 package com.ukefu.webim.config.web;
 
-import java.util.Set;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.session.hazelcast.HazelcastSessionRepository;
@@ -14,12 +12,12 @@ import com.hazelcast.config.MapAttributeConfig;
 import com.hazelcast.config.MapIndexConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.Member;
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.UKTools;
 import com.ukefu.webim.service.rpc.AgentTopicListener;
 import com.ukefu.webim.service.rpc.CallCenterTopicListener;
 import com.ukefu.webim.service.rpc.ClusterMasterListener;
+import com.ukefu.webim.service.rpc.ClusterMember;
 import com.ukefu.webim.service.rpc.EntIMTopicListener;
 import com.ukefu.webim.service.rpc.IMTopicListener;
 import com.ukefu.webim.service.rpc.NameSpaceTopicListener;
@@ -47,16 +45,19 @@ public class HazelcastHttpSessionConfig {
     	hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.TOPIC_ENTIM.toString()).addMessageListener(new EntIMTopicListener()) ;
     	hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.NAMESPACE.toString()).addMessageListener(new NameSpaceTopicListener()) ;
     	
-    	hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.NAMESPACE.toString()).addMessageListener(new ClusterMasterListener()) ;
+    	hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.TOPIC_VOTE.toString()).addMessageListener(new ClusterMasterListener(hazelcastInstance)) ;
     	hazelcastInstance.getCluster().getLocalMember().setLongAttribute("start", System.currentTimeMillis()) ;
     	hazelcastInstance.getCluster().getLocalMember().setStringAttribute("id", UKTools.genID()) ;
     	
-    	Set<Member> members = hazelcastInstance.getCluster().getMembers() ;
-    	Member master = null ;
-    	for(Member member : members) {
-//    		if(member!=null && member.getLongAttribute("start")!=null && )
-    	}
+    	/**
+    	 * 
+    	 */
+    	hazelcastInstance.getCluster().addMembershipListener(new ClusterMember(hazelcastInstance)) ;
     	
+    	/**
+    	 * 选出新的 Master服务，然后通知所有服务器
+    	 */
+    	UKTools.voteMaster(hazelcastInstance);
     	
         return hazelcastInstance; 
     }

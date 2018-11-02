@@ -596,7 +596,7 @@ public class UKDataContext {
 		NEW,
 		MESSAGE, 
 		END,
-		TRANS, STATUS , AGENTSTATUS , SERVICE, WRITING;
+		TRANS, STATUS , AGENTSTATUS , SERVICE, WRITING , MASTER;
 		
 		public String toString(){
 			return super.toString().toLowerCase() ;
@@ -817,7 +817,8 @@ public class UKDataContext {
 		TOPIC_IM,
 		TOPIC_AGENT,
 		TOPIC_CALLCENTER,
-		NAMESPACE;
+		NAMESPACE,
+		TOPIC_VOTE;
 		
 		public String toString(){
 			return super.toString().toLowerCase() ;
