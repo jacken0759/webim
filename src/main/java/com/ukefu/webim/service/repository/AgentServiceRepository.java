@@ -31,4 +31,6 @@ public abstract interface AgentServiceRepository
   public Page<AgentService> findAll(Specification<AgentService> spec, Pageable pageable);  //分页按条件查询 
   
   public abstract List<AgentService> findByTemplateidAndQualitystatus(String templateid,String qualitystatus ) ;
+  
+  public List<AgentService> findAll(Specification<AgentService> spec);
 }
