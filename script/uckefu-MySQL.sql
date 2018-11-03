@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-11-01 13:43:03
+Date: 2018-11-03 18:14:16
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -1032,6 +1032,13 @@ CREATE TABLE `uk_callcenter_event` (
   `qualitydistype` varchar(32) DEFAULT NULL COMMENT '分配状态  ，未分配not/分配到部门disorgan/分配到坐席disagent',
   `qualityactid` varchar(50) DEFAULT NULL COMMENT '质检活动id',
   `qualityfilterid` varchar(50) DEFAULT NULL COMMENT '筛选表单id',
+  `transbegin` datetime DEFAULT NULL COMMENT '语音转写开始时间',
+  `transend` datetime DEFAULT NULL COMMENT '语音转写结束时间',
+  `transtime` varchar(32) DEFAULT NULL COMMENT '语音转写用时',
+  `trans` tinyint(4) DEFAULT '0' COMMENT '是否语音转写（0未转写1已转写）',
+  `transtatus` varchar(32) DEFAULT NULL COMMENT '语音转写状态',
+  `transcost` tinyint(4) DEFAULT '0' COMMENT '语音转写费用',
+  `engine` varchar(32) DEFAULT NULL COMMENT '语音转写引擎',
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='通话记录表';
 
@@ -4172,6 +4179,13 @@ CREATE TABLE `uk_qc_result` (
   `status` varchar(32) DEFAULT NULL COMMENT '状态（已质检done、已归档archive、复检中recheck）',
   `archivedate` datetime DEFAULT NULL COMMENT '归档日期',
   `qualitytype` varchar(32) DEFAULT NULL COMMENT '质检类型（callevent通话/workorders工单/agentservice会话）',
+  `isvp` int(11) DEFAULT '0' COMMENT '是否有否决权（1是/0否）',
+  `isadcom` int(11) DEFAULT '0' COMMENT '是否有优点评语（1是/0否）',
+  `isqacom` int(11) DEFAULT '0' COMMENT '是否QA评语（1是/0否）',
+  `isimcom` int(11) DEFAULT '0' COMMENT '是否有改进评语（1是/0否）',
+  `isrmk` int(11) DEFAULT '0' COMMENT '质检时是否有备注（1是/0否）',
+  `isitemrmk` int(11) DEFAULT '0' COMMENT '质检项是否能填备注（1是/0否）',
+  `isitemdir` int(11) DEFAULT '0' COMMENT '质检项是否有说明（1是/0否）',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='QC质检 - 结果主表';
 
@@ -9985,7 +9999,7 @@ CREATE TABLE `uk_user` (
 INSERT INTO `uk_user` VALUES ('4028811b61834723016183ec57760392', null, 'chenfarong', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'chen@ukewo.cn', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-02-11 16:12:39', null, '2018-06-29 17:40:30', null, '18510129455', '2018-02-11 16:12:39', null, '0', '陈法蓉', null, '0', null, null, null, '0', '0', '0', '2018-06-29 17:40:37', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b642f5f8c01642f60ed440683', null, 'test1', '130811dbd239c97bd9ce933de7349f20', '5', 'ad@te.com', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-06-24 09:20:38', null, '2018-10-09 11:01:09', null, '18510129433', '2018-06-24 09:20:38', null, '0', 'test1', null, '1', null, null, null, '0', '0', '0', '2018-10-10 15:13:33', null, null, null, '0', '1', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b645dc08f01645e0512ce0935', null, 'yiliao', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'asd@ac.com', null, null, null, null, null, null, null, null, null, null, null, '4028811b645dc08f01645e005f3d08dd', 'ukewo', null, '2018-07-03 10:42:28', null, '2018-07-03 10:43:31', null, '18512212955', '2018-07-03 10:42:28', null, '0', '医疗', null, '0', null, null, null, '0', '0', '0', '2018-07-03 10:43:39', null, null, null, '0', '0', '0', '0', null);
-INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-11-01 10:58:57', null, null, null, '0', '1', '1', '0', null);
+INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '4028811b66d257820166d28cb868022b', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-11-03 16:40:46', null, null, null, '0', '1', '1', '0', null);
 
 -- ----------------------------
 -- Table structure for `uk_userevent`
