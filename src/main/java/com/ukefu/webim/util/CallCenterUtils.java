@@ -2,10 +2,26 @@ package com.ukefu.webim.util;
 
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.RunnableFuture;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaBuilder.In;
@@ -17,12 +33,12 @@ import javax.validation.Valid;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.ui.ModelMap;
 
 import com.ukefu.core.UKDataContext;
+import com.ukefu.util.UCKeFuThreadFactory;
+import com.ukefu.util.UKTools;
 import com.ukefu.util.es.SearchTools;
 import com.ukefu.util.es.UKDataBean;
 import com.ukefu.webim.service.cache.CacheHelper;
@@ -56,11 +72,20 @@ import com.ukefu.webim.web.model.Organ;
 import com.ukefu.webim.web.model.PbxHost;
 import com.ukefu.webim.web.model.SaleStatus;
 import com.ukefu.webim.web.model.SipTrunk;
+import com.ukefu.webim.web.model.StatusEvent;
 import com.ukefu.webim.web.model.UKeFuDic;
 import com.ukefu.webim.web.model.User;
 import com.ukefu.webim.web.model.UserRole;
 
 public class CallCenterUtils {
+	
+	static final Executor fastExecutor = new ThreadPoolExecutor(
+	          0,
+	          Integer.MAX_VALUE,
+	          10, TimeUnit.SECONDS, // terminate idle threads after 10 sec
+	          new SynchronousQueue<Runnable>()  // directly hand off tasks
+	          , new UCKeFuThreadFactory("callcenterVoiceRecord")
+	  );
 	
 	/**
 	 * 
@@ -759,5 +784,102 @@ public class CallCenterUtils {
 			calloutCountRes.save(saleCountList) ;
 		}
 	}
+	/**
+	 * 读取语音文件
+	 * @param statusEvent
+	 * @throws IOException 
+	 */
+	public static File crawlVoiceRecord(StatusEvent statusEvent) throws IOException {
+		String fileName = statusEvent.getRecordfile().substring(statusEvent.getRecordfile().lastIndexOf("/"), statusEvent.getRecordfile().length()) ;
+		PbxHost pbxHost = CallCenterUtils.pbxhost(statusEvent.getIpaddr()) ;		//根据 PbxHost配置的 方式获取 录音文件的读取方式
+		File tempFile = File.createTempFile(statusEvent.getId(), fileName) ;
+		FileOutputStream voiceFileOutputStream = new FileOutputStream(tempFile) ;
+		if(!StringUtils.isBlank(pbxHost.getRecordpath())){
+			URL url = new URL(pbxHost.getRecordpath()+fileName);
+			HttpURLConnection conn = null ;
+	        try {
+	            conn = (HttpURLConnection) url.openConnection();
+	            /**
+	             * 链接最大超时时间5秒，读取文件最大超时时间不超过60秒
+	             */
+	            conn.setConnectTimeout(5000);  
+	            conn.setReadTimeout(60000);  
+	            
+	            InputStream inStream = conn.getInputStream();
+	            byte[] buffer = new byte[1204];
+	            int byteread = 0;
 
+	            while ((byteread = inStream.read(buffer)) != -1) {
+	            	voiceFileOutputStream.write(buffer, 0, byteread);
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	        	voiceFileOutputStream.close();
+	        }
+		}else{
+			File voiceFile = new File(statusEvent.getRecordfile()) ;
+			if(voiceFile.exists() && pbxHost!=null){
+				FileInputStream input = new FileInputStream(voiceFile) ;
+				try{
+					byte[] data = new byte[1024];
+					int len = 0;
+					while((len = input.read(data) )> 0){
+						voiceFileOutputStream.write(data , 0 , len);
+					}
+					
+				}finally{
+					input.close();
+					voiceFileOutputStream.close();
+				}
+			}
+		}
+		return tempFile ;
+	}
+	/**
+	 * 批量打包语音文件 , 通过信号量控制最大不超过10个线程执行，将来增加配置参数来调整信号量
+	 * @param statusEventList
+	 * @return
+	 * @throws Exception
+	 */
+	public static File packageVoiceFile(List<StatusEvent> statusEventList) throws Exception {
+		final Semaphore semaphore = new Semaphore(10);
+		final AtomicInteger fetch = new AtomicInteger() ;	//用于计数的轮次，从0开始
+		List<Future<Integer>> futures = new ArrayList<Future<Integer>>();
+		File tempFile = File.createTempFile(String.valueOf(System.currentTimeMillis()), "zip") ;
+		final FileOutputStream fileOutputStream = new FileOutputStream(tempFile) ;
+		for(final StatusEvent statusEvent : statusEventList) {
+			Callable<Integer> callable = new Callable<Integer>() {
+				@Override
+				public Integer call() throws Exception {
+					File tempVoiceRecordFile = null ;
+					try {
+						UKTools.packageVoiceRecordFile(tempVoiceRecordFile = crawlVoiceRecord(statusEvent), fileOutputStream);
+					} catch (Exception e) {
+					} finally {
+						fetch.incrementAndGet();
+						semaphore.release();
+						if(tempVoiceRecordFile!=null && tempVoiceRecordFile.exists()) {
+							tempVoiceRecordFile.deleteOnExit();
+						}
+					}
+					return fetch.intValue();
+				}
+			};
+			RunnableFuture<Integer> runnableFuture = new FutureTask<Integer>(callable);
+			try {
+				semaphore.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			fastExecutor.execute(runnableFuture);// releases semaphore
+			futures.add(runnableFuture);
+		}
+		
+		for (Future<Integer> future : futures) {
+			future.get() ;
+		}
+		assert semaphore.availablePermits() >= 10;
+		return tempFile;
+	}
 }

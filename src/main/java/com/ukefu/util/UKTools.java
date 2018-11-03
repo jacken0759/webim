@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -30,6 +31,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -1593,7 +1596,7 @@ public class UKTools {
 		return OnlineUserUtils.objectMapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);   
 	}
 
-	public static JavaType getCollectionType(ObjectMapper mapper, Class<ArrayList> collectionClass,
+	public static JavaType getCollectionType(ObjectMapper mapper, @SuppressWarnings("rawtypes") Class<ArrayList> collectionClass,
 			Class<VoiceTranscription> elementClasses) {
 		// TODO Auto-generated method stub
 		return OnlineUserUtils.objectMapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);   
@@ -1617,5 +1620,32 @@ public class UKTools {
     		hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.TOPIC_VOTE.toString()).publish(new RPCDataBean(master.getStringAttribute("id"), master.getAddress().getHost(), master.getAddress().getPort() , master.getLongAttribute("start")));
     	}
 	}
-
+	
+	/**
+	 * 打包语音文件到压缩文件
+	 * @param inputFile
+	 * @param zipFilename
+	 * @throws IOException
+	 */
+	public static void packageVoiceRecordFile(File voiceFile , OutputStream output) throws IOException {
+		if(voiceFile!=null && voiceFile.exists()) {
+			ByteArrayOutputStream byteArrayOutputStream = null ;
+	        ZipOutputStream out = new ZipOutputStream(byteArrayOutputStream = new ByteArrayOutputStream());    
+	        try {    
+	        	out.putNextEntry(new ZipEntry(new StringBuffer().append(voiceFile.getName()).toString()));   
+	        	out.write(FileUtils.readFileToByteArray(voiceFile));  
+	        	out.close();
+	        } catch (IOException e) {    
+	            e.printStackTrace();  
+	        } finally {    
+	            out.close();    
+	            if(byteArrayOutputStream!=null){
+	            	byteArrayOutputStream.close() ;
+	            }
+	        }
+	        if(byteArrayOutputStream!=null){
+	        	output.write(byteArrayOutputStream.toByteArray()) ;
+	        }
+		}
+	}
 }
