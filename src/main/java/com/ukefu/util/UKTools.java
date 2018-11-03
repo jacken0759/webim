@@ -104,6 +104,7 @@ import com.ukefu.webim.web.model.TableProperties;
 import com.ukefu.webim.web.model.Template;
 import com.ukefu.webim.web.model.UKeFuDic;
 import com.ukefu.webim.web.model.User;
+import com.ukefu.webim.web.model.VoiceTranscription;
 import com.ukefu.webim.web.model.WorkOrders;
 import com.ukefu.webim.web.model.WorkSession;
 import com.ukefu.webim.web.model.WorkserviceTime;
@@ -1591,6 +1592,15 @@ public class UKTools {
 	public static JavaType getCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {   
 		return OnlineUserUtils.objectMapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);   
 	}
+
+	public static JavaType getCollectionType(ObjectMapper mapper, Class<ArrayList> collectionClass,
+			Class<VoiceTranscription> elementClasses) {
+		// TODO Auto-generated method stub
+		return OnlineUserUtils.objectMapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);   
+	}
+
+	
+
 	/**
 	 * 选出新的 Master服务器
 	 * @param hazelcastInstance
@@ -1607,4 +1617,5 @@ public class UKTools {
     		hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.TOPIC_VOTE.toString()).publish(new RPCDataBean(master.getStringAttribute("id"), master.getAddress().getHost(), master.getAddress().getPort() , master.getLongAttribute("start")));
     	}
 	}
+
 }

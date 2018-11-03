@@ -1,4 +1,4 @@
-package com.ukefu.util;
+package com.ukefu.util.asr.lfasr;
 
 import com.ukefu.webim.web.model.QualityConfig;
 import com.ukefu.webim.web.model.StatusEvent;
