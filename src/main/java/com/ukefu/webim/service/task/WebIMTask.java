@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import com.ukefu.core.ClusterContext;
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.UKTools;
 import com.ukefu.util.client.NettyClients;
@@ -60,7 +61,7 @@ public class WebIMTask {
 	@Scheduled(fixedDelay= 5000) // 每5秒执行一次
     public void task() {
 		List<SessionConfig> sessionConfigList = ServiceQuene.initSessionConfigList() ;
-		if(sessionConfigList!=null && sessionConfigList.size() > 0 && UKDataContext.getContext() != null){
+		if(sessionConfigList!=null && sessionConfigList.size() > 0 && UKDataContext.getContext() != null && UKDataContext.needRunTask()){
 			for(SessionConfig sessionConfig : sessionConfigList) {
 				if(sessionConfig.isSessiontimeout()){		//设置了启用 超时提醒
 					List<AgentUserTask> agentUserTask = agentUserTaskRes.findByLastmessageLessThanAndStatusAndOrgi(UKTools.getLastTime(sessionConfig.getTimeout()) , UKDataContext.AgentUserStatusEnum.INSERVICE.toString() , sessionConfig.getOrgi()) ;
@@ -133,7 +134,7 @@ public class WebIMTask {
 	@Scheduled(fixedDelay= 5000) // 每5秒执行一次
     public void agent() {
 		List<SessionConfig> sessionConfigList = ServiceQuene.initSessionConfigList() ;
-		if(sessionConfigList!=null && sessionConfigList.size() > 0 && UKDataContext.getContext() != null){
+		if(sessionConfigList!=null && sessionConfigList.size() > 0 && UKDataContext.getContext() != null && UKDataContext.needRunTask()){
 			for(SessionConfig sessionConfig : sessionConfigList) {
 				sessionConfig = ServiceQuene.initSessionConfig(sessionConfig.getOrgi()) ;
 				if(sessionConfig!=null && UKDataContext.getContext() != null && sessionConfig.isAgentreplaytimeout()){
@@ -159,13 +160,15 @@ public class WebIMTask {
 	
 	@Scheduled(fixedDelay= 600000) // 每分钟执行一次
     public void onlineuser() {
-		Page<OnlineUser> pages = onlineUserRes.findByStatusAndCreatetimeLessThan(UKDataContext.OnlineUserOperatorStatus.ONLINE.toString(), UKTools.getLastTime(60), new PageRequest(0,  100)) ;
-		if(pages.getContent().size()>0){
-			for(OnlineUser onlineUser : pages.getContent()){
-				try {
-					OnlineUserUtils.offline(onlineUser);
-				} catch (Exception e) {
-					e.printStackTrace();
+		if(UKDataContext.needRunTask()) {
+			Page<OnlineUser> pages = onlineUserRes.findByStatusAndCreatetimeLessThan(UKDataContext.OnlineUserOperatorStatus.ONLINE.toString(), UKTools.getLastTime(60), new PageRequest(0,  100)) ;
+			if(pages.getContent().size()>0){
+				for(OnlineUser onlineUser : pages.getContent()){
+					try {
+						OnlineUserUtils.offline(onlineUser);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -173,7 +176,7 @@ public class WebIMTask {
 	
 	@Scheduled(fixedDelay= 10000) // 每10秒执行一次 ， 负责将当期在线的访客序列化到 数据库
     public void traceOnlineUser() {
-		if(UKDataContext.getContext()!=null){	//判断系统是否启动完成，避免 未初始化完成即开始执行 任务
+		if(UKDataContext.getContext()!=null && UKDataContext.needRunTask()){	//判断系统是否启动完成，避免 未初始化完成即开始执行 任务
 			long onlineusers = CacheHelper.getOnlineUserCacheBean().getSize() ;
 			if(onlineusers > 0){
 				Collection<?> datas = CacheHelper.getOnlineUserCacheBean().getAllCacheObject(UKDataContext.SYSTEM_ORGI) ;
@@ -301,21 +304,23 @@ public class WebIMTask {
 	
 	@Scheduled(fixedDelay= 3000) // 每三秒 , 加载 标记为执行中的任务何 即将执行的 计划任务
     public void jobDetail() {
-		List<JobDetail> allJob = new ArrayList<JobDetail>();
-		Page<JobDetail> readyTaskList = jobDetailRes.findByTaskstatus(UKDataContext.TaskStatusType.READ.getType() , new PageRequest(0,  100)) ;
-		allJob.addAll(readyTaskList.getContent()) ;
-		Page<JobDetail> planTaskList = jobDetailRes.findByPlantaskAndTaskstatusAndNextfiretimeLessThan(true , UKDataContext.TaskStatusType.NORMAL.getType() ,new Date(), new PageRequest(0,  100)) ;
-		allJob.addAll(planTaskList.getContent()) ;
-		if(allJob.size()>0){
-			for(JobDetail jobDetail : allJob){
-				if(CacheHelper.getJobCacheBean().getCacheObject(jobDetail.getId(), jobDetail.getOrgi()) == null) {
-					jobDetail.setTaskstatus(UKDataContext.TaskStatusType.QUEUE.getType());
-					jobDetailRes.save(jobDetail) ;
-					CacheHelper.getJobCacheBean().put(jobDetail.getId(), jobDetail, jobDetail.getOrgi());
-					/**
-					 * 加入到作业执行引擎
-					 */
-					taskExecutor.execute(new Task(jobDetail, jobDetailRes));
+		if(UKDataContext.needRunTask()) {
+			List<JobDetail> allJob = new ArrayList<JobDetail>();
+			Page<JobDetail> readyTaskList = jobDetailRes.findByTaskstatus(UKDataContext.TaskStatusType.READ.getType() , new PageRequest(0,  100)) ;
+			allJob.addAll(readyTaskList.getContent()) ;
+			Page<JobDetail> planTaskList = jobDetailRes.findByPlantaskAndTaskstatusAndNextfiretimeLessThan(true , UKDataContext.TaskStatusType.NORMAL.getType() ,new Date(), new PageRequest(0,  100)) ;
+			allJob.addAll(planTaskList.getContent()) ;
+			if(allJob.size()>0){
+				for(JobDetail jobDetail : allJob){
+					if(CacheHelper.getJobCacheBean().getCacheObject(jobDetail.getId(), jobDetail.getOrgi()) == null) {
+						jobDetail.setTaskstatus(UKDataContext.TaskStatusType.QUEUE.getType());
+						jobDetailRes.save(jobDetail) ;
+						CacheHelper.getJobCacheBean().put(jobDetail.getId(), jobDetail, jobDetail.getOrgi());
+						/**
+						 * 加入到作业执行引擎
+						 */
+						taskExecutor.execute(new Task(jobDetail, jobDetailRes));
+					}
 				}
 			}
 		}
@@ -323,7 +328,7 @@ public class WebIMTask {
 	
 	@Scheduled(fixedDelay= 3000 , initialDelay = 20000) // 每三秒 , 加载 标记为执行中的任务何 即将执行的 计划任务
     public void callOut() {
-		if(UKDataContext.model.get("sales")!=null) {
+		if(UKDataContext.model.get("sales")!=null && UKDataContext.needRunTask()) {
 			/**
 			 * 遍历 队列， 然后推送 名单
 			 */

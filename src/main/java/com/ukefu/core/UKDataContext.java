@@ -943,4 +943,11 @@ public class UKDataContext {
 	public static Class<?> getResource(String resource){
 		return uKeFuResourceMap.get(resource) ;
 	}
+	/**
+	 * 判断是否执行任务，用于扩展规则
+	 * @return
+	 */
+	public static boolean needRunTask() {
+		return  ClusterContext.getInstance().isMaster() ;
+	}
 }
