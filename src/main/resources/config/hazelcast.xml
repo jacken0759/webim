@@ -40,10 +40,8 @@
         	<multicast enabled="false"></multicast>
             <tcp-ip enabled="true">
                 <member-list>
-                	<!-- 
                     <member>192.168.1.155:5701</member>
-                    <member>192.168.1.155:5702</member>
-                     -->
+                    <member>192.168.1.156:5701</member>
                 </member-list>
             </tcp-ip>
         </join>
