@@ -392,3 +392,4 @@ ALTER TABLE uk_callcenter_event ADD transtime varchar(32) DEFAULT NULL COMMENT '
 ALTER TABLE uk_callcenter_event ADD trans tinyint(4) DEFAULT '0' COMMENT '是否语音转写（0未转写1已转写）';
 ALTER TABLE uk_callcenter_event ADD transtatus varchar(32) DEFAULT NULL COMMENT '语音转写状态';
 ALTER TABLE uk_callcenter_event ADD transcost tinyint(4) DEFAULT '0' COMMENT '语音转写费用';
+ALTER TABLE uk_callcenter_event ADD engine varchar(32) DEFAULT NULL COMMENT '语音转写引擎';
