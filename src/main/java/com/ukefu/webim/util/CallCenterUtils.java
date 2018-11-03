@@ -2,6 +2,7 @@ package com.ukefu.webim.util;
 
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -22,6 +23,7 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.zip.ZipOutputStream;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaBuilder.In;
@@ -790,47 +792,50 @@ public class CallCenterUtils {
 	 * @throws IOException 
 	 */
 	public static File crawlVoiceRecord(StatusEvent statusEvent) throws IOException {
-		String fileName = statusEvent.getRecordfile().substring(statusEvent.getRecordfile().lastIndexOf("/"), statusEvent.getRecordfile().length()) ;
-		PbxHost pbxHost = CallCenterUtils.pbxhost(statusEvent.getIpaddr()) ;		//根据 PbxHost配置的 方式获取 录音文件的读取方式
-		File tempFile = File.createTempFile(statusEvent.getId(), fileName) ;
-		FileOutputStream voiceFileOutputStream = new FileOutputStream(tempFile) ;
-		if(!StringUtils.isBlank(pbxHost.getRecordpath())){
-			URL url = new URL(pbxHost.getRecordpath()+fileName);
-			HttpURLConnection conn = null ;
-	        try {
-	            conn = (HttpURLConnection) url.openConnection();
-	            /**
-	             * 链接最大超时时间5秒，读取文件最大超时时间不超过60秒
-	             */
-	            conn.setConnectTimeout(5000);  
-	            conn.setReadTimeout(60000);  
-	            
-	            InputStream inStream = conn.getInputStream();
-	            byte[] buffer = new byte[1204];
-	            int byteread = 0;
-
-	            while ((byteread = inStream.read(buffer)) != -1) {
-	            	voiceFileOutputStream.write(buffer, 0, byteread);
-	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        } finally {
-	        	voiceFileOutputStream.close();
-	        }
-		}else{
-			File voiceFile = new File(statusEvent.getRecordfile()) ;
-			if(voiceFile.exists() && pbxHost!=null){
-				FileInputStream input = new FileInputStream(voiceFile) ;
-				try{
-					byte[] data = new byte[1024];
-					int len = 0;
-					while((len = input.read(data) )> 0){
-						voiceFileOutputStream.write(data , 0 , len);
+		File tempFile = null ;
+		if(!StringUtils.isBlank(statusEvent.getRecordfile())) {
+			String fileName = statusEvent.getRecordfile().substring(statusEvent.getRecordfile().lastIndexOf("/"), statusEvent.getRecordfile().length()) ;
+			PbxHost pbxHost = CallCenterUtils.pbxhost(statusEvent.getIpaddr()) ;		//根据 PbxHost配置的 方式获取 录音文件的读取方式
+			tempFile = File.createTempFile(statusEvent.getId(), fileName.substring(fileName.lastIndexOf("."))) ;
+			FileOutputStream voiceFileOutputStream = new FileOutputStream(tempFile) ;
+			if(!StringUtils.isBlank(pbxHost.getRecordpath())){
+				URL url = new URL(pbxHost.getRecordpath()+fileName);
+				HttpURLConnection conn = null ;
+		        try {
+		            conn = (HttpURLConnection) url.openConnection();
+		            /**
+		             * 链接最大超时时间5秒，读取文件最大超时时间不超过60秒
+		             */
+		            conn.setConnectTimeout(5000);  
+		            conn.setReadTimeout(60000);  
+		            
+		            InputStream inStream = conn.getInputStream();
+		            byte[] buffer = new byte[1204];
+		            int byteread = 0;
+	
+		            while ((byteread = inStream.read(buffer)) > 0) {
+		            	voiceFileOutputStream.write(buffer, 0, byteread);
+		            }
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        } finally {
+		        	voiceFileOutputStream.close();
+		        }
+			}else{
+				File voiceFile = new File(statusEvent.getRecordfile()) ;
+				if(voiceFile.exists() && pbxHost!=null){
+					FileInputStream input = new FileInputStream(voiceFile) ;
+					try{
+						byte[] data = new byte[1024];
+						int len = 0;
+						while((len = input.read(data) )> 0){
+							voiceFileOutputStream.write(data , 0 , len);
+						}
+						
+					}finally{
+						input.close();
+						voiceFileOutputStream.close();
 					}
-					
-				}finally{
-					input.close();
-					voiceFileOutputStream.close();
 				}
 			}
 		}
@@ -846,40 +851,67 @@ public class CallCenterUtils {
 		final Semaphore semaphore = new Semaphore(10);
 		final AtomicInteger fetch = new AtomicInteger() ;	//用于计数的轮次，从0开始
 		List<Future<Integer>> futures = new ArrayList<Future<Integer>>();
-		File tempFile = File.createTempFile(String.valueOf(System.currentTimeMillis()), "zip") ;
+		File tempFile = File.createTempFile(String.valueOf(System.currentTimeMillis()), ".zip") ;
 		final FileOutputStream fileOutputStream = new FileOutputStream(tempFile) ;
-		for(final StatusEvent statusEvent : statusEventList) {
-			Callable<Integer> callable = new Callable<Integer>() {
-				@Override
-				public Integer call() throws Exception {
-					File tempVoiceRecordFile = null ;
-					try {
-						UKTools.packageVoiceRecordFile(tempVoiceRecordFile = crawlVoiceRecord(statusEvent), fileOutputStream);
-					} catch (Exception e) {
-					} finally {
-						fetch.incrementAndGet();
-						semaphore.release();
-						if(tempVoiceRecordFile!=null && tempVoiceRecordFile.exists()) {
-							tempVoiceRecordFile.deleteOnExit();
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream() ;
+		final ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream);    
+		final List<File> recordFileList = new ArrayList<File>();
+		try {
+			for(final StatusEvent statusEvent : statusEventList) {
+				Callable<Integer> callable = new Callable<Integer>() {
+					@Override
+					public Integer call() throws Exception {
+						File tempVoiceRecordFile = null ;
+						try {
+							tempVoiceRecordFile = crawlVoiceRecord(statusEvent) ;
+							if(tempVoiceRecordFile!=null && tempVoiceRecordFile.exists()) {
+								recordFileList.add(tempVoiceRecordFile) ;
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						} finally {
+							fetch.incrementAndGet();
+							semaphore.release();
 						}
+						return fetch.intValue();
 					}
-					return fetch.intValue();
+				};
+				RunnableFuture<Integer> runnableFuture = new FutureTask<Integer>(callable);
+				try {
+					semaphore.acquire();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
-			};
-			RunnableFuture<Integer> runnableFuture = new FutureTask<Integer>(callable);
-			try {
-				semaphore.acquire();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+				fastExecutor.execute(runnableFuture);// releases semaphore
+				futures.add(runnableFuture);
 			}
-			fastExecutor.execute(runnableFuture);// releases semaphore
-			futures.add(runnableFuture);
+			
+			for (Future<Integer> future : futures) {
+				future.get() ;
+			}
+			assert semaphore.availablePermits() >= 10;
+			for(File tempVoiceRecordFile : recordFileList) {
+				UKTools.packageVoiceRecordFile(tempVoiceRecordFile, zipOutputStream);
+				if(tempVoiceRecordFile!=null && tempVoiceRecordFile.exists()) {
+					tempVoiceRecordFile.deleteOnExit();
+				}
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}finally {
+			if(byteArrayOutputStream!=null){
+            	byteArrayOutputStream.close() ;
+            }
+			if(zipOutputStream!=null) {
+				zipOutputStream.close();
+			}
+	        if(byteArrayOutputStream!=null){
+	        	fileOutputStream.write(byteArrayOutputStream.toByteArray()) ;
+	        }
+	        if(fileOutputStream!=null) {
+				fileOutputStream.close();
+			}
 		}
-		
-		for (Future<Integer> future : futures) {
-			future.get() ;
-		}
-		assert semaphore.availablePermits() >= 10;
 		return tempFile;
 	}
 }

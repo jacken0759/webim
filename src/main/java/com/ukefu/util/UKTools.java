@@ -6,11 +6,11 @@ import java.beans.PropertyDescriptor;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -1627,24 +1627,22 @@ public class UKTools {
 	 * @param zipFilename
 	 * @throws IOException
 	 */
-	public static void packageVoiceRecordFile(File voiceFile , OutputStream output) throws IOException {
+	public static void packageVoiceRecordFile(File voiceFile , ZipOutputStream zipOutputStream) throws IOException {
 		if(voiceFile!=null && voiceFile.exists()) {
-			ByteArrayOutputStream byteArrayOutputStream = null ;
-	        ZipOutputStream out = new ZipOutputStream(byteArrayOutputStream = new ByteArrayOutputStream());    
+	        FileInputStream input = new FileInputStream(voiceFile) ;
 	        try {    
-	        	out.putNextEntry(new ZipEntry(new StringBuffer().append(voiceFile.getName()).toString()));   
-	        	out.write(FileUtils.readFileToByteArray(voiceFile));  
-	        	out.close();
+	        	zipOutputStream.putNextEntry(new ZipEntry(new StringBuffer().append(voiceFile.getName()).toString()));   
+	        	int len = 0 ;
+	        	byte[] data = new byte[1024] ;
+	        	while((len = input.read(data)) > 0) {
+	        		zipOutputStream.write(data , 0 , len);
+	        	}
 	        } catch (IOException e) {    
 	            e.printStackTrace();  
 	        } finally {    
-	            out.close();    
-	            if(byteArrayOutputStream!=null){
-	            	byteArrayOutputStream.close() ;
+	            if(input!=null) {
+	            	input.close();
 	            }
-	        }
-	        if(byteArrayOutputStream!=null){
-	        	output.write(byteArrayOutputStream.toByteArray()) ;
 	        }
 		}
 	}
