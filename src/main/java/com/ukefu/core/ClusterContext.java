@@ -15,6 +15,9 @@ public class ClusterContext implements java.io.Serializable{
 	private boolean master = false ;
 	private String host ;
 	private int port ;
+	private String id ;
+	private long start ;
+	
 	
 	public static ClusterContext getInstance() {
 		return instance ;
@@ -38,5 +41,21 @@ public class ClusterContext implements java.io.Serializable{
 	}
 	public boolean isMaster() {
 		return master;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public long getStart() {
+		return start;
+	}
+
+	public void setStart(long start) {
+		this.start = start;
 	}
 }
