@@ -90,7 +90,7 @@ public class ApiIMController extends Handler{
 	@Menu(type = "apps" , subtype = "webim" , access = true)
 	@ApiOperation("获取在线客服会话ID")
     public ResponseEntity<RestResult> session(HttpServletRequest request) {
-        return new ResponseEntity<>(new RestResult(RestResultType.OK, request.getSession().getId()), HttpStatus.OK);
+        return new ResponseEntity<>(new RestResult(RestResultType.OK, UKTools.getContextID(request.getSession().getId()) ), HttpStatus.OK);
     }
 	
 
