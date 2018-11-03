@@ -176,6 +176,13 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>{
 	private String username;
 	private String organ;
 	
+	private int trans;		//是否语音转写（0未转写1已转写）
+	private Date transbegin;//语音转写开始时间
+	private Date transend;	//语音转写结束时间
+	private String transtime;//语音转写用时
+	private String transtatus;//语音转写状态
+	private int transcost;	  //语音转写费用
+	
 
 	public String getUsername() {
 		return username;
@@ -794,5 +801,41 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>{
 	}
 	public void setQualityfilterid(String qualityfilterid) {
 		this.qualityfilterid = qualityfilterid;
+	}
+	public int getTrans() {
+		return trans;
+	}
+	public void setTrans(int trans) {
+		this.trans = trans;
+	}
+	public Date getTransbegin() {
+		return transbegin;
+	}
+	public void setTransbegin(Date transbegin) {
+		this.transbegin = transbegin;
+	}
+	public Date getTransend() {
+		return transend;
+	}
+	public void setTransend(Date transend) {
+		this.transend = transend;
+	}
+	public String getTranstime() {
+		return transtime;
+	}
+	public void setTranstime(String transtime) {
+		this.transtime = transtime;
+	}
+	public String getTranstatus() {
+		return transtatus;
+	}
+	public void setTranstatus(String transtatus) {
+		this.transtatus = transtatus;
+	}
+	public int getTranscost() {
+		return transcost;
+	}
+	public void setTranscost(int transcost) {
+		this.transcost = transcost;
 	}
 }

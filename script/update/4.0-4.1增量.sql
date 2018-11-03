@@ -350,3 +350,45 @@ ALTER TABLE uk_qc_result ADD isimcom int(11) DEFAULT '0' COMMENT '是否有改�
 ALTER TABLE uk_qc_result ADD isrmk int(11) DEFAULT '0' COMMENT '质检时是否有备注（1是/0否）';
 ALTER TABLE uk_qc_result ADD isitemrmk int(11) DEFAULT '0' COMMENT '质检项是否能填备注（1是/0否）';
 ALTER TABLE uk_qc_result ADD isitemdir int(11) DEFAULT '0' COMMENT '质检项是否有说明（1是/0否）';
+
+CREATE TABLE `uk_voice_transcription` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `callid` text NOT NULL COMMENT '通话记录ID',
+  `recordfile` text COMMENT '录音文件名',
+  `bg` varchar(50) DEFAULT NULL COMMENT '名称',
+  `ed` varchar(50) DEFAULT NULL COMMENT '代码',
+  `onebest` text COMMENT '代码',
+  `speaker` varchar(50) DEFAULT NULL COMMENT '代码',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `organ` varchar(32) DEFAULT NULL COMMENT '企业ID',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='录音转写表';
+
+CREATE TABLE `uk_qc_config` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `phonetic` tinyint(4) DEFAULT '0' COMMENT '是否开启语音转写（0关闭1打开）',
+  `engine` varchar(50) DEFAULT NULL COMMENT '转写引擎',
+  `appid` varchar(50) DEFAULT NULL COMMENT '引擎的 AppId',
+  `secretkey` varchar(50) DEFAULT NULL COMMENT '引擎的 secret_key',
+  `lfasrhost` text COMMENT '引擎的 api接口网址',
+  `filepiecesize` varchar(50) DEFAULT NULL COMMENT '引擎的上传录音文件最大尺寸',
+  `storepath` text COMMENT '引擎的转写结果保存位置',
+  `maxthreads` int(11) DEFAULT '0' COMMENT '最大线程数',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `organ` varchar(32) DEFAULT NULL COMMENT '企业ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='质监系统 - 配置表';
+
+
+ALTER TABLE uk_callcenter_event ADD transbegin datetime DEFAULT NULL COMMENT '语音转写开始时间';
+ALTER TABLE uk_callcenter_event ADD transend datetime DEFAULT NULL COMMENT '语音转写结束时间';
+ALTER TABLE uk_callcenter_event ADD transtime varchar(32) DEFAULT NULL COMMENT '语音转写用时';
+ALTER TABLE uk_callcenter_event ADD trans tinyint(4) DEFAULT '0' COMMENT '是否语音转写（0未转写1已转写）';
+ALTER TABLE uk_callcenter_event ADD transtatus varchar(32) DEFAULT NULL COMMENT '语音转写状态';
+ALTER TABLE uk_callcenter_event ADD transcost tinyint(4) DEFAULT '0' COMMENT '语音转写费用';
