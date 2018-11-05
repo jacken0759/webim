@@ -394,9 +394,9 @@ ALTER TABLE uk_callcenter_event ADD transtatus varchar(32) DEFAULT NULL COMMENT 
 ALTER TABLE uk_callcenter_event ADD transcost tinyint(4) DEFAULT '0' COMMENT '语音转写费用';
 ALTER TABLE uk_callcenter_event ADD engine varchar(32) DEFAULT NULL COMMENT '语音转写引擎';
 
-ALTER TABLE uk_callcenter_event ADD qualitypass tinyint(4) DEFAULT NULL COMMENT '质检是否合格(默认2为未质检)';
-ALTER TABLE uk_agentservice ADD qualitypass tinyint(4) DEFAULT NULL COMMENT '质检是否合格(默认2为未质检)';
-ALTER TABLE uk_workorders ADD qualitypass tinyint(4) DEFAULT NULL COMMENT '质检是否合格(默认2为未质检)';
+ALTER TABLE uk_callcenter_event ADD qualitypass tinyint(4) DEFAULT NULL COMMENT '质检是否合格(默认为未质检)';
+ALTER TABLE uk_agentservice ADD qualitypass tinyint(4) DEFAULT NULL COMMENT '质检是否合格(默认为未质检)';
+ALTER TABLE uk_workorders ADD qualitypass tinyint(4) DEFAULT NULL COMMENT '质检是否合格(默认为未质检)';
 
 ALTER TABLE uk_qc_mission_his ADD qualitypass tinyint(4) DEFAULT NULL COMMENT '质检是否合格(默认为未质检)';
 ALTER TABLE uk_qc_mission_his ADD qualityappeal tinyint(4) DEFAULT NULL COMMENT '质检是否申诉过(默认为未质检)';
