@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.ukefu.webim.web.model.OnlineUser;
-import com.ukefu.webim.web.model.QualityMissionHis;
 
 public abstract interface OnlineUserRepository extends JpaRepository<OnlineUser, String> {
 	public abstract OnlineUser findBySessionidAndOrgi(String paramString, String orgi);
@@ -158,10 +157,27 @@ public abstract interface OnlineUserRepository extends JpaRepository<OnlineUser,
 	@Query("select count(id) from QualityMissionHis where orgi = ?1 and qualityuser = ?2 and qualityappeal = ?3 and qualityarbitrate = ?4")
 	Long countByQualityuserAndQualityappealAndQualityarbitrateFromQualityMissionHis(String orgi, String qualityuser,int qualityappeal,int qualityarbitrate);
 	
+	@Query("select qualityorgan,count(id) as misscount from QualityMissionHis  where orgi = ?1  GROUP BY qualityorgan ")
+	List<Object> findGroupbyOrganFromQualityMissionHis(String orgi);
+	
 	@Query("select qualityorgan,count(id) as passcount  from QualityMissionHis  where orgi = ?1 and qualitypass = ?2 GROUP BY qualityorgan ")
 	List<Object> findByQualitypassGroupbyOrganFromQualityMissionHis(String orgi, int qualitypass);
 	
 	@Query("select qualityorgan,count(id) as passcount  from QualityMissionHis  where orgi = ?1 and qualitypass = ?2 and qualitytype=?3 GROUP BY qualityorgan ")
 	List<Object> findByQualitypassGroupbyOrganFromQualityMissionHis(String orgi, int qualitypass,String qualitytype);
+	
+	//计算每小组平均质检效率
+	@Query("select qualityorgan,AVG(date_format(timediff(qualitytime,createtime),'%s')+date_format(timediff(qualitytime,createtime),'%i')*60) as efficiency  from QualityMissionHis  where orgi = ?1  GROUP BY qualityorgan")
+	List<Object> avgByQuanlitytimebyOrganFromQualityMissionHis(String orgi);
+	
+	
+	@Query("select qualityorgan,count(id) as misscount from QualityMissionHis  where orgi = ?1 and qualitystatus=?2  GROUP BY qualityorgan ")
+	List<Object> findByQualitystatusGroupbyOrganFromQualityMissionHis(String orgi,String qualitystatus);
+	
+	@Query("select qualityorgan,count(id) as misscount from QualityMissionHis  where orgi = ?1 and qualityappeal=?2  GROUP BY qualityorgan ")
+	List<Object> findByQualityappealGroupbyOrganFromQualityMissionHis(String orgi,int qualityappeal);
+	
+	@Query("select qualityorgan,count(id) as misscount from QualityMissionHis  where orgi = ?1 and qualityarbitrate=?2  GROUP BY qualityorgan ")
+	List<Object> findByQualityarbitrateGroupbyOrganFromQualityMissionHis(String orgi,int qualityarbitrate);
 	
 }
