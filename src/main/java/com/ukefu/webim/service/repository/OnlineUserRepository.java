@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.ukefu.webim.web.model.OnlineUser;
+import com.ukefu.webim.web.model.QualityMissionHis;
 
 public abstract interface OnlineUserRepository extends JpaRepository<OnlineUser, String> {
 	public abstract OnlineUser findBySessionidAndOrgi(String paramString, String orgi);
@@ -135,24 +136,32 @@ public abstract interface OnlineUserRepository extends JpaRepository<OnlineUser,
 	@Query("select AVG(ringduration) from StatusEvent where orgi = ?1 and (ani = ?2 or called = ?3) and ?4 < createtime and createtime < ?5")
 	Long countByToadyExtRingFromStatusEvent(String orgi, String ani, String called, Date begin, Date end);
 	
-	@Query("select count(id) from StatusEvent where  qualitydisuser = ?1 and qualitystatus = ?2 ")
-	Long countByQualitydisuserAndQualitystatusFromStatusEvent(String qualitydisuser,String qualitystatus);
+	//根据质检人和质检状态
+	@Query("select count(id) from QualityMissionHis where orgi = ?1 and qualityuser = ?2 and qualitystatus = ?3")
+	Long countByQualityuserAndQualitystatusFromQualityMissionHis(String orgi, String qualityuser, String qualitystatus);
 	
-	@Query("select count(id) from AgentService where orgi = ?1 and qualitydisuser = ?2 and qualitystatus = ?3 ")
-	Long countByQualitydisuserAndQualitystatusFromAgentService(String orgi ,String qualitydisuser,String qualitystatus);
+	@Query("select count(id) from QualityMissionHis where orgi = ?1 and qualityuser = ?2")
+	Long countByQualityuserFromQualityMissionHis(String orgi, String qualityuser);
 	
-	@Query("select count(id) from StatusEvent where  qualitydisuser = ?1 ")
-	Long countByQualitydisuserFromStatusEvent(String qualitydisuser);
+	//根据分配质检人和质检状态
+	@Query("select count(id) from QualityMissionHis where orgi = ?1 and qualitydisuser = ?2 and qualitystatus = ?3")
+	Long countByQualitydisuserAndQualitystatusFromQualityMissionHis(String orgi, String qualitydisuser, String qualitystatus);
 	
-	@Query("select count(id) from AgentService where orgi = ?1 and qualitydisuser = ?2 ")
-	Long countByQualitydisuserFromAgentService(String orgi ,String qualitydisuser);
+	@Query("select count(id) from QualityMissionHis where orgi = ?1 and qualitydisuser = ?2")
+	Long countByQualitydisuserFromQualityMissionHis(String orgi, String qualitydisuser);
 	
-	@Query("select count(id) from StatusEvent where  qualityuser = ?1 and qualitypass =?2")
-	Long countByQualityuserAndQualitypassFromStatusEvent(String qualityuser,boolean qualitypass);
+	//根据质检人和质检是否合格
+	@Query("select count(id) from QualityMissionHis where orgi = ?1 and qualityuser = ?2 and qualitypass = ?3")
+	Long countByQualityuserAndQualitypassFromQualityMissionHis(String orgi, String qualityuser,int qualitypass);
 	
-	@Query("select count(id) from AgentService where orgi = ?1 and qualityuser = ?2 and qualitypass =?3")
-	Long countByQualityuserAndQualitypassFromAgentService(String orgi ,String qualityuser,boolean qualitypass);
+	//根据质检人 、质检是否申诉、 质检是否仲裁
+	@Query("select count(id) from QualityMissionHis where orgi = ?1 and qualityuser = ?2 and qualityappeal = ?3 and qualityarbitrate = ?4")
+	Long countByQualityuserAndQualityappealAndQualityarbitrateFromQualityMissionHis(String orgi, String qualityuser,int qualityappeal,int qualityarbitrate);
 	
+	@Query("select qualityorgan,count(id) as passcount  from QualityMissionHis  where orgi = ?1 and qualitypass = ?2 GROUP BY qualityorgan ")
+	List<Object> findByQualitypassGroupbyOrganFromQualityMissionHis(String orgi, int qualitypass);
 	
+	@Query("select qualityorgan,count(id) as passcount  from QualityMissionHis  where orgi = ?1 and qualitypass = ?2 and qualitytype=?3 GROUP BY qualityorgan ")
+	List<Object> findByQualitypassGroupbyOrganFromQualityMissionHis(String orgi, int qualitypass,String qualitytype);
 	
 }

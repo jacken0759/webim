@@ -26,9 +26,5 @@ public interface WorkOrdersEsCommonRepository {
 	
 	public List<WorkOrders> findByOrgiAndQualitydisorgan(BoolQueryBuilder boolQueryBuilder) ;
 	
-	public List<WorkOrders> findByOrgiAndQualitydisuser(String orgi , String qualitydisuser) ;
 	
-	public List<WorkOrders> findByOrgiAndQualitystatusAndQualitydisuser(String orgi ,String qualitystatus, String qualitydisuser) ;
-	
-	public List<WorkOrders> findByOrgiAndQualityuserAndQualitypass(String orgi ,String qualityuser, boolean qualitypass) ;
 }
