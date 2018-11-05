@@ -135,4 +135,24 @@ public abstract interface OnlineUserRepository extends JpaRepository<OnlineUser,
 	@Query("select AVG(ringduration) from StatusEvent where orgi = ?1 and (ani = ?2 or called = ?3) and ?4 < createtime and createtime < ?5")
 	Long countByToadyExtRingFromStatusEvent(String orgi, String ani, String called, Date begin, Date end);
 	
+	@Query("select count(id) from StatusEvent where  qualitydisuser = ?1 and qualitystatus = ?2 ")
+	Long countByQualitydisuserAndQualitystatusFromStatusEvent(String qualitydisuser,String qualitystatus);
+	
+	@Query("select count(id) from AgentService where orgi = ?1 and qualitydisuser = ?2 and qualitystatus = ?3 ")
+	Long countByQualitydisuserAndQualitystatusFromAgentService(String orgi ,String qualitydisuser,String qualitystatus);
+	
+	@Query("select count(id) from StatusEvent where  qualitydisuser = ?1 ")
+	Long countByQualitydisuserFromStatusEvent(String qualitydisuser);
+	
+	@Query("select count(id) from AgentService where orgi = ?1 and qualitydisuser = ?2 ")
+	Long countByQualitydisuserFromAgentService(String orgi ,String qualitydisuser);
+	
+	@Query("select count(id) from StatusEvent where  qualityuser = ?1 and qualitypass =?2")
+	Long countByQualityuserAndQualitypassFromStatusEvent(String qualityuser,boolean qualitypass);
+	
+	@Query("select count(id) from AgentService where orgi = ?1 and qualityuser = ?2 and qualitypass =?3")
+	Long countByQualityuserAndQualitypassFromAgentService(String orgi ,String qualityuser,boolean qualitypass);
+	
+	
+	
 }

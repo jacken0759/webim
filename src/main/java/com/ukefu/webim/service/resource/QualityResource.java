@@ -303,7 +303,7 @@ public class QualityResource extends Resource{
 					qcMissionHis.setQualitytime(new Date());
 					qcMissionHis.setAssuser(this.jobDetail.getCreater());
 					qcMissionHis.setTemplateid(this.jobDetail.getTemplateid());
-					qcMissionHis.setQualitystatus(UKDataContext.QualityStatus.DIS.toString());
+					qcMissionHis.setQualitystatus(UKDataContext.QualityStatus.NO.toString());
 					qcMissionHis.setOrgi(this.jobDetail.getOrgi());
 					qcMissionHis.setActid(this.jobDetail.getId());
 					qcMissionHis.setOrgan(this.jobDetail.getOrgan());

@@ -50,4 +50,6 @@ public interface StatusEventRepository extends JpaRepository<StatusEvent, String
 	public StatusEvent findByIdAndOrgi(String id, String orgi);
 	
 	public List<StatusEvent> findAll(Specification<StatusEvent> spec);
+	
+	public List<StatusEvent> findByQualitydisuserAndQualitystatus(String qualitydisuser,String qualitystatus) ;
 }

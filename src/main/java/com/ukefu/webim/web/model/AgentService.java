@@ -145,6 +145,8 @@ public class AgentService implements Serializable {
 	private String agentservice;
 	@Transient
 	private boolean agentTip = false;
+	
+	private boolean qualitypass;//质检是否合格
 
 	public String getAgentno() {
 		return this.agentno;
@@ -949,4 +951,13 @@ public class AgentService implements Serializable {
 	public void setQualityfilterid(String qualityfilterid) {
 		this.qualityfilterid = qualityfilterid;
 	}
+
+	public boolean isQualitypass() {
+		return qualitypass;
+	}
+
+	public void setQualitypass(boolean qualitypass) {
+		this.qualitypass = qualitypass;
+	}
+	
 }
