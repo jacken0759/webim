@@ -482,7 +482,7 @@ public class SearchTools {
 				}
 				list.add(in) ;
 				
-				if(qcFormFilterItemList.size() > 0) {
+				if(qcFormFilterItemList.size() > 0 && qcFormFilterItemList.get(0).getField() != null) {
 					try {
 						for(QualityFormFilterItem formFilterItem : qcFormFilterItemList) {
 							if(formFilterItem.getField().equals("q")) {
@@ -600,15 +600,15 @@ public class SearchTools {
 		if(boolquery != null) {
 			boolQueryBuilder.must(boolquery);
 		}
-		
-		BoolQueryBuilder orBuilder = new BoolQueryBuilder();
-		int orNums = 0 ;
-		for(QualityFormFilterItem formFilterItem : qcFormFilterItemList) {
-			QueryBuilder tempQueryBuilder = null ;
-			if(formFilterItem.getField().equals("q")) {
-				tempQueryBuilder = new QueryStringQueryBuilder(formFilterItem.getValue()).defaultOperator(Operator.AND) ;
-			}else {
-				switch(formFilterItem.getCond()) {
+		if(qcFormFilterItemList.size() > 0 && qcFormFilterItemList.get(0).getField() != null) {
+			BoolQueryBuilder orBuilder = new BoolQueryBuilder();
+			int orNums = 0 ;
+			for(QualityFormFilterItem formFilterItem : qcFormFilterItemList) {
+				QueryBuilder tempQueryBuilder = null ;
+				if(formFilterItem.getField().equals("q")) {
+					tempQueryBuilder = new QueryStringQueryBuilder(formFilterItem.getValue()).defaultOperator(Operator.AND) ;
+				}else {
+					switch(formFilterItem.getCond()) {
 					case "01" : 
 						tempQueryBuilder = rangeQuery(formFilterItem.getField()).from(formFilterItem.getValue()).includeLower(false) ;
 						break ;
@@ -632,25 +632,26 @@ public class SearchTools {
 						break ;
 					default :
 						break ;
+					}
+				}
+				if("AND".equalsIgnoreCase(formFilterItem.getComp())) {
+					if("06".equals(formFilterItem.getCond())) {
+						boolQueryBuilder.mustNot(tempQueryBuilder) ;
+					}else {
+						boolQueryBuilder.must(tempQueryBuilder) ;
+					}
+				}else {
+					orNums ++ ;
+					if("06".equals(formFilterItem.getCond())) {
+						orBuilder.mustNot(tempQueryBuilder) ;
+					}else {
+						orBuilder.should(tempQueryBuilder) ;
+					}
 				}
 			}
-			if("AND".equalsIgnoreCase(formFilterItem.getComp())) {
-				if("06".equals(formFilterItem.getCond())) {
-					boolQueryBuilder.mustNot(tempQueryBuilder) ;
-				}else {
-					boolQueryBuilder.must(tempQueryBuilder) ;
-				}
-			}else {
-				orNums ++ ;
-				if("06".equals(formFilterItem.getCond())) {
-					orBuilder.mustNot(tempQueryBuilder) ;
-				}else {
-					orBuilder.should(tempQueryBuilder) ;
-				}
+			if(orNums > 0) {
+				boolQueryBuilder.must(orBuilder) ;
 			}
-		}
-		if(orNums > 0) {
-			boolQueryBuilder.must(orBuilder) ;
 		}
 		Page<WorkOrders> page = workOrdersRes.findById(boolQueryBuilder, false, orgi,new PageRequest(0, 10000));
 		return page.getContent();
@@ -686,7 +687,7 @@ public class SearchTools {
 				}
 				list.add(in) ;
 				
-				if(qcFormFilterItemList.size() > 0) {
+				if(qcFormFilterItemList.size() > 0 && qcFormFilterItemList.get(0).getField() != null) {
 					try {
 						for(QualityFormFilterItem formFilterItem : qcFormFilterItemList) {
 							if(formFilterItem.getField().equals("q")) {
