@@ -40,10 +40,12 @@ DEMO访问地址：[优客服（UCKeFu-WebIM）](http://uk.ukewo.cn/) ， 访问
 
 2、mvn install:install-file -Dfile=src/main/resources/WEB-INF/lib/mondrian-3.7.0.jar -DgroupId=mondrian -DartifactId=mondrian -Dversion=3.7.0 -Dpackaging=jar
 
-3、执行添加 阿里云jar 
+3、执行添加 阿里云依赖包
+
 mvn install:install-file -Dfile=src/main/resources/WEB-INF/lib/aliyun-java-sdk-core-3.3.1.jar -DgroupId=com.aliyun -DartifactId=aliyun-java-sdk-core -Dversion=3.3.1 -Dpackaging=jar
 
 4、阿里大鱼jar
+
 mvn install:install-file -Dfile=src/main/resources/WEB-INF/lib/aliyun-java-sdk-dysmsapi-1.0.0.jar -DgroupId=com.aliyun -DartifactId=aliyun-java-sdk-dysmsapi -Dversion=1.0.0 -Dpackaging=jar
  **确保两个依赖都安装成功** 
 
