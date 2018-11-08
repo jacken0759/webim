@@ -47,7 +47,7 @@ public class BatchDataProcess implements JPAProcess{
 
 	@Override
 	public void end() {
-		if(builder!=null) {
+		if(builder!=null && builder.numberOfActions() > 0) {
 			builder.setRefresh(true).execute().actionGet();
 		}
 	}

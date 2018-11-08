@@ -80,7 +80,7 @@ public class BatchResource extends Resource{
 		    	event.getDSData().getReport().setTitle(this.jobDetail.getName() + "_" + UKTools.dateFormate.format(new Date()));
 		    	event.getDSData().setProcess(new BatchDataProcess(metadataTable, esDataExchange));
 	    		process = new DatabaseImportProecess(event) ;		//启动导入任务
-			}else if(tempFile.exists()) {
+			}else if(tempFile!=null && tempFile.exists()) {
 				String fileName = "callout/batch/"+UKTools.getUUID() + tempFile.getName().substring(tempFile.getName().lastIndexOf(".")) ;
 		    	File excelFile = new File(path , fileName) ;
 		    	if(!excelFile.getParentFile().exists()){
