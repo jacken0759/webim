@@ -401,3 +401,5 @@ ALTER TABLE uk_workorders ADD qualitypass tinyint(4) DEFAULT '2' COMMENT '质检
 ALTER TABLE uk_qc_mission_his ADD qualitypass tinyint(4) DEFAULT '2' COMMENT '质检是否合格(默认2为未质检)';
 ALTER TABLE uk_qc_mission_his ADD qualityappeal tinyint(4) DEFAULT '2' COMMENT '质检是否申诉过(默认2为未质检)';
 ALTER TABLE uk_qc_mission_his ADD qualityarbitrate tinyint(4) DEFAULT '2' COMMENT '质检是否仲裁过(默认2为未质检)';
+
+ALTER TABLE uk_qc_config ADD archivetime int(11) DEFAULT '3' COMMENT '质检自动归档时间，默认3天';
