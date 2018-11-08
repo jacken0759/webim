@@ -56,7 +56,9 @@ public class QualityMissionHis implements Serializable{
 	private String rejectremarks; //驳回备注
 	private String resultid; //结果id
 
-	
+	private int qualitypass=2; //质检是否合格(默认2为未质检)'
+	private int qualityappeal=2; //质检是否申诉过(默认2为未质检)
+	private int qualityarbitrate=2; //质检是否仲裁过(默认2为未质检)
 	
 	@Id
 	@Column(length = 32)
@@ -218,6 +220,25 @@ public class QualityMissionHis implements Serializable{
 	public void setRejectremarks(String rejectremarks) {
 		this.rejectremarks = rejectremarks;
 	}
+	public int getQualitypass() {
+		return qualitypass;
+	}
+	public void setQualitypass(int qualitypass) {
+		this.qualitypass = qualitypass;
+	}
+	public int getQualityappeal() {
+		return qualityappeal;
+	}
+	public void setQualityappeal(int qualityappeal) {
+		this.qualityappeal = qualityappeal;
+	}
+	public int getQualityarbitrate() {
+		return qualityarbitrate;
+	}
+	public void setQualityarbitrate(int qualityarbitrate) {
+		this.qualityarbitrate = qualityarbitrate;
+	}
+	
 	
 	
 }

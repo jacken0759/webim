@@ -39,6 +39,8 @@ public class QualityConfig implements java.io.Serializable{
 
 	private String orgi ;
 	
+	private int archivetime ;//质检自动归档时间
+	
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -126,6 +128,12 @@ public class QualityConfig implements java.io.Serializable{
 	}
 	public void setOrgi(String orgi) {
 		this.orgi = orgi;
+	}
+	public int getArchivetime() {
+		return archivetime;
+	}
+	public void setArchivetime(int archivetime) {
+		this.archivetime = archivetime;
 	}
 	
 }

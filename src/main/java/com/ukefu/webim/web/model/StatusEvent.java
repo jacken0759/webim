@@ -183,6 +183,8 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>{
 	private String transtatus;//语音转写状态
 	private int transcost;	  //语音转写费用
 	
+	private int qualitypass=2;//质检是否合格(默认2为未质检)
+	
 
 	public String getUsername() {
 		return username;
@@ -838,4 +840,11 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>{
 	public void setTranscost(int transcost) {
 		this.transcost = transcost;
 	}
+	public int getQualitypass() {
+		return qualitypass;
+	}
+	public void setQualitypass(int qualitypass) {
+		this.qualitypass = qualitypass;
+	}
+	
 }

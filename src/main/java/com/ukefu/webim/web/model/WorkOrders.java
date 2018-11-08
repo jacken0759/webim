@@ -132,6 +132,8 @@ public class WorkOrders extends ESBean implements UKAgg{
 	private String qualityactid;	//质检活动id
 	private String qualityfilterid;	//质检筛选表单id
 	
+	private int qualitypass=2;//质检是否合格(默认2为未质检)
+	
 	/**
 	 * @return the id
 	 */
@@ -677,5 +679,14 @@ public class WorkOrders extends ESBean implements UKAgg{
 	public void setQualityfilterid(String qualityfilterid) {
 		this.qualityfilterid = qualityfilterid;
 	}
+
+	public int getQualitypass() {
+		return qualitypass;
+	}
+
+	public void setQualitypass(int qualitypass) {
+		this.qualitypass = qualitypass;
+	}
+
 	
 }

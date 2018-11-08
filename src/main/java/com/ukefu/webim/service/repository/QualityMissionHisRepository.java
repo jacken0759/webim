@@ -20,4 +20,6 @@ public abstract interface QualityMissionHisRepository  extends JpaRepository<Qua
 	public abstract List<QualityMissionHis> findByFilteridAndOrgi(String filterid, String orgi);
 	
 	public abstract List<QualityMissionHis> findByTaskidAndOrgi(String taskid, String orgi);
+	
+	public abstract List<QualityMissionHis> findByQualitypassAndOrgi(String qualitypass, String orgi);
 }
