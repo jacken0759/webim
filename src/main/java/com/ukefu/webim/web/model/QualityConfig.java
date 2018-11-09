@@ -22,7 +22,7 @@ public class QualityConfig implements java.io.Serializable{
 	
 	private String id ;
 	
-	private int phonetic ;			//是否开启语音转写（0关闭1打开）
+	private boolean phonetic ;			//是否开启语音转写（0关闭1打开）
 	private String engine ;			//语音转写引擎（百度/讯飞）
 	private String appid ;			//引擎的 App_Id
 	private String secretkey ;		//引擎的 secret_key
@@ -40,6 +40,7 @@ public class QualityConfig implements java.io.Serializable{
 	private String orgi ;
 	
 	private int archivetime ;//质检自动归档时间
+	private int aplarchivetime ;//已申诉质检自动归档时间
 	
 	@Id
 	@Column(length = 32)
@@ -51,10 +52,10 @@ public class QualityConfig implements java.io.Serializable{
 	public void setId(String id) {
 		this.id = id;
 	}
-	public int getPhonetic() {
+	public boolean isPhonetic() {
 		return phonetic;
 	}
-	public void setPhonetic(int phonetic) {
+	public void setPhonetic(boolean phonetic) {
 		this.phonetic = phonetic;
 	}
 	public String getEngine() {
@@ -134,6 +135,12 @@ public class QualityConfig implements java.io.Serializable{
 	}
 	public void setArchivetime(int archivetime) {
 		this.archivetime = archivetime;
+	}
+	public int getAplarchivetime() {
+		return aplarchivetime;
+	}
+	public void setAplarchivetime(int aplarchivetime) {
+		this.aplarchivetime = aplarchivetime;
 	}
 	
 }

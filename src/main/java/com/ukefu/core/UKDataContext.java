@@ -81,6 +81,8 @@ public class UKDataContext {
 	
 	public static final String SYSTEM_CACHE_AI_CONFIG = "ai_config";
 	
+	public static final String SYSTEM_CACHE_QUALITY_CONFIG = "quality_config";
+	
 	public static final String SYSTEM_CACHE_CALLOUT_CONFIG = "callout_config";
 	
 	public static String SYSTEM_ORGI = "ukewo" ;
@@ -97,6 +99,8 @@ public class UKDataContext {
 	private static ElasticsearchTemplate templet ;
 	
 	public static BlockingQueue<Log> tempLogQueue = new LinkedBlockingQueue<Log>();
+	
+	public static final int QUALITY_ARCHIVE_DEFAULT_DAY = 3 ;
 	
 	static{
 		ConvertUtils.register(new DateConverter(), java.util.Date.class); 
