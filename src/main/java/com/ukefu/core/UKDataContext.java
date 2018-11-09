@@ -77,6 +77,8 @@ public class UKDataContext {
 	
 	public static final String SYSTEM_CACHE_AI_CONFIG = "ai_config";
 	
+	public static final String SYSTEM_CACHE_QUALITY_CONFIG = "quality_config";
+	
 	public static final String SYSTEM_CACHE_CALLOUT_CONFIG = "callout_config";
 	
 	public static String SYSTEM_ORGI = "ukewo" ;
