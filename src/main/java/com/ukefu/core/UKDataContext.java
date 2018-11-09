@@ -96,6 +96,8 @@ public class UKDataContext {
 	
 	public static BlockingQueue<Log> tempLogQueue = new LinkedBlockingQueue<Log>();
 	
+	public static final int QUALITY_ARCHIVE_DEFAULT_DAY = 3 ;
+	
 	static{
 		ConvertUtils.register(new DateConverter(), java.util.Date.class); 
 		model.put("report", true) ;
