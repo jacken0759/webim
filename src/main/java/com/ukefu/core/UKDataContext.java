@@ -41,6 +41,10 @@ public class UKDataContext {
 	public static final String UKEFU_SYSTEM_PRIVATEFIELD = "PRIVATEFIELD" ;
 	
 	public static final String SYSTEM_INDEX = "uckefu" ;
+	
+	public static final String CALLOUT_INDEX = "uckefucallout" ;
+	
+	
 	public static final String UKEFU_SYSTEM_SECFIELD = "ukefu_sec_field" ;
 	
 	

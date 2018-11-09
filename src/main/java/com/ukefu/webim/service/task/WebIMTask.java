@@ -186,7 +186,7 @@ public class WebIMTask {
 						OnlineUser onlineUser = (OnlineUser)data ;
 						if(onlineUser.getUpdatetime()!=null && (System.currentTimeMillis() - onlineUser.getUpdatetime().getTime()) < 15000){
 							CousultInvite invite = OnlineUserUtils.cousult(onlineUser.getAppid(), onlineUser.getOrgi(), consultInviteRes) ;
-							if(!invite.isTraceuser()){
+							if(invite.isTraceuser()){
 								OnlineUserRepository service = (OnlineUserRepository) UKDataContext.getContext().getBean(OnlineUserRepository.class);
 								List<OnlineUser> onlineUserList = service.findByUseridAndOrgi(onlineUser.getUserid() , onlineUser.getOrgi());
 								if(onlineUserList .size() > 1){

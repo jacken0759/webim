@@ -780,7 +780,7 @@ public class OnlineUserUtils {
 		agentUser.setOwner(eventid); //智能IVR的 EventID
 		
 		CousultInvite invite = OnlineUserUtils.cousult(appid, orgi, UKDataContext.getContext().getBean(ConsultInviteRepository.class)) ;
-		if(invite!=null && !invite.isTraceuser()){
+		if(invite!=null && invite.isTraceuser()){
 			OnlineUser onlineUser = (OnlineUser) CacheHelper.getOnlineUserCacheBean().getCacheObject(user, orgi) ;
 			if(onlineUser!=null){
 				OnlineUserRepository onlineUserRes = UKDataContext.getContext().getBean(OnlineUserRepository.class) ;

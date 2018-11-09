@@ -60,7 +60,6 @@ public class ESTools {
 			builder.endObject() ;
 		}
 		builder.endObject().endObject().endObject();
-        UKDataContext.getTemplet().putMapping(UKDataContext.SYSTEM_INDEX, tb.getTablename(), builder);
-
+        UKDataContext.getTemplet().putMapping(UKDataContext.CALLOUT_INDEX, tb.getTablename(), builder);
 	}
 }

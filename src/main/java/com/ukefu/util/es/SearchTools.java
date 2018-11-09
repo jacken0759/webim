@@ -346,7 +346,7 @@ public class SearchTools {
 	 */
 	private static PageImpl<UKDataBean> search(BoolQueryBuilder queryBuilder , MetadataTable metadataTable , boolean loadRef , int p, int ps , String sort){
 		ESDataExchangeImpl esDataExchange = UKDataContext.getContext().getBean(ESDataExchangeImpl.class);
-		return esDataExchange.findPageResult(queryBuilder, UKDataContext.SYSTEM_INDEX, metadataTable, new PageRequest(p, ps , Sort.Direction.ASC, sort) , loadRef) ;
+		return esDataExchange.findPageResult(queryBuilder, UKDataContext.CALLOUT_INDEX, metadataTable, new PageRequest(p, ps , Sort.Direction.ASC, sort) , loadRef) ;
 	}
 	
 	/**

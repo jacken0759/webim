@@ -87,11 +87,11 @@ public class ESDataExchangeImpl{
 			dataBean.setId((String) dataBean.getValues().get("id"));
 		}
 		if(!StringUtils.isBlank(dataBean.getType())) {
-			indexRequestBuilder = UKDataContext.getTemplet().getClient().prepareIndex(UKDataContext.SYSTEM_INDEX,
+			indexRequestBuilder = UKDataContext.getTemplet().getClient().prepareIndex(UKDataContext.CALLOUT_INDEX,
 					dataBean.getType(), dataBean.getId())
 			.setSource(processValues(dataBean));
 		}else {
-			indexRequestBuilder = UKDataContext.getTemplet().getClient().prepareIndex(UKDataContext.SYSTEM_INDEX,
+			indexRequestBuilder = UKDataContext.getTemplet().getClient().prepareIndex(UKDataContext.CALLOUT_INDEX,
 						dataBean.getTable().getTablename(), dataBean.getId())
 				.setSource(processValues(dataBean));
 		}
@@ -124,7 +124,7 @@ public class ESDataExchangeImpl{
 
 	public void deleteIObject(UKDataBean dataBean ) throws Exception {
 		if(dataBean.getTable()!=null){
-			UKDataContext.getTemplet().getClient().prepareDelete(UKDataContext.SYSTEM_INDEX, dataBean.getTable().getTablename(), dataBean.getId()).setRefresh(true).execute().actionGet();
+			UKDataContext.getTemplet().getClient().prepareDelete(UKDataContext.CALLOUT_INDEX, dataBean.getTable().getTablename(), dataBean.getId()).setRefresh(true).execute().actionGet();
 		}
 	}
 	/**
@@ -136,14 +136,14 @@ public class ESDataExchangeImpl{
 	 */
 	public void deleteByCon(QueryBuilder query ,String type) throws Exception {
 		BulkRequestBuilder bulkRequest = UKDataContext.getTemplet().getClient().prepareBulk();  
-	    SearchResponse response = UKDataContext.getTemplet().getClient().prepareSearch(UKDataContext.SYSTEM_INDEX).setTypes(type)  
+	    SearchResponse response = UKDataContext.getTemplet().getClient().prepareSearch(UKDataContext.CALLOUT_INDEX).setTypes(type)  
 	            .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)  
 	            .setQuery(query)  
 	            .setFrom(0).setSize(10000).setExplain(true).execute().actionGet();  
 	    if(response.getHits().getTotalHits() > 0) {
 		    for(SearchHit hit : response.getHits()){  
 		        String id = hit.getId();  
-		        bulkRequest.add(UKDataContext.getTemplet().getClient().prepareDelete(UKDataContext.SYSTEM_INDEX, type, id).request());  
+		        bulkRequest.add(UKDataContext.getTemplet().getClient().prepareDelete(UKDataContext.CALLOUT_INDEX, type, id).request());  
 		    }  
 		    bulkRequest.get();  
 	    }
@@ -152,7 +152,7 @@ public class ESDataExchangeImpl{
 	public void deleteById(String type , String id){
 		if(!StringUtils.isBlank(type) && !StringUtils.isBlank(id)){
 			UKDataContext.getTemplet().getClient()
-			.prepareDelete(UKDataContext.SYSTEM_INDEX, type, id).execute().actionGet();
+			.prepareDelete(UKDataContext.CALLOUT_INDEX, type, id).execute().actionGet();
 		}
 	}
 	
@@ -160,7 +160,7 @@ public class ESDataExchangeImpl{
 	public UKDataBean getIObjectByPK(UKDataBean dataBean , String id) {
 		if(dataBean.getTable()!=null){
 			GetResponse getResponse = UKDataContext.getTemplet().getClient()
-					.prepareGet(UKDataContext.SYSTEM_INDEX,
+					.prepareGet(UKDataContext.CALLOUT_INDEX,
 							dataBean.getTable().getTablename(), dataBean.getId())
 					.execute().actionGet();
 			dataBean.setValues(getResponse.getSource());
@@ -176,7 +176,7 @@ public class ESDataExchangeImpl{
 		UKDataBean dataBean = new UKDataBean() ;
 		if(!StringUtils.isBlank(type)){
 			GetResponse getResponse = UKDataContext.getTemplet().getClient()
-					.prepareGet(UKDataContext.SYSTEM_INDEX,
+					.prepareGet(UKDataContext.CALLOUT_INDEX,
 							type, id)
 					.execute().actionGet();
 			dataBean.setValues(getResponse.getSource());
@@ -202,7 +202,7 @@ public class ESDataExchangeImpl{
 			}
 		}
 		UKDataContext.getTemplet().getClient()
-				.prepareUpdate(UKDataContext.SYSTEM_INDEX,
+				.prepareUpdate(UKDataContext.CALLOUT_INDEX,
 						dataBean.getTable().getTablename(), dataBean.getId()).setDoc(processValues(dataBean)).execute().actionGet();
 	}
 
@@ -226,7 +226,7 @@ public class ESDataExchangeImpl{
 	 */
 	public PageImpl<UKDataBean> findAllPageResult(QueryBuilder query,String index ,MetadataTable metadata, Pageable page , boolean loadRef , String types) {
 		List<UKDataBean> dataBeanList = new ArrayList<UKDataBean>() ;
-		SearchRequestBuilder searchBuilder = UKDataContext.getTemplet().getClient().prepareSearch(UKDataContext.SYSTEM_INDEX);
+		SearchRequestBuilder searchBuilder = UKDataContext.getTemplet().getClient().prepareSearch(UKDataContext.CALLOUT_INDEX);
 		if(!StringUtils.isBlank(types)) {
 			searchBuilder.setTypes(types) ;
 		}
@@ -338,7 +338,7 @@ public class ESDataExchangeImpl{
 	 */
 	public PageImpl<UKDataBean> findAllPageAggResult(QueryBuilder query,String aggField,Pageable page , boolean loadRef , String types) {
 		List<UKDataBean> dataBeanList = new ArrayList<UKDataBean>() ;
-		SearchRequestBuilder searchBuilder = UKDataContext.getTemplet().getClient().prepareSearch(UKDataContext.SYSTEM_INDEX);
+		SearchRequestBuilder searchBuilder = UKDataContext.getTemplet().getClient().prepareSearch(UKDataContext.CALLOUT_INDEX);
 		if(!StringUtils.isBlank(types)) {
 			searchBuilder.setTypes(types) ;
 		}
@@ -463,7 +463,7 @@ public class ESDataExchangeImpl{
 	 */
 	public PageImpl<EkmDataBean> findAllPageAggResultEkm(QueryBuilder query,Pageable page , boolean loadRef , String types) {
 		List<EkmDataBean> dataBeanList = new ArrayList<EkmDataBean>() ;
-		SearchRequestBuilder searchBuilder = UKDataContext.getTemplet().getClient().prepareSearch(UKDataContext.SYSTEM_INDEX);
+		SearchRequestBuilder searchBuilder = UKDataContext.getTemplet().getClient().prepareSearch(UKDataContext.CALLOUT_INDEX);
 		if(!StringUtils.isBlank(types)) {
 			searchBuilder.setTypes(types) ;
 		}
