@@ -85,6 +85,7 @@ import com.ukefu.webim.service.repository.AdTypeRepository;
 import com.ukefu.webim.service.repository.AiConfigRepository;
 import com.ukefu.webim.service.repository.AreaTypeRepository;
 import com.ukefu.webim.service.repository.AttachmentRepository;
+import com.ukefu.webim.service.repository.QualityConfigRepository;
 import com.ukefu.webim.service.repository.SecretRepository;
 import com.ukefu.webim.service.repository.SystemConfigRepository;
 import com.ukefu.webim.service.repository.SystemMessageRepository;
@@ -98,6 +99,7 @@ import com.ukefu.webim.web.model.AiConfig;
 import com.ukefu.webim.web.model.AttachmentFile;
 import com.ukefu.webim.web.model.JobDetail;
 import com.ukefu.webim.web.model.JobTask;
+import com.ukefu.webim.web.model.QualityConfig;
 import com.ukefu.webim.web.model.Secret;
 import com.ukefu.webim.web.model.SessionConfig;
 import com.ukefu.webim.web.model.SysDic;
@@ -1645,5 +1647,27 @@ public class UKTools {
 	            }
 	        }
 		}
+	}
+	 /**
+	 * 质检配置
+	 * @param orgi
+	 * @return
+	 */
+	public static QualityConfig initQualityConfig(String orgi){
+		QualityConfig qcConfig = (QualityConfig) CacheHelper.getSystemCacheBean().getCacheObject(UKDataContext.SYSTEM_CACHE_QUALITY_CONFIG, orgi);
+		if(UKDataContext.getContext() != null && qcConfig == null){
+			QualityConfigRepository qcConfigRepository = UKDataContext.getContext().getBean(QualityConfigRepository.class) ;
+			List<QualityConfig> qualityConList = qcConfigRepository.findByOrgi(orgi);
+			if(qualityConList.size() == 0){
+				qcConfig = new QualityConfig() ;
+				qcConfig.setOrgi(orgi);
+				qcConfig.setCreatetime(new Date());
+				qcConfigRepository.save(qcConfig);
+			}else{
+				qcConfig = qualityConList.get(0) ;
+				CacheHelper.getQcQueueCacheBean().put(UKDataContext.SYSTEM_CACHE_QUALITY_CONFIG,qcConfig, orgi) ;
+			}
+		}
+		return qcConfig ;
 	}
 }
