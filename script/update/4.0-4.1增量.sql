@@ -403,3 +403,4 @@ ALTER TABLE uk_qc_mission_his ADD qualityappeal tinyint(4) DEFAULT '2' COMMENT '
 ALTER TABLE uk_qc_mission_his ADD qualityarbitrate tinyint(4) DEFAULT '2' COMMENT '质检是否仲裁过(默认2为未质检)';
 
 ALTER TABLE uk_qc_config ADD archivetime int(11) DEFAULT '3' COMMENT '质检自动归档时间，默认3天';
+ALTER TABLE uk_qc_config ADD aplarchivetime int(11) DEFAULT '3' COMMENT '已申诉质检自动归档时间，默认3天';

@@ -84,16 +84,21 @@ public class QcTask {
 		this.elasticsearchTemplate = elasticsearchTemplate;
     }
 	
-	@Scheduled(fixedDelay= 43200000) // 每12小时执行一次43200000
+	@Scheduled(fixedDelay= 43200000) // 每12小时执行一次12*60*60*1000=43200000
     public void task() {
 //		System.out.println("qcTask开始执行");
 		if(UKDataContext.getContext()!=null && UKDataContext.needRunTask()){	//判断系统是否启动完成，避免 未初始化完成即开始执行 任务
 			QualityConfig qcConfig = UKTools.initQualityConfig(UKDataContext.SYSTEM_ORGI) ;
 			int archivetime = UKDataContext.QUALITY_ARCHIVE_DEFAULT_DAY;
+			int aplarchivetime = UKDataContext.QUALITY_ARCHIVE_DEFAULT_DAY;
 			if (qcConfig != null && qcConfig.getArchivetime()!=0) {
 				archivetime = qcConfig.getArchivetime() ;
 			}
-			final Date nowDate = UKTools.getLastDay(archivetime);
+			if (qcConfig != null && qcConfig.getAplarchivetime()!=0) {
+				aplarchivetime = qcConfig.getAplarchivetime() ;
+			}
+			final Date archivedate = UKTools.getLastDay(archivetime); //今天日期减去archivetime
+			final Date aplarchivedate = UKTools.getLastDay(aplarchivetime);//今天日期减去aplarchivetime
 			int p = 0 ;
 			int ps = 100 ;
 			List<StatusEvent> statusEventList = null ;
@@ -114,12 +119,22 @@ public class QcTask {
 					public Predicate toPredicate(Root<QualityMissionHis> root, CriteriaQuery<?> query,
 							CriteriaBuilder cb) {
 						List<Predicate> list = new ArrayList<Predicate>();  
-						
 						list.add(cb.equal(root.get("qualitystatus").as(String.class),UKDataContext.QualityStatus.DONE.toString())) ;
-						list.add(cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), nowDate)) ;
-						
+						list.add(cb.equal(root.get("orgi").as(String.class),UKDataContext.SYSTEM_ORGI)) ;
+						//list.add(cb.and(cb.or(cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), archivedate)),cb.or(cb.and(cb.equal(root.get("qualityappeal").as(int.class),1),cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), aplarchivedate)))));
+//						list.add(cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), archivedate)) ;
+//						list.add(cb.or(cb.and(cb.equal(root.get("qualityappeal").as(int.class),1),cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), aplarchivedate)))) ;
+//						list.add(
+//								cb.and(
+//										cb.or(cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), archivedate)),cb.equal(root.get("qualityappeal").as(int.class),1)));
+//						List<Predicate> list2 = new ArrayList<Predicate>();  
+//						list2.add(cb.equal(root.get("qualityappeal").as(int.class),1)) ;
+//						list2.add(cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), aplarchivedate)) ;
+						//list.add(cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), aplarchivedate));
+						list.add(cb.or(cb.and(cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), aplarchivedate),cb.equal(root.get("qualityappeal").as(int.class),1)),cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class),archivedate)));
 						Predicate[] p = new Predicate[list.size()];  
-					    return cb.and(list.toArray(p));  
+						
+					    return cb.and(list.toArray(p));
 					}}, new PageRequest(p, ps , Sort.Direction.DESC, "createtime")) ;
 				if (qualitymissionhisList.getContent()!=null && qualitymissionhisList.getContent().size()>0) {
 					for(QualityMissionHis qualitymissionhis : qualitymissionhisList.getContent()){

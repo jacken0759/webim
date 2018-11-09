@@ -1663,6 +1663,7 @@ public class UKTools {
 				qcConfig.setOrgi(orgi);
 				qcConfig.setCreatetime(new Date());
 				qcConfig.setArchivetime(UKDataContext.QUALITY_ARCHIVE_DEFAULT_DAY);
+				qcConfig.setAplarchivetime(UKDataContext.QUALITY_ARCHIVE_DEFAULT_DAY);
 				qcConfigRepository.save(qcConfig);
 			}else{
 				qcConfig = qualityConList.get(0) ;
