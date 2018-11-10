@@ -295,6 +295,17 @@ public class UKDataContext {
 		}
 	}
 	
+	public enum TransStatus{
+		NO,		//未提交
+		SUBMIT,		//已提交			
+		INTRANS,		//转写中
+		SUCCESS,     //成功
+		FAILD; //转写失败
+		public String toString(){
+			return super.toString().toLowerCase() ;
+		}
+	}
+	
 	public enum CallCenterCallTypeEnum{
 		INSIDELINE,
 		ORGCALLOUT,

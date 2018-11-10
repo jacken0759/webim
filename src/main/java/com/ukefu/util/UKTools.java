@@ -8,13 +8,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -92,6 +96,7 @@ import com.ukefu.webim.service.repository.SystemMessageRepository;
 import com.ukefu.webim.service.repository.TablePropertiesRepository;
 import com.ukefu.webim.service.repository.TemplateRepository;
 import com.ukefu.webim.service.repository.WorkserviceTimeRepository;
+import com.ukefu.webim.util.CallCenterUtils;
 import com.ukefu.webim.util.OnlineUserUtils;
 import com.ukefu.webim.util.server.message.SessionConfigItem;
 import com.ukefu.webim.web.model.AdType;
@@ -99,9 +104,11 @@ import com.ukefu.webim.web.model.AiConfig;
 import com.ukefu.webim.web.model.AttachmentFile;
 import com.ukefu.webim.web.model.JobDetail;
 import com.ukefu.webim.web.model.JobTask;
+import com.ukefu.webim.web.model.PbxHost;
 import com.ukefu.webim.web.model.QualityConfig;
 import com.ukefu.webim.web.model.Secret;
 import com.ukefu.webim.web.model.SessionConfig;
+import com.ukefu.webim.web.model.StatusEvent;
 import com.ukefu.webim.web.model.SysDic;
 import com.ukefu.webim.web.model.SystemConfig;
 import com.ukefu.webim.web.model.SystemMessage;
@@ -1671,5 +1678,61 @@ public class UKTools {
 			}
 		}
 		return qcConfig ;
+	}
+	
+	/**
+	 * 读取语音文件
+	 * @param statusEvent
+	 * @throws IOException 
+	 */
+	public static File crawlVoiceRecord(StatusEvent statusEvent) throws IOException {
+		File tempFile = null ;
+		if(!StringUtils.isBlank(statusEvent.getRecordfile())) {
+			String fileName = statusEvent.getRecordfile().substring(statusEvent.getRecordfile().lastIndexOf("/"), statusEvent.getRecordfile().length()) ;
+			PbxHost pbxHost = CallCenterUtils.pbxhost(statusEvent.getIpaddr()) ;		//根据 PbxHost配置的 方式获取 录音文件的读取方式
+			tempFile = File.createTempFile(statusEvent.getId(), fileName.substring(fileName.lastIndexOf("."))) ;
+			FileOutputStream voiceFileOutputStream = new FileOutputStream(tempFile) ;
+			if(!StringUtils.isBlank(pbxHost.getRecordpath())){
+				URL url = new URL(pbxHost.getRecordpath()+fileName);
+				HttpURLConnection conn = null ;
+		        try {
+		            conn = (HttpURLConnection) url.openConnection();
+		            /**
+		             * 链接最大超时时间5秒，读取文件最大超时时间不超过60秒
+		             */
+		            conn.setConnectTimeout(5000);  
+		            conn.setReadTimeout(60000);  
+		            
+		            InputStream inStream = conn.getInputStream();
+		            byte[] buffer = new byte[1204];
+		            int byteread = 0;
+	
+		            while ((byteread = inStream.read(buffer)) > 0) {
+		            	voiceFileOutputStream.write(buffer, 0, byteread);
+		            }
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        } finally {
+		        	voiceFileOutputStream.close();
+		        }
+			}else{
+				File voiceFile = new File(statusEvent.getRecordfile()) ;
+				if(voiceFile.exists() && pbxHost!=null){
+					FileInputStream input = new FileInputStream(voiceFile) ;
+					try{
+						byte[] data = new byte[1024];
+						int len = 0;
+						while((len = input.read(data) )> 0){
+							voiceFileOutputStream.write(data , 0 , len);
+						}
+						
+					}finally{
+						input.close();
+						voiceFileOutputStream.close();
+					}
+				}
+			}
+		}
+		return tempFile ;
 	}
 }

@@ -16,7 +16,6 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -27,12 +26,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.UKTools;
+import com.ukefu.util.asr.lfasr.PhoneticTranscription;
+import com.ukefu.webim.service.cache.CacheHelper;
 import com.ukefu.webim.service.es.WorkOrdersRepository;
 import com.ukefu.webim.service.repository.AgentServiceRepository;
-import com.ukefu.webim.service.repository.AgentUserTaskRepository;
-import com.ukefu.webim.service.repository.JobDetailRepository;
-import com.ukefu.webim.service.repository.OnlineUserRepository;
-import com.ukefu.webim.service.repository.QualityConfigRepository;
 import com.ukefu.webim.service.repository.QualityMissionHisRepository;
 import com.ukefu.webim.service.repository.QualityResultRepository;
 import com.ukefu.webim.service.repository.StatusEventRepository;
@@ -48,18 +45,6 @@ import com.ukefu.webim.web.model.WorkOrders;
 public class QcTask {
 	
 	@Autowired
-	private AgentUserTaskRepository agentUserTaskRes ;
-	
-	@Autowired
-	private OnlineUserRepository onlineUserRes ;
-	
-	@Autowired
-	private JobDetailRepository jobDetailRes ;
-	
-	@Autowired
-	private TaskExecutor taskExecutor;
-	
-	@Autowired
 	private QualityResultRepository qualityResultRes ;
 	
 	@Autowired
@@ -73,9 +58,6 @@ public class QcTask {
 	
 	@Autowired
 	private WorkOrdersRepository workOrdersRes ;
-
-	@Autowired
-	private QualityConfigRepository QualityConfigRes ;
 	
 	private ElasticsearchTemplate elasticsearchTemplate;
 	
@@ -108,7 +90,6 @@ public class QcTask {
 			List<QualityMissionHis> qualityMissionHisList = null;
 			Page<QualityMissionHis> qualitymissionhisList = null;
 			do {
-//				System.out.println("qcTask执行，遍历"+p+"次");
 				statusEventList = new ArrayList<StatusEvent>() ;
 				workOrderList = new ArrayList<WorkOrders>();
 				agentServiceList = new ArrayList<AgentService>();
@@ -121,16 +102,6 @@ public class QcTask {
 						List<Predicate> list = new ArrayList<Predicate>();  
 						list.add(cb.equal(root.get("qualitystatus").as(String.class),UKDataContext.QualityStatus.DONE.toString())) ;
 						list.add(cb.equal(root.get("orgi").as(String.class),UKDataContext.SYSTEM_ORGI)) ;
-						//list.add(cb.and(cb.or(cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), archivedate)),cb.or(cb.and(cb.equal(root.get("qualityappeal").as(int.class),1),cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), aplarchivedate)))));
-//						list.add(cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), archivedate)) ;
-//						list.add(cb.or(cb.and(cb.equal(root.get("qualityappeal").as(int.class),1),cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), aplarchivedate)))) ;
-//						list.add(
-//								cb.and(
-//										cb.or(cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), archivedate)),cb.equal(root.get("qualityappeal").as(int.class),1)));
-//						List<Predicate> list2 = new ArrayList<Predicate>();  
-//						list2.add(cb.equal(root.get("qualityappeal").as(int.class),1)) ;
-//						list2.add(cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), aplarchivedate)) ;
-						//list.add(cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), aplarchivedate));
 						list.add(cb.or(cb.and(cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), aplarchivedate),cb.equal(root.get("qualityappeal").as(int.class),1)),cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class),archivedate)));
 						Predicate[] p = new Predicate[list.size()];  
 						
@@ -198,8 +169,56 @@ public class QcTask {
 					
 				}
 				p++;
-				
-			} while (qualitymissionhisList.getContent()!=null && qualitymissionhisList.getContent().size() == ps);
+			} while (qualitymissionhisList!=null && qualitymissionhisList.getContent()!=null && qualitymissionhisList.getContent().size() == ps);
 		}
+	}
+	
+	@Scheduled(fixedDelay= 3000) 
+    public void voiceTrans() {
+		Object data = null ;
+		while((data = CacheHelper.getQcQueueCacheBean().getCacheObject(null, null))!=null) {
+			if(data instanceof StatusEvent) {
+				StatusEvent statusEvent = (StatusEvent)data ;
+				QualityConfig qConfig = UKTools.initQualityConfig(statusEvent.getOrgi()) ;
+				if(qConfig!=null && qConfig.isPhonetic()) {
+					UKTools.published(statusEvent);
+				}
+			}
+		}
+	}
+	
+	@Scheduled(fixedDelay= 3000) 
+    public void checkVoiceTrans() {
+		Page<StatusEvent> transList = null ;
+		do {
+			transList = statusEventRes.findAll(new Specification<StatusEvent>(){
+				@Override
+				public Predicate toPredicate(Root<StatusEvent> root, CriteriaQuery<?> query,
+						CriteriaBuilder cb) {
+					List<Predicate> list = new ArrayList<Predicate>();  
+					list.add(cb.equal(root.get("transtatus").as(String.class),UKDataContext.TransStatus.INTRANS.toString())) ;
+					Predicate[] p = new Predicate[list.size()];  
+					
+				    return cb.and(list.toArray(p));
+				}}, new PageRequest(0, 100, Sort.Direction.ASC, "transbegin")) ; 
+			if(transList.getContent().size()>0) {
+				List<StatusEvent> needUpdateList = new ArrayList<StatusEvent>();
+				for(StatusEvent statusEvent : transList.getContent()) {
+					QualityConfig qConfig = UKTools.initQualityConfig(statusEvent.getOrgi()) ;
+					if(qConfig!=null && qConfig.isPhonetic()) {
+						PhoneticTranscription trans = (PhoneticTranscription) UKDataContext.getContext().getBean(qConfig.getEngine()) ;
+						if(trans!=null) {
+							boolean needUpdata = trans.getStatus(statusEvent, qConfig) ;
+							if(needUpdata) {
+								needUpdateList.add(statusEvent)  ;
+							}
+						}
+					}
+				}
+				if(needUpdateList.size() > 0) {
+					statusEventRes.save(needUpdateList) ;
+				}
+			}
+		}while(transList!=null && transList.getContent().size()>0) ;
 	}
 }

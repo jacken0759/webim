@@ -4,12 +4,7 @@ import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -787,61 +782,6 @@ public class CallCenterUtils {
 		}
 	}
 	/**
-	 * 读取语音文件
-	 * @param statusEvent
-	 * @throws IOException 
-	 */
-	public static File crawlVoiceRecord(StatusEvent statusEvent) throws IOException {
-		File tempFile = null ;
-		if(!StringUtils.isBlank(statusEvent.getRecordfile())) {
-			String fileName = statusEvent.getRecordfile().substring(statusEvent.getRecordfile().lastIndexOf("/"), statusEvent.getRecordfile().length()) ;
-			PbxHost pbxHost = CallCenterUtils.pbxhost(statusEvent.getIpaddr()) ;		//根据 PbxHost配置的 方式获取 录音文件的读取方式
-			tempFile = File.createTempFile(statusEvent.getId(), fileName.substring(fileName.lastIndexOf("."))) ;
-			FileOutputStream voiceFileOutputStream = new FileOutputStream(tempFile) ;
-			if(!StringUtils.isBlank(pbxHost.getRecordpath())){
-				URL url = new URL(pbxHost.getRecordpath()+fileName);
-				HttpURLConnection conn = null ;
-		        try {
-		            conn = (HttpURLConnection) url.openConnection();
-		            /**
-		             * 链接最大超时时间5秒，读取文件最大超时时间不超过60秒
-		             */
-		            conn.setConnectTimeout(5000);  
-		            conn.setReadTimeout(60000);  
-		            
-		            InputStream inStream = conn.getInputStream();
-		            byte[] buffer = new byte[1204];
-		            int byteread = 0;
-	
-		            while ((byteread = inStream.read(buffer)) > 0) {
-		            	voiceFileOutputStream.write(buffer, 0, byteread);
-		            }
-		        } catch (Exception e) {
-		            e.printStackTrace();
-		        } finally {
-		        	voiceFileOutputStream.close();
-		        }
-			}else{
-				File voiceFile = new File(statusEvent.getRecordfile()) ;
-				if(voiceFile.exists() && pbxHost!=null){
-					FileInputStream input = new FileInputStream(voiceFile) ;
-					try{
-						byte[] data = new byte[1024];
-						int len = 0;
-						while((len = input.read(data) )> 0){
-							voiceFileOutputStream.write(data , 0 , len);
-						}
-						
-					}finally{
-						input.close();
-						voiceFileOutputStream.close();
-					}
-				}
-			}
-		}
-		return tempFile ;
-	}
-	/**
 	 * 批量打包语音文件 , 通过信号量控制最大不超过10个线程执行，将来增加配置参数来调整信号量
 	 * @param statusEventList
 	 * @return
@@ -863,7 +803,7 @@ public class CallCenterUtils {
 					public Integer call() throws Exception {
 						File tempVoiceRecordFile = null ;
 						try {
-							tempVoiceRecordFile = crawlVoiceRecord(statusEvent) ;
+							tempVoiceRecordFile = UKTools.crawlVoiceRecord(statusEvent) ;
 							if(tempVoiceRecordFile!=null && tempVoiceRecordFile.exists()) {
 								recordFileList.add(tempVoiceRecordFile) ;
 							}

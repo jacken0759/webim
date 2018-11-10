@@ -16,11 +16,12 @@ import org.hibernate.annotations.Proxy;
 
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.UKTools;
+import com.ukefu.util.event.UserEvent;
 
 @Entity
 @Table(name = "uk_callcenter_event")
 @Proxy(lazy = false)
-public class StatusEvent implements Serializable, Comparable<StatusEvent>{
+public class StatusEvent implements Serializable, Comparable<StatusEvent>,UserEvent{
 
 	/**
 	 * 
