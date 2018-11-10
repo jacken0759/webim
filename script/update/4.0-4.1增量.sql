@@ -404,3 +404,5 @@ ALTER TABLE uk_qc_mission_his ADD qualityarbitrate tinyint(4) DEFAULT '2' COMMEN
 
 ALTER TABLE uk_qc_config ADD archivetime int(11) DEFAULT '3' COMMENT '质检自动归档时间，默认3天';
 ALTER TABLE uk_qc_config ADD aplarchivetime int(11) DEFAULT '3' COMMENT '已申诉质检自动归档时间，默认3天';
+
+ALTER TABLE uk_callcenter_event ADD tranid varchar(50) DEFAULT NULL COMMENT '语音转写任务ID';
