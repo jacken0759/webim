@@ -189,7 +189,6 @@ public class QcTask {
 					
 					
 				}
-				p++;
 			} while (qualitymissionhisList!=null && qualitymissionhisList.getContent()!=null && qualitymissionhisList.getContent().size() == ps);
 		}
 	}
