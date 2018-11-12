@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -206,12 +207,14 @@ public class QcTask {
 					List<StatusEvent> needUpdateList = new ArrayList<StatusEvent>();
 					for(StatusEvent statusEvent : transList.getContent()) {
 						QualityConfig qConfig = UKTools.initQualityConfig(statusEvent.getOrgi()) ;
-						if(qConfig!=null && qConfig.isPhonetic()) {
+						if(qConfig!=null && qConfig.isPhonetic() && !StringUtils.isBlank(qConfig.getEngine())) {
 							PhoneticTranscription trans = (PhoneticTranscription) UKDataContext.getContext().getBean(qConfig.getEngine()) ;
 							if(trans!=null) {
-								boolean needUpdata = trans.getStatus(statusEvent, qConfig) ;
-								if(needUpdata) {
-									needUpdateList.add(statusEvent)  ;
+								if(!StringUtils.isBlank(statusEvent.getTaskid())) {
+									boolean needUpdata = trans.getStatus(statusEvent, qConfig) ;
+									if(needUpdata) {
+										needUpdateList.add(statusEvent)  ;
+									}
 								}
 							}
 						}
