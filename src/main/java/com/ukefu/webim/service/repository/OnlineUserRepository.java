@@ -2,6 +2,7 @@ package com.ukefu.webim.service.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -179,5 +180,35 @@ public abstract interface OnlineUserRepository extends JpaRepository<OnlineUser,
 	
 	@Query("select qualityorgan,count(id) as misscount from QualityMissionHis  where orgi = ?1 and qualityarbitrate=?2  GROUP BY qualityorgan ")
 	List<Object> findByQualityarbitrateGroupbyOrganFromQualityMissionHis(String orgi,int qualityarbitrate);
+	
+	@Query("select count(id) as allcount,"
+			+ "count(case when qualitystatus = 'done' THEN '1' end) as donecount,"
+			+ "count(case when qualitystatus = 'recheck' THEN '2' end) as recount,"
+			+ "count(case when qualitystatus = 'no' THEN '3' end) as nocount,"
+			+ "count(case when qualitystatus = 'appeal' THEN '4' end) as appealcount,"
+			+ "count(case when qualitystatus = 'abritrate' THEN '5' end) as myabritratecount,"
+			+ "count(case when qualityuser = ?1 and qualitypass = 0 THEN '6' end) as nopasscount,"
+			+ "count(case when qualityuser = ?1 and qualityappeal = 1  THEN '7' end) as myappealcount,"
+			+ "count(case when qualityuser = ?1 and qualityappeal = 1 and qualityarbitrate = 1 THEN '8' end) as myarbitratecount "
+			+ "FROM QualityMissionHis "
+			+ "where qualitydisuser = ?1 and orgi = ?2")
+	Map<String,Long> countQc(String qualityuser,String orgi);
+	
+	@Query("select qualityorgan as organid,"
+			+"count(id) as misscount,"
+			+"count(case when qualitypass = 1 and qualitytype = 'callevent' THEN '1' end) as organpasscallcount,"
+			+"count(case when qualitypass = 1 and qualitytype = 'agentservice' THEN '2' end) as organpassagentcount,"
+			+"count(case when qualitypass = 1 and qualitytype = 'workorders' THEN '3' end) as organpassworkcount,"
+			+"count(case when qualitystatus = 'appeal' THEN '4' end) as disablecount,"
+			+"count(case when qualitypass = 0 THEN '5' end) as organnopasscount,"
+			+"count(case when qualityappeal = 0 THEN '6' end) as organappealcount,"
+			+"count(case when qualityarbitrate = 0 THEN '7' end) as organarbitratecount,"
+			+"AVG(date_format(timediff(qualitytime,createtime),'%s')+date_format(timediff(qualitytime,createtime),'%i')*60) as efficiency, "
+			+"count(case when qualitytype = 'callevent' THEN '8' end) as organcallcount,"
+			+"count(case when qualitytype = 'agentservice' THEN '9' end) as organagentcount,"
+			+"count(case when qualitytype = 'workorders' THEN '10' end) as organworkcount "
+		    +"FROM QualityMissionHis "
+		    +"where orgi = ?1 GROUP BY qualityorgan")
+	List<Map<String,Long>> countQcOrgan(String orgi);
 	
 }

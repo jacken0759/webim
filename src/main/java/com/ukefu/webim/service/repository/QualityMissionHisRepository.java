@@ -27,4 +27,6 @@ public abstract interface QualityMissionHisRepository  extends JpaRepository<Qua
 	public abstract List<QualityMissionHis> findByQualitypassAndOrgi(String qualitypass, String orgi);
 	
 	public  Page<QualityMissionHis> findAll(Specification<QualityMissionHis> spec, Pageable pageable);  //分页按条件查询 
+	
+	public abstract List<QualityMissionHis> findByOrgiAndQualitydisuser(String orgi,String qualitydisuser);
 }
