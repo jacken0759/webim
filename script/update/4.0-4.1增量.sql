@@ -406,3 +406,5 @@ ALTER TABLE uk_qc_config ADD archivetime int(11) DEFAULT '3' COMMENT '质检自�
 ALTER TABLE uk_qc_config ADD aplarchivetime int(11) DEFAULT '3' COMMENT '已申诉质检自动归档时间，默认3天';
 
 ALTER TABLE uk_callcenter_event ADD tranid varchar(50) DEFAULT NULL COMMENT '语音转写任务ID';
+
+ALTER TABLE uk_consult_invite ADD leavemsgunlimit tinyint DEFAULT 0 COMMENT '启用无限制留言功能';
