@@ -109,6 +109,9 @@ public class CousultInvite implements java.io.Serializable{
 	
 	private String lvmopentype ;	//留言板弹出方式
 	private boolean leavemessage ;	//启用留言功能
+	
+	private boolean leavemsgunlimit ;	//同一个访客只允许留言一次
+	
 	private boolean lvmname;
 	private boolean lvmphone;
 	private boolean lvmemail;
@@ -898,5 +901,11 @@ public class CousultInvite implements java.io.Serializable{
 	}
 	public void setDefaultskill(String defaultskill) {
 		this.defaultskill = defaultskill;
+	}
+	public boolean isLeavemsgunlimit() {
+		return leavemsgunlimit;
+	}
+	public void setLeavemsgunlimit(boolean leavemsgunlimit) {
+		this.leavemsgunlimit = leavemsgunlimit;
 	}
 }

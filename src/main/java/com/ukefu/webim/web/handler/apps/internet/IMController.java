@@ -676,11 +676,22 @@ public class IMController extends Handler{
     		SNSAccount snsAccount = snsAccountRepository.findBySnsid(appid);
 			String orgi = snsAccount.getOrgi();
 			CousultInvite invite = OnlineUserUtils.cousult(appid, orgi, inviteRepository) ;
-	    	List<LeaveMsg> msgList = leaveMsgRes.findByOrgiAndUserid(invite.getOrgi(), msg.getUserid()) ;
-	    	if(msg!=null && msgList.size() == 0){
-	    		msg.setOrgi(invite.getOrgi());
+			if(invite.isLeavemsgunlimit() && msg!=null) {
+				msg.setOrgi(invite.getOrgi());
 	    		leaveMsgRes.save(msg) ;
-	    	}
+			}else {
+		    	List<LeaveMsg> msgList = leaveMsgRes.findByOrgiAndUserid(invite.getOrgi(), msg.getUserid()) ;
+		    	if(msg!=null && msgList.size() == 0){
+		    		msg.setOrgi(invite.getOrgi());
+		    		leaveMsgRes.save(msg) ;
+		    	}else if(msg!=null && msgList.size() > 0){
+		    		LeaveMsg temp = msgList.get(0) ;
+		    		msg.setId(temp.getId());
+		    		msg.setCreatetime(temp.getCreatetime());
+		    		msg.setOrgi(invite.getOrgi());
+		    		leaveMsgRes.save(msg) ;
+		    	}
+			}
     	}
     	return request(super.createRequestPageTempletResponse("/apps/im/leavemsgsave"));
     }
