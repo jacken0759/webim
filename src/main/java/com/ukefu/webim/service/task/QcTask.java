@@ -71,17 +71,6 @@ public class QcTask {
     public void task() {
 //		System.out.println("qcTask开始执行");
 		if(UKDataContext.getContext()!=null && UKDataContext.needRunTask()){	//判断系统是否启动完成，避免 未初始化完成即开始执行 任务
-			QualityConfig qcConfig = UKTools.initQualityConfig(UKDataContext.SYSTEM_ORGI) ;
-			int archivetime = UKDataContext.QUALITY_ARCHIVE_DEFAULT_DAY;
-			int aplarchivetime = UKDataContext.QUALITY_ARCHIVE_DEFAULT_DAY;
-			if (qcConfig != null && qcConfig.getArchivetime()!=0) {
-				archivetime = qcConfig.getArchivetime() ;
-			}
-			if (qcConfig != null && qcConfig.getAplarchivetime()!=0) {
-				aplarchivetime = qcConfig.getAplarchivetime() ;
-			}
-			final Date archivedate = UKTools.getLastDay(archivetime); //今天日期减去archivetime
-			final Date aplarchivedate = UKTools.getLastDay(aplarchivetime);//今天日期减去aplarchivetime
 			int p = 0 ;
 			int ps = 100 ;
 			List<StatusEvent> statusEventList = null ;
@@ -91,18 +80,47 @@ public class QcTask {
 			List<QualityMissionHis> qualityMissionHisList = null;
 			Page<QualityMissionHis> qualitymissionhisList = null;
 			do {
+				String orgiString = "";
 				statusEventList = new ArrayList<StatusEvent>() ;
 				workOrderList = new ArrayList<WorkOrders>();
 				agentServiceList = new ArrayList<AgentService>();
 				qualityResultList = new ArrayList<QualityResult>();
 				qualityMissionHisList = new ArrayList<QualityMissionHis>();
+				QualityConfig qcConfig = null ;
+				Page<QualityMissionHis> qmhList = qualityMissionHisRes.findAll(new Specification<QualityMissionHis>(){
+					@Override
+					public Predicate toPredicate(Root<QualityMissionHis> root, CriteriaQuery<?> query,
+							CriteriaBuilder cb) {
+						List<Predicate> list = new ArrayList<Predicate>();  
+						list.add(cb.equal(root.get("qualitystatus").as(String.class),UKDataContext.QualityStatus.DONE.toString())) ;
+						Predicate[] p = new Predicate[list.size()];  
+						
+					    return cb.and(list.toArray(p));
+					}}, new PageRequest(p, ps , Sort.Direction.DESC, "createtime")) ;
+				if (qmhList!=null && qmhList.getContent()!=null && qmhList.getContent().size()>0) {
+					QualityMissionHis qmh = qmhList.getContent().get(0) ;
+					orgiString = qmh.getOrgi();
+					qcConfig = UKTools.initQualityConfig(orgiString) ;
+				}
+				final String orgi = orgiString;
+				int archivetime = UKDataContext.QUALITY_ARCHIVE_DEFAULT_DAY;
+				int aplarchivetime = UKDataContext.QUALITY_ARCHIVE_DEFAULT_DAY;
+				if (qcConfig != null && qcConfig.getArchivetime()!=0) {
+					archivetime = qcConfig.getArchivetime() ;
+				}
+				if (qcConfig != null && qcConfig.getAplarchivetime()!=0) {
+					aplarchivetime = qcConfig.getAplarchivetime() ;
+				}
+				final Date archivedate = UKTools.getLastDay(archivetime); //今天日期减去archivetime
+				final Date aplarchivedate = UKTools.getLastDay(aplarchivetime);//今天日期减去aplarchivetime
+				
 				qualitymissionhisList = qualityMissionHisRes.findAll(new Specification<QualityMissionHis>(){
 					@Override
 					public Predicate toPredicate(Root<QualityMissionHis> root, CriteriaQuery<?> query,
 							CriteriaBuilder cb) {
 						List<Predicate> list = new ArrayList<Predicate>();  
 						list.add(cb.equal(root.get("qualitystatus").as(String.class),UKDataContext.QualityStatus.DONE.toString())) ;
-						list.add(cb.equal(root.get("orgi").as(String.class),UKDataContext.SYSTEM_ORGI)) ;
+//						list.add(cb.equal(root.get("orgi").as(String.class),orgi)) ;
 						list.add(cb.or(cb.and(cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class), aplarchivedate),cb.equal(root.get("qualityappeal").as(int.class),1)),cb.lessThanOrEqualTo(root.get("qualitytime").as(Date.class),archivedate)));
 						Predicate[] p = new Predicate[list.size()];  
 						
@@ -110,36 +128,38 @@ public class QcTask {
 					}}, new PageRequest(p, ps , Sort.Direction.DESC, "createtime")) ;
 				if (qualitymissionhisList.getContent()!=null && qualitymissionhisList.getContent().size()>0) {
 					for(QualityMissionHis qualitymissionhis : qualitymissionhisList.getContent()){
-						if (UKDataContext.QcFormFilterTypeEnum.CALLEVENT.toString().equals(qualitymissionhis.getQualitytype())) {
-							StatusEvent statusEvent = statusEventRes.findById(qualitymissionhis.getDataid()) ;
-							if (statusEvent!=null) {
-								statusEvent.setQualitystatus(UKDataContext.QualityStatus.ARCHIVE.toString());
-								statusEventList.add(statusEvent) ;
+						if (orgi.equals(qualitymissionhis.getOrgi())) {
+							if (UKDataContext.QcFormFilterTypeEnum.CALLEVENT.toString().equals(qualitymissionhis.getQualitytype())) {
+								StatusEvent statusEvent = statusEventRes.findById(qualitymissionhis.getDataid()) ;
+								if (statusEvent!=null) {
+									statusEvent.setQualitystatus(UKDataContext.QualityStatus.ARCHIVE.toString());
+									statusEventList.add(statusEvent) ;
+								}
+							}else if (UKDataContext.QcFormFilterTypeEnum.WORKORDERS.toString().equals(qualitymissionhis.getQualitytype())) {
+								BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+								boolQueryBuilder.must(QueryBuilders.termQuery("orgi", orgi) );
+								boolQueryBuilder.must(QueryBuilders.termQuery("id", qualitymissionhis.getDataid()) );
+								List<WorkOrders> woList = workOrdersRes.findByOrgiAndQualitydisorgan(boolQueryBuilder) ;
+								if (woList != null && woList.size()>0) {
+									WorkOrders workOrders = woList.get(0) ;
+									workOrders.setQualitystatus(UKDataContext.QualityStatus.ARCHIVE.toString());
+									workOrderList.add(workOrders) ;
+								}
+							}else if (UKDataContext.QcFormFilterTypeEnum.AGENTSERVICE.toString().equals(qualitymissionhis.getQualitytype())) {
+								AgentService agentService = agentServiceRes.findByIdAndOrgi(qualitymissionhis.getDataid(), orgi) ;
+								if (agentService != null) {
+									agentService.setQualitystatus(UKDataContext.QualityStatus.ARCHIVE.toString());
+									agentServiceList.add(agentService) ;
+								}
 							}
-						}else if (UKDataContext.QcFormFilterTypeEnum.WORKORDERS.toString().equals(qualitymissionhis.getQualitytype())) {
-							BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-							boolQueryBuilder.must(QueryBuilders.termQuery("orgi", UKDataContext.SYSTEM_ORGI) );
-							boolQueryBuilder.must(QueryBuilders.termQuery("id", qualitymissionhis.getDataid()) );
-							List<WorkOrders> woList = workOrdersRes.findByOrgiAndQualitydisorgan(boolQueryBuilder) ;
-							if (woList != null && woList.size()>0) {
-								WorkOrders workOrders = woList.get(0) ;
-								workOrders.setQualitystatus(UKDataContext.QualityStatus.ARCHIVE.toString());
-								workOrderList.add(workOrders) ;
+							QualityResult qualityResult = qualityResultRes.findByDataidAndOrgi(qualitymissionhis.getDataid(), orgi) ;
+							if (qualityResult != null) {
+								qualityResult.setStatus(UKDataContext.QualityStatus.ARCHIVE.toString());
+								qualityResultList.add(qualityResult);
 							}
-						}else if (UKDataContext.QcFormFilterTypeEnum.AGENTSERVICE.toString().equals(qualitymissionhis.getQualitytype())) {
-							AgentService agentService = agentServiceRes.findByIdAndOrgi(qualitymissionhis.getDataid(), UKDataContext.SYSTEM_ORGI) ;
-							if (agentService != null) {
-								agentService.setQualitystatus(UKDataContext.QualityStatus.ARCHIVE.toString());
-								agentServiceList.add(agentService) ;
-							}
+							qualitymissionhis.setQualitystatus(UKDataContext.QualityStatus.ARCHIVE.toString());
+							qualityMissionHisList.add(qualitymissionhis) ;
 						}
-						QualityResult qualityResult = qualityResultRes.findByDataidAndOrgi(qualitymissionhis.getDataid(), UKDataContext.SYSTEM_ORGI) ;
-						if (qualityResult != null) {
-							qualityResult.setStatus(UKDataContext.QualityStatus.ARCHIVE.toString());
-							qualityResultList.add(qualityResult);
-						}
-						qualitymissionhis.setQualitystatus(UKDataContext.QualityStatus.ARCHIVE.toString());
-						qualityMissionHisList.add(qualitymissionhis) ;
 					}
 					if (statusEventList != null && statusEventList.size()>0) {
 						statusEventRes.save(statusEventList) ;
