@@ -189,36 +189,38 @@ public class QcTask {
 	
 	@Scheduled(fixedDelay= 3000) 
     public void checkVoiceTrans() {
-		Page<StatusEvent> transList = null ;
-		do {
-			transList = statusEventRes.findAll(new Specification<StatusEvent>(){
-				@Override
-				public Predicate toPredicate(Root<StatusEvent> root, CriteriaQuery<?> query,
-						CriteriaBuilder cb) {
-					List<Predicate> list = new ArrayList<Predicate>();  
-					list.add(cb.equal(root.get("transtatus").as(String.class),UKDataContext.TransStatus.INTRANS.toString())) ;
-					Predicate[] p = new Predicate[list.size()];  
-					
-				    return cb.and(list.toArray(p));
-				}}, new PageRequest(0, 100, Sort.Direction.ASC, "transbegin")) ; 
-			if(transList.getContent().size()>0) {
-				List<StatusEvent> needUpdateList = new ArrayList<StatusEvent>();
-				for(StatusEvent statusEvent : transList.getContent()) {
-					QualityConfig qConfig = UKTools.initQualityConfig(statusEvent.getOrgi()) ;
-					if(qConfig!=null && qConfig.isPhonetic()) {
-						PhoneticTranscription trans = (PhoneticTranscription) UKDataContext.getContext().getBean(qConfig.getEngine()) ;
-						if(trans!=null) {
-							boolean needUpdata = trans.getStatus(statusEvent, qConfig) ;
-							if(needUpdata) {
-								needUpdateList.add(statusEvent)  ;
+		if(UKDataContext.model.get("qc") != null) {
+			Page<StatusEvent> transList = null ;
+			do {
+				transList = statusEventRes.findAll(new Specification<StatusEvent>(){
+					@Override
+					public Predicate toPredicate(Root<StatusEvent> root, CriteriaQuery<?> query,
+							CriteriaBuilder cb) {
+						List<Predicate> list = new ArrayList<Predicate>();  
+						list.add(cb.equal(root.get("transtatus").as(String.class),UKDataContext.TransStatus.INTRANS.toString())) ;
+						Predicate[] p = new Predicate[list.size()];  
+						
+						return cb.and(list.toArray(p));
+					}}, new PageRequest(0, 100, Sort.Direction.ASC, "transbegin")) ; 
+				if(transList.getContent().size()>0) {
+					List<StatusEvent> needUpdateList = new ArrayList<StatusEvent>();
+					for(StatusEvent statusEvent : transList.getContent()) {
+						QualityConfig qConfig = UKTools.initQualityConfig(statusEvent.getOrgi()) ;
+						if(qConfig!=null && qConfig.isPhonetic()) {
+							PhoneticTranscription trans = (PhoneticTranscription) UKDataContext.getContext().getBean(qConfig.getEngine()) ;
+							if(trans!=null) {
+								boolean needUpdata = trans.getStatus(statusEvent, qConfig) ;
+								if(needUpdata) {
+									needUpdateList.add(statusEvent)  ;
+								}
 							}
 						}
 					}
+					if(needUpdateList.size() > 0) {
+						statusEventRes.save(needUpdateList) ;
+					}
 				}
-				if(needUpdateList.size() > 0) {
-					statusEventRes.save(needUpdateList) ;
-				}
-			}
-		}while(transList!=null && transList.getContent().size()>0) ;
+			}while(transList!=null && transList.getContent().size()>0) ;
+		}
 	}
 }
