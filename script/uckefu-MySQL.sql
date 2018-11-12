@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-11-03 18:14:16
+Date: 2018-11-12 17:17:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -596,6 +596,7 @@ CREATE TABLE `uk_agentservice` (
   `qualitydistype` varchar(32) DEFAULT NULL COMMENT '分配状态  ，未分配not/分配到部门disorgan/分配到坐席disagent',
   `qualityactid` varchar(50) DEFAULT NULL COMMENT '质检活动id',
   `qualityfilterid` varchar(50) DEFAULT NULL COMMENT '筛选表单id',
+  `qualitypass` tinyint(4) DEFAULT '2' COMMENT '质检是否合格(默认2为未质检)',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='在线客服服务记录表';
 
@@ -1039,6 +1040,8 @@ CREATE TABLE `uk_callcenter_event` (
   `transtatus` varchar(32) DEFAULT NULL COMMENT '语音转写状态',
   `transcost` tinyint(4) DEFAULT '0' COMMENT '语音转写费用',
   `engine` varchar(32) DEFAULT NULL COMMENT '语音转写引擎',
+  `qualitypass` tinyint(4) DEFAULT '2' COMMENT '质检是否合格(默认2为未质检)',
+  `tranid` varchar(50) DEFAULT NULL COMMENT '语音转写任务ID',
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='通话记录表';
 
@@ -1811,6 +1814,7 @@ CREATE TABLE `uk_consult_invite` (
   `weichattoken` varchar(255) DEFAULT NULL COMMENT '微信TOKEN',
   `defaultskill` text COMMENT '默认启用的技能组',
   `firstreplytime` int(11) DEFAULT '0' COMMENT '首次消息回复时间',
+  `leavemsgunlimit` tinyint(4) DEFAULT '0' COMMENT '启用无限制留言功能',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='访客网站配置表';
 
@@ -3929,6 +3933,48 @@ CREATE TABLE `uk_qc_activity` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `uk_qc_activity_task`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_qc_activity_task`;
+CREATE TABLE `uk_qc_activity_task` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '任务名称',
+  `CODE` varchar(50) DEFAULT NULL COMMENT '任务代码',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `UPDATETIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `USERNAME` varchar(50) DEFAULT NULL COMMENT '创建人名称',
+  `STATUS` varchar(50) DEFAULT NULL COMMENT '状态',
+  `PARENTID` varchar(32) DEFAULT NULL COMMENT '上级ID',
+  `ACTID` varchar(32) DEFAULT NULL COMMENT '活动ID',
+  `INX` int(11) DEFAULT '0' COMMENT '分类排序序号',
+  `NAMENUM` int(11) DEFAULT '0' COMMENT '批次包含的名单总数',
+  `VALIDNUM` int(11) DEFAULT '0' COMMENT '批次包含的有效名单总数',
+  `INVALIDNUM` int(11) DEFAULT '0' COMMENT '批次包含的无效名单总数',
+  `ASSIGNED` int(11) DEFAULT '0' COMMENT '已分配名单总数',
+  `NOTASSIGNED` int(11) DEFAULT '0' COMMENT '未分配名单总数',
+  `ENABLE` tinyint(4) DEFAULT '0' COMMENT '分类状态',
+  `DATASTATUS` tinyint(4) DEFAULT '0' COMMENT '数据状态',
+  `ORGAN` varchar(32) DEFAULT NULL COMMENT '部门',
+  `DESCRIPTION` text COMMENT '备注信息',
+  `execnum` int(11) DEFAULT '0' COMMENT '导入次数',
+  `SOURCE` varchar(255) DEFAULT NULL COMMENT '来源信息',
+  `BATID` varchar(32) DEFAULT NULL COMMENT '批次ID',
+  `FILTERID` varchar(32) DEFAULT NULL COMMENT '筛选ID',
+  `ASSIGNEDORGAN` int(11) DEFAULT '0' COMMENT '分配给部门',
+  `exectype` varchar(32) DEFAULT NULL COMMENT '执行类型',
+  `renum` int(11) DEFAULT '0' COMMENT '分配数量',
+  `reorgannum` int(11) DEFAULT '0' COMMENT '分配到部门数量',
+  `assignedai` int(11) DEFAULT '0' COMMENT '分配到AI的名单数量',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='质检活动 - 任务表';
+
+-- ----------------------------
+-- Records of uk_qc_activity_task
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `uk_qc_appeal`
 -- ----------------------------
 DROP TABLE IF EXISTS `uk_qc_appeal`;
@@ -3981,6 +4027,35 @@ CREATE TABLE `uk_qc_callagent` (
 
 -- ----------------------------
 -- Records of uk_qc_callagent
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_qc_config`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_qc_config`;
+CREATE TABLE `uk_qc_config` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `phonetic` tinyint(4) DEFAULT '0' COMMENT '是否开启语音转写（0关闭1打开）',
+  `engine` varchar(50) DEFAULT NULL COMMENT '转写引擎',
+  `appid` varchar(50) DEFAULT NULL COMMENT '引擎的 AppId',
+  `secretkey` varchar(50) DEFAULT NULL COMMENT '引擎的 secret_key',
+  `lfasrhost` text COMMENT '引擎的 api接口网址',
+  `filepiecesize` varchar(50) DEFAULT NULL COMMENT '引擎的上传录音文件最大尺寸',
+  `storepath` text COMMENT '引擎的转写结果保存位置',
+  `maxthreads` int(11) DEFAULT '0' COMMENT '最大线程数',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `organ` varchar(32) DEFAULT NULL COMMENT '企业ID',
+  `archivetime` int(11) DEFAULT '3' COMMENT '质检自动归档时间，默认3天',
+  `aplarchivetime` int(11) DEFAULT '3' COMMENT '已申诉质检自动归档时间，默认3天',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='质监系统 - 配置表';
+
+-- ----------------------------
+-- Records of uk_qc_config
 -- ----------------------------
 
 -- ----------------------------
@@ -4149,6 +4224,9 @@ CREATE TABLE `uk_qc_mission_his` (
   `arbremarks` text COMMENT '仲裁备注',
   `rejectremarks` text COMMENT '驳回备注',
   `resultid` varchar(32) DEFAULT NULL COMMENT '结果id',
+  `qualitypass` tinyint(4) DEFAULT '2' COMMENT '质检是否合格(默认2为未质检)',
+  `qualityappeal` tinyint(4) DEFAULT '2' COMMENT '质检是否申诉过(默认2为未质检)',
+  `qualityarbitrate` tinyint(4) DEFAULT '2' COMMENT '质检是否仲裁过(默认2为未质检)',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='QC质检 - 任务历史表';
 
@@ -9999,7 +10077,7 @@ CREATE TABLE `uk_user` (
 INSERT INTO `uk_user` VALUES ('4028811b61834723016183ec57760392', null, 'chenfarong', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'chen@ukewo.cn', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-02-11 16:12:39', null, '2018-06-29 17:40:30', null, '18510129455', '2018-02-11 16:12:39', null, '0', '陈法蓉', null, '0', null, null, null, '0', '0', '0', '2018-06-29 17:40:37', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b642f5f8c01642f60ed440683', null, 'test1', '130811dbd239c97bd9ce933de7349f20', '5', 'ad@te.com', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-06-24 09:20:38', null, '2018-10-09 11:01:09', null, '18510129433', '2018-06-24 09:20:38', null, '0', 'test1', null, '1', null, null, null, '0', '0', '0', '2018-10-10 15:13:33', null, null, null, '0', '1', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b645dc08f01645e0512ce0935', null, 'yiliao', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'asd@ac.com', null, null, null, null, null, null, null, null, null, null, null, '4028811b645dc08f01645e005f3d08dd', 'ukewo', null, '2018-07-03 10:42:28', null, '2018-07-03 10:43:31', null, '18512212955', '2018-07-03 10:42:28', null, '0', '医疗', null, '0', null, null, null, '0', '0', '0', '2018-07-03 10:43:39', null, null, null, '0', '0', '0', '0', null);
-INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '4028811b66d257820166d28cb868022b', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-11-03 16:40:46', null, null, null, '0', '1', '1', '0', null);
+INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-11-12 15:34:49', null, null, null, '0', '1', '1', '0', null);
 
 -- ----------------------------
 -- Table structure for `uk_userevent`
@@ -10059,6 +10137,29 @@ CREATE TABLE `uk_userrole` (
 
 -- ----------------------------
 -- Records of uk_userrole
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_voice_transcription`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_voice_transcription`;
+CREATE TABLE `uk_voice_transcription` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `callid` text NOT NULL COMMENT '通话记录ID',
+  `recordfile` text COMMENT '录音文件名',
+  `bg` varchar(50) DEFAULT NULL COMMENT '名称',
+  `ed` varchar(50) DEFAULT NULL COMMENT '代码',
+  `onebest` text COMMENT '代码',
+  `speaker` varchar(50) DEFAULT NULL COMMENT '代码',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `organ` varchar(32) DEFAULT NULL COMMENT '企业ID',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='录音转写表';
+
+-- ----------------------------
+-- Records of uk_voice_transcription
 -- ----------------------------
 
 -- ----------------------------
@@ -10189,6 +10290,7 @@ CREATE TABLE `uk_workorders` (
   `qualitydistype` varchar(32) DEFAULT NULL COMMENT '分配状态  ，未分配not/分配到部门disorgan/分配到坐席disagent',
   `qualityactid` varchar(50) DEFAULT NULL COMMENT '质检活动id',
   `qualityfilterid` varchar(50) DEFAULT NULL COMMENT '筛选表单id',
+  `qualitypass` tinyint(4) DEFAULT '2' COMMENT '质检是否合格(默认2为未质检)',
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='工单表';
 
