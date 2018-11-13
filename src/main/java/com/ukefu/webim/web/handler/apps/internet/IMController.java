@@ -567,7 +567,10 @@ public class IMController extends Handler{
 				List<AgentUserContacts> agentUserContactsList = agentUserContactsRes.findByUseridAndOrgi(userid, orgi) ;
 				if(agentUserContactsList.size() > 0){
 					AgentUserContacts agentUserContacts = agentUserContactsList.get(0) ;
-					contacts = contactsRes.findOne(agentUserContacts.getContactsid()) ;
+					Contacts temp = contactsRes.findOne(agentUserContacts.getContactsid()) ;
+					if(temp!=null) {
+						contacts = temp ;
+					}
 				}
 			}
 		}
