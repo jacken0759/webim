@@ -27,7 +27,7 @@ public class CommentController extends Handler{
 	@RequestMapping("/comment/index")
     @Menu(type = "service" , subtype = "comment" , admin= true)
     public ModelAndView index(ModelMap map , HttpServletRequest request , String userid , String agentservice , @Valid String channel) {
-		Page<AgentService> agentServiceList = agentServiceRes.findByOrgiAndSatisfaction(super.getOrgi(request) , true ,new PageRequest(super.getP(request), super.getPs(request), Direction.DESC , "createtime")) ;
+		Page<AgentService> agentServiceList = agentServiceRes.findByOrgiAndSatisfaction(super.getOrgi(request) , true ,new PageRequest(super.getP(request), super.getPs(request), Direction.DESC , "satistime")) ;
 		map.addAttribute("serviceList", agentServiceList) ;
 		return request(super.createAppsTempletResponse("/apps/service/comment/index"));
     }
