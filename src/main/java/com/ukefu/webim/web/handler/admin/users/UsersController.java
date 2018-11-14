@@ -120,7 +120,7 @@ public class UsersController extends Handler{
     @RequestMapping("/update")
     @Menu(type = "admin" , subtype = "user" , admin = true)
     public ModelAndView update(HttpServletRequest request ,@Valid User user) {
-    	User tempUser = userRepository.getOne(user.getId()) ;
+    	User tempUser = userRepository.findById(user.getId()) ;
     	if(tempUser != null){
     		String msg = validUserUpdate(user,tempUser);
     		if(!StringUtils.isBlank(msg)){
@@ -195,7 +195,7 @@ public class UsersController extends Handler{
     	if(user!=null){
 	    	List<UserRole> userRole = userRoleRes.findByOrgiAndUser(super.getOrgiByTenantshare(request), user) ;
 	    	userRoleRes.delete(userRole);	//删除用户的时候，同时删除用户对应的
-	    	user = userRepository.getOne(user.getId()) ;
+	    	user = userRepository.findById(user.getId()) ;
 	    	user.setDatastatus(true);
 	    	userRepository.save(user) ;
 	    	OnlineUserUtils.clean(super.getOrgi(request));

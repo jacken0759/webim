@@ -177,7 +177,7 @@ public class SysDicController extends Handler{
 				
 			}
 		}
-		reloadSysDicItem(sysDicRes.getOne(sysDic.getParentid()), request);
+		reloadSysDicItem(sysDicRes.findById(sysDic.getParentid()), request);
 		
     	return request(super.createRequestPageTempletResponse("redirect:/admin/sysdic/dicitem.html?id="+sysDic.getParentid()+"&p="+p));
     }
@@ -215,7 +215,7 @@ public class SysDicController extends Handler{
     @Menu(type = "admin" , subtype = "sysdic")
     public ModelAndView dicitemdelete(ModelMap map , HttpServletRequest request , @Valid String id, @Valid String p) {
     	sysDicRes.delete(sysDicRes.findByDicid(id));
-    	SysDic dic = sysDicRes.getOne(id) ;
+    	SysDic dic = sysDicRes.findById(id) ;
     	sysDicRes.delete(dic);
     	reloadSysDicItem(dic, request);
         return request(super.createRequestPageTempletResponse("redirect:/admin/sysdic/dicitem.html?id="+dic.getParentid()+"&p="+p));
