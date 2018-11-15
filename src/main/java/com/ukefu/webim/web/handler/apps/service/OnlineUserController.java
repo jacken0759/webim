@@ -1,5 +1,7 @@
 package com.ukefu.webim.web.handler.apps.service;
 
+import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,6 +9,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
@@ -40,6 +43,13 @@ import com.ukefu.webim.web.model.OnlineUser;
 import com.ukefu.webim.web.model.SessionType;
 import com.ukefu.webim.web.model.SysDic;
 import com.ukefu.webim.web.model.WeiXinUser;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 
 @Controller
 @RequestMapping("/service")
@@ -89,25 +99,37 @@ public class OnlineUserController extends Handler{
 	
 	@RequestMapping("/online/index")
     @Menu(type = "service" , subtype = "online" , admin= true)
-    public ModelAndView index(ModelMap map , HttpServletRequest request , String userid , String agentservice , @Valid String channel) {
+    public ModelAndView index(ModelMap map , HttpServletRequest request , final String userid , String agentservice , @Valid String channel) {
 		if(!StringUtils.isBlank(userid)){
 			map.put("inviteResult", UKTools.getWebIMInviteResult(onlineUserRes.findByOrgiAndUserid(super.getOrgi(request), userid))) ;
 			map.put("tagRelationList", tagRelationRes.findByUserid(userid)) ;
 			map.put("onlineUserHistList", onlineUserHisRes.findByUseridAndOrgi(userid, super.getOrgi(request))) ;
 			map.put("agentServicesAvg", onlineUserRes.countByUserForAvagTime(super.getOrgi(request), UKDataContext.AgentUserStatusEnum.END.toString(),userid)) ;
 			
-			List<AgentService> agentServiceList = agentServiceRes.findByUseridAndOrgi(userid, super.getOrgi(request)) ; 
+			//List<AgentService> agentServiceList = agentServiceRes.findByUseridAndOrgi(userid, super.getOrgi(request)) ; 
+			final String orgi = super.getOrgi(request);
+			Page<AgentService> agentServiceList= agentServiceRes.findAll(new Specification<AgentService>(){
+				@Override
+				public Predicate toPredicate(Root<AgentService> root, CriteriaQuery<?> query,
+						CriteriaBuilder cb) {
+					List<Predicate> list = new ArrayList<Predicate>();  
+					list.add(cb.equal(root.get("orgi").as(String.class), orgi));
+					list.add(cb.equal(root.get("userid").as(String.class),userid));
+					
+					Predicate[] p = new Predicate[list.size()];  
+					return cb.and(list.toArray(p));   
+				}}, new PageRequest(0, 10000, Sort.Direction.DESC, new String[] { "servicetime" }));
 			
 			map.put("agentServiceList", agentServiceList) ;
-			if(agentServiceList.size()>0){
+			if(agentServiceList.getContent().size()>0){
 				map.put("serviceCount", Integer
 						.valueOf(this.agentServiceRes
 								.countByUseridAndOrgiAndStatus(userid, super.getOrgi(request),
 										UKDataContext.AgentUserStatusEnum.END.toString())));
 				
-				AgentService agentService = agentServiceList.get(0) ;
+				AgentService agentService = agentServiceList.getContent().get(0) ;
 				if(!StringUtils.isBlank(agentservice)){
-					for(AgentService as : agentServiceList){
+					for(AgentService as : agentServiceList.getContent()){
 						if(as.getId().equals(agentservice)){
 							agentService = as ; break ;
 						}

@@ -21,7 +21,7 @@
 					<div class="ukefu-relation">
 						<span lay-event="" class="ukefu-relation-item" style="width:20%;">
 							咨询
-							<a href="/service/history/index.html" class="measure"> <#if agentServiceList??>${agentServiceList?size}</#if></a>
+							<a href="/service/history/index.html" class="measure"> <#if agentServiceList??>${agentServiceList.totalElements!''}</#if></a>
 						</span>
 						<span lay-event="" class="ukefu-relation-item">
 							邀请
@@ -125,8 +125,8 @@
 								</tr>
 							</thead>
 							<tbody>
-								<#if agentServiceList?? && agentServiceList?size gt 0>
-								<#list agentServiceList as agentService>
+								<#if agentServiceList?? && agentServiceList.content?size gt 0>
+								<#list agentServiceList.content as agentService>
 								<tr class="tdHasContorllor design-dropable-td <#if curAgentService?? && curAgentService.id == agentService.id>ukefu-current-agentservice</#if> ukefu-agentservice-list">
 									<td class=" first_td_head">
 										<a href="/service/online/chatmsg.html?id=${agentService.id!''}" data-toggle="load" data-target="#onlinecontent">
