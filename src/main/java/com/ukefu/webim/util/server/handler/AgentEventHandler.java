@@ -58,7 +58,7 @@ public class AgentEventHandler
 	    	if(agentStatusList.size() > 0){
 	    		AgentStatus agentStatus = agentStatusList.get(0) ;
 				agentStatus.setUpdatetime(new Date());
-				agentStatusRepository.save(agentStatus);
+//				agentStatusRepository.save(agentStatus);
 				if(CacheHelper.getAgentStatusCacheBean().getCacheObject(user, orgi)!=null) {
 					CacheHelper.getAgentStatusCacheBean().put(user, agentStatus , orgi);
 				}
