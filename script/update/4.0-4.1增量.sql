@@ -434,3 +434,33 @@ CREATE TABLE `uk_sms_templet` (
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='短信模板表';
 
+
+
+
+CREATE TABLE `uk_sms_record` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `NAME` varchar(255) DEFAULT NULL COMMENT '模板名称',
+  `DESCRIPTION` longtext COMMENT '描述',
+  `CODE` varchar(255) DEFAULT NULL COMMENT '代码',
+  `GROUPID` varchar(255) DEFAULT NULL COMMENT '组ID',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `USERID` varchar(255) DEFAULT NULL COMMENT '创建人ID',
+  `TEMPLETTITLE` varchar(500) DEFAULT NULL COMMENT '模板标题内容',
+  `SMSTEXT` longtext COMMENT '模板内容',
+  `SUBTIME` datetime COMMENT '提交时间',
+  `SENDTIME` datetime COMMENT '发送时间',
+  `SMSID` varchar(32) COMMENT '短信网关ID',
+  `SENDRESULT` varchar(32) COMMENT '短信发送结果',
+  `TEMPLETTYPE` varchar(255) DEFAULT NULL COMMENT '模板类型',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `ICONSTR` varchar(255) DEFAULT NULL COMMENT '自定义样式',
+  `MEMO` varchar(255) DEFAULT NULL COMMENT '备注',
+  `ORDERINDEX` int(11) DEFAULT NULL COMMENT '排序位置',
+  `TYPEID` varchar(32) DEFAULT NULL COMMENT '分类ID',
+  `SELDATA` tinyint(4) DEFAULT NULL COMMENT '启用外键',
+  `layoutcols` int(11) DEFAULT '0' COMMENT '布局列数',
+  `datatype` varchar(32) DEFAULT NULL COMMENT '数据类型',
+  `charttype` varchar(32) DEFAULT NULL COMMENT '图表类型',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='短信发送记录表';
+

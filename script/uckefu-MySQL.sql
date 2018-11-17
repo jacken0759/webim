@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-11-16 10:50:29
+Date: 2018-11-17 20:25:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -5166,6 +5166,72 @@ CREATE TABLE `uk_skill` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `uk_sms_record`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_sms_record`;
+CREATE TABLE `uk_sms_record` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `NAME` varchar(255) DEFAULT NULL COMMENT '模板名称',
+  `DESCRIPTION` longtext COMMENT '描述',
+  `CODE` varchar(255) DEFAULT NULL COMMENT '代码',
+  `GROUPID` varchar(255) DEFAULT NULL COMMENT '组ID',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `USERID` varchar(255) DEFAULT NULL COMMENT '创建人ID',
+  `TEMPLETTITLE` varchar(500) DEFAULT NULL COMMENT '模板标题内容',
+  `SMSTEXT` longtext COMMENT '模板内容',
+  `SUBTIME` datetime DEFAULT NULL COMMENT '提交时间',
+  `SENDTIME` datetime DEFAULT NULL COMMENT '发送时间',
+  `SMSID` varchar(32) DEFAULT NULL COMMENT '短信网关ID',
+  `SENDRESULT` varchar(32) DEFAULT NULL COMMENT '短信发送结果',
+  `TEMPLETTYPE` varchar(255) DEFAULT NULL COMMENT '模板类型',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `ICONSTR` varchar(255) DEFAULT NULL COMMENT '自定义样式',
+  `MEMO` varchar(255) DEFAULT NULL COMMENT '备注',
+  `ORDERINDEX` int(11) DEFAULT NULL COMMENT '排序位置',
+  `TYPEID` varchar(32) DEFAULT NULL COMMENT '分类ID',
+  `SELDATA` tinyint(4) DEFAULT NULL COMMENT '启用外键',
+  `layoutcols` int(11) DEFAULT '0' COMMENT '布局列数',
+  `datatype` varchar(32) DEFAULT NULL COMMENT '数据类型',
+  `charttype` varchar(32) DEFAULT NULL COMMENT '图表类型',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='短信发送记录表';
+
+-- ----------------------------
+-- Records of uk_sms_record
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_sms_templet`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_sms_templet`;
+CREATE TABLE `uk_sms_templet` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `NAME` varchar(255) DEFAULT NULL COMMENT '模板名称',
+  `DESCRIPTION` longtext COMMENT '描述',
+  `CODE` varchar(255) DEFAULT NULL COMMENT '代码',
+  `GROUPID` varchar(255) DEFAULT NULL COMMENT '组ID',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `USERID` varchar(255) DEFAULT NULL COMMENT '创建人ID',
+  `TEMPLETTITLE` varchar(500) DEFAULT NULL COMMENT '模板标题内容',
+  `TEMPLETTEXT` longtext COMMENT '模板内容',
+  `TEMPLETTYPE` varchar(255) DEFAULT NULL COMMENT '模板类型',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `ICONSTR` varchar(255) DEFAULT NULL COMMENT '自定义样式',
+  `MEMO` varchar(255) DEFAULT NULL COMMENT '备注',
+  `ORDERINDEX` int(11) DEFAULT NULL COMMENT '排序位置',
+  `TYPEID` varchar(32) DEFAULT NULL COMMENT '分类ID',
+  `SELDATA` tinyint(4) DEFAULT NULL COMMENT '启用外键',
+  `layoutcols` int(11) DEFAULT '0' COMMENT '布局列数',
+  `datatype` varchar(32) DEFAULT NULL COMMENT '数据类型',
+  `charttype` varchar(32) DEFAULT NULL COMMENT '图表类型',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='短信模板表';
+
+-- ----------------------------
+-- Records of uk_sms_templet
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `uk_snsaccount`
 -- ----------------------------
 DROP TABLE IF EXISTS `uk_snsaccount`;
@@ -8896,6 +8962,9 @@ INSERT INTO `uk_sysdic` VALUES ('4028811b665196b1016651a4a057004c', '空闲', 'p
 INSERT INTO `uk_sysdic` VALUES ('4028811b6676847001667a7febc103a5', '话术管理', 'pub', 'A11_A06_A07', null, 'auth', '402888816400f9110164011abffe058e', null, null, '&#x756e646566696e6564;', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-10-16 09:31:35', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', '/apps/salespatter/index.html', 'webim', '2', null, 'left');
 INSERT INTO `uk_sysdic` VALUES ('4028811b6686698d01668675e46a032a', '测试', 'pub', '01', 'ukewo', null, '297e74066652bc8a016652f07fa20110', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-10-18 17:16:05', '2018-10-18 17:16:05', '0', '1', '297e74066652bc8a016652f07fa20110', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('4028811b6686698d016686824542037e', '测试', 'pub', '01', 'ukewo', null, '297e74066652bc8a016652f0cdbd0114', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-10-18 17:29:36', '2018-10-18 17:29:36', '0', '1', '297e74066652bc8a016652f0cdbd0114', '0', '0', null, null, null, null, null);
+INSERT INTO `uk_sysdic` VALUES ('4028811b671beae801671bfa71a0025e', '短信模板类型', 'pub', 'com.dic.sms.templetype', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-16 18:04:17', null, '1', '0', null, '0', '0', null, null, null, null, null);
+INSERT INTO `uk_sysdic` VALUES ('4028811b671beae801671bfae9c30264', '电销名单', 'pub', 'sales', 'ukewo', null, '4028811b671beae801671bfa71a0025e', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-16 18:04:47', '2018-11-16 18:04:47', '0', '1', '4028811b671beae801671bfa71a0025e', '0', '0', null, null, null, null, null);
+INSERT INTO `uk_sysdic` VALUES ('4028811b671beae801671bfae9d70265', '电销商品', 'pub', 'pro', 'ukewo', null, '4028811b671beae801671bfa71a0025e', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-16 18:04:47', '2018-11-16 18:04:47', '0', '2', '4028811b671beae801671bfa71a0025e', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('402881e8618cc9ab01618cd99f40035a', '模型类型', 'pub', 'com.dic.cube.modeltype', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-02-13 09:48:47', null, '1', '0', null, '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('402881e8618cc9ab01618cd9cfae035b', '立方体', 'pub', 'cube', 'ukewo', 'layui-icon', '402881e8618cc9ab01618cd99f40035a', '', null, '', '', null, '4028cac3614cd2f901614cf8be1f0324', '2018-02-13 09:49:00', '2018-02-13 09:49:00', '0', '1', '402881e8618cc9ab01618cd99f40035a', '0', '1', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('402881e86191fd51016191ff64550355', '维度成员数据类型', 'pub', 'com.dic.cubelevel.type', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-02-14 09:48:09', null, '1', '0', null, '0', '0', null, null, null, null, null);
@@ -9366,7 +9435,7 @@ INSERT INTO `uk_sysdic` VALUES ('402881fb6251f62201625229bd380495', '价格采�
 INSERT INTO `uk_sysdic` VALUES ('402881fb6251f62201625229ccad0496', '价格采集', 'pub', 'g7_1', 'ukewo', null, '402881fb6251f62201625228bb4b048e', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-03-23 17:21:33', '2018-03-23 17:21:33', '0', '1', '402881fb624c612401624c6fb495043d', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('402881fb6251f62201625229ddcf0497', '价格采集', 'pub', 'g8_1', 'ukewo', null, '402881fb6251f62201625228bb5a048f', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-03-23 17:21:38', '2018-03-23 17:21:38', '0', '1', '402881fb624c612401624c6fb495043d', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('402881fb6266a6c7016266a9854e0394', '短信网关类型', 'pub', 'com.dic.sms.type', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-03-27 16:53:28', null, '1', '0', null, '0', '0', null, null, null, null, null);
-INSERT INTO `uk_sysdic` VALUES ('402881fb6266a6c7016266ab17bf0395', '阿里大于', 'pub', 'dysms', 'ukewo', 'layui-icon', '402881fb6266a6c7016266a9854e0394', '', null, '', '', null, '4028cac3614cd2f901614cf8be1f0324', '2018-03-27 16:55:11', null, '1', '0', '402881fb6266a6c7016266a9854e0394', '0', '0', null, null, null, null, null);
+INSERT INTO `uk_sysdic` VALUES ('402881fb6266a6c7016266ab17bf0395', '阿里大鱼', 'pub', 'dysms', 'ukewo', 'layui-icon', '402881fb6266a6c7016266a9854e0394', '', null, '', '', null, '4028cac3614cd2f901614cf8be1f0324', '2018-03-27 16:55:11', null, '1', '0', '402881fb6266a6c7016266a9854e0394', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('402881fb6266c1bd016266c3d4070394', '其他短信', 'pub', 'othersms', 'ukewo', 'layui-icon', '297e63f05d1da6be015d1dae6de20002', '', null, '', '', null, '4028cac3614cd2f901614cf8be1f0324', '2018-03-27 17:22:12', null, '1', '0', '297e63f05d1da6be015d1dae6de20002', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('4028838b5ae97036015ae972b6f10003', '客户类型', 'pub', 'com.dic.contacts.entype', null, 'data', '0', '', null, null, null, null, '297e8c7b455798280145579c73e501c1', '2017-03-20 10:01:33', null, '1', '0', null, '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('4028838b5ae97036015ae972d48d0004', '普通客户', 'pub', '01', 'ukewo', null, '4028838b5ae97036015ae972b6f10003', null, null, null, null, null, '297e8c7b455798280145579c73e501c1', '2017-03-20 10:01:41', '2017-03-20 10:01:41', '0', '1', '4028838b5ae97036015ae972b6f10003', '0', '0', null, null, null, null, null);
@@ -10082,7 +10151,7 @@ CREATE TABLE `uk_user` (
 INSERT INTO `uk_user` VALUES ('4028811b61834723016183ec57760392', null, 'chenfarong', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'chen@ukewo.cn', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-02-11 16:12:39', null, '2018-06-29 17:40:30', null, '18510129455', '2018-02-11 16:12:39', null, '0', '陈法蓉', null, '0', null, null, null, '0', '0', '0', '2018-06-29 17:40:37', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b642f5f8c01642f60ed440683', null, 'test1', '130811dbd239c97bd9ce933de7349f20', '5', 'ad@te.com', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-06-24 09:20:38', null, '2018-10-09 11:01:09', null, '18510129433', '2018-06-24 09:20:38', null, '0', 'test1', null, '1', null, null, null, '0', '0', '0', '2018-10-10 15:13:33', null, null, null, '0', '1', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b645dc08f01645e0512ce0935', null, 'yiliao', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'asd@ac.com', null, null, null, null, null, null, null, null, null, null, null, '4028811b645dc08f01645e005f3d08dd', 'ukewo', null, '2018-07-03 10:42:28', null, '2018-07-03 10:43:31', null, '18512212955', '2018-07-03 10:42:28', null, '0', '医疗', null, '0', null, null, null, '0', '0', '0', '2018-07-03 10:43:39', null, null, null, '0', '0', '0', '0', null);
-INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-11-16 09:26:10', null, null, null, '0', '1', '1', '0', null);
+INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-11-17 20:22:38', null, null, null, '0', '1', '1', '0', null);
 
 -- ----------------------------
 -- Table structure for `uk_userevent`
