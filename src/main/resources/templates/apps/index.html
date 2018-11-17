@@ -206,15 +206,6 @@
 									<i class="kfont" style="top: 1px;">&#xe717;</i>
 								</a>
 							</dd>
-							<#if user?? && user.agent == true>
-								<#if user?? && (user.roleAuthMap["A01"]?? || user.usertype == "0") >
-								<dd class="ukefu-left-menu" data-tooltip="坐席工作台">
-									<a href="/ukefu/layer.html" href="javascript:void(0)" onclick="return false;" data-title="坐席对话" data-href="/agent/index.html" class="iframe_btn" data-id="multiMediaDialogWin" data-type="tabAdd"> <i class="layui-icon"
-										style="top: 3px;">&#xe63a;</i>
-									</a>
-								</dd>
-								</#if>
-							</#if>
 							<#if models?? && models["contacts"]?? && models["contacts"] == true>
 								<#if user?? && (user.roleAuthMap["A02"]??  || user.usertype == "0")>
 								<dd class="ukefu-left-menu" data-tooltip="全部联系人">
@@ -269,14 +260,6 @@
 								<dd class="ukefu-left-menu" data-tooltip="客服设置">
 									<a href="javascript:void(0)" data-title="客服设置" data-href="/setting/agent/index.html" class="iframe_btn" data-id="maincontent" data-type="tabChange"> <i class="layui-icon"
 										style="position: relative;">&#xe614;</i>
-									</a>
-								</dd>
-							</#if>
-							<#if user?? && (user.roleAuthMap["A07"]?? || user.usertype == "0") >
-								<dd class="ukefu-left-menu" data-tooltip="快捷回复">
-									<a href="javascript:void(0)" data-title="快捷回复" data-href="/setting/quickreply/index.html" class="iframe_btn" data-id="maincontent" data-type="tabChange"> 
-										<i class="layui-icon"
-										style="position: relative;">&#xe609;</i>
 									</a>
 								</dd>
 							</#if>

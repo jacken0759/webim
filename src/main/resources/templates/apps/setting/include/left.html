@@ -24,11 +24,30 @@
 				<a href="/setting/role/index.html">角色授权</a>
 			</dd>
 			</#if>
+			<#if user?? && (user.roleAuthMap["A07"]?? || user.usertype == "0") >
+			<dd class="<#if subtype?? && subtype == "quickreply">layui-this</#if>">
+				<a href="/setting/quickreply/index.html">快捷回复</a>
+			</dd>
+			</#if>
 			<!-- 
 			<dd <#if subtype?? && subtype == 'acd'>class="layui-this"</#if>>
 				<a href="/setting/acd.html">ACD策略</a>
 			</dd>
 			 -->
+		</dl>
+	</li>
+</#if>
+<#if user?? && (user.roleAuthMap["A06_A10"]?? || user.usertype == "0") >
+	<li class="layui-nav-item layui-nav-itemed">
+		<a class="layui-nav-title" href="javascript:;">短信模板设置</a>
+		<dl class="layui-nav-child">
+			<#list smsTempletTypeList as smsTemplet>
+				<dd <#if sysDic?? && sysDic.id== smsTemplet.id>class="layui-this"</#if>>
+					<a  href="/setting/sms/index.html?tptype=${smsTemplet.id!''}">
+						${smsTemplet.name!''}
+					</a>
+				</dd>
+			</#list>
 		</dl>
 	</li>
 </#if>
@@ -45,7 +64,7 @@
 			</#list>
 		</dl>
 	</li>
-	</#if>
+</#if>
 <#if user?? && (user.roleAuthMap["A06_A02"]?? || user.usertype == "0") >
 	<li class="layui-nav-item layui-nav-itemed">
 		<a class="layui-nav-title" href="javascript:;">广告位管理</a>
