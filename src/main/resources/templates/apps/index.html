@@ -288,6 +288,7 @@
 									</dd>
 								</#if>
 							</#if>
+							<!-- 
 							<#if models?? && ( (models["sales"]?? && models["sales"] == true) || (models["calloutai"]?? && models["calloutai"] == true) )>
 								<#if user?? &&( user.roleAuthMap["A11"]?? || user.usertype == "0") >
 								<dd class="ukefu-left-menu" data-tooltip="外呼名单">
@@ -297,6 +298,7 @@
 								</dd>
 								</#if>
 							</#if>
+							 -->
 							<#if models?? && models["sales"]?? && models["sales"] == true>
 								<#if user?? &&( user.roleAuthMap["A11"]?? || user.usertype == "0") >
 								<dd class="ukefu-left-menu" data-tooltip="电销系统">
@@ -306,6 +308,7 @@
 								</dd>
 								</#if>
 							</#if>
+							<!-- 
 							<#if models?? && models["calloutai"]?? && models["calloutai"] == true>
 								<#if user?? &&( user.roleAuthMap["A11"]?? || user.usertype == "0") >
 								<dd class="ukefu-left-menu" data-tooltip="外呼机器人">
@@ -315,6 +318,7 @@
 								</dd>
 								</#if>
 							</#if>
+							 -->
 							<#if models?? && models["callcenter"]?? && models["callcenter"] == true>
 								<#if user?? && (user.roleAuthMap["A10"]?? || user.usertype == "0") >
 									<dd class="ukefu-left-menu" data-tooltip="语音渠道">
