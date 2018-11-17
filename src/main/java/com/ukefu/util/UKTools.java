@@ -1735,4 +1735,29 @@ public class UKTools {
 		}
 		return tempFile ;
 	}
+	/**
+	 * 计算短信模板表达式
+	 * @param param
+	 * @param reportList
+	 * @return
+	 */
+	public static String processTempletValue(String smstemplet , Map<String,Object> data){
+		StringBuffer strb = new StringBuffer();
+		Pattern pattern = Pattern.compile("(\\[[\\S\\s]*?\\])") ;
+		Matcher matcher = pattern.matcher(smstemplet) ;
+		 while(matcher.find()) {
+			 String param = matcher.group(1) ;
+			 Object value = data.get(param.substring(1, param.length() - 1)) ;
+			 if(value == null) {
+				 value = ""  ;
+			 }
+			 matcher.appendReplacement(strb,value.toString());
+		    }
+		    matcher.appendTail(strb) ;
+		    if(strb.length() == 0){
+		    	strb.append(smstemplet) ;
+		    }
+		
+		return strb.toString() ;
+	}
 }
