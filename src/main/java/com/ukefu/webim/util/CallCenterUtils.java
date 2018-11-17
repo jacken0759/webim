@@ -534,8 +534,8 @@ public class CallCenterUtils {
 		BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
 		queryBuilder.must(termQuery("actid", actid));// 活动ID
 		queryBuilder.mustNot(termQuery("status", UKDataContext.NamesDisStatusType.NOT.toString()));
-		PageImpl<UKDataBean> dataList = SearchTools.search(queryBuilder,p, ps);
-		return dataList.getContent().size();
+		PageImpl<UKDataBean> dataList = SearchTools.search(queryBuilder,p, 1);
+		return (int)dataList.getTotalElements();
 	}
 	/**
 	 * 获取语音渠道中的查询条件

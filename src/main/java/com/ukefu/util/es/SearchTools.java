@@ -49,121 +49,13 @@ import com.ukefu.webim.web.model.WorkOrders;
 public class SearchTools {
 	
 	public static PageImpl<UKDataBean> search(String orgi , FormFilter formFilter , List<FormFilterItem> itemList , MetadataTable metadataTable , boolean loadRef , int p, int ps){
-		BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
-		queryBuilder.must(termQuery("orgi", orgi)) ;
-		
-		BoolQueryBuilder orBuilder = new BoolQueryBuilder();
-		int orNums = 0 ;
-		for(FormFilterItem formFilterItem : itemList) {
-			QueryBuilder tempQueryBuilder = null ;
-			if(formFilterItem.getField().equals("q")) {
-				tempQueryBuilder = new QueryStringQueryBuilder(formFilterItem.getValue()).defaultOperator(Operator.AND) ;
-			}else {
-				switch(formFilterItem.getCond()) {
-					case "01" : 
-						tempQueryBuilder = rangeQuery(formFilterItem.getField()).from(formFilterItem.getValue()).includeLower(false) ;
-						break ;
-					case "02" : 
-						tempQueryBuilder = rangeQuery(formFilterItem.getField()).from(formFilterItem.getValue()).includeLower(true) ;
-						break ;
-					case "03" : 
-						tempQueryBuilder = rangeQuery(formFilterItem.getField()).to(formFilterItem.getValue()).includeUpper(false) ;
-						break ;
-					case "04" : 
-						tempQueryBuilder = rangeQuery(formFilterItem.getField()).to(formFilterItem.getValue()).includeUpper(true) ;
-						break ;
-					case "05" : 
-						tempQueryBuilder = termQuery(formFilterItem.getField() , formFilterItem.getValue()) ;
-						break ;
-					case "06" : 
-						tempQueryBuilder = termQuery(formFilterItem.getField() , formFilterItem.getValue()) ;
-						break ;
-					case "07" : 
-						tempQueryBuilder = new QueryStringQueryBuilder(formFilterItem.getValue()).field(formFilterItem.getField()).defaultOperator(Operator.AND) ;
-						break ;
-					default :
-						break ;
-				}
-			}
-			if("AND".equalsIgnoreCase(formFilterItem.getComp())) {
-				if("06".equals(formFilterItem.getCond())) {
-					queryBuilder.mustNot(tempQueryBuilder) ;
-				}else {
-					queryBuilder.must(tempQueryBuilder) ;
-				}
-			}else {
-				orNums ++ ;
-				if("06".equals(formFilterItem.getCond())) {
-					orBuilder.mustNot(tempQueryBuilder) ;
-				}else {
-					orBuilder.should(tempQueryBuilder) ;
-				}
-			}
-		}
-		if(orNums > 0) {
-			queryBuilder.must(orBuilder) ;
-		}
-		
-		return search(queryBuilder, metadataTable, loadRef, p, ps);
+		return search(query(orgi, formFilter, itemList, metadataTable, loadRef, p, ps), metadataTable, loadRef, p, ps);
 	}
 	
 	public static PageImpl<UKDataBean> dissearch(String orgi , FormFilter formFilter , List<FormFilterItem> itemList , MetadataTable metadataTable , int p, int ps){
-		BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
-		queryBuilder.must(termQuery("orgi", orgi)) ;
+		BoolQueryBuilder queryBuilder = query(orgi, formFilter, itemList, metadataTable, false, p, ps) ;
 		queryBuilder.must(termQuery("status", UKDataContext.NamesDisStatusType.NOT.toString())) ;
 		queryBuilder.must(termQuery("validresult", "valid")) ;
-		
-		BoolQueryBuilder orBuilder = new BoolQueryBuilder();
-		int orNums = 0 ;
-		for(FormFilterItem formFilterItem : itemList) {
-			QueryBuilder tempQueryBuilder = null ;
-			if(formFilterItem.getField().equals("q")) {
-				tempQueryBuilder = new QueryStringQueryBuilder(formFilterItem.getValue()).defaultOperator(Operator.AND) ;
-			}else {
-				switch(formFilterItem.getCond()) {
-					case "01" : 
-						tempQueryBuilder = rangeQuery(formFilterItem.getField()).from(formFilterItem.getValue()).includeLower(false) ;
-						break ;
-					case "02" : 
-						tempQueryBuilder = rangeQuery(formFilterItem.getField()).from(formFilterItem.getValue()).includeLower(true) ;
-						break ;
-					case "03" : 
-						tempQueryBuilder = rangeQuery(formFilterItem.getField()).to(formFilterItem.getValue()).includeUpper(false) ;
-						break ;
-					case "04" : 
-						tempQueryBuilder = rangeQuery(formFilterItem.getField()).to(formFilterItem.getValue()).includeUpper(true) ;
-						break ;
-					case "05" : 
-						tempQueryBuilder = termQuery(formFilterItem.getField() , formFilterItem.getValue()) ;
-						break ;
-					case "06" : 
-						tempQueryBuilder = termQuery(formFilterItem.getField() , formFilterItem.getValue()) ;
-						break ;
-					case "07" : 
-						tempQueryBuilder = new QueryStringQueryBuilder(formFilterItem.getValue()).field(formFilterItem.getField()).defaultOperator(Operator.AND) ;
-						break ;
-					default :
-						break ;
-				}
-			}
-			if("AND".equalsIgnoreCase(formFilterItem.getComp())) {
-				if("06".equals(formFilterItem.getCond())) {
-					queryBuilder.mustNot(tempQueryBuilder) ;
-				}else {
-					queryBuilder.must(tempQueryBuilder) ;
-				}
-			}else {
-				orNums ++ ;
-				if("06".equals(formFilterItem.getCond())) {
-					orBuilder.mustNot(tempQueryBuilder) ;
-				}else {
-					orBuilder.should(tempQueryBuilder) ;
-				}
-			}
-		}
-		if(orNums > 0) {
-			queryBuilder.must(orBuilder) ;
-		}
 		return search(queryBuilder, metadataTable, false, p, ps);
 	}
 	
@@ -331,7 +223,7 @@ public class SearchTools {
 	 * @param ps
 	 * @return
 	 */
-	private static PageImpl<UKDataBean> search(BoolQueryBuilder queryBuilder , MetadataTable metadataTable , boolean loadRef , int p, int ps){
+	public static PageImpl<UKDataBean> search(BoolQueryBuilder queryBuilder , MetadataTable metadataTable , boolean loadRef , int p, int ps){
 		return search(queryBuilder, metadataTable, loadRef, p, ps, "createtime");
 	}
 	
@@ -775,5 +667,63 @@ public class SearchTools {
 			    return pb;  
 			}}, new PageRequest(0, 10000 , Sort.Direction.DESC, "createtime")) ;
 		return page.getContent();
+	}
+	public static BoolQueryBuilder query(String orgi , FormFilter formFilter , List<FormFilterItem> itemList , MetadataTable metadataTable , boolean loadRef , int p, int ps){
+		BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
+		queryBuilder.must(termQuery("orgi", orgi)) ;
+		
+		BoolQueryBuilder orBuilder = new BoolQueryBuilder();
+		int orNums = 0 ;
+		for(FormFilterItem formFilterItem : itemList) {
+			QueryBuilder tempQueryBuilder = null ;
+			if(formFilterItem.getField().equals("q")) {
+				tempQueryBuilder = new QueryStringQueryBuilder(formFilterItem.getValue()).defaultOperator(Operator.AND) ;
+			}else {
+				switch(formFilterItem.getCond()) {
+					case "01" : 
+						tempQueryBuilder = rangeQuery(formFilterItem.getField()).from(formFilterItem.getValue()).includeLower(false) ;
+						break ;
+					case "02" : 
+						tempQueryBuilder = rangeQuery(formFilterItem.getField()).from(formFilterItem.getValue()).includeLower(true) ;
+						break ;
+					case "03" : 
+						tempQueryBuilder = rangeQuery(formFilterItem.getField()).to(formFilterItem.getValue()).includeUpper(false) ;
+						break ;
+					case "04" : 
+						tempQueryBuilder = rangeQuery(formFilterItem.getField()).to(formFilterItem.getValue()).includeUpper(true) ;
+						break ;
+					case "05" : 
+						tempQueryBuilder = termQuery(formFilterItem.getField() , formFilterItem.getValue()) ;
+						break ;
+					case "06" : 
+						tempQueryBuilder = termQuery(formFilterItem.getField() , formFilterItem.getValue()) ;
+						break ;
+					case "07" : 
+						tempQueryBuilder = new QueryStringQueryBuilder(formFilterItem.getValue()).field(formFilterItem.getField()).defaultOperator(Operator.AND) ;
+						break ;
+					default :
+						break ;
+				}
+			}
+			if("AND".equalsIgnoreCase(formFilterItem.getComp())) {
+				if("06".equals(formFilterItem.getCond())) {
+					queryBuilder.mustNot(tempQueryBuilder) ;
+				}else {
+					queryBuilder.must(tempQueryBuilder) ;
+				}
+			}else {
+				orNums ++ ;
+				if("06".equals(formFilterItem.getCond())) {
+					orBuilder.mustNot(tempQueryBuilder) ;
+				}else {
+					orBuilder.should(tempQueryBuilder) ;
+				}
+			}
+		}
+		if(orNums > 0) {
+			queryBuilder.must(orBuilder) ;
+		}
+		
+		return queryBuilder;
 	}
 }
