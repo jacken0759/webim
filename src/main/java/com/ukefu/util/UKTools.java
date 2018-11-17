@@ -1381,18 +1381,26 @@ public class UKTools {
 	 * @param content
 	 * @throws Exception
 	 */
-	public static boolean sendSms(String phone,String id ,String tpId, Map<String,Object> tplValuesMap) throws Exception{
+	public static boolean sendSmsByTemplate(String phone,String id ,String tpId, Map<String,Object> tplValuesMap) throws Exception{
+		Template tp = UKTools.getTemplate(tpId) ;
+		return sendSms(phone, id, UKTools.getTemplet(tp.getTemplettext(),tplValuesMap));
+	}
+	
+	/**
+	 * 发送短信
+	 * @param email
+	 * @param cc
+	 * @param subject
+	 * @param content
+	 * @throws Exception
+	 */
+	public static boolean sendSms(String phone,String id ,String template) throws Exception{
 		SystemConfig config = UKTools.getSystemConfig() ;
 		if(config!=null) {
-			SystemMessage systemMessage = UKDataContext.getContext().getBean(SystemMessageRepository.class).findByIdAndOrgi(id,config.getOrgi()) ;
+			SystemMessage systemMessage = UKDataContext.getContext().getBean(SystemMessageRepository.class).findByIdAndOrgi(!StringUtils.isBlank(config.getSmsid()) ? config.getSmsid() : id,config.getOrgi()) ;
 			if(systemMessage==null) {
 				return false;
 			}
-			Template tp = UKTools.getTemplate(tpId) ;
-			if(tp==null) {
-				return false;
-			}
-			String params = UKTools.getTemplet(tp.getTemplettext(),tplValuesMap) ;
 			
 			SysDic sysDic= UKeFuDic.getInstance().getDicItem(systemMessage.getSmstype());
 			//阿里大于
@@ -1423,7 +1431,7 @@ public class UKTools {
 				 request.setTemplateCode(systemMessage.getTpcode());
 				 //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
 				 //友情提示:如果JSON中需要带换行符,请参照标准的JSON协议对换行符的要求,比如短信内容中包含\r\n的情况在JSON中需要表示成\\r\\n,否则会导致JSON在服务端解析失败
-				 request.setTemplateParam(params);
+				 request.setTemplateParam(template);
 				 //可选-上行短信扩展码(扩展码字段控制在7位或以下，无特殊需求用户请忽略此字段)
 				 //request.setSmsUpExtendCode("90997");
 				 //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者

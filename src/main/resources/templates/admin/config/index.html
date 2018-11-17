@@ -664,7 +664,42 @@
 								</div>
 								
 								<div class="ukefu-webim-prop">
-									<div class="ukefu-webim-tl" style="clear:both;">19、启用多${systemConfig.namealias!'租户'}管理模式</div>
+									<div class="ukefu-webim-tl" style="clear:both;">19、启用短信发送功能</div>
+									<div class="box-item">
+										<div class="row">
+											<div class="col-lg-8">
+												<p>启用系统发送短信功能</p>
+												<p style="color:#888888;font-size:13px;margin-top:10px;">开启后在业务功能中出现短信发送按钮</p>
+											</div>
+											<div class="col-lg-4" style="text-align:right;">
+												<input type="checkbox" title="启用" name="enablesms" lay-filter="sms" <#if systemConfig?? && systemConfig.enablesms == true>checked="checked"</#if>>
+											</div>
+										</div>
+									</div>
+									<div class="box-item" id="sms" style="position: relative;<#if systemConfig?? && systemConfig.enablesms == true><#else>display:none;</#if>">
+										<div class="row" style="margin-bottom:20px;">
+											<div class="col-lg-8">
+												<p>a、发送短信的网关</p>
+												<p style="color:#888888;font-size:13px;margin-top:10px;">选用发送短信的网关服务器配置信息</p>
+											</div>
+											<div class="col-lg-4" style="text-align:right;">
+												<div class="layui-input-block">
+												     <select name="smsid">
+												     	<option value="">请选择短信网关...</option>
+												     	<#if smsMessageList??>
+												     	<#list smsMessageList as server>
+												        <option value="${server.id!''}" <#if systemConfig.smsid?? && server.id == systemConfig.smsid>selected="selected"</#if>>${server.name!''}</option>
+												        </#list>
+												        </#if>
+												      </select>
+												</div>	
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="ukefu-webim-prop">
+									<div class="ukefu-webim-tl" style="clear:both;">20、启用多${systemConfig.namealias!'租户'}管理模式</div>
 									<div class="box-item">
 										<div class="row">
 											<div class="col-lg-8">
@@ -728,7 +763,7 @@
 									</div>
 								</div>
 								<div class="ukefu-webim-prop">
-									<div class="ukefu-webim-tl" style="clear:both;">20、启用日志存储到数据库</div>
+									<div class="ukefu-webim-tl" style="clear:both;">21、启用日志存储到数据库</div>
 									<div class="box-item">
 										<div class="row">
 											<div class="col-lg-8">
@@ -837,6 +872,13 @@
 				$('#email').show();		
 			}else{
 				$('#email').hide();
+			}
+		});
+		form.on("checkbox(sms)" , function(data){
+			if(data.elem.checked == true){
+				$('#sms').show();		
+			}else{
+				$('#sms').hide();
 			}
 		});
 		form.on("checkbox(tenant)" , function(data){

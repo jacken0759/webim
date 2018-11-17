@@ -106,6 +106,8 @@ public class SystemConfigController extends Handler{
     	
     	map.addAttribute("sysMessageList", systemMessageRes.findByMsgtypeAndOrgi(UKDataContext.SystemMessageType.EMAIL.toString(), super.getOrgi(request))) ;
     	
+    	map.addAttribute("smsMessageList", systemMessageRes.findByMsgtypeAndOrgi(UKDataContext.SystemMessageType.SMS.toString(), super.getOrgi(request))) ;
+    	
     	if(!StringUtils.isBlank(execute) && execute.equals("false")){
     		map.addAttribute("execute", execute) ;
     	}
