@@ -450,7 +450,19 @@ CREATE TABLE `uk_sms_record` (
   `SUBTIME` datetime COMMENT '提交时间',
   `SENDTIME` datetime COMMENT '发送时间',
   `SMSID` varchar(32) COMMENT '短信网关ID',
-  `SENDRESULT` varchar(32) COMMENT '短信发送结果',
+  `SENDRESULT` text COMMENT '短信发送结果',
+  `SENDOK` tinyint DEFAULT 0 COMMENT '是否发送成功',
+  `APPKEY` VARCHAR(100) DEFAULT NULL COMMENT '分配类型',
+  `SMSTYPE` VARCHAR(100) DEFAULT NULL COMMENT '分配类型',
+  `DISTYPE` VARCHAR(100) DEFAULT NULL COMMENT '分配类型',
+  `DATAID` VARCHAR(100) DEFAULT NULL COMMENT '数据ID',
+  `TASKID` VARCHAR(100) DEFAULT NULL COMMENT '任务ID',
+  `FILTERID` VARCHAR(100) DEFAULT NULL COMMENT '筛选表单ID',
+  `PHONENUMBER` VARCHAR(100) DEFAULT NULL COMMENT '电话号码',
+  `ACTID` VARCHAR(32) DEFAULT NULL COMMENT '活动ID',
+  `BATID` VARCHAR(32) DEFAULT NULL COMMENT '活动ID',
+  `ORGAN` VARCHAR(32) DEFAULT NULL COMMENT '部门',
+
   `TEMPLETTYPE` varchar(255) DEFAULT NULL COMMENT '模板类型',
   `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
   `ICONSTR` varchar(255) DEFAULT NULL COMMENT '自定义样式',
@@ -464,3 +476,8 @@ CREATE TABLE `uk_sms_record` (
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='短信发送记录表';
 
+
+
+INSERT INTO `uk_sysdic` VALUES ('4028811b671beae801671bfa71a0025e', '短信模板类型', 'pub', 'com.dic.sms.templetype', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-16 18:04:17', null, '1', '0', null, '0', '0', null, null, null, null, null);
+INSERT INTO `uk_sysdic` VALUES ('4028811b671beae801671bfae9c30264', '电销名单', 'pub', 'sales', 'ukewo', null, '4028811b671beae801671bfa71a0025e', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-16 18:04:47', '2018-11-16 18:04:47', '0', '1', '4028811b671beae801671bfa71a0025e', '0', '0', null, null, null, null, null);
+INSERT INTO `uk_sysdic` VALUES ('4028811b671beae801671bfae9d70265', '电销商品', 'pub', 'pro', 'ukewo', null, '4028811b671beae801671bfa71a0025e', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-16 18:04:47', '2018-11-16 18:04:47', '0', '2', '4028811b671beae801671bfa71a0025e', '0', '0', null, null, null, null, null);

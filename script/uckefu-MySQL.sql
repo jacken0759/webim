@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-11-17 20:25:05
+Date: 2018-11-18 17:46:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -5182,7 +5182,18 @@ CREATE TABLE `uk_sms_record` (
   `SUBTIME` datetime DEFAULT NULL COMMENT '提交时间',
   `SENDTIME` datetime DEFAULT NULL COMMENT '发送时间',
   `SMSID` varchar(32) DEFAULT NULL COMMENT '短信网关ID',
-  `SENDRESULT` varchar(32) DEFAULT NULL COMMENT '短信发送结果',
+  `SENDRESULT` text COMMENT '短信发送结果',
+  `SENDOK` tinyint(4) DEFAULT '0' COMMENT '是否发送成功',
+  `APPKEY` varchar(100) DEFAULT NULL COMMENT '分配类型',
+  `SMSTYPE` varchar(100) DEFAULT NULL COMMENT '分配类型',
+  `DISTYPE` varchar(100) DEFAULT NULL COMMENT '分配类型',
+  `DATAID` varchar(100) DEFAULT NULL COMMENT '数据ID',
+  `TASKID` varchar(100) DEFAULT NULL COMMENT '任务ID',
+  `FILTERID` varchar(100) DEFAULT NULL COMMENT '筛选表单ID',
+  `PHONENUMBER` varchar(100) DEFAULT NULL COMMENT '电话号码',
+  `ACTID` varchar(32) DEFAULT NULL COMMENT '活动ID',
+  `BATID` varchar(32) DEFAULT NULL COMMENT '活动ID',
+  `ORGAN` varchar(32) DEFAULT NULL COMMENT '部门',
   `TEMPLETTYPE` varchar(255) DEFAULT NULL COMMENT '模板类型',
   `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
   `ICONSTR` varchar(255) DEFAULT NULL COMMENT '自定义样式',
