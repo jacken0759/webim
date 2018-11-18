@@ -117,4 +117,23 @@
 		</dl>
 	</li>
 </#if>
+<#if user?? && (user.roleAuthMap["A08_A06"]?? || user.usertype == "0") >
+	<li class="layui-nav-item layui-nav-itemed">
+		<a class="layui-nav-title" href="javascript:;">短信发送记录</a>
+		<dl class="layui-nav-child">
+			<dd <#if subtype='sms' && !(sysDic??)>class="layui-this"</#if>>
+				<a  href="/service/sms/index.html">
+					全部记录
+				</a>
+			</dd>
+			<#list smsTempletTypeList as smsTemplet>
+				<dd <#if sysDic?? && sysDic.id== smsTemplet.id>class="layui-this"</#if>>
+					<a  href="/service/sms/index.html?tptype=${smsTemplet.id!''}">
+						${smsTemplet.name!''}
+					</a>
+				</dd>
+			</#list>
+		</dl>
+	</li>
+</#if>
 </ul>

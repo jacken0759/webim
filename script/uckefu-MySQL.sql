@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-11-18 17:46:09
+Date: 2018-11-18 20:38:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -5194,6 +5194,8 @@ CREATE TABLE `uk_sms_record` (
   `ACTID` varchar(32) DEFAULT NULL COMMENT '活动ID',
   `BATID` varchar(32) DEFAULT NULL COMMENT '活动ID',
   `ORGAN` varchar(32) DEFAULT NULL COMMENT '部门',
+  `EXTENTION` varchar(32) DEFAULT NULL COMMENT '分机ID',
+  `EXTNO` varchar(32) DEFAULT NULL COMMENT '分机号码',
   `TEMPLETTYPE` varchar(255) DEFAULT NULL COMMENT '模板类型',
   `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
   `ICONSTR` varchar(255) DEFAULT NULL COMMENT '自定义样式',

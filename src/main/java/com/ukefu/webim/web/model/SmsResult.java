@@ -37,9 +37,26 @@ public class SmsResult implements java.io.Serializable{
 	private Date subtime ;	//提交时间
 	private Date sendtime;	//发送时间
 	private String smsid;	//发送网关
+	private String extention;//分机ID
+	private String extno ;	//分机号码
 	private String sendresult;	//发送结果
 	
+	private String organ ;		//部门
 	
+	private String smstype ;	//发送的语音网关类型
+	private String appkey ;		//发送短信的 APPKEY
+	
+	private boolean sendok ;	//发送成功
+	
+	
+	private String dataid ;		//UKDataBean对象ID
+	private String taskid ;		//任务ID
+	private String filterid;	//筛选ID
+	private String actid ;		//活动ID
+	private String batid ;		//批次ID
+	
+	private String phonenumber;	//电话号码
+	private String distype ;	//号码隐藏
 	
 	private String templettype ; //List OR Preview
 	private Date createtime = new Date();
@@ -185,5 +202,82 @@ public class SmsResult implements java.io.Serializable{
 	public void setCharttype(String charttype) {
 		this.charttype = charttype;
 	}
-	
+	public String getSmstype() {
+		return smstype;
+	}
+	public void setSmstype(String smstype) {
+		this.smstype = smstype;
+	}
+	public String getAppkey() {
+		return appkey;
+	}
+	public void setAppkey(String appkey) {
+		this.appkey = appkey;
+	}
+	public String getDataid() {
+		return dataid;
+	}
+	public void setDataid(String dataid) {
+		this.dataid = dataid;
+	}
+	public String getTaskid() {
+		return taskid;
+	}
+	public void setTaskid(String taskid) {
+		this.taskid = taskid;
+	}
+	public String getFilterid() {
+		return filterid;
+	}
+	public void setFilterid(String filterid) {
+		this.filterid = filterid;
+	}
+	public String getActid() {
+		return actid;
+	}
+	public void setActid(String actid) {
+		this.actid = actid;
+	}
+	public String getPhonenumber() {
+		return phonenumber;
+	}
+	public void setPhonenumber(String phonenumber) {
+		this.phonenumber = phonenumber;
+	}
+	public String getDistype() {
+		return distype;
+	}
+	public void setDistype(String distype) {
+		this.distype = distype;
+	}
+	public String getBatid() {
+		return batid;
+	}
+	public void setBatid(String batid) {
+		this.batid = batid;
+	}
+	public String getOrgan() {
+		return organ;
+	}
+	public void setOrgan(String organ) {
+		this.organ = organ;
+	}
+	public boolean isSendok() {
+		return sendok;
+	}
+	public void setSendok(boolean sendok) {
+		this.sendok = sendok;
+	}
+	public String getExtention() {
+		return extention;
+	}
+	public void setExtention(String extention) {
+		this.extention = extention;
+	}
+	public String getExtno() {
+		return extno;
+	}
+	public void setExtno(String extno) {
+		this.extno = extno;
+	}
 }

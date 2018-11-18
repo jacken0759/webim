@@ -108,6 +108,7 @@ import com.ukefu.webim.web.model.PbxHost;
 import com.ukefu.webim.web.model.QualityConfig;
 import com.ukefu.webim.web.model.Secret;
 import com.ukefu.webim.web.model.SessionConfig;
+import com.ukefu.webim.web.model.SmsResult;
 import com.ukefu.webim.web.model.StatusEvent;
 import com.ukefu.webim.web.model.SysDic;
 import com.ukefu.webim.web.model.SystemConfig;
@@ -1381,9 +1382,9 @@ public class UKTools {
 	 * @param content
 	 * @throws Exception
 	 */
-	public static boolean sendSmsByTemplate(String phone,String id ,String tpId, Map<String,Object> tplValuesMap) throws Exception{
+	public static boolean sendSmsByTemplate(String phone,String id ,String tpId, Map<String,Object> tplValuesMap , SmsResult result) throws Exception{
 		Template tp = UKTools.getTemplate(tpId) ;
-		return sendSms(phone, id, UKTools.getTemplet(tp.getTemplettext(),tplValuesMap));
+		return sendSms(phone, id, UKTools.getTemplet(tp.getTemplettext(),tplValuesMap) , result);
 	}
 	
 	/**
@@ -1394,18 +1395,22 @@ public class UKTools {
 	 * @param content
 	 * @throws Exception
 	 */
-	public static boolean sendSms(String phone,String id ,String template) throws Exception{
+	public static boolean sendSms(String phone,String id ,String template  , SmsResult result) throws Exception{
 		SystemConfig config = UKTools.getSystemConfig() ;
 		if(config!=null) {
 			SystemMessage systemMessage = UKDataContext.getContext().getBean(SystemMessageRepository.class).findByIdAndOrgi(!StringUtils.isBlank(config.getSmsid()) ? config.getSmsid() : id,config.getOrgi()) ;
 			if(systemMessage==null) {
 				return false;
 			}
-			
+			if(result == null) {
+				result = new SmsResult() ;
+			}
 			SysDic sysDic= UKeFuDic.getInstance().getDicItem(systemMessage.getSmstype());
 			//阿里大于
+			result.setSmstext(template);
 			if(sysDic!=null && "dysms".equals(sysDic.getCode())) {
 				//设置超时时间-可自行调整
+				result.setSmstype(sysDic.getCode());
 				System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
 				System.setProperty("sun.net.client.defaultReadTimeout", "10000");
 				//初始化ascClient需要的几个参数
@@ -1414,6 +1419,8 @@ public class UKTools {
 				//替换成你的AK
 				final String accessKeyId = systemMessage.getAppkey();//你的accessKeyId,参考本文档步骤2
 				final String accessKeySecret = systemMessage.getAppsec();//你的accessKeySecret，参考本文档步骤2
+				result.setAppkey(accessKeyId);
+				result.setSubtime(new Date());
 				//初始化ascClient,暂时不支持多region（请勿修改）
 				IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId,
 				accessKeySecret);
@@ -1437,16 +1444,21 @@ public class UKTools {
 				 //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
 				 request.setOutId("yourOutId");
 				//请求失败这里会抛ClientException异常
-				SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
-				if(sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {
-					return true;
-				}else if(!StringUtils.isBlank(sendSmsResponse.getMessage())){
-					try {
-						throw new Exception("短信发送失败，原因："+sendSmsResponse.getMessage());
-					}catch(Exception e) {
-						e.printStackTrace();
-					} 
-				}
+				 try {
+					SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
+					if(sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {
+						result.setSendresult(sendSmsResponse.getCode());
+						result.setSendok(true);
+						return true;
+					}else if(!StringUtils.isBlank(sendSmsResponse.getMessage())){
+						result.setSendresult(sendSmsResponse.getMessage());
+					}
+				 }catch(Exception ex) {
+					 result.setSendresult(ex.getMessage());
+					 throw ex;
+				 }finally {
+					 result.setSendtime(new Date());
+				 }
 			}
 		}
 		return false;
