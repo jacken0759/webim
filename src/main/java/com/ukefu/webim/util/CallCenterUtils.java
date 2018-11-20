@@ -375,6 +375,8 @@ public class CallCenterUtils {
 		//if(act != null){
 		//	map.put("salestatusList",UKDataContext.getContext().getBean(SaleStatusRepository.class).findByOrgiAndActivityid(user.getOrgi(), act.getDicid()));
 		//}
+		//机器人
+		map.addAttribute("aiList",UKDataContext.getContext().getBean(ExtentionRepository.class).findByExtypeAndOrgi(UKDataContext.ExtentionType.IVR.toString() , user.getOrgi()));
 		map.addAttribute("statusList",UKeFuDic.getInstance().getDic("com.dic.callout.activity"));
 	}
 	/**

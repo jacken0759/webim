@@ -205,6 +205,11 @@ public class Handler {
 			queryBuilder.must(termQuery("owneruser", request.getParameter("owneruser"))) ;
 			map.put("owneruser", request.getParameter("owneruser")) ;
 		}
+		//电销机器人
+		if(!StringUtils.isBlank(request.getParameter("ownerai"))) {
+			queryBuilder.must(termQuery("ownerai", request.getParameter("ownerai"))) ;
+			map.put("ownerai", request.getParameter("ownerai")) ;
+		}
 		//部门
 		if(!StringUtils.isBlank(request.getParameter("ownerdept"))) {
 			queryBuilder.must(termQuery("ownerdept", request.getParameter("ownerdept"))) ;
