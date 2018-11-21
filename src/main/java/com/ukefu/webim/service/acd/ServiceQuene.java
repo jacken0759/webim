@@ -429,19 +429,23 @@ public class ServiceQuene {
 		
 		List<AgentStatus> agentStatusList = new ArrayList<AgentStatus>();
 		PagingPredicate<String, AgentStatus> pagingPredicate = null ;
+		AgentStatus agentStatus = null ;
 		/**
 		 * 处理ACD 的 技能组请求和 坐席请求
 		 */
-		if(!StringUtils.isBlank(agentUser.getAgent())){
-			pagingPredicate = new PagingPredicate<String, AgentStatus>(  new SqlPredicate( " busy = false AND agentno = '" + agentUser.getAgent()+"' AND orgi = '" + orgi +"'") , 1 );
-		}else if(!StringUtils.isBlank(agentUser.getSkill())){
-			pagingPredicate = new PagingPredicate<String, AgentStatus>(  new SqlPredicate( " busy = false AND skill = '" + agentUser.getSkill()+"' AND orgi = '" + orgi +"'") , 1 );
-		}else{
-			pagingPredicate = new PagingPredicate<String, AgentStatus>(  new SqlPredicate( " busy = false AND orgi = '" + orgi +"'") , 1 );
+		if(!StringUtils.isBlank(agentUser.getAgentno())){
+			agentStatusList.add((AgentStatus) CacheHelper.getAgentStatusCacheBean().getCacheObject(agentUser.getAgentno(), agentUser.getOrgi())) ;
 		}
-		
-		agentStatusList.addAll(((IMap<String , AgentStatus>) CacheHelper.getAgentStatusCacheBean().getCache()).values(pagingPredicate)) ;
-		AgentStatus agentStatus = null ;
+		if(agentStatusList.size() == 0) {
+			if(!StringUtils.isBlank(agentUser.getAgent())){
+				pagingPredicate = new PagingPredicate<String, AgentStatus>(  new SqlPredicate( " busy = false AND agentno = '" + agentUser.getAgent()+"' AND orgi = '" + orgi +"'") , 1 );
+			}else if(!StringUtils.isBlank(agentUser.getSkill())){
+				pagingPredicate = new PagingPredicate<String, AgentStatus>(  new SqlPredicate( " busy = false AND skill = '" + agentUser.getSkill()+"' AND orgi = '" + orgi +"'") , 1 );
+			}else{
+				pagingPredicate = new PagingPredicate<String, AgentStatus>(  new SqlPredicate( " busy = false AND orgi = '" + orgi +"'") , 1 );
+			}
+			agentStatusList.addAll(((IMap<String , AgentStatus>) CacheHelper.getAgentStatusCacheBean().getCache()).values(pagingPredicate)) ;
+		}
 		AgentService agentService = null ;	//放入缓存的对象
 		if(agentStatusList.size() > 0){
 			agentStatus = agentStatusList.get(0) ;
