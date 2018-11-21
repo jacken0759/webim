@@ -46,8 +46,7 @@
 			<div class="layui-inline ukefu_reservation" style="<#if summary?? && summary.reservation == true>display:;<#else>display:none;</#if>">
 				<label class="layui-form-label" style="width: 80px;">预约时间：</label>
 				<div class="layui-input-inline" style="width: 245px;">
-					<input type="text" id="reservtime" name="reservtime" autocomplete="off" value="<#if summary?? && summary.reservtime??>${summary.reservtime?string('yyyy-MM-dd HH:mm:ss')}</#if>"
-						class="layui-input">
+					<input name="reservtime" id="reservtime" class="layui-input" placeholder="预约日期"  value="<#if summary?? && summary.reservtime??>${summary.reservtime?string('yyyy-MM-dd HH:mm:ss')}</#if>" autocomplete="off">
 					<i class="layui-icon" style="position: absolute;right: 3px;top: 6px;font-size: 25px;">&#xe637;</i>
 				</div>
 			</div>
@@ -70,7 +69,6 @@
 		</div>
 	</form>
 </div>
-
 <script>
 	layui.use('form', function() {
 		var form = layui.form;
@@ -82,6 +80,7 @@
 				$('.ukefu_reservation').hide();
 			}	
 		});
+		form.render('select'); //刷新select选择框渲染
 	});
 	layui.use('element', function(){
 		var element = layui.element;
@@ -91,7 +90,7 @@
 
 		laydate.render({ 
 		  elem: '#reservtime',
-		  format:"YYYY-MM-DD hh:mm:ss"
+		  type:'datetime'
 		});
 	});
 	$(".tags").select2();
