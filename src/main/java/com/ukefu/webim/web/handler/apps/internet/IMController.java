@@ -526,6 +526,8 @@ public class IMController extends Handler{
 			    	}
 	    		}
 			}
+    	}else {
+    		view = request(super.createRequestPageTempletResponse("/apps/im/leavemsg")) ;
     	}
         return view;
     }
