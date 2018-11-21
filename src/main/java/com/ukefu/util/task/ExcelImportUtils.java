@@ -80,6 +80,10 @@ public class ExcelImportUtils{
 						Cell title = titleRow.getCell(col) ;
 						String titleValue = getValue(title) ;
 						if(!StringUtils.isBlank(titleValue)) {
+							/**
+							 * 剔除标题字段中发非字母和数字字符
+							 */
+							titleValue = titleValue.replaceAll("[^a-z^A-Z^0-9]", "") ;
 							if(titleValue.equalsIgnoreCase("id")) {
 								findId = true ;
 							}

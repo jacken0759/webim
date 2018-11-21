@@ -259,9 +259,7 @@ public class CallOutUtils {
 	}
 	
 	public static void processMetadataTable(boolean findId , MetadataTable metaDataTable , DSDataEvent event) {
-		if(findId == false) {
-			metaDataTable.getTableproperty().add(initProperties("id", "主键", "String", event.getOrgi() , event.getTablename() , true)) ;
-		}
+		metaDataTable.getTableproperty().add(initProperties("id", "主键", "String", event.getOrgi() , event.getTablename() , true)) ;
 		metaDataTable.getTableproperty().add(initProperties("orgi", "租户ID", "String", event.getOrgi() , event.getTablename() , true)) ;
 		metaDataTable.getTableproperty().add(initProperties("creater", "创建人", "String", event.getOrgi() , event.getTablename() , true)) ;
 		metaDataTable.getTableproperty().add(initProperties("createtime", "创建时间", "Datetime", event.getOrgi() , event.getTablename() , true)) ;

@@ -247,7 +247,7 @@ public class ESDataExchangeImpl{
 			temp.setType(hit.getType());
 			temp.setTable(metadata);
 			temp.setValues(hit.getSource());
-			temp.setId((String)temp.getValues().get("id"));
+			temp.setId(hit.getId());
 			dataBeanList.add(processDate(temp)) ;
 			
 			
@@ -468,7 +468,6 @@ public class ESDataExchangeImpl{
 			searchBuilder.setTypes(types) ;
 		}
 		
-		int size = page.getPageSize() * (page.getPageNumber() + 1);
 		searchBuilder.setFrom(0).setSize(0);
 		
 		searchBuilder.addAggregation(AggregationBuilders.terms("organ").field("organ")).addAggregation(AggregationBuilders.terms("creater").field("creater")).addAggregation(AggregationBuilders.terms("dimenid").field("dimenid"));
