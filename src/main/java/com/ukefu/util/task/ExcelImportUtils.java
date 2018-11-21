@@ -83,7 +83,7 @@ public class ExcelImportUtils{
 							/**
 							 * 剔除标题字段中发非字母和数字字符
 							 */
-							titleValue = titleValue.replaceAll("[^a-z^A-Z^0-9]", "") ;
+							titleValue = titleValue.trim();
 							if(titleValue.equalsIgnoreCase("id")) {
 								findId = true ;
 							}
