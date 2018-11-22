@@ -487,3 +487,17 @@ INSERT INTO `uk_sysdic` VALUES ('4028811b671beae801671bfae9d70265', '电销商�
 
 INSERT INTO `uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENTID`, `DESCRIPTION`, `MEMO`, `ICONSTR`, `ICONSKIN`, `CATETYPE`, `CREATER`, `CREATETIME`, `UPDATETIME`, `HASCHILD`, `SORTINDEX`, `DICID`, `DEFAULTVALUE`, `DISCODE`, `URL`, `MODULE`, `MLEVEL`, `RULES`, `MENUTYPE`) VALUES ('297efe59672a2af0016736561ed002f6', '短信发送记录', 'pub', 'A08_A06', NULL, 'auth', '402881ef612b1f5b01612cc5d9710545', NULL, NULL, '&#x756e646566696e6564;', NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-11-21 20:54:32', NULL, 0, 0, '402888815d2fe37f015d2fe75cc80002', 0, 0, 'javascript:;', 'webim', '2', NULL, 'left');
 INSERT INTO `uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENTID`, `DESCRIPTION`, `MEMO`, `ICONSTR`, `ICONSKIN`, `CATETYPE`, `CREATER`, `CREATETIME`, `UPDATETIME`, `HASCHILD`, `SORTINDEX`, `DICID`, `DEFAULTVALUE`, `DISCODE`, `URL`, `MODULE`, `MLEVEL`, `RULES`, `MENUTYPE`) VALUES ('297efe59672a2af001673655955502f1', '短信模板设置', 'pub', 'A06_A10', NULL, 'auth', '402881ef612b1f5b01612cc5a2040543', NULL, NULL, '&#x756e646566696e6564;', NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-11-21 20:53:57', NULL, 0, 0, '402888815d2fe37f015d2fe75cc80002', 0, 0, 'javascript:;', 'webim', '2', NULL, 'left');
+
+
+
+ALTER TABLE uk_sales_product ADD url varchar(255) DEFAULT NULL COMMENT '访问地址';
+ALTER TABLE uk_sales_product ADD field1 varchar(255) DEFAULT NULL COMMENT '备用字段1';
+ALTER TABLE uk_sales_product ADD field2 varchar(255) DEFAULT NULL COMMENT '备用字段2';
+ALTER TABLE uk_sales_product ADD field3 varchar(255) DEFAULT NULL COMMENT '备用字段3';
+ALTER TABLE uk_sales_product ADD field4 varchar(255) DEFAULT NULL COMMENT '备用字段4';
+ALTER TABLE uk_sales_product ADD field5 varchar(255) DEFAULT NULL COMMENT '备用字段5';
+ALTER TABLE uk_sales_product ADD field6 varchar(255) DEFAULT NULL COMMENT '备用字段6';
+ALTER TABLE uk_sales_product ADD field7 varchar(255) DEFAULT NULL COMMENT '备用字段7';
+ALTER TABLE uk_sales_product ADD field8 varchar(255) DEFAULT NULL COMMENT '备用字段8';
+ALTER TABLE uk_sales_product ADD field9 varchar(255) DEFAULT NULL COMMENT '备用字段9';
+ALTER TABLE uk_sales_product ADD field10 varchar(255) DEFAULT NULL COMMENT '备用字段10';
