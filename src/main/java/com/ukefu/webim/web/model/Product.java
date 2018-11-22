@@ -62,6 +62,18 @@ public class Product implements java.io.Serializable{
 	private int price;//价格
 	private int quota;//库存
 	
+	private String url;	//备用字段
+	private String field1 ;	//备用字段
+	private String field2 ;	//备用字段
+	private String field3 ;	//备用字段
+	private String field4 ;	//备用字段
+	private String field5 ;	//备用字段
+	private String field6 ;	//备用字段
+	private String field7 ;	//备用字段
+	private String field8 ;	//备用字段
+	private String field9 ;	//备用字段
+	private String field10 ;	//备用字段
+	
 	private String termtype;	//有效期类型
 	private Date begintime; 	//有效期开始时间
 	private Date endtime; 		//有效期结束时间
@@ -243,5 +255,92 @@ public class Product implements java.io.Serializable{
 	public void setProvoice(String provoice) {
 		this.provoice = provoice;
 	}
-	
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getField1() {
+		return field1;
+	}
+
+	public void setField1(String field1) {
+		this.field1 = field1;
+	}
+
+	public String getField2() {
+		return field2;
+	}
+
+	public void setField2(String field2) {
+		this.field2 = field2;
+	}
+
+	public String getField3() {
+		return field3;
+	}
+
+	public void setField3(String field3) {
+		this.field3 = field3;
+	}
+
+	public String getField4() {
+		return field4;
+	}
+
+	public void setField4(String field4) {
+		this.field4 = field4;
+	}
+
+	public String getField5() {
+		return field5;
+	}
+
+	public void setField5(String field5) {
+		this.field5 = field5;
+	}
+
+	public String getField6() {
+		return field6;
+	}
+
+	public void setField6(String field6) {
+		this.field6 = field6;
+	}
+
+	public String getField7() {
+		return field7;
+	}
+
+	public void setField7(String field7) {
+		this.field7 = field7;
+	}
+
+	public String getField8() {
+		return field8;
+	}
+
+	public void setField8(String field8) {
+		this.field8 = field8;
+	}
+
+	public String getField9() {
+		return field9;
+	}
+
+	public void setField9(String field9) {
+		this.field9 = field9;
+	}
+
+	public String getField10() {
+		return field10;
+	}
+
+	public void setField10(String field10) {
+		this.field10 = field10;
+	}
 }
