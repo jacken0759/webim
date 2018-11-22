@@ -311,6 +311,9 @@ public class CallOutUtils {
 		
 		metaDataTable.getTableproperty().add(initProperties("succcall", "拨打成功次数", "Long", event.getOrgi() , event.getTablename() , true)) ;
 		metaDataTable.getTableproperty().add(initProperties("faildcall", "拨打失败次数", "Long", event.getOrgi() , event.getTablename() , true)) ;
+		
+		metaDataTable.getTableproperty().add(initProperties("ringtime", "振铃时长", "Long", event.getOrgi() , event.getTablename() , true)) ;
+		metaDataTable.getTableproperty().add(initProperties("incall", "通话时长", "Long", event.getOrgi() , event.getTablename() , true)) ;
 	}
 	
 	public static TableProperties initProperties(String name ,String title, String type ,String orgi ,String tableName , boolean sysfield) {
