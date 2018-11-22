@@ -116,6 +116,9 @@ public class ExcelImportProecess extends DataProcess{
 						Cell value = row.getCell(col) ;
 						Cell title = titleRow.getCell(col) ;
 						String titleValue = getValue(title) ;
+						if(!StringUtils.isBlank(titleValue)) {
+							titleValue = titleValue.trim() ;
+						}
 						TableProperties tableProperties = getTableProperties(event, titleValue);
 						if(tableProperties!=null && value!=null){
 							String valuestr = getValue(value) ;
