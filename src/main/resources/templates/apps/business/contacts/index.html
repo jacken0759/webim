@@ -194,7 +194,7 @@
 				,groups: 5 //连续显示分页数
 				,jump:function(data , first){
 					if(!first){
-						location.href = "/apps/contacts/${subtype!'index'}.html?p="+data.curr ;
+						location.href = "/apps/contacts/${subtype!'index'}.html?p="+data.curr+"&ckind=${ckind!''}";
 					}
 				}
 		   });
