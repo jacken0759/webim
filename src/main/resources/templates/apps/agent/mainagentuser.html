@@ -201,6 +201,14 @@
 								    	备注：<span id="agentmemo">${curAgentService.memo!''}</span>
 								    	<a href="/service/sessionmemo.html?userid=${userid!''}&agentservice=${curAgentService.id!''}" data-toggle="ajax" data-width="600" data-height="350" title="填写备注"><i class='layui-icon'>&#xe642;</i></a>
 								</li>
+								<#if summary??>
+								<li>
+									服务小结：
+									<a href="/agent/summary.html?userid=${curagentuser.userid!''}&agentserviceid=${curagentuser.agentserviceid!''}&agentuserid=${curagentuser.id}" data-toggle="ajax" data-width="950" data-height="450" title="记录服务小结">
+										<i class="layui-icon">&#xe605;</i> 已记录服务小结
+									</a>
+								</li>
+								</#if>
 							</ul>
 							
 							<#if curagentuser.name??>
@@ -261,7 +269,6 @@
 								    </span>
 								</li>
 								</#if>
-								
 							</ul>
 							</#if>
 						</div>
