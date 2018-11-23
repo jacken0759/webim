@@ -52,11 +52,12 @@ public class ServiceQuene {
 		if(UKDataContext.getContext() != null && (sessionConfig = (SessionConfig) CacheHelper.getSystemCacheBean().getCacheObject(UKDataContext.SYSTEM_CACHE_SESSION_CONFIG+"_"+orgi, orgi)) == null){
 			SessionConfigRepository agentUserRepository = UKDataContext.getContext().getBean(SessionConfigRepository.class) ;
 			sessionConfig = agentUserRepository.findByOrgi(orgi) ;
-			if(sessionConfig == null){
-				sessionConfig = new SessionConfig() ;
-			}else{
+			if(sessionConfig != null){
 				CacheHelper.getSystemCacheBean().put(UKDataContext.SYSTEM_CACHE_SESSION_CONFIG+"_"+orgi,sessionConfig, orgi) ;
 			}
+		}
+		if(sessionConfig == null) {
+			sessionConfig = new SessionConfig() ;
 		}
 		return sessionConfig ;
 	}
@@ -447,9 +448,10 @@ public class ServiceQuene {
 			agentStatusList.addAll(((IMap<String , AgentStatus>) CacheHelper.getAgentStatusCacheBean().getCache()).values(pagingPredicate)) ;
 		}
 		AgentService agentService = null ;	//放入缓存的对象
-		if(agentStatusList.size() > 0){
+		if(agentStatusList!=null && agentStatusList.size() > 0){
 			agentStatus = agentStatusList.get(0) ;
-			if(agentStatus.getUsers() >= initSessionConfig(orgi).getMaxuser()){
+			SessionConfig config = initSessionConfig(orgi) ;
+			if(agentStatus !=null && config !=null && agentStatus.getUsers() >= config.getMaxuser()){
 				agentStatus = null ;
 				/**
 				 * 判断当前有多少人排队中 ， 分三种情况：1、请求技能组的，2、请求坐席的，3，默认请求的
@@ -460,7 +462,7 @@ public class ServiceQuene {
 		}
 		try {
 			agentService = processAgentService(agentStatus, agentUser, orgi) ;
-			if(agentService.getStatus().equals(UKDataContext.AgentUserStatusEnum.INQUENE.toString())){
+			if(agentService!=null && agentService.getStatus().equals(UKDataContext.AgentUserStatusEnum.INQUENE.toString())){
 				agentService.setQueneindex(getQueneIndex(agentUser.getAgent(), orgi, agentUser.getSkill()));
 			}
 			
