@@ -5,6 +5,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,7 +29,7 @@ public abstract interface CallOutNamesRepository extends JpaRepository<CallOutNa
 	
 	public abstract List<CallOutNames> findByDataidAndCreaterAndOrgi(String dataid ,String creater, String orgi) ;
 	
-	public abstract Page<CallOutNames> findAll(Specification<CallOutTask> spec, Pageable pageable);
+	public abstract Page<CallOutNames> findAll(Specification<CallOutNames> spec, Pageable pageable);
 	
 	public abstract Page<CallOutNames> findByCreaterAndOrgi(String creater , String orgi , Pageable page) ;
 	
@@ -39,6 +40,8 @@ public abstract interface CallOutNamesRepository extends JpaRepository<CallOutNa
 	public abstract Page<CallOutNames> findByOwneruserAndOrgi(String owneruser , String orgi , Pageable page) ;
 	
 	public abstract List<CallOutNames> findByMetanameAndDataidAndOrgi(String metaname, String dataid , String orgi ) ;
+	
+	public abstract Page<CallOutNames> findByOwneraiAndOrgi(String ownerai , String orgi , Pageable page) ;
 	
 	@Modifying
 	@Transactional
@@ -54,5 +57,7 @@ public abstract interface CallOutNamesRepository extends JpaRepository<CallOutNa
 	@Transactional
 	@Query(value = "delete from CallOutNames where orgi = ?1 and batid = ?2")
 	public abstract void deleteByOrgiAndBatid(String orgi , String batid ) ;
-	
+
+	@Query(value = "delete from CallOutNames where orgi = ?1 and batid = ?2")
+	public abstract List<CallOutNames> findByOrgiAndOnweraiAndDuration(String metaname, String dataid , String orgi ) ;
 }

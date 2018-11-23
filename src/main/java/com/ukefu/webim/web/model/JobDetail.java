@@ -144,6 +144,10 @@ public class JobDetail implements Serializable{
 	private String filtertype;//筛选类型
 	private String templateid;//质检模板
 
+	
+	private String extention;//要执行的机器人id
+	private boolean enabletaithreads ;		//当前任务 启用机器人并发外呼限制
+	private int aithreads ;					//当前任务 机器人外呼并发数量
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -840,4 +844,30 @@ public class JobDetail implements Serializable{
 	public void setTemplateid(String templateid) {
 		this.templateid = templateid;
 	}
+
+	public String getExtention() {
+		return extention;
+	}
+
+	public void setExtention(String extention) {
+		this.extention = extention;
+	}
+
+	public boolean isEnabletaithreads() {
+		return enabletaithreads;
+	}
+
+	public void setEnabletaithreads(boolean enabletaithreads) {
+		this.enabletaithreads = enabletaithreads;
+	}
+
+	public int getAithreads() {
+		return aithreads;
+	}
+
+	public void setAithreads(int aithreads) {
+		this.aithreads = aithreads;
+	}
+	
+	
 }

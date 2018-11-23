@@ -63,7 +63,7 @@ public class CallOutNames implements java.io.Serializable{
 	
 	private String owneruser ;	//分配 坐席
 	private String ownerdept ;	//分配 部门
-	
+	private String ownerai ;	//分配 机器人
 	private String dataid ;		//UKDataBean对象ID
 	private String taskid ;		//任务ID
 	private String filterid;	//筛选ID
@@ -400,4 +400,13 @@ public class CallOutNames implements java.io.Serializable{
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
+
+	public String getOwnerai() {
+		return ownerai;
+	}
+
+	public void setOwnerai(String ownerai) {
+		this.ownerai = ownerai;
+	}
+	
 }

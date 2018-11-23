@@ -484,7 +484,6 @@ INSERT INTO `uk_sysdic` VALUES ('4028811b671beae801671bfa71a0025e', '短信模�
 INSERT INTO `uk_sysdic` VALUES ('4028811b671beae801671bfae9c30264', '电销名单', 'pub', 'sales', 'ukewo', null, '4028811b671beae801671bfa71a0025e', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-16 18:04:47', '2018-11-16 18:04:47', '0', '1', '4028811b671beae801671bfa71a0025e', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('4028811b671beae801671bfae9d70265', '电销商品', 'pub', 'pro', 'ukewo', null, '4028811b671beae801671bfa71a0025e', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-16 18:04:47', '2018-11-16 18:04:47', '0', '2', '4028811b671beae801671bfa71a0025e', '0', '0', null, null, null, null, null);
 
-
 INSERT INTO `uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENTID`, `DESCRIPTION`, `MEMO`, `ICONSTR`, `ICONSKIN`, `CATETYPE`, `CREATER`, `CREATETIME`, `UPDATETIME`, `HASCHILD`, `SORTINDEX`, `DICID`, `DEFAULTVALUE`, `DISCODE`, `URL`, `MODULE`, `MLEVEL`, `RULES`, `MENUTYPE`) VALUES ('297efe59672a2af0016736561ed002f6', '短信发送记录', 'pub', 'A08_A06', NULL, 'auth', '402881ef612b1f5b01612cc5d9710545', NULL, NULL, '&#x756e646566696e6564;', NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-11-21 20:54:32', NULL, 0, 0, '402888815d2fe37f015d2fe75cc80002', 0, 0, 'javascript:;', 'webim', '2', NULL, 'left');
 INSERT INTO `uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENTID`, `DESCRIPTION`, `MEMO`, `ICONSTR`, `ICONSKIN`, `CATETYPE`, `CREATER`, `CREATETIME`, `UPDATETIME`, `HASCHILD`, `SORTINDEX`, `DICID`, `DEFAULTVALUE`, `DISCODE`, `URL`, `MODULE`, `MLEVEL`, `RULES`, `MENUTYPE`) VALUES ('297efe59672a2af001673655955502f1', '短信模板设置', 'pub', 'A06_A10', NULL, 'auth', '402881ef612b1f5b01612cc5a2040543', NULL, NULL, '&#x756e646566696e6564;', NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-11-21 20:53:57', NULL, 0, 0, '402888815d2fe37f015d2fe75cc80002', 0, 0, 'javascript:;', 'webim', '2', NULL, 'left');
 
@@ -501,3 +500,8 @@ ALTER TABLE uk_sales_product ADD field7 varchar(255) DEFAULT NULL COMMENT '备�
 ALTER TABLE uk_sales_product ADD field8 varchar(255) DEFAULT NULL COMMENT '备用字段8';
 ALTER TABLE uk_sales_product ADD field9 varchar(255) DEFAULT NULL COMMENT '备用字段9';
 ALTER TABLE uk_sales_product ADD field10 varchar(255) DEFAULT NULL COMMENT '备用字段10';
+
+ ALTER TABLE uk_jobdetail ADD extention varchar(50) DEFAULT NULL COMMENT '机器人ID';
+ ALTER TABLE uk_act_callnames ADD ownerai varchar(50) DEFAULT NULL COMMENT '机器人ID';
+ALTER TABLE uk_jobdetail ADD enabletaithreads tinyint(4) DEFAULT NULL COMMENT '机器人是否限制并发';
+ALTER TABLE uk_jobdetail ADD aithreads tinyint(4) DEFAULT NULL COMMENT '并发数';

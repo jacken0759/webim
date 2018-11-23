@@ -195,13 +195,13 @@ public class CallOutUtils {
 			callOutName.setOrgi(orgi);
 			if(task!=null) {
 				callOutName.setName(task.getName());	//任务名称
+				callOutName.setActid(task.getActid());
 			}
 			if(batch!=null) {
 				callOutName.setBatname(batch.getName());
 			}
 			
 			
-			callOutName.setActid(task.getActid());
 			callOutName.setBatid(batid);
 			
 			callOutName.setTaskid(taskid);
@@ -226,7 +226,8 @@ public class CallOutUtils {
 			callOutName.setMemo((String) name.getValues().get("apmemo"));
 			
 			callOutName.setOwneruser((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));
-			callOutName.setOwnerdept((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));
+			callOutName.setOwnerdept((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));
+			callOutName.setOwnerai((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AI));
 		}
 		
 		callOutName.setLeavenum(leavenames);

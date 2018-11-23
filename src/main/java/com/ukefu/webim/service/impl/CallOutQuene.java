@@ -99,7 +99,15 @@ public class CallOutQuene {
 		Long names = (Long) callOutMap.aggregate(Aggregators.<Map.Entry<String, CallOutNames>>count(), new AiCallOutFilterPredicate(orgi)) ;
 		return names!=null ? names.intValue() : 0 ;
 	}
-	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static int countAiCallOut(String orgi,String ownerai) {
+		/**
+		 * 统计当前在线的坐席数量
+		 */
+		IMap callOutMap = (IMap<String, Object>) CacheHelper.getCallOutCacheBean().getCache() ;
+		Long names = (Long) callOutMap.aggregate(Aggregators.<Map.Entry<String, CallOutNames>>count(), new AiCallOutFilterPredicate(orgi,ownerai)) ;
+		return names!=null ? names.intValue() : 0 ;
+	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static int countAgentCallOut(String orgi) {
 		/**

@@ -30,4 +30,7 @@ public abstract interface JobDetailRepository extends JpaRepository<JobDetail, S
 	
 	
 	public abstract List<JobDetail> findByOrgiAndBatchtypeAndOrganid(String orgi, String batchtype, String organ);
+	
+	//通过orgi和机器人id查询
+	public abstract List<JobDetail> findByOrgiAndExtention(String orgi, String extention);
 }

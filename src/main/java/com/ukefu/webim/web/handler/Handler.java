@@ -158,6 +158,36 @@ public class Handler {
 			map.put("callbegin", request.getParameter("callbegin")) ;
 			map.put("callend", request.getParameter("callend")) ;
 		}
+		//分配时间区间查询
+		if(!StringUtils.isBlank(request.getParameter("distimebegin")) || !StringUtils.isBlank(request.getParameter("distimeend"))){
+			
+			if(!StringUtils.isBlank(request.getParameter("distimebegin"))) {
+				try {
+					
+					rangeQuery = QueryBuilders.rangeQuery("distime").from(UKTools.dateFormate.parse(request.getParameter("distimebegin")).getTime()) ;
+				} catch (ParseException e) {
+					
+					e.printStackTrace();
+				}
+			}
+			if(!StringUtils.isBlank(request.getParameter("distimeend")) ) {
+				
+				try {
+					
+					if(rangeQuery == null) {
+						rangeQuery = QueryBuilders.rangeQuery("distime").to(UKTools.dateFormate.parse(request.getParameter("distimeend")).getTime()) ;
+					}else {
+						rangeQuery.to(UKTools.dateFormate.parse(request.getParameter("distimeend")).getTime()) ;
+					}
+				} catch (ParseException e) {
+					
+					e.printStackTrace();
+				}
+				
+			}
+			map.put("distimebegin", request.getParameter("distimebegin")) ;
+			map.put("distimeend", request.getParameter("distimeend")) ;
+		}
 		//预约时间区间查询
 		if(!StringUtils.isBlank(request.getParameter("apbegin")) || !StringUtils.isBlank(request.getParameter("apend"))){
 			

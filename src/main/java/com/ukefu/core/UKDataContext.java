@@ -111,6 +111,12 @@ public class UKDataContext {
 		uKeFuResourceMap.put(TaskType.BATCH.toString(), BatchResource.class) ;
 		//质检分配任务
 		uKeFuResourceMap.put(TaskType.QUALITY.toString(), QualityResource.class) ;
+		//ai callout
+		try {
+			uKeFuResourceMap.put(TaskType.AISALES.toString(), Class.forName("com.ukefu.webim.service.resource.AiCalloutResource"));
+		} catch (ClassNotFoundException e) {
+			//e.printStackTrace();
+		}
 	}
 	
 	public enum AskSectionType{
@@ -420,7 +426,8 @@ public class UKDataContext {
 	public enum TaskType{
 		BATCH,
 		ACTIVE,
-		QUALITY;
+		QUALITY,
+		AISALES;//电销机器人任务
 		public String toString(){
 			return super.toString().toLowerCase() ;
 		}
