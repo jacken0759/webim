@@ -96,6 +96,8 @@ public class CallCenterSipTrunkController extends Handler{
 				oldSipTrunk.setCity(siptrunk.getCity());
 				oldSipTrunk.setPrefix(siptrunk.getPrefix());
 				
+				oldSipTrunk.setPrefixstr(siptrunk.getPrefixstr());
+				
 				sipTrunkRes.save(oldSipTrunk);
 				
 				CacheHelper.getSystemCacheBean().put(oldSipTrunk.getId() ,oldSipTrunk , oldSipTrunk.getOrgi()) ;

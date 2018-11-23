@@ -32,6 +32,7 @@ public class SipTrunk implements java.io.Serializable{
 	private String extention ;	//注册分机号
 	private String outnumber;	//外呼 号码
 	private String prefix ;		//前缀号码， 手机拨打的时候 需要加 0
+	private String prefixstr ;	//前缀号码
 	
 	private String dtmf ;		//DTMF模式  ， rfc 2833 , inbound ,sip info
 	
@@ -261,5 +262,11 @@ public class SipTrunk implements java.io.Serializable{
 	}
 	public void setEnablecallagent(boolean enablecallagent) {
 		this.enablecallagent = enablecallagent;
+	}
+	public String getPrefixstr() {
+		return prefixstr;
+	}
+	public void setPrefixstr(String prefixstr) {
+		this.prefixstr = prefixstr;
 	}
 }

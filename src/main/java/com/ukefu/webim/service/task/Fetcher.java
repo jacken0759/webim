@@ -69,6 +69,9 @@ public class Fetcher implements Runnable {
 				try {
 					while (job.isPause() && job.isFetcher()) {
 						Thread.sleep(1000);
+						if(resource.isAvailable()) {
+							break ;
+						}
 					}
 					if (obj!= null){
 						output(obj);

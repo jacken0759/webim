@@ -503,5 +503,7 @@ ALTER TABLE uk_sales_product ADD field10 varchar(255) DEFAULT NULL COMMENT '备�
 
  ALTER TABLE uk_jobdetail ADD extention varchar(50) DEFAULT NULL COMMENT '机器人ID';
  ALTER TABLE uk_act_callnames ADD ownerai varchar(50) DEFAULT NULL COMMENT '机器人ID';
-ALTER TABLE uk_jobdetail ADD enabletaithreads tinyint(4) DEFAULT NULL COMMENT '机器人是否限制并发';
-ALTER TABLE uk_jobdetail ADD aithreads tinyint(4) DEFAULT NULL COMMENT '并发数';
+ALTER TABLE uk_jobdetail ADD enabletaithreads tinyint(4) DEFAULT 0 COMMENT '机器人是否限制并发';
+ALTER TABLE uk_jobdetail ADD aithreads tinyint(4) DEFAULT 0 COMMENT '并发数';
+
+ALTER TABLE uk_callcenter_siptrunk ADD prefixstr varchar(50) DEFAULT NULL COMMENT '加拨前缀号码';
