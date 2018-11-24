@@ -351,10 +351,22 @@ public class ESDataExchangeImpl{
 		AggregationBuilder<?> aggregition = AggregationBuilders.terms(aggField).field(aggField).size(size) ;
 		aggregition.subAggregation(AggregationBuilders.terms("apstatus").field("apstatus")) ;
 		aggregition.subAggregation(AggregationBuilders.terms("callstatus").field("callstatus")) ;
-		aggregition.subAggregation(AggregationBuilders.range("calltime.zero").field("incall").addRange(0, 10000)) ;
-		aggregition.subAggregation(AggregationBuilders.range("calltime.ten").field("incall").addRange(10000, 60000)) ;
-		aggregition.subAggregation(AggregationBuilders.range("calltime.six").field("incall").addRange(60000, 120000)) ;
-		aggregition.subAggregation(AggregationBuilders.range("calltime.hand").field("incall").addRange(120000, Integer.MAX_VALUE)) ;
+		aggregition.subAggregation(AggregationBuilders.range("incall.one").field("incall").addRange(0, 10000)) ;
+		aggregition.subAggregation(AggregationBuilders.range("incall.two").field("incall").addRange(10000, 60000)) ;
+		aggregition.subAggregation(AggregationBuilders.range("incall.three").field("incall").addRange(60000, 120000)) ;
+		aggregition.subAggregation(AggregationBuilders.range("incall.four").field("incall").addRange(120000, Integer.MAX_VALUE)) ;
+		
+		aggregition.subAggregation(AggregationBuilders.range("calltimes.one").field("calltimes").addRange(0, 5)) ;
+		aggregition.subAggregation(AggregationBuilders.range("calltimes.two").field("calltimes").addRange(5, 10)) ;
+		aggregition.subAggregation(AggregationBuilders.range("calltimes.three").field("calltimes").addRange(10, Integer.MAX_VALUE)) ;
+
+		aggregition.subAggregation(AggregationBuilders.terms("level").field("level")) ;
+		
+		aggregition.subAggregation(AggregationBuilders.range("focustimes.one").field("focustimes").addRange(0, 1)) ;
+		aggregition.subAggregation(AggregationBuilders.range("focustimes.two").field("focustimes").addRange(1, 5)) ;
+		aggregition.subAggregation(AggregationBuilders.range("focustimes.three").field("focustimes").addRange(5, 20)) ;
+		aggregition.subAggregation(AggregationBuilders.range("focustimes.four").field("focustimes").addRange(20, Integer.MAX_VALUE)) ;
+		
 		
 		searchBuilder.addAggregation(aggregition) ;
 		
