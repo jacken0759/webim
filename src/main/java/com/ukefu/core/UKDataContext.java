@@ -13,6 +13,7 @@ import com.ukefu.util.DateConverter;
 import com.ukefu.webim.service.resource.ActivityResource;
 import com.ukefu.webim.service.resource.BatchResource;
 import com.ukefu.webim.service.resource.QualityResource;
+import com.ukefu.webim.web.model.JobDetail;
 import com.ukefu.webim.web.model.Log;
 
 public class UKDataContext {
@@ -91,6 +92,8 @@ public class UKDataContext {
 	public static Map<String , Boolean> model = new HashMap<String,Boolean>();
 	
 	public static Map<String , Class<?>> uKeFuResourceMap = new HashMap<String , Class<?>>() ;
+	
+	public static Map<String , JobDetail> localJobDetailMap = new HashMap<String , JobDetail>() ;
 	
 	private static int WebIMPort = 8081 ;
 	
@@ -845,6 +848,7 @@ public class UKDataContext {
 		TOPIC_AGENT,
 		TOPIC_CALLCENTER,
 		NAMESPACE,
+		TOPIC_JOBDETAIL,
 		TOPIC_VOTE;
 		
 		public String toString(){

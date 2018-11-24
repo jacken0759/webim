@@ -30,6 +30,7 @@ public class Task implements Runnable{
 				 */
 				jobDetail.setTaskfiretime(new Date());
 				jobDetail.setTaskstatus(UKDataContext.TaskStatusType.RUNNING.getType()) ;
+				jobDetail.setMemo(null);
 				jobDetailRes.save(jobDetail) ;
 				/**
 				 * 任务开始执行
@@ -40,6 +41,7 @@ public class Task implements Runnable{
 						UKDataContext.getContext().getBean(ReporterRepository.class).save(jobDetail.getReport()) ;
 					}
 					if (jobDetail.isFetcher()) {//while (jobDetail.isFetcher()) {
+						UKDataContext.localJobDetailMap.put(jobDetail.getId(), jobDetail) ;
 						new Fetcher(jobDetail).run();
 					}
 				}
@@ -64,7 +66,7 @@ public class Task implements Runnable{
 			
 //			jobDetail.setLastdate(new Date()) ;
 			jobDetailRes.save(jobDetail) ;
-			
+			UKDataContext.localJobDetailMap.remove(jobDetail.getId()) ;
 			/**
 			 * 存储历史信息
 			 */

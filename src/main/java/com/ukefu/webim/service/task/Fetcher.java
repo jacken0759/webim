@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.UKTools;
@@ -87,6 +88,9 @@ public class Fetcher implements Runnable {
 			/**
 	         * 
 	         */
+			if(StringUtils.isBlank(this.job.getMemo())) {
+				this.job.setMemo("true");
+			}
 		} catch (Throwable e) {
 			e.printStackTrace();
 			job.setExceptionMsg(e.getMessage());

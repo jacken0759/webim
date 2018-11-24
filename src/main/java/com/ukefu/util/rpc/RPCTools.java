@@ -48,6 +48,17 @@ public class RPCTools {
 		UKDataContext.getContext().getBean(HazelcastInstance.class).getTopic(UKDataContext.UCKeFuTopic.TOPIC_CALLCENTER.toString()).publish(new RPCDataBean(id, event, data));
 	}
 	
+	
+	/**
+	 * 
+	 * @param id
+	 * @param event
+	 * @param data
+	 */
+	public static void sendJobDetailMessage(String id , String event , Object data){
+		UKDataContext.getContext().getBean(HazelcastInstance.class).getTopic(UKDataContext.UCKeFuTopic.TOPIC_JOBDETAIL.toString()).publish(new RPCDataBean(id, event, data));
+	}
+	
 	/**
 	 * 
 	 * @param id

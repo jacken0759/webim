@@ -20,6 +20,7 @@ import com.ukefu.webim.service.rpc.ClusterMasterListener;
 import com.ukefu.webim.service.rpc.ClusterMember;
 import com.ukefu.webim.service.rpc.EntIMTopicListener;
 import com.ukefu.webim.service.rpc.IMTopicListener;
+import com.ukefu.webim.service.rpc.JobDetailListener;
 import com.ukefu.webim.service.rpc.NameSpaceTopicListener;
 
 @Configuration
@@ -46,6 +47,9 @@ public class HazelcastHttpSessionConfig {
     	hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.NAMESPACE.toString()).addMessageListener(new NameSpaceTopicListener()) ;
     	
     	hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.TOPIC_VOTE.toString()).addMessageListener(new ClusterMasterListener(hazelcastInstance)) ;
+    	
+    	hazelcastInstance.getTopic(UKDataContext.UCKeFuTopic.TOPIC_JOBDETAIL.toString()).addMessageListener(new JobDetailListener()) ;
+    	
     	hazelcastInstance.getCluster().getLocalMember().setLongAttribute("start", System.currentTimeMillis()) ;
     	hazelcastInstance.getCluster().getLocalMember().setStringAttribute("id", UKTools.genID()) ;
     	
