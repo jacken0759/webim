@@ -19,6 +19,8 @@ import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.histogram.InternalDateHistogram;
+import org.elasticsearch.search.aggregations.bucket.range.InternalRange;
+import org.elasticsearch.search.aggregations.bucket.range.InternalRange.Bucket;
 import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.sort.FieldSortBuilder;
@@ -349,6 +351,10 @@ public class ESDataExchangeImpl{
 		AggregationBuilder<?> aggregition = AggregationBuilders.terms(aggField).field(aggField).size(size) ;
 		aggregition.subAggregation(AggregationBuilders.terms("apstatus").field("apstatus")) ;
 		aggregition.subAggregation(AggregationBuilders.terms("callstatus").field("callstatus")) ;
+		aggregition.subAggregation(AggregationBuilders.range("calltime.zero").field("incall").addRange(0, 10000)) ;
+		aggregition.subAggregation(AggregationBuilders.range("calltime.ten").field("incall").addRange(10000, 60000)) ;
+		aggregition.subAggregation(AggregationBuilders.range("calltime.six").field("incall").addRange(60000, 120000)) ;
+		aggregition.subAggregation(AggregationBuilders.range("calltime.hand").field("incall").addRange(120000, Integer.MAX_VALUE)) ;
 		
 		searchBuilder.addAggregation(aggregition) ;
 		
@@ -390,6 +396,14 @@ public class ESDataExchangeImpl{
 								StringTerms agg2  = (StringTerms) temp ;
 								for (Terms.Bucket entry2 : agg2.getBuckets()) {
 									dataBean.getValues().put(temp.getName()+"."+entry2.getKeyAsString(), entry2.getDocCount()) ;
+								}
+							}else if(temp instanceof InternalRange) {
+								InternalRange<?, ?> range = (InternalRange<?, ?>) temp ;
+								if(range.getBuckets().size() > 0) {
+									InternalRange.Bucket data = (InternalRange.Bucket) range.getBuckets().get(0)  ;
+									if(data!=null) {
+										dataBean.getValues().put(range.getName(), data.getDocCount()) ;
+									}
 								}
 							}
 						}
