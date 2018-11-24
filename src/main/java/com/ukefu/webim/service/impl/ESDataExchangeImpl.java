@@ -362,9 +362,9 @@ public class ESDataExchangeImpl{
 
 		aggregition.subAggregation(AggregationBuilders.terms("level").field("level")) ;
 		
-		aggregition.subAggregation(AggregationBuilders.range("focustimes.one").field("focustimes").addRange(0, 1)) ;
-		aggregition.subAggregation(AggregationBuilders.range("focustimes.two").field("focustimes").addRange(1, 5)) ;
-		aggregition.subAggregation(AggregationBuilders.range("focustimes.three").field("focustimes").addRange(5, 20)) ;
+		aggregition.subAggregation(AggregationBuilders.range("focustimes.one").field("focustimes").addRange(0, 5)) ;
+		aggregition.subAggregation(AggregationBuilders.range("focustimes.two").field("focustimes").addRange(5, 10)) ;
+		aggregition.subAggregation(AggregationBuilders.range("focustimes.three").field("focustimes").addRange(10, 20)) ;
 		aggregition.subAggregation(AggregationBuilders.range("focustimes.four").field("focustimes").addRange(20, Integer.MAX_VALUE)) ;
 		
 		

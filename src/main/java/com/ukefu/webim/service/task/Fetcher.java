@@ -86,7 +86,7 @@ public class Fetcher implements Runnable {
 							break ;
 						}
 					}
-					if (obj!= null){
+					if (obj!= null && this.job.isFetcher()){
 						output(obj);
 					}
 				} catch (Throwable t) { // unexpected exception
