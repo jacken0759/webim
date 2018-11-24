@@ -85,7 +85,7 @@ $(document).ready(function(){
 		    
 		    var connections = [];
 		    groups.forEach(function( val, index ) {
-		    	//渲染组
+		    	//渲染组（问题）
 		    	j.addGroup({
 			        el:eval(val),
 			        id:val,
@@ -113,7 +113,7 @@ $(document).ready(function(){
 			        anchor:"Continuous",
 			        endpoint:[ "Dot", { radius: 2, cssClass:"large-green" } ]
 			    });
-		    	//渲染底下元素
+		    	//渲染底下元素（答案）
 		    	var groupson = $("#"+val+" .groupson");
 		    	$.each(groupson, function(i2, val2) {
 		    		var nextId = $(val2).attr("next-id");
@@ -133,14 +133,14 @@ $(document).ready(function(){
 				    });
 		    	});  
 		    });
-		    
+		    //监听连接线事件
 		    j.bind("connection", function(p) {
 		    	if($(p.source).attr("parent-id") == $(p.target).attr("id")){
 		    		j.deleteConnection(p.connection);
 		    	}else{
 		    		p.connection.bind("click", function() {
 			            j.deleteConnection(this);
-			          //更新@Valid String answerid, @Valid String queid
+			          //删除答案连接
 			              $.ajax({
 				             type: "get",
 				             url: "/apps/salespatter/question/answer/edit",
@@ -174,8 +174,6 @@ $(document).ready(function(){
 		    });
 		    isinit = true;
 		    
-		    // the independent element that demonstrates the fact that it can be dropped onto a group
-		    //j.draggable("standalone");
 		    // 删除节点
 		    j.on(canvas, "click", ".del", function() {
 		    	var g = this.parentNode.getAttribute("id");
@@ -197,17 +195,6 @@ $(document).ready(function(){
         		});
 		    });
 		    
-		    /*j.bind('click', function (conn, originalEvent) {
-		    	j.detach(conn);
-		    	})*/
-		    	
 		    jsPlumb.fire("jsPlumbDemoLoaded", j);
-		    
-		    
-		  //获取所有连接
-		    /*$(".getAllConnection").click(function(){
-		    	
-		    })*/	
-		    
 	});
 });
