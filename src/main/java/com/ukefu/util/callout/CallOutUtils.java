@@ -315,6 +315,10 @@ public class CallOutUtils {
 		
 		metaDataTable.getTableproperty().add(initProperties("ringtime", "振铃时长", "Long", event.getOrgi() , event.getTablename() , true)) ;
 		metaDataTable.getTableproperty().add(initProperties("incall", "通话时长", "Long", event.getOrgi() , event.getTablename() , true)) ;
+		
+		metaDataTable.getTableproperty().add(initProperties("level", "评级", "String", event.getOrgi() , event.getTablename() , true)) ;
+		
+		metaDataTable.getTableproperty().add(initProperties("levelscore", "评分", "Long", event.getOrgi() , event.getTablename() , true)) ;
 	}
 	
 	public static TableProperties initProperties(String name ,String title, String type ,String orgi ,String tableName , boolean sysfield) {
