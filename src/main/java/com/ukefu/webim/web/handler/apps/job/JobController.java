@@ -65,13 +65,19 @@ public class JobController extends Handler {
 				if(taskinfo.getIsRepeat() && taskinfo.getRepeatJustTime() > 0) {
 					detail.setEndtime(format.format((taskinfo.getRunBeginHour() + taskinfo.getRepeatJustTime()))+":"+format.format(taskinfo.getRunBeginMinute())+":"+format.format(taskinfo.getRunBeginSecond()));
 				}
-				
-				detail.setCronexp(UKTools.convertCrond(taskinfo));
-				/**
-				 * 设定触发时间
-				 */
-				detail.setNextfiretime(new Date());
-				detail.setNextfiretime(UKTools.updateTaskNextFireTime(detail));
+				if(plantask!=null && plantask.booleanValue()) {
+					detail.setCronexp(UKTools.convertCrond(taskinfo));
+					/**
+					 * 设定触发时间
+					 */
+					detail.setNextfiretime(new Date());
+					detail.setNextfiretime(UKTools.updateTaskNextFireTime(detail));
+					detail.setPlantask(true);
+				}else {
+					detail.setPlantask(false);
+					detail.setCronexp(null);
+					detail.setNextfiretime(null);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
