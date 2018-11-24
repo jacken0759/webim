@@ -320,7 +320,7 @@ public class CallOutUtils {
 		
 		metaDataTable.getTableproperty().add(initProperties("levelscore", "评分", "Long", event.getOrgi() , event.getTablename() , true)) ;
 		
-		metaDataTable.getTableproperty().add(initProperties("focustimes", "关注点", "Long", event.getOrgi() , event.getTablename() , true)) ;
+		metaDataTable.getTableproperty().add(initProperties("focustimes", "关注点次数", "Long", event.getOrgi() , event.getTablename() , true)) ;
 	}
 	
 	public static TableProperties initProperties(String name ,String title, String type ,String orgi ,String tableName , boolean sysfield) {
