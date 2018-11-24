@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-11-24 12:55:14
+Date: 2018-11-24 13:02:14
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -5331,6 +5331,139 @@ CREATE TABLE `uk_snsaccount` (
 
 -- ----------------------------
 -- Records of uk_snsaccount
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_spt_answer`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_spt_answer`;
+CREATE TABLE `uk_spt_answer` (
+  `id` varchar(32) NOT NULL,
+  `questionid` varchar(32) DEFAULT NULL COMMENT '问题ID',
+  `questionname` varchar(255) DEFAULT NULL COMMENT '问题名称',
+  `answer` text COMMENT '问题答案',
+  `queid` varchar(32) DEFAULT NULL COMMENT '跳转问题ID',
+  `answerscore` int(11) DEFAULT '0' COMMENT '答案评分',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `processid` varchar(32) DEFAULT NULL COMMENT '问卷ID',
+  `correct` varchar(32) DEFAULT NULL COMMENT '是否是正确答案（0正确1不正确）',
+  `hanguptype` varchar(32) DEFAULT NULL COMMENT '挂断提示语类型',
+  `hangupmsg` varchar(255) DEFAULT NULL COMMENT '挂断提示语文字',
+  `hangupvoice` varchar(32) DEFAULT NULL COMMENT '挂断提示语语音',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='话术-问题答案表';
+
+-- ----------------------------
+-- Records of uk_spt_answer
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_spt_level`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_spt_level`;
+CREATE TABLE `uk_spt_level` (
+  `id` varchar(32) NOT NULL,
+  `name` varchar(255) DEFAULT NULL COMMENT '评级名称',
+  `sortindex` int(11) DEFAULT '0' COMMENT '序号',
+  `minscore` int(11) DEFAULT '0' COMMENT '开始评分范围',
+  `maxscore` int(11) DEFAULT NULL COMMENT '结束评分范围',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `processid` varchar(32) DEFAULT NULL COMMENT '话术ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='话术-评级表';
+
+-- ----------------------------
+-- Records of uk_spt_level
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_spt_point`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_spt_point`;
+CREATE TABLE `uk_spt_point` (
+  `id` varchar(32) NOT NULL,
+  `questionid` varchar(32) DEFAULT NULL COMMENT '问题ID',
+  `pointtype` varchar(32) DEFAULT NULL COMMENT '关注点类型（0关键字 1通话时长）',
+  `focusword` varchar(255) DEFAULT NULL COMMENT '关键字',
+  `mincalltime` int(11) DEFAULT '0' COMMENT '开始通话时长范围',
+  `maxcalltime` int(11) DEFAULT NULL COMMENT '结束通话时长范围',
+  `score` int(11) DEFAULT '0' COMMENT '评分',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `processid` varchar(32) DEFAULT NULL COMMENT '问卷ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='话术-关注点表';
+
+-- ----------------------------
+-- Records of uk_spt_point
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_spt_question`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_spt_question`;
+CREATE TABLE `uk_spt_question` (
+  `id` varchar(32) NOT NULL,
+  `title` varchar(255) DEFAULT NULL COMMENT '问题标题',
+  `name` varchar(255) DEFAULT NULL COMMENT '问题名称',
+  `sortindex` int(11) DEFAULT '0' COMMENT '问题序号',
+  `quetype` int(11) DEFAULT '0' COMMENT '问题类型（0选择题1问答题）',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `description` text COMMENT '描述',
+  `memo` text COMMENT '备注',
+  `score` int(11) DEFAULT NULL COMMENT '问题分值',
+  `processid` varchar(32) DEFAULT NULL COMMENT '问卷ID',
+  `wvtype` varchar(32) DEFAULT NULL COMMENT '类型（文字/语音）',
+  `quevoice` varchar(32) DEFAULT NULL COMMENT '语音ID',
+  `confirmtype` varchar(32) DEFAULT NULL COMMENT '答案确认语类型',
+  `confirmword` varchar(255) DEFAULT NULL COMMENT '答案确认语文字',
+  `confirmvoice` varchar(255) DEFAULT NULL COMMENT '答案确认语语音',
+  `overtimetype` varchar(255) DEFAULT NULL COMMENT '回答超时语',
+  `overtimeword` varchar(255) DEFAULT NULL COMMENT '回答超时语文字',
+  `overtimevoice` varchar(255) DEFAULT NULL COMMENT '回答超时语语音',
+  `errortype` varchar(255) DEFAULT NULL COMMENT '回答错误语',
+  `errorword` varchar(255) DEFAULT NULL COMMENT '回答错误语文字',
+  `errorvoice` varchar(255) DEFAULT NULL COMMENT '回答错误语语音',
+  `replykeyword` varchar(255) DEFAULT NULL COMMENT '关键词重复',
+  `replytype` varchar(255) DEFAULT NULL COMMENT '重复提示类型',
+  `replyword` varchar(255) DEFAULT NULL COMMENT '重复提示语文字',
+  `replyvoice` varchar(255) DEFAULT NULL COMMENT '重复提示语语音',
+  `replyrepeat` varchar(32) DEFAULT NULL COMMENT '重复确认语-最大重复次数',
+  `replyoperate` varchar(32) DEFAULT NULL COMMENT '重复确认语-到达最大次数的操作（转接trans/挂断/handup）',
+  `replytrans` varchar(32) DEFAULT NULL COMMENT '重复确认语-转接号码',
+  `replytypeup` varchar(32) DEFAULT NULL COMMENT '重复确认语-转接号码',
+  `replywordup` varchar(255) DEFAULT NULL COMMENT '重复确认语-挂断提示语（文字）',
+  `replyvoiceup` varchar(32) DEFAULT NULL COMMENT '重复确认语-挂断提示语（语音ID）',
+  `overtimerepeat` varchar(32) DEFAULT NULL COMMENT '回答超时语-最大重复次数',
+  `overtimeoperate` varchar(32) DEFAULT NULL COMMENT '回答超时语-到达最大次数的操作（转接trans/挂断/handup）',
+  `overtimetrans` varchar(32) DEFAULT NULL COMMENT '回答超时语-转接号码',
+  `overtimetypeup` varchar(32) DEFAULT NULL COMMENT '回答超时语-挂断提示语类型',
+  `overtimewordup` varchar(255) DEFAULT NULL COMMENT '回答超时语-挂断提示语（文字）',
+  `overtimevoiceup` varchar(32) DEFAULT NULL COMMENT '回答超时语-挂断提示语（语音ID）',
+  `errorepeat` varchar(32) DEFAULT NULL COMMENT '回答错误语-最大重复次数',
+  `erroroperate` varchar(32) DEFAULT NULL COMMENT '回答错误语-到达最大次数的操作（转接trans/挂断/handup）',
+  `errortrans` varchar(32) DEFAULT NULL COMMENT '回答错误语-转接号码',
+  `errortypeup` varchar(32) DEFAULT NULL COMMENT '回答错误语-挂断提示语类型',
+  `errorwordup` varchar(255) DEFAULT NULL COMMENT '回答错误语-挂断提示语（文字）',
+  `errorvoiceup` varchar(32) DEFAULT NULL COMMENT '回答错误语-挂断提示语（语音ID）',
+  `offsetx` int(11) DEFAULT '0' COMMENT '位置x',
+  `offsety` int(11) DEFAULT '0' COMMENT '位置y',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='话术-问题表';
+
+-- ----------------------------
+-- Records of uk_spt_question
 -- ----------------------------
 
 -- ----------------------------

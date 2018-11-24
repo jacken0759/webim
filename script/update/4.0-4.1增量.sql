@@ -510,6 +510,11 @@ ALTER TABLE uk_callcenter_siptrunk ADD prefixstr varchar(50) DEFAULT NULL COMMEN
 
 
 
+ALTER TABLE uk_jobdetail ADD starttime varchar(50) DEFAULT NULL COMMENT '任务起始时间';
+ALTER TABLE uk_jobdetail ADD endtime varchar(50) DEFAULT NULL COMMENT '任务结束时间';
+
+
+
 CREATE TABLE `uk_spt_question` (
   `id` varchar(32) NOT NULL,
 	`title` varchar(255) DEFAULT NULL COMMENT '问题标题',
