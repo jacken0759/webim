@@ -1,5 +1,6 @@
 package com.ukefu.webim.web.handler.apps.job;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Date;
 
@@ -59,6 +60,11 @@ public class JobController extends Handler {
 				detail.setPlantask(plantask) ;
 				ObjectMapper mapper = new ObjectMapper();  
 				detail.setTaskinfo(mapper.writeValueAsString(taskinfo));
+				DecimalFormat format = new DecimalFormat("00");
+				detail.setStarttime(format.format(taskinfo.getRunBeginHour())+":"+format.format(taskinfo.getRunBeginMinute())+":"+format.format(taskinfo.getRunBeginSecond()));
+				if(taskinfo.getIsRepeat() && taskinfo.getRepeatJustTime() > 0) {
+					detail.setEndtime(format.format((taskinfo.getRunBeginHour() + taskinfo.getRepeatJustTime()))+":"+format.format(taskinfo.getRunBeginMinute())+":"+format.format(taskinfo.getRunBeginSecond()));
+				}
 				
 				detail.setCronexp(UKTools.convertCrond(taskinfo));
 				/**

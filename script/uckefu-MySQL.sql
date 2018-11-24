@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-11-22 16:58:06
+Date: 2018-11-24 12:55:14
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -171,6 +171,7 @@ CREATE TABLE `uk_act_callnames` (
   `duration` int(11) DEFAULT '0' COMMENT '机器人呼叫通话时长',
   `callresult` varchar(255) DEFAULT NULL COMMENT '呼叫结果消息',
   `callsuccess` tinyint(4) DEFAULT '0' COMMENT '是否呼叫成功',
+  `ownerai` varchar(50) DEFAULT NULL COMMENT '机器人ID',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='电销名单表';
 
@@ -1371,6 +1372,7 @@ CREATE TABLE `uk_callcenter_siptrunk` (
   `notready` varchar(50) DEFAULT NULL COMMENT '坐席不在线的时候转到号码',
   `noname` varchar(50) DEFAULT NULL COMMENT '未找到名单或未分配的时候转到号码',
   `enablecallagent` tinyint(4) DEFAULT '0' COMMENT '坐席不在线转手机',
+  `prefixstr` varchar(50) DEFAULT NULL COMMENT '加拨前缀号码',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='SIP网关信息表';
 
@@ -3248,6 +3250,11 @@ CREATE TABLE `uk_jobdetail` (
   `localserver` varchar(255) DEFAULT NULL COMMENT '获取远程的本地服务URL',
   `filtertype` varchar(50) DEFAULT NULL COMMENT '活动筛选类型',
   `templateid` varchar(50) DEFAULT NULL COMMENT '质检模板ID',
+  `extention` varchar(50) DEFAULT NULL COMMENT '机器人ID',
+  `enabletaithreads` tinyint(4) DEFAULT '0' COMMENT '机器人是否限制并发',
+  `aithreads` tinyint(4) DEFAULT '0' COMMENT '并发数',
+  `starttime` varchar(50) DEFAULT NULL COMMENT '任务起始时间',
+  `endtime` varchar(50) DEFAULT NULL COMMENT '任务结束时间',
   PRIMARY KEY (`ID`,`ENABLE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='作业调度任务/活动/批次表';
 
@@ -10177,7 +10184,7 @@ CREATE TABLE `uk_user` (
 INSERT INTO `uk_user` VALUES ('4028811b61834723016183ec57760392', null, 'chenfarong', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'chen@ukewo.cn', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-02-11 16:12:39', null, '2018-06-29 17:40:30', null, '18510129455', '2018-02-11 16:12:39', null, '0', '陈法蓉', null, '0', null, null, null, '0', '0', '0', '2018-06-29 17:40:37', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b642f5f8c01642f60ed440683', null, 'test1', '130811dbd239c97bd9ce933de7349f20', '5', 'ad@te.com', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-06-24 09:20:38', null, '2018-11-20 09:05:49', '4028811b66d257820166d28cb868022b', '18510129433', '2018-06-24 09:20:38', null, '0', 'test1', null, '0', null, null, null, '0', '0', '0', '2018-11-20 09:06:03', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b645dc08f01645e0512ce0935', null, 'yiliao', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'asd@ac.com', null, null, null, null, null, null, null, null, null, null, null, '4028811b645dc08f01645e005f3d08dd', 'ukewo', null, '2018-07-03 10:42:28', null, '2018-07-03 10:43:31', null, '18512212955', '2018-07-03 10:42:28', null, '0', '医疗', null, '0', null, null, null, '0', '0', '0', '2018-07-03 10:43:39', null, null, null, '0', '0', '0', '0', null);
-INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-11-22 16:49:59', null, null, null, '0', '1', '1', '0', null);
+INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-11-24 12:39:01', null, null, null, '0', '1', '1', '0', null);
 
 -- ----------------------------
 -- Table structure for `uk_userevent`

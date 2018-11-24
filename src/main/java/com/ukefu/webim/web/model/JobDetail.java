@@ -65,6 +65,9 @@ public class JobDetail implements Serializable{
 	private long lastindex = 0 ;
 	private String dataid;//为了在状态中检索，存放了报表的id集合
 	private String dicid;//存放了报表所在目录
+	
+	private String starttime ;	//任务启动时间
+	private String endtime ;		//任务结束时间
 
 	private Date taskfiretime ;
 	private String crawltask ;
@@ -868,6 +871,20 @@ public class JobDetail implements Serializable{
 	public void setAithreads(int aithreads) {
 		this.aithreads = aithreads;
 	}
-	
-	
+
+	public String getStarttime() {
+		return starttime;
+	}
+
+	public void setStarttime(String starttime) {
+		this.starttime = starttime;
+	}
+
+	public String getEndtime() {
+		return endtime;
+	}
+
+	public void setEndtime(String endtime) {
+		this.endtime = endtime;
+	}
 }

@@ -1,6 +1,7 @@
 package com.ukefu.webim.service.task;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -71,6 +72,16 @@ public class Fetcher implements Runnable {
 					while (job.isPause() && job.isFetcher()) {
 						Thread.sleep(1000);
 						if(resource.isAvailable()) {
+							break ;
+						}
+					}
+					/**
+					 * 校验任务的 结束时间
+					 */
+					if(!StringUtils.isBlank(this.job.getEndtime())){
+						Date current = UKTools.dateFormate.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date()) +" "+ this.job.getEndtime() );
+						if(current.before(new Date())) {
+							this.job.setMemo("任务已超过结束时间");
 							break ;
 						}
 					}
