@@ -508,6 +508,8 @@ ALTER TABLE uk_jobdetail ADD aithreads tinyint(4) DEFAULT 0 COMMENT '并发数';
 
 ALTER TABLE uk_callcenter_siptrunk ADD prefixstr varchar(50) DEFAULT NULL COMMENT '加拨前缀号码';
 
+
+
 CREATE TABLE `uk_spt_question` (
   `id` varchar(32) NOT NULL,
 	`title` varchar(255) DEFAULT NULL COMMENT '问题标题',
@@ -518,6 +520,7 @@ CREATE TABLE `uk_spt_question` (
   `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
   `createtime` datetime DEFAULT NULL COMMENT '创建时间',
   `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+ 
   `description` text COMMENT '描述',
   `memo` text COMMENT '备注',
   `score` int(11) DEFAULT NULL COMMENT '问题分值',
@@ -558,6 +561,10 @@ CREATE TABLE `uk_spt_question` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='话术-问题表';
 
+
+ALTER TABLE uk_spt_question ADD offsetx int(11) DEFAULT '0' COMMENT '位置x';
+
+ALTER TABLE uk_spt_question ADD offsety int(11) DEFAULT '0' COMMENT '位置y';
 CREATE TABLE `uk_spt_answer` (
   `id` varchar(32) NOT NULL,
   `questionid` varchar(32) DEFAULT NULL COMMENT '问题ID',

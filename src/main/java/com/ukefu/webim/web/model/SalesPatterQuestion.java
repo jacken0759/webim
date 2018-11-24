@@ -32,6 +32,8 @@ public class SalesPatterQuestion implements java.io.Serializable{
 	private Date createtime;//创建时间
 	private Date updatetime;//更新时间
 	
+	private int offsetx;//位置x
+	private int offsety;//位置y
 	private String description;//描述
 	private String memo;//备注
 	private int score;//问题分值
@@ -360,5 +362,19 @@ public class SalesPatterQuestion implements java.io.Serializable{
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	public int getOffsetx() {
+		return offsetx;
+	}
+	public void setOffsetx(int offsetx) {
+		this.offsetx = offsetx;
+	}
+	public int getOffsety() {
+		return offsety;
+	}
+	public void setOffsety(int offsety) {
+		this.offsety = offsety;
+	}
+
+	
 	
 }
