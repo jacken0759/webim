@@ -25,6 +25,7 @@ public class Fetcher implements Runnable {
 	private AtomicInteger errors = new AtomicInteger(0); // total pages fetched
 	private Resource resource = null ;
 	private int processpages = 0 ;
+	private boolean round ;
 	/**
 	 * 构建任务信息
 	 * @param job
@@ -163,5 +164,13 @@ public class Fetcher implements Runnable {
 			this.job.getReport().setStatus(new StringBuffer().append("已处理：").append(this.job.getReport().getPages()).append(", 错误：").append(this.job.getReport().getErrors()).append("，处理速度：").append(job.getReport().getSpeed()).append("条/秒，线程数：").append(this.job.getReport().getThreads()).append(this.job.getReport().getDetailmsg()!=null ? "，详细信息："+this.job.getReport().getDetailmsg() : "").toString());
 			CacheHelper.getJobCacheBean().put(job.getId(), job , job.getOrgi());
 		}
+	}
+
+	public boolean isRound() {
+		return round;
+	}
+
+	public void setRound(boolean round) {
+		this.round = round;
 	}
 }

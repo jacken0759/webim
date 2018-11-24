@@ -68,6 +68,7 @@ public class Reporter implements java.io.Serializable{
 	private String username ;
 	private boolean error ;	
 	private boolean out ;
+	private boolean round ;	//是否需要多轮采集
 	private long start = System.currentTimeMillis() ;
 	private AtomicInteger atompages = new AtomicInteger() ;
 	
@@ -333,6 +334,13 @@ public class Reporter implements java.io.Serializable{
 	}
 	public void setOrgan(String organ) {
 		this.organ = organ;
+	}
+	@Transient
+	public boolean isRound() {
+		return round;
+	}
+	public void setRound(boolean round) {
+		this.round = round;
 	}
 	public String toString() {
 		return new StringBuffer().append("已处理：").append(this.getAtompages().intValue()).append(", 错误：").append(this.getErrors()).append("，处理速度：").append(this.getSpeed()).append("条/秒，线程数：").append(this.getThreads()).append(this.getDetailmsg()!=null ? "，详细信息："+this.getDetailmsg() : "").toString() ;

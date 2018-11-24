@@ -40,9 +40,11 @@ public class Task implements Runnable{
 						jobDetail.setReport(new Reporter());
 						UKDataContext.getContext().getBean(ReporterRepository.class).save(jobDetail.getReport()) ;
 					}
-					if (jobDetail.isFetcher()) {//while (jobDetail.isFetcher()) {
+					if (jobDetail.isFetcher()) {
 						UKDataContext.localJobDetailMap.put(jobDetail.getId(), jobDetail) ;
-						new Fetcher(jobDetail).run();
+						do {
+							new Fetcher(jobDetail).run();
+						}while(jobDetail.isFetcher() && jobDetail.getReport()!=null && jobDetail.getReport().isRound()) ;//启用多轮，每轮处理本轮数据
 					}
 				}
 			}
