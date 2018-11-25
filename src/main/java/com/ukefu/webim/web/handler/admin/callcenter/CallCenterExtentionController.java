@@ -20,8 +20,8 @@ import com.ukefu.webim.service.impl.CallOutQuene;
 import com.ukefu.webim.service.repository.ExtentionRepository;
 import com.ukefu.webim.service.repository.MediaRepository;
 import com.ukefu.webim.service.repository.PbxHostRepository;
-import com.ukefu.webim.service.repository.ProductRepository;
 import com.ukefu.webim.service.repository.QueSurveyProcessRepository;
+import com.ukefu.webim.service.repository.SalesPatterRepository;
 import com.ukefu.webim.service.repository.ServiceAiRepository;
 import com.ukefu.webim.service.repository.SipTrunkRepository;
 import com.ukefu.webim.web.handler.Handler;
@@ -49,7 +49,7 @@ public class CallCenterExtentionController extends Handler{
 	private ServiceAiRepository serviceAiRes ;
 	
 	@Autowired
-	private ProductRepository productRes ;
+	private SalesPatterRepository salesPatterRes ;
 	
 	@Autowired
 	private QueSurveyProcessRepository queSurveyProcessRes ;
@@ -195,7 +195,7 @@ public class CallCenterExtentionController extends Handler{
 		
 		map.put("serviceAiList",serviceAiRes.findByOrgi(super.getOrgi(request)) ) ;
 		map.put("queList",queSurveyProcessRes.findByOrgi(super.getOrgi(request)) ) ;
-		map.put("productList",productRes.findByOrgi(super.getOrgi(request)) ) ;
+		map.put("salesPatterList",salesPatterRes.findByOrgi(super.getOrgi(request)) ) ;
 		
     	return request(super.createRequestPageTempletResponse("/admin/callcenter/extention/ivr"));
     }

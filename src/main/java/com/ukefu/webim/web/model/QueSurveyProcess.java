@@ -13,7 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name = "uk_que_survey_process")
 @org.hibernate.annotations.Proxy(lazy = false)
-public class QueSurveyProcess implements java.io.Serializable{
+public class QueSurveyProcess implements AiCallOutProcess{
 
 	/**
 	 * 问卷调查表

@@ -1,10 +1,13 @@
 package com.ukefu.webim.web.handler.resource;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -75,8 +79,29 @@ public class MediaController extends Handler{
     @Menu(type = "resouce" , subtype = "voice" , access = true)
     public void voice(HttpServletResponse response, @Valid String id) throws IOException {
     	File file = new File(path ,id) ;
+    	response.setContentType(Files.probeContentType(Paths.get(file.getAbsolutePath())));  
+        response.setHeader("Content-Disposition", "attachment;filename="+java.net.URLEncoder.encode(file.getName(), "UTF-8"));  
     	if(file.exists() && file.isFile()){
     		response.getOutputStream().write(FileUtils.readFileToByteArray(new File(path ,id)));
+    	}
+    }
+    
+    @RequestMapping("/voice/{type}/{id}")
+    @Menu(type = "resouce" , subtype = "voice" , access = true)
+    public void voiceplay(HttpServletResponse response, HttpServletRequest request, @PathVariable String type, @PathVariable String id) throws IOException {
+    	File file = new File(path ,type+"/"+id + request.getRequestURI().substring(request.getRequestURI().lastIndexOf("."))) ;
+    	response.setHeader("Content-Type" , "application/octet-stream");  
+        response.setHeader("Content-Disposition", "attachment;filename="+java.net.URLEncoder.encode(file.getName(), "UTF-8"));  
+    	if(file.exists() && file.isFile()){
+    		FileInputStream input = new FileInputStream(file) ;
+    		OutputStream output = response.getOutputStream() ; 
+    		byte[] data = new byte[1024] ;
+    		int len = 0 ;
+    		while((len = input.read(data))>0) {
+    			output.write(data , 0  , len);
+    		}
+    		output.flush();
+    		input.close();
     	}
     }
     

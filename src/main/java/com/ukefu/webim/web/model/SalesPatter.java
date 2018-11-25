@@ -13,7 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name = "uk_spt_salespatter")
 @org.hibernate.annotations.Proxy(lazy = false)
-public class SalesPatter implements java.io.Serializable{
+public class SalesPatter implements AiCallOutProcess{
 
 	/**
 	 * 话术表

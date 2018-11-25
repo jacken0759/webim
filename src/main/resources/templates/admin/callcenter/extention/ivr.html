@@ -3,6 +3,12 @@
     	<input type="hidden" name="hostid" value="${pbxHost.id!''}">
     	<input type="hidden" name="id" value="${extention.id!''}">
     	<div class="layui-form-item">
+	    	<label class="layui-form-label">智能IVR对接地址：</label>
+	        <div class="layui-input-inline">
+	        	<input type="text" readOnly="readonly" style="width:450px;"  autocomplete="off" class="layui-input" value="${schema!''}://${hostname!''}:${port?string('###')}/apps/smartivr/asr?ext=${extention.extention!''}">
+	        </div>
+	    </div>
+    	<div class="layui-form-item">
             <label class="layui-form-label">启用机器人类型：</label>
             <div class="layui-input-inline" style="width: 400px;">
                 <input type="radio" title="智能机器人" name="aitype" id="enableai" value="smartai" lay-filter="enable_ai" <#if !(extention?? && extention.aitype == 'businessai')>checked="checked"</#if>>
@@ -21,12 +27,6 @@
 						</#list>
 						</#if> 
 					</select>
-	            </div>
-	        </div>
-	        <div class="layui-form-item">
-	            <label class="layui-form-label">智能IVR对接地址：</label>
-	            <div class="layui-input-inline">
-	               <input type="text" readOnly="readonly" style="width:450px;"  autocomplete="off" class="layui-input" value="${schema!''}://${hostname!''}:${port?string('###')}/apps/smartivr/asr?ext=${extention.extention!''}">
 	            </div>
 	        </div>
 	        <div class="layui-form-item">
@@ -63,18 +63,18 @@
 		       	<div class="layui-input-inline">
 			        <select name="bustype"  lay-filter="bustype" >
 		            		<option value="">请选择业务类型</option>
-		            		<option value="sale" <#if extention?? && extention.bustype == 'sale'>selected="selected"</#if>>电销</option>
+		            		<option value="sale" <#if extention?? && extention.bustype == 'sale'>selected="selected"</#if>>业务话术</option>
 		            		<option value="quesurvey" <#if extention?? && extention.bustype == 'quesurvey'>selected="selected"</#if>>调查问卷</option>
 		            </select>
 	            </div>
             </div>
 	       	<div class="layui-form-item" id="pro" style="<#if extention?? && extention.bustype == 'sale'>display: inline;<#else>display: none;  </#if>">
-	       		<label class="layui-form-label">产品：</label>
+	       		<label class="layui-form-label">业务话术：</label>
 		       	<div class="layui-input-inline">
 			        <select name="proid"   >
-		            	<option value="">请选择产品</option>
-		            	<#list productList as product>
-		            		<option value="${product.id}" <#if extention?? && extention.proid == product.id>selected="selected"</#if>>${product.title!''}</option>
+		            	<option value="">请选择话术</option>
+		            	<#list salesPatterList as salesPatter>
+		            		<option value="${salesPatter.id}" <#if extention?? && extention.proid == salesPatter.id>selected="selected"</#if>>${salesPatter.name!''}</option>
 		            	</#list>
 		            </select>
 	            </div>
