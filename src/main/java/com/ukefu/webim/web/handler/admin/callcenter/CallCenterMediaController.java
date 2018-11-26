@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ukefu.util.Menu;
-import com.ukefu.util.UKTools;
 import com.ukefu.webim.service.repository.MediaRepository;
 import com.ukefu.webim.service.repository.PbxHostRepository;
 import com.ukefu.webim.web.handler.Handler;
@@ -63,7 +62,7 @@ public class CallCenterMediaController extends Handler{
 		if(!StringUtils.isBlank(media.getName())){
 			int count = mediaRes.countByNameAndOrgi(media.getName(), super.getOrgi(request)) ;
 			if(count == 0){
-				String fileName = "media/"+UKTools.getUUID()+mediafile.getOriginalFilename().substring(mediafile.getOriginalFilename().lastIndexOf(".")) ;
+				String fileName = "media/"+media.getId()+ mediafile.getOriginalFilename().substring(mediafile.getOriginalFilename().lastIndexOf(".")) ;
 				
 				media.setOrgi(super.getOrgi(request));
 				media.setCreater(super.getUser(request).getId());
@@ -109,7 +108,7 @@ public class CallCenterMediaController extends Handler{
 		    			wavFile.deleteOnExit();
 		    		}
 					
-					String fileName = "media/"+UKTools.getUUID()+mediafile.getOriginalFilename().substring(mediafile.getOriginalFilename().lastIndexOf(".")) ;
+					String fileName = "media/"+media.getId()+mediafile.getOriginalFilename().substring(mediafile.getOriginalFilename().lastIndexOf(".")) ;
 					oldMedia.setFilename(fileName);
 					
 					if(mediafile!=null && mediafile.getOriginalFilename().lastIndexOf(".") > 0){

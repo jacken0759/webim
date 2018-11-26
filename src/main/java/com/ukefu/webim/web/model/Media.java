@@ -10,6 +10,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.ukefu.util.UKTools;
+
 @Entity
 @Table(name = "uk_callcenter_media")
 @org.hibernate.annotations.Proxy(lazy = false)
@@ -18,7 +20,7 @@ public class Media implements java.io.Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 3932323765657445180L;
-	private String id;
+	private String id = UKTools.getUUID();
 	private String name;
 	private String orgi;
 	private String creater ;
@@ -32,7 +34,7 @@ public class Media implements java.io.Serializable{
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy = "uuid")	
+	@GenericGenerator(name = "system-uuid", strategy = "assigned")	
 	public String getId() {
 		return id;
 	}
