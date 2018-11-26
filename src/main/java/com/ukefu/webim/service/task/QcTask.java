@@ -193,10 +193,10 @@ public class QcTask {
 		}
 	}
 	
-	@Scheduled(fixedDelay= 3000) 
+	@Scheduled(fixedDelay= 3000 , initialDelay = 20000) 
     public void voiceTrans() {
 		Object data = null ;
-		while((data = CacheHelper.getQcQueueCacheBean().getCacheObject(null, null))!=null) {
+		while(CacheHelper.getQcQueueCacheBean()!=null && (data = CacheHelper.getQcQueueCacheBean().getCacheObject(null, null))!=null) {
 			if(data instanceof StatusEvent) {
 				StatusEvent statusEvent = (StatusEvent)data ;
 				QualityConfig qConfig = UKTools.initQualityConfig(statusEvent.getOrgi()) ;
@@ -207,7 +207,7 @@ public class QcTask {
 		}
 	}
 	
-	@Scheduled(fixedDelay= 3000) 
+	@Scheduled(fixedDelay= 3000 , initialDelay = 20000) 
     public void checkVoiceTrans() {
 		if(UKDataContext.model.get("qc") != null) {
 			Page<StatusEvent> transList = null ;
