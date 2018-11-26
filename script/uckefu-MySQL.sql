@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-11-24 13:02:14
+Date: 2018-11-26 15:02:17
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -10317,7 +10317,7 @@ CREATE TABLE `uk_user` (
 INSERT INTO `uk_user` VALUES ('4028811b61834723016183ec57760392', null, 'chenfarong', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'chen@ukewo.cn', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-02-11 16:12:39', null, '2018-06-29 17:40:30', null, '18510129455', '2018-02-11 16:12:39', null, '0', '陈法蓉', null, '0', null, null, null, '0', '0', '0', '2018-06-29 17:40:37', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b642f5f8c01642f60ed440683', null, 'test1', '130811dbd239c97bd9ce933de7349f20', '5', 'ad@te.com', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-06-24 09:20:38', null, '2018-11-20 09:05:49', '4028811b66d257820166d28cb868022b', '18510129433', '2018-06-24 09:20:38', null, '0', 'test1', null, '0', null, null, null, '0', '0', '0', '2018-11-20 09:06:03', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b645dc08f01645e0512ce0935', null, 'yiliao', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'asd@ac.com', null, null, null, null, null, null, null, null, null, null, null, '4028811b645dc08f01645e005f3d08dd', 'ukewo', null, '2018-07-03 10:42:28', null, '2018-07-03 10:43:31', null, '18512212955', '2018-07-03 10:42:28', null, '0', '医疗', null, '0', null, null, null, '0', '0', '0', '2018-07-03 10:43:39', null, null, null, '0', '0', '0', '0', null);
-INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-11-24 12:39:01', null, null, null, '0', '1', '1', '0', null);
+INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-11-25 18:05:51', null, null, null, '0', '1', '1', '0', null);
 
 -- ----------------------------
 -- Table structure for `uk_userevent`
