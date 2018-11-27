@@ -26,6 +26,7 @@ public class QueSurveyResult implements java.io.Serializable{
 	private Date createtime;//创建时间
 	private Date endtime;//结束时间
 	
+	private String busstype;//业务类型（sale,quesurvey  //AiBussType
 	private int processtime;//问答时长
 	private int asktimes;//提问次数
 	private int answertimes;//回答次数
@@ -178,6 +179,12 @@ public class QueSurveyResult implements java.io.Serializable{
 	}
 	public void setOrgan(String organ) {
 		this.organ = organ;
+	}
+	public String getBusstype() {
+		return busstype;
+	}
+	public void setBusstype(String busstype) {
+		this.busstype = busstype;
 	}
 	
 	

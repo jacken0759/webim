@@ -43,9 +43,8 @@ public class SalesPatter implements AiCallOutProcess{
 	private String sumscore;//总评分
 	private String description;//描述
 	
+	private String questionid;//开始问题id
 
-
-	
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -176,4 +175,12 @@ public class SalesPatter implements AiCallOutProcess{
 	public void setType(String type) {
 		this.type = type;
 	}
+	public String getQuestionid() {
+		return questionid;
+	}
+	public void setQuestionid(String questionid) {
+		this.questionid = questionid;
+	}
+	
+	
 }

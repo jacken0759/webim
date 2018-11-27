@@ -5,4 +5,5 @@ public interface AiCallOutProcess extends java.io.Serializable{
 	public String getWelword();
 	public String getWelvoice();
 	public String getWeltype();
+	public String getQuestionid();
 }

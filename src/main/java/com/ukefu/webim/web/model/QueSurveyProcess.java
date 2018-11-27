@@ -42,8 +42,7 @@ public class QueSurveyProcess implements AiCallOutProcess{
 	private String sumscore;//总评分
 	private String description;//描述
 	
-
-
+	private String questionid;//开始问题id
 	
 	@Id
 	@Column(length = 32)
@@ -169,5 +168,12 @@ public class QueSurveyProcess implements AiCallOutProcess{
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	public String getQuestionid() {
+		return questionid;
+	}
+	public void setQuestionid(String questionid) {
+		this.questionid = questionid;
+	}
+	
 	
 }

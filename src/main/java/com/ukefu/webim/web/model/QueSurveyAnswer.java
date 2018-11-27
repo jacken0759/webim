@@ -22,6 +22,7 @@ public class QueSurveyAnswer implements java.io.Serializable{
 	private String id ;
 	private String questionid;//问题ID
 	private String questionname;//问题名称
+	private String title;//答案title
 	private String answer;//问题答案
 	private String queid;//跳转问题ID
 	private int answerscore;//答案评分
@@ -131,4 +132,11 @@ public class QueSurveyAnswer implements java.io.Serializable{
 	public void setHangupvoice(String hangupvoice) {
 		this.hangupvoice = hangupvoice;
 	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
 }

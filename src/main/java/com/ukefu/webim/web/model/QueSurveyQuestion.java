@@ -20,6 +20,7 @@ public class QueSurveyQuestion implements java.io.Serializable{
 	private static final long serialVersionUID = 1115593425069549681L;
 	
 	private String id ;
+	private String title;    //问题标题
 	private String name;//问题名称
 	private String sortindex;//问题序号
 	private int quetype;//问题类型（选择题/问答题）
@@ -28,6 +29,8 @@ public class QueSurveyQuestion implements java.io.Serializable{
 	private Date createtime;//创建时间
 	private Date updatetime;//更新时间
 	
+	private int offsetx;//位置x
+	private int offsety;//位置y
 	private String description;//描述
 	private String memo;//备注
 	private int score;//问题分值
@@ -349,6 +352,24 @@ public class QueSurveyQuestion implements java.io.Serializable{
 	}
 	public void setErrorvoiceup(String errorvoiceup) {
 		this.errorvoiceup = errorvoiceup;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public int getOffsetx() {
+		return offsetx;
+	}
+	public void setOffsetx(int offsetx) {
+		this.offsetx = offsetx;
+	}
+	public int getOffsety() {
+		return offsety;
+	}
+	public void setOffsety(int offsety) {
+		this.offsety = offsety;
 	}
 	
 }
