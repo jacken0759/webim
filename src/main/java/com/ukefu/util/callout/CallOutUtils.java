@@ -81,7 +81,7 @@ public class CallOutUtils {
 	
 	
 	public static CallOutNames processNames(UKDataBean name, CallCenterAgent agent , String orgi , int leavenames) {
-		CallOutNames callOutName = null;
+		CallOutNames callOutName = new CallOutNames();
 		if(name.getValues() != null && name.getValues().get("batid") != null && name.getValues().get("taskid") != null) {
 			String batid = (String) name.getValues().get("batid") ;
 			String taskid = (String) name.getValues().get("taskid") ;
@@ -92,8 +92,6 @@ public class CallOutUtils {
 			List<CallOutNames> callNamesList = callOutNamesRes.findByDataidAndCreaterAndOrgi((String)name.getValues().get("id"), (String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT), orgi) ;
 			if(callNamesList.size() > 0) {
 				callOutName = callNamesList.get(0) ;
-			}else {
-				callOutName = new CallOutNames();
 			}
 			if(callOutName!=null){
 				callOutName.setOrgi(orgi);
@@ -228,9 +226,9 @@ public class CallOutUtils {
 			callOutName.setOwneruser((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));
 			callOutName.setOwnerdept((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));
 			callOutName.setOwnerai((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AI));
+			callOutName.setLeavenum(leavenames);
 		}
 		
-		callOutName.setLeavenum(leavenames);
 		
 		String dial_number = null ;
 		boolean disphonenum = false ;
