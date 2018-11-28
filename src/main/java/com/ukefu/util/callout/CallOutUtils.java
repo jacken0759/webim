@@ -81,19 +81,19 @@ public class CallOutUtils {
 	
 	
 	public static CallOutNames processNames(UKDataBean name, CallCenterAgent agent , String orgi , int leavenames) {
-		CallOutNames callOutName = new CallOutNames();
+		CallOutNames callOutName = null ;
 		if(name.getValues() != null && name.getValues().get("batid") != null && name.getValues().get("taskid") != null) {
 			String batid = (String) name.getValues().get("batid") ;
 			String taskid = (String) name.getValues().get("taskid") ;
 			JobDetail batch = UKDataContext.getContext().getBean(JobDetailRepository.class).findByIdAndOrgi(batid, orgi) ;
 			CallOutTask task = UKDataContext.getContext().getBean(CallOutTaskRepository.class).findByIdAndOrgi(taskid, orgi) ;
 			CallOutNamesRepository callOutNamesRes = UKDataContext.getContext().getBean(CallOutNamesRepository.class) ;
-			
 			List<CallOutNames> callNamesList = callOutNamesRes.findByDataidAndCreaterAndOrgi((String)name.getValues().get("id"), (String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT), orgi) ;
 			if(callNamesList.size() > 0) {
 				callOutName = callNamesList.get(0) ;
-			}else {
-				callOutName = new CallOutNames();
+			}
+			if(callOutName == null) {
+				callOutName = new CallOutNames() ; 
 			}
 			if(callOutName!=null){
 				callOutName.setOrgi(orgi);
@@ -185,13 +185,14 @@ public class CallOutUtils {
 		String taskid = (String) name.getValues().get("taskid") ;
 		JobDetail batch = UKDataContext.getContext().getBean(JobDetailRepository.class).findByIdAndOrgi(batid, orgi) ;
 		CallOutTask task = UKDataContext.getContext().getBean(CallOutTaskRepository.class).findByIdAndOrgi(taskid, orgi) ;
-		CallOutNames callOutName = new CallOutNames() ; 
+		CallOutNames callOutName = null; 
 		
 		List<CallOutNames> callNamesList = callOutNamesRes.findByDataidAndCreaterAndOrgi((String)name.getValues().get("id"), (String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT), orgi) ;
 		if(callNamesList.size() > 0) {
 			callOutName = callNamesList.get(0) ;
-		}else {
-			callOutName = new CallOutNames();
+		}
+		if(callOutName == null) {
+			callOutName = new CallOutNames() ; 
 		}
 		if(callOutName!=null){
 			callOutName.setOrgi(orgi);
