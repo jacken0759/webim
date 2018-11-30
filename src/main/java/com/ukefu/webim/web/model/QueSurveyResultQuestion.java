@@ -9,43 +9,40 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * 问卷结果主表 - 通话记录关联
+ * 问卷问题结果 - 通话记录关联
  */
 @Entity
-@Table(name = "uk_que_result")
+@Table(name = "uk_que_result_question")
 @org.hibernate.annotations.Proxy(lazy = false)
-public class QueSurveyResult implements java.io.Serializable{
+public class QueSurveyResultQuestion implements java.io.Serializable{
 
 	private static final long serialVersionUID = 1115593425069549681L;
 	
 	private String id ;
 	private String eventid;//通话记录ID
+	private String resultid;////结果主表ID
 	private String processid;//问卷ID
+	private String questionid;//问题ID
 	private String orgi;//租户ID
 	private String creater;//创建人
 	private Date createtime;//创建时间
 	private Date endtime;//结束时间
 	
-	private String busstype;//业务类型（sale,quesurvey  //AiBussType
-	private int processtime;//问答时长
+	private int processtime;//问答时长 //统计 类型为时长的关注点
 	private int asktimes;//提问次数
 	private int answertimes;//回答次数
 	private int answertime;//回答时长（每个回答时间总和）
 	private int errortimes;//回答错误次数
 	private int timeouttimes;//回答超时次数
 	private int retimes ;		//重复次数
-	private String actid;//活动ID
-	private String batchid;//批次ID
-	private String filterid;//筛选表单ID
-	private String formfilterid;//筛选记录ID
+	private String answer;//回答内容 多次，分割
 	private String nameid;//名单ID
 	private String mobile;//手机号
-	private String sumscore;//问卷评分
+	private int sumscore;//问题总评分
+	private int score;//问题评分
 	private String organ;
 	
 	private int focustimes;//关注点次数
-	private String level;//评级 a b c d
-
 	
 	@Id
 	@Column(length = 32)
@@ -68,6 +65,12 @@ public class QueSurveyResult implements java.io.Serializable{
 	}
 	public void setProcessid(String processid) {
 		this.processid = processid;
+	}
+	public String getQuestionid() {
+		return questionid;
+	}
+	public void setQuestionid(String questionid) {
+		this.questionid = questionid;
 	}
 	public String getOrgi() {
 		return orgi;
@@ -129,29 +132,17 @@ public class QueSurveyResult implements java.io.Serializable{
 	public void setTimeouttimes(int timeouttimes) {
 		this.timeouttimes = timeouttimes;
 	}
-	public String getActid() {
-		return actid;
+	public int getRetimes() {
+		return retimes;
 	}
-	public void setActid(String actid) {
-		this.actid = actid;
+	public void setRetimes(int retimes) {
+		this.retimes = retimes;
 	}
-	public String getBatchid() {
-		return batchid;
+	public String getAnswer() {
+		return answer;
 	}
-	public void setBatchid(String batchid) {
-		this.batchid = batchid;
-	}
-	public String getFilterid() {
-		return filterid;
-	}
-	public void setFilterid(String filterid) {
-		this.filterid = filterid;
-	}
-	public String getFormfilterid() {
-		return formfilterid;
-	}
-	public void setFormfilterid(String formfilterid) {
-		this.formfilterid = formfilterid;
+	public void setAnswer(String answer) {
+		this.answer = answer;
 	}
 	public String getNameid() {
 		return nameid;
@@ -165,29 +156,18 @@ public class QueSurveyResult implements java.io.Serializable{
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	public String getSumscore() {
-		return sumscore;
-	}
-	public void setSumscore(String sumscore) {
-		this.sumscore = sumscore;
-	}
-	public int getRetimes() {
-		return retimes;
-	}
-	public void setRetimes(int retimes) {
-		this.retimes = retimes;
-	}
+	
 	public String getOrgan() {
 		return organ;
 	}
 	public void setOrgan(String organ) {
 		this.organ = organ;
 	}
-	public String getBusstype() {
-		return busstype;
+	public int getSumscore() {
+		return sumscore;
 	}
-	public void setBusstype(String busstype) {
-		this.busstype = busstype;
+	public void setSumscore(int sumscore) {
+		this.sumscore = sumscore;
 	}
 	public int getFocustimes() {
 		return focustimes;
@@ -195,12 +175,32 @@ public class QueSurveyResult implements java.io.Serializable{
 	public void setFocustimes(int focustimes) {
 		this.focustimes = focustimes;
 	}
-	public String getLevel() {
-		return level;
+	
+	public String getResultid() {
+		return resultid;
 	}
-	public void setLevel(String level) {
-		this.level = level;
+	public void setResultid(String resultid) {
+		this.resultid = resultid;
 	}
+	
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
+	@Override
+	public String toString() {
+		return "QueSurveyResultQuestion [id=" + id + ", eventid=" + eventid + ", resultid=" + resultid + ", processid="
+				+ processid + ", questionid=" + questionid + ", orgi=" + orgi + ", creater=" + creater + ", createtime="
+				+ createtime + ", endtime=" + endtime + ", processtime=" + processtime + ", asktimes=" + asktimes
+				+ ", answertimes=" + answertimes + ", answertime=" + answertime + ", errortimes=" + errortimes
+				+ ", timeouttimes=" + timeouttimes + ", retimes=" + retimes + ", answer=" + answer + ", nameid="
+				+ nameid + ", mobile=" + mobile + ", sumscore=" + sumscore + ", score=" + score + ", organ=" + organ
+				+ ", focustimes=" + focustimes + "]";
+	}
+
+	
 	
 	
 }

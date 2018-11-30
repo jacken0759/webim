@@ -563,6 +563,66 @@ INSERT INTO `uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENT
 
 INSERT INTO `uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENTID`, `DESCRIPTION`, `MEMO`, `ICONSTR`, `ICONSKIN`, `CATETYPE`, `CREATER`, `CREATETIME`, `UPDATETIME`, `HASCHILD`, `SORTINDEX`, `DICID`, `DEFAULTVALUE`, `DISCODE`, `URL`, `MODULE`, `MLEVEL`, `RULES`, `MENUTYPE`) VALUES ('297e740666d3bbd30166d3c9f47c0029', '科大讯飞', 'pub', 'qcphonetic', 'ukewo', 'layui-icon', '297e740666d3bbd30166d3c979880024', '', NULL, '', '', NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-11-02 17:38:39', NULL, '1', '0', '297e740666d3bbd30166d3c979880024', '0', '0', NULL, NULL, NULL, NULL, NULL);
 
+ALTER TABLE uk_que_result ADD focustimes int(11) DEFAULT NULL COMMENT '关注点次数';
+
+ALTER TABLE uk_que_result ADD level varchar(32) DEFAULT NULL COMMENT '客户评级（a,b,c,d）';
+
+ALTER TABLE uk_spt_point ADD name varchar(255) DEFAULT NULL COMMENT '关注点名称';
+
+CREATE TABLE `uk_que_result_question` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `eventid` varchar(100) DEFAULT NULL COMMENT '通话记录ID',
+	`resultid` varchar(32) DEFAULT NULL COMMENT '结果主表ID',
+  `processid` varchar(32) DEFAULT NULL COMMENT '问卷ID',
+  `questionid` varchar(32) DEFAULT NULL COMMENT '问题ID',
+  `processtime` int(11) DEFAULT '0' COMMENT '问答时长',
+  `asktimes` int(11) DEFAULT '0' COMMENT '提问次数',
+  `answertimes` int(11) DEFAULT '0' COMMENT '回答次数',
+  `answertime` int(11) DEFAULT '0' COMMENT '回答时长（每个回答时间总和）',
+  `errortimes` int(11) DEFAULT '0' COMMENT '回答错误次数',
+  `timeouttimes` int(11) DEFAULT '0' COMMENT '回答超时次数',
+  `retimes` int(11) DEFAULT '0' COMMENT '重复次数',
+  `nameid` varchar(32) DEFAULT NULL COMMENT '名单ID',
+  `mobile` varchar(32) DEFAULT NULL COMMENT '手机号',
+  `sumscore` int(11) DEFAULT '0' COMMENT '问题总评分',
+	`score` int(11) DEFAULT '0' COMMENT '问题评分',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `endtime` datetime DEFAULT NULL COMMENT '结束时间',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `organ` varchar(32) DEFAULT NULL COMMENT '部门',
+  `answer` text DEFAULT NULL COMMENT '回答内容 ，分割',
+  `focustimes` int(11) DEFAULT NULL COMMENT '关注点次数',
+
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='问卷问题结果';
+
+CREATE TABLE `uk_que_result_point` (
+  `id` varchar(32) NOT NULL,
+  `questionid` varchar(32) DEFAULT NULL COMMENT '问题ID',
+  `eventid` varchar(100) DEFAULT NULL COMMENT '通话记录ID',
+  `resultid` varchar(32) DEFAULT NULL COMMENT '结果主表ID',
+  `processid` varchar(32) DEFAULT NULL COMMENT '问卷ID',
+  `resultqueid` varchar(32) DEFAULT NULL COMMENT '结果问题表ID',
+  `pointid` varchar(32) DEFAULT NULL COMMENT '关注点id',
+  `nameid` varchar(32) DEFAULT NULL COMMENT 'es名单id',
+	`answer` varchar(32) DEFAULT NULL COMMENT '当时回答',
+	`answertime` int(11) DEFAULT '0' COMMENT '当时回答时长',
+  `pointname` varchar(255) DEFAULT NULL COMMENT '关注点名称',
+  `pointtype` varchar(32) DEFAULT NULL COMMENT '关注点类型（0关键字 1通话时长）',
+  `focusword` varchar(255) DEFAULT NULL COMMENT '关键字',
+  `mincalltime` int(11) DEFAULT '0' COMMENT '开始通话时长范围',
+  `maxcalltime` int(11) DEFAULT NULL COMMENT '结束通话时长范围',
+  `score` int(11) DEFAULT '0' COMMENT '评分',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='结果关注点表';
+
+
+
+
 
 
 

@@ -1,5 +1,7 @@
 package com.ukefu.webim.web.model;
 
+import java.util.LinkedList;
+
 import com.ukefu.util.IP;
 
 public class AiUser implements java.io.Serializable{
@@ -37,12 +39,15 @@ public class AiUser implements java.io.Serializable{
 	private int errortimes ;	//错误次数
 	private String queresultid ;//问卷结果主表ID
 	
+	private LinkedList<QueSurveyResultQuestion> questionList;
+	
 	public AiUser(String id , String userid, long time,String orgi , IP ipdata){
 		this.id = id.replace("-", "") ;
 		this.userid = userid ;
 		this.time = time ;
 		this.ipdata = ipdata ;
 		this.orgi = orgi;
+		this.questionList = new LinkedList<>();
 	}
 	
 	public String getOrgi() {
@@ -230,5 +235,23 @@ public class AiUser implements java.io.Serializable{
 
 	public void setSkill(String skill) {
 		this.skill = skill;
+	}
+
+	public LinkedList<QueSurveyResultQuestion> getQuestionList() {
+		return questionList;
+	}
+
+	public void setQuestionList(LinkedList<QueSurveyResultQuestion> questionList) {
+		this.questionList = questionList;
+	}
+	
+	public static void main(String[] args) {
+		LinkedList<String>  list = new LinkedList<>();
+		list.add("12321");
+		System.out.println(list.getLast());
+		list.add("21332233");
+		System.out.println(list.getLast());
+		list.add("5555");
+		System.out.println(list.getLast());
 	}
 }

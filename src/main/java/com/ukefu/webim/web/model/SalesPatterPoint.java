@@ -24,6 +24,7 @@ public class SalesPatterPoint implements java.io.Serializable{
 	private static final long serialVersionUID = -1735624207903818828L;
 	private String id ;
 	private String questionid;//问题ID
+	private String name;//名称
 	private String pointtype;//关注点类型（0关键字 1通话时长）'
 	private String focusword;//'关键字'
 	private Integer mincalltime;//开始通话时长范围
@@ -111,6 +112,12 @@ public class SalesPatterPoint implements java.io.Serializable{
 	}
 	public void setProcessid(String processid) {
 		this.processid = processid;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 }

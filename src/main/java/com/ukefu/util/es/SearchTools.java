@@ -168,6 +168,7 @@ public class SearchTools {
 		BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
 		queryBuilder.must(termQuery("orgi", orgi)) ;
 		queryBuilder.must(termQuery("validresult", "valid")) ;
+		queryBuilder.must(termQuery("status", UKDataContext.NamesDisStatusType.DISAI.toString())) ;
 		StringBuffer strb = new StringBuffer();
 		if(!StringUtils.isBlank(phonenum)) {
 			if(phonenum.startsWith("0")) {
@@ -182,7 +183,28 @@ public class SearchTools {
 		return search(queryBuilder,0, 1);
 	}
 
-	
+	/**
+	 * 
+	 * @param orgi
+	 * @param agent
+	 * @param p
+	 * @param ps
+	 * @return
+	 */
+	public static PageImpl<UKDataBean> aiidsearch(String orgi , String id){
+		BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
+		queryBuilder.must(termQuery("orgi", orgi)) ;
+		queryBuilder.must(termQuery("validresult", "valid")) ;
+		queryBuilder.must(termQuery("status", UKDataContext.NamesDisStatusType.DISAI.toString())) ;
+		StringBuffer strb = new StringBuffer();
+		if(!StringUtils.isBlank(id)) {
+			strb.append(id) ;
+		}else {
+			strb.append(UKDataContext.UKEFU_SYSTEM_NO_DAT) ;
+		}
+		queryBuilder.must(termQuery("id",strb.toString())) ;
+		return search(queryBuilder,0, 1);
+	}
 	/**
 	 * 
 	 * @param orgi
