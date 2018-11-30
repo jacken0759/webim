@@ -93,9 +93,14 @@ public class ActivityResource extends Resource{
 				 */
 				if(isRecovery()) {
 					//回收数据 , 需要传入回收的目标  ： 包括 批次ID，任务ID，筛选ID，活动ID
-					dataList = SearchTools.recoversearch(this.jobDetail.getOrgi(), this.jobDetail.getExectype(), this.jobDetail.getExectarget() , metadataTable ,(int) Math.ceil(this.jobDetail.getStartindex()/50000), 50000) ;
+					dataList = SearchTools.recoversearch(this.jobDetail.getOrgi(), this.jobDetail.getExectype(), this.jobDetail.getExectarget() , metadataTable ,(int) Math.ceil(this.jobDetail.getStartindex()/5000), 5000) ;
 				}else {
-					dataList = SearchTools.dissearch(this.jobDetail.getOrgi(), formFilter, formFilterList , metadataTable ,(int) Math.ceil(this.jobDetail.getStartindex()/50000), 50000) ;
+					dataList = SearchTools.dissearch(this.jobDetail.getOrgi(), formFilter, formFilterList , metadataTable ,(int) Math.ceil(this.jobDetail.getStartindex()/5000), 5000) ;
+				}
+				if(dataList.getTotalElements() > dataList.getContent().size()) {
+					this.jobDetail.getReport().setRound(true);
+				}else {
+					this.jobDetail.getReport().setRound(false);
 				}
 			}
 			this.callAgentList = UKDataContext.getContext().getBean(CallAgentRepository.class).findByActidAndOrgi(this.jobDetail.getId() , this.jobDetail.getOrgi()) ;

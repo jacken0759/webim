@@ -50,7 +50,9 @@ public class Fetcher implements Runnable {
 		}catch (Exception e1) {
 			String msg = "TaskID:"+job.getId() + " TaskName:"+job.getName()+" TaskType:"+job.getTasktype()+" Date:"+new Date()+" Exception:"+e1.getMessage() ;
 			job.setExceptionMsg(ExceptionUtils.getMessage(e1));
-			
+			if(StringUtils.isBlank(job.getMemo())) {
+				job.setMemo(msg);
+			}
 			/**
 			 * 设置错误代码
 			 */
