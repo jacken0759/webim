@@ -20,8 +20,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.ukefu.core.UKDataContext;
 import com.ukefu.util.UKTools;
 import com.ukefu.util.callout.CallOutUtils;
+import com.ukefu.util.es.ESTools;
 import com.ukefu.webim.web.model.MetadataTable;
 import com.ukefu.webim.web.model.TableProperties;
 
@@ -98,7 +100,7 @@ public class ExcelImportUtils{
             /**
 			 * 映射 Mapping , 已修正，增加了一个手动映射的步骤，上传数据结构以后，允许手动映射
 			 */
-			//ESTools.mapping(metaDataTable, UKDataContext.SYSTEM_INDEX);
+			ESTools.mapping(metaDataTable, UKDataContext.CALLOUT_INDEX);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
