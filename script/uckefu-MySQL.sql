@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-11-26 15:02:17
+Date: 2018-12-01 23:37:08
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -4414,6 +4414,9 @@ CREATE TABLE `uk_que_result` (
   `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
   `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
   `organ` varchar(32) DEFAULT NULL COMMENT '部门',
+  `busstype` varchar(32) DEFAULT NULL COMMENT '业务类型（sale,quesurvey',
+  `focustimes` int(11) DEFAULT NULL COMMENT '关注点次数',
+  `level` varchar(32) DEFAULT NULL COMMENT '客户评级（a,b,c,d）',
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='问卷结果主表';
 
@@ -4467,6 +4470,7 @@ CREATE TABLE `uk_que_survey_answer` (
   `hanguptype` varchar(32) DEFAULT NULL COMMENT '挂断提示语类型',
   `hangupmsg` varchar(255) DEFAULT NULL COMMENT '挂断提示语文字',
   `hangupvoice` varchar(32) DEFAULT NULL COMMENT '挂断提示语语音',
+  `title` varchar(255) DEFAULT NULL COMMENT '标题',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='问卷调查-问题答案表';
 
@@ -4499,6 +4503,7 @@ CREATE TABLE `uk_que_survey_process` (
   `prostatus` varchar(32) DEFAULT '0' COMMENT '问卷状态（0未发布1发布）',
   `sumscore` varchar(32) DEFAULT NULL COMMENT '总评分值',
   `description` text COMMENT '描述',
+  `questionid` varchar(32) DEFAULT NULL COMMENT '开始问题id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='问卷调查表';
 
@@ -4556,6 +4561,9 @@ CREATE TABLE `uk_que_survey_question` (
   `errortypeup` varchar(32) DEFAULT NULL COMMENT '回答错误语-挂断提示语类型',
   `errorwordup` varchar(255) DEFAULT NULL COMMENT '回答错误语-挂断提示语（文字）',
   `errorvoiceup` varchar(32) DEFAULT NULL COMMENT '回答错误语-挂断提示语（语音ID）',
+  `title` varchar(255) DEFAULT NULL COMMENT '标题',
+  `offsetx` int(11) DEFAULT '0' COMMENT '位置x',
+  `offsety` int(11) DEFAULT '0' COMMENT '位置y',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='问卷调查-问题表';
 
@@ -5399,6 +5407,7 @@ CREATE TABLE `uk_spt_point` (
   `createtime` datetime DEFAULT NULL COMMENT '创建时间',
   `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
   `processid` varchar(32) DEFAULT NULL COMMENT '问卷ID',
+  `name` varchar(255) DEFAULT NULL COMMENT '关注点名称',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='话术-关注点表';
 
@@ -5492,6 +5501,7 @@ CREATE TABLE `uk_spt_salespatter` (
   `prostatus` varchar(32) DEFAULT '0' COMMENT '话术状态（0未发布1发布）',
   `sumscore` varchar(32) DEFAULT NULL COMMENT '总评分值',
   `description` text COMMENT '描述',
+  `questionid` varchar(32) DEFAULT NULL COMMENT '开始问题id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='话术调查表';
 
@@ -9070,6 +9080,8 @@ INSERT INTO `uk_sysdic` VALUES ('297e7406650cce9d01650ce68c37067e', 'EKM知识�
 INSERT INTO `uk_sysdic` VALUES ('297e7406659e543f01659e5987c3001d', '坐席服务时间设置', 'pub', 'com.dic.workservice.time', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-09-03 15:33:12', null, '1', '0', null, '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('297e74066652bc8a016652f07fa20110', 'EKM知识库（帮助平台）', 'pub', 'com.dic.ekm.help.type', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-10-08 17:09:44', null, '1', '0', null, '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('297e74066652bc8a016652f0cdbd0114', 'EKM知识库（问答平台）', 'pub', 'com.dic.ekm.ask.type', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-10-08 17:10:04', null, '1', '0', null, '0', '0', null, null, null, null, null);
+INSERT INTO `uk_sysdic` VALUES ('297e740666d3bbd30166d3c979880024', '质检系统（语音转写引擎）', 'pub', 'com.quality.phonetic.transcription', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-02 17:38:08', null, '1', '0', null, '0', '0', null, null, null, null, null);
+INSERT INTO `uk_sysdic` VALUES ('297e740666d3bbd30166d3c9f47c0029', '科大讯飞', 'pub', 'qcphonetic', 'ukewo', 'layui-icon', '297e740666d3bbd30166d3c979880024', '', null, '', '', null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-02 17:38:39', null, '1', '0', '297e740666d3bbd30166d3c979880024', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('297efe59672a2af001673655955502f1', '短信模板设置', 'pub', 'A06_A10', null, 'auth', '402881ef612b1f5b01612cc5a2040543', null, null, '&#x756e646566696e6564;', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-21 20:53:57', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', 'javascript:;', 'webim', '2', null, 'left');
 INSERT INTO `uk_sysdic` VALUES ('297efe59672a2af0016736561ed002f6', '短信发送记录', 'pub', 'A08_A06', null, 'auth', '402881ef612b1f5b01612cc5d9710545', null, null, '&#x756e646566696e6564;', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-21 20:54:32', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', 'javascript:;', 'webim', '2', null, 'left');
 INSERT INTO `uk_sysdic` VALUES ('402880e76707618301670762f768038a', '呼叫中心满意度', 'pub', 'com.dic.callcenter.comment', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-12 18:06:25', null, '1', '0', null, '0', '0', null, null, null, null, null);
@@ -9131,6 +9143,14 @@ INSERT INTO `uk_sysdic` VALUES ('4028811b6686698d016686824542037e', '测试', 'p
 INSERT INTO `uk_sysdic` VALUES ('4028811b671beae801671bfa71a0025e', '短信模板类型', 'pub', 'com.dic.sms.templetype', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-16 18:04:17', null, '1', '0', null, '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('4028811b671beae801671bfae9c30264', '电销名单', 'pub', 'sales', 'ukewo', null, '4028811b671beae801671bfa71a0025e', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-16 18:04:47', '2018-11-16 18:04:47', '0', '1', '4028811b671beae801671bfa71a0025e', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('4028811b671beae801671bfae9d70265', '电销商品', 'pub', 'pro', 'ukewo', null, '4028811b671beae801671bfa71a0025e', null, null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-16 18:04:47', '2018-11-16 18:04:47', '0', '2', '4028811b671beae801671bfa71a0025e', '0', '0', null, null, null, null, null);
+INSERT INTO `uk_sysdic` VALUES ('4028811c6763b3a2016763def0cf0168', '业务概况', 'pub', 'A16_A01', null, 'auth', '402888816686bff7016687649b8300f2', null, null, '&#x756e646566696e6564;', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-30 17:06:54', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', '/apps/callout/ai/index.html', 'webim', '2', null, 'left');
+INSERT INTO `uk_sysdic` VALUES ('4028811c6763b3a2016763df1a71016c', '机器人列表', 'pub', 'A16_A02', 'ukewo', 'auth', '402888816686bff7016687649b8300f2', null, null, '&#x756e646566696e6564;', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-30 17:07:04', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', '/apps/callout/ai/ailist.html', 'webim', '2', null, 'left');
+INSERT INTO `uk_sysdic` VALUES ('4028811c6763b3a2016763df50c30170', '拨打任务', 'pub', 'A16_A03', 'ukewo', 'auth', '402888816686bff7016687649b8300f2', null, null, '&#x756e646566696e6564;', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-30 17:07:18', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', '/apps/callout/ai/task/index.html', 'webim', '2', null, 'left');
+INSERT INTO `uk_sysdic` VALUES ('4028811c6763b3a2016763dfa8fe0173', '机器人名单', 'pub', 'A16_A04', 'ukewo', 'auth', '402888816686bff7016687649b8300f2', null, null, '&#x756e646566696e6564;', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-30 17:07:41', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', 'javascript:;', 'webim', '2', null, 'left');
+INSERT INTO `uk_sysdic` VALUES ('4028811c6763b3a2016763e020a20178', '所有名单', 'pub', 'A16_A04_A01', 'ukewo', 'auth', '4028811c6763b3a2016763dfa8fe0173', null, null, '&#x756e646566696e6564;', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-30 17:08:12', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', '/apps/callout/ai/data.html', 'webim', '3', null, 'left');
+INSERT INTO `uk_sysdic` VALUES ('4028811c6763b3a2016763e04dda017c', '未拨打名单', 'pub', 'A16_A04_A02', 'ukewo', 'auth', '4028811c6763b3a2016763dfa8fe0173', null, null, '&#x756e646566696e6564;', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-30 17:08:23', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', '/apps/callout/ai/notcall.html', 'webim', '3', null, 'left');
+INSERT INTO `uk_sysdic` VALUES ('4028811c6763b3a2016763e0acd20180', '拨打成功名单', 'pub', 'A16_A04_A03', 'ukewo', 'auth', '4028811c6763b3a2016763dfa8fe0173', null, null, '&#x756e646566696e6564;', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-30 17:08:47', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', '/apps/callout/ai/success.html', 'webim', '3', null, 'left');
+INSERT INTO `uk_sysdic` VALUES ('4028811c6763b3a2016763e0e5ed0185', '拨打失败名单', 'pub', 'A16_A04_A04', 'ukewo', 'auth', '4028811c6763b3a2016763dfa8fe0173', null, null, '&#x756e646566696e6564;', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-30 17:09:02', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', '/apps/callout/ai/faild.html', 'webim', '3', null, 'left');
 INSERT INTO `uk_sysdic` VALUES ('402881e8618cc9ab01618cd99f40035a', '模型类型', 'pub', 'com.dic.cube.modeltype', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-02-13 09:48:47', null, '1', '0', null, '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('402881e8618cc9ab01618cd9cfae035b', '立方体', 'pub', 'cube', 'ukewo', 'layui-icon', '402881e8618cc9ab01618cd99f40035a', '', null, '', '', null, '4028cac3614cd2f901614cf8be1f0324', '2018-02-13 09:49:00', '2018-02-13 09:49:00', '0', '1', '402881e8618cc9ab01618cd99f40035a', '0', '1', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('402881e86191fd51016191ff64550355', '维度成员数据类型', 'pub', 'com.dic.cubelevel.type', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-02-14 09:48:09', null, '1', '0', null, '0', '0', null, null, null, null, null);
@@ -9790,6 +9810,7 @@ INSERT INTO `uk_sysdic` VALUES ('40288881661adacd01661afe57a700b9', '超时结�
 INSERT INTO `uk_sysdic` VALUES ('40288881661adacd01661afec8e100bd', '排队退出', 'pub', 'queue', 'ukewo', 'layui-icon', '40288881661adacd01661afd4f5600ac', '', null, '', '', null, '4028cac3614cd2f901614cf8be1f0324', '2018-09-27 20:26:37', null, '1', '0', '40288881661adacd01661afd4f5600ac', '0', '1', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('40288881661adacd01661aff5e5200c1', '系统关闭', 'pub', 'system', 'ukewo', 'layui-icon', '40288881661adacd01661afd4f5600ac', '', null, '', '', null, '4028cac3614cd2f901614cf8be1f0324', '2018-09-27 20:27:15', null, '1', '0', '40288881661adacd01661afd4f5600ac', '0', '1', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('402888816686bff7016687649b8300f1', '知识库', 'pub', 'A14', null, 'auth', '402888815d2fe37f015d2fe75cc80002', null, null, '<i class=\"kfont\" style=\"position: relative;\">&#xe62a;</i>', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-10-18 21:36:49', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', '/apps/ekm/index.html', 'webim', '1', null, 'left');
+INSERT INTO `uk_sysdic` VALUES ('402888816686bff7016687649b8300f2', '外呼机器人', 'pub', 'A16', 'ukewo', 'auth', '402888815d2fe37f015d2fe75cc80002', null, null, '<i class=\"kfont\" style=\"position: relative;\">&#xe691;</i>', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-11-30 16:54:03', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', '/apps/callout/ai/index.html', 'webim', '1', null, 'left');
 INSERT INTO `uk_sysdic` VALUES ('402888816686bff70166876563ed00f6', '知识总览', 'pub', 'A14_A01', null, 'auth', '402888816686bff7016687649b8300f1', null, null, '&#x756e646566696e6564;', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-10-18 21:37:40', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', 'javascript:;', 'webim', '2', null, 'left');
 INSERT INTO `uk_sysdic` VALUES ('402888816686bff701668765e45c00f9', '我的知识', 'pub', 'A14_A02', null, 'auth', '402888816686bff7016687649b8300f1', null, null, '&#x756e646566696e6564;', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-10-18 21:38:13', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', 'javascript:;', 'webim', '2', null, 'left');
 INSERT INTO `uk_sysdic` VALUES ('402888816686bff70166876640a400fc', '相关记录', 'pub', 'A14_A03', null, 'auth', '402888816686bff7016687649b8300f1', null, null, '&#x756e646566696e6564;', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-10-18 21:38:37', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', 'javascript:;', 'webim', '2', null, 'left');
@@ -10317,7 +10338,7 @@ CREATE TABLE `uk_user` (
 INSERT INTO `uk_user` VALUES ('4028811b61834723016183ec57760392', null, 'chenfarong', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'chen@ukewo.cn', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-02-11 16:12:39', null, '2018-06-29 17:40:30', null, '18510129455', '2018-02-11 16:12:39', null, '0', '陈法蓉', null, '0', null, null, null, '0', '0', '0', '2018-06-29 17:40:37', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b642f5f8c01642f60ed440683', null, 'test1', '130811dbd239c97bd9ce933de7349f20', '5', 'ad@te.com', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-06-24 09:20:38', null, '2018-11-20 09:05:49', '4028811b66d257820166d28cb868022b', '18510129433', '2018-06-24 09:20:38', null, '0', 'test1', null, '0', null, null, null, '0', '0', '0', '2018-11-20 09:06:03', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b645dc08f01645e0512ce0935', null, 'yiliao', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'asd@ac.com', null, null, null, null, null, null, null, null, null, null, null, '4028811b645dc08f01645e005f3d08dd', 'ukewo', null, '2018-07-03 10:42:28', null, '2018-07-03 10:43:31', null, '18512212955', '2018-07-03 10:42:28', null, '0', '医疗', null, '0', null, null, null, '0', '0', '0', '2018-07-03 10:43:39', null, null, null, '0', '0', '0', '0', null);
-INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-11-25 18:05:51', null, null, null, '0', '1', '1', '0', null);
+INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '000000006519253b01651d2530fe080e', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-12-01 21:22:29', null, null, null, '0', '1', '1', '0', null);
 
 -- ----------------------------
 -- Table structure for `uk_userevent`
