@@ -13,6 +13,10 @@ public abstract interface TagRepository  extends JpaRepository<Tag, String>
 	
 	public abstract Tag findByOrgiAndTag(String orgi , String tag);
 	
+	public abstract int countByOrgiAndTagAndTagtype(String orgi , String tag , String tagtype);
+	
+	public abstract int countByOrgiAndTagAndTagtypeAndNotId(String orgi , String tag , String tagtype , String id);
+	
 	public abstract Tag findByOrgiAndId(String orgi , String id);
 	
 	public abstract Page<Tag> findByOrgiAndTagtype(String orgi , String tagtype ,Pageable paramPageable);

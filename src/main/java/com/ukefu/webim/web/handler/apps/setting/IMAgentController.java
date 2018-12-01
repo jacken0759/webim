@@ -219,8 +219,7 @@ public class IMAgentController extends Handler{
     @RequestMapping("/tag/update")
     @Menu(type = "setting" , subtype = "tag" , admin= false)
     public ModelAndView tagupdate(ModelMap map , HttpServletRequest request , @Valid Tag tag , @Valid String tagtype) {
-    	Tag temptag = tagRes.findByOrgiAndTag(super.getOrgi(request), tag.getTag()) ;
-    	if(temptag == null || tag.getId().equals(temptag.getId())){
+    	if(tagRes.countByOrgiAndTagAndTagtypeAndNotId(super.getOrgi(request), tag.getTag(), tagtype, tag.getId()) == 0){
     		tag.setOrgi(super.getOrgi(request));
 	    	tag.setCreater(super.getUser(request).getId());
 	    	tagRes.save(tag) ;
@@ -231,7 +230,7 @@ public class IMAgentController extends Handler{
     @RequestMapping("/tag/save")
     @Menu(type = "setting" , subtype = "tag" , admin= false)
     public ModelAndView tagsave(ModelMap map , HttpServletRequest request , @Valid Tag tag , @Valid String tagtype) {
-    	if(tagRes.findByOrgiAndTag(super.getOrgi(request), tag.getTag()) == null){
+    	if(tagRes.countByOrgiAndTagAndTagtype(super.getOrgi(request), tag.getTag() , tagtype) == 0){
 	    	tag.setOrgi(super.getOrgi(request));
 	    	tag.setCreater(super.getUser(request).getId());
 	    	tagRes.save(tag) ;
