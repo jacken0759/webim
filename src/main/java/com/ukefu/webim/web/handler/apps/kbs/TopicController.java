@@ -224,7 +224,7 @@ public class TopicController extends Handler{
     public ModelAndView knowledgetypeadd(ModelMap map , HttpServletRequest request ,@Valid String type, @Valid String aiid) {
     	map.addAttribute("areaList", areaRepository.findByOrgi(super.getOrgi(request))) ;
     	
-    	List<KnowledgeType> knowledgeTypeList = knowledgeTypeRes.findByOrgi(super.getOrgi(request))  ; 
+    	List<KnowledgeType> knowledgeTypeList = knowledgeTypeRes.findByOrgiAndTypeid(super.getOrgi(request) , "0")  ; 
     	map.put("knowledgeTypeList", knowledgeTypeList);
     	map.put("aiid", aiid);
     	if(!StringUtils.isBlank(type)){
@@ -267,7 +267,7 @@ public class TopicController extends Handler{
     	
     	map.put("aiid", aiid);
     	
-    	List<KnowledgeType> knowledgeTypeList = knowledgeTypeRes.findByOrgi(super.getOrgi(request))  ; 
+    	List<KnowledgeType> knowledgeTypeList = knowledgeTypeRes.findByOrgiAndTypeid(super.getOrgi(request) , "0")  ; 
     	map.put("knowledgeTypeList", knowledgeTypeList);
     	return request(super.createRequestPageTempletResponse("/apps/business/topic/edittype"));
     }
@@ -283,10 +283,8 @@ public class TopicController extends Handler{
     		temp.setParentid(type.getParentid());
     		if(StringUtils.isBlank(type.getParentid()) || type.getParentid().equals("0")){
     			temp.setParentid("0");
-    			temp.setTypeid(temp.getId());
     		}else{
     			temp.setParentid(type.getParentid());
-    			temp.setTypeid(type.getParentid());
     		}
     		knowledgeTypeRes.save(temp) ;
     		OnlineUserUtils.resetHotTopicType((DataExchangeInterface) UKDataContext.getContext().getBean("topictype") , super.getUser(request), super.getOrgi(request) , aiid);

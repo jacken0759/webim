@@ -79,10 +79,21 @@ public class MediaController extends Handler{
     @Menu(type = "resouce" , subtype = "voice" , access = true)
     public void voice(HttpServletResponse response, @Valid String id) throws IOException {
     	File file = new File(path ,id) ;
-    	response.setContentType(Files.probeContentType(Paths.get(file.getAbsolutePath())));  
+//    	response.setContentType(Files.probeContentType(Paths.get(file.getAbsolutePath())));  
+    	response.setHeader("Content-Type" , "application/octet-stream");
+    	response.setHeader("Content-Lenght" , String.valueOf(file.length()));
+    	response.setContentLengthLong(file.length());
         response.setHeader("Content-Disposition", "attachment;filename="+java.net.URLEncoder.encode(file.getName(), "UTF-8"));  
-    	if(file.exists() && file.isFile()){
-    		response.getOutputStream().write(FileUtils.readFileToByteArray(new File(path ,id)));
+        if(file.exists() && file.isFile()){
+    		FileInputStream input = new FileInputStream(file) ;
+    		OutputStream output = response.getOutputStream() ; 
+    		byte[] data = new byte[1024] ;
+    		int len = 0 ;
+    		while((len = input.read(data))>0) {
+    			output.write(data , 0  , len);
+    		}
+    		output.flush();
+    		input.close();
     	}
     }
     
@@ -91,6 +102,9 @@ public class MediaController extends Handler{
     public void voiceplay(HttpServletResponse response, HttpServletRequest request, @PathVariable String type, @PathVariable String id) throws IOException {
     	File file = new File(path ,type+"/"+id + request.getRequestURI().substring(request.getRequestURI().lastIndexOf("."))) ;
     	response.setHeader("Content-Type" , "application/octet-stream");  
+    	response.setHeader("Content-Lenght" , String.valueOf(file.length()));
+    	response.setContentLengthLong(file.length());
+    	response.setContentType(Files.probeContentType(Paths.get(file.getAbsolutePath())));  
         response.setHeader("Content-Disposition", "attachment;filename="+java.net.URLEncoder.encode(file.getName(), "UTF-8"));  
     	if(file.exists() && file.isFile()){
     		FileInputStream input = new FileInputStream(file) ;
@@ -100,7 +114,6 @@ public class MediaController extends Handler{
     		while((len = input.read(data))>0) {
     			output.write(data , 0  , len);
     		}
-    		output.flush();
     		input.close();
     	}
     }
