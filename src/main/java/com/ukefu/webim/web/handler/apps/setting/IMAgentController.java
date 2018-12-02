@@ -219,7 +219,8 @@ public class IMAgentController extends Handler{
     @RequestMapping("/tag/update")
     @Menu(type = "setting" , subtype = "tag" , admin= false)
     public ModelAndView tagupdate(ModelMap map , HttpServletRequest request , @Valid Tag tag , @Valid String tagtype) {
-    	if(tagRes.countByOrgiAndTagAndTagtypeNotId(super.getOrgi(request), tag.getTag(), tagtype, tag.getId()) == 0){
+    	List<Tag> tagList = tagRes.findByOrgiAndTagAndTagtype(super.getOrgi(request), tag.getTag(), tagtype, tag.getId()) ;
+    	if(tagList.size() == 1 && tagList.get(0).getId().equals(tag.getId())){
     		tag.setOrgi(super.getOrgi(request));
 	    	tag.setCreater(super.getUser(request).getId());
 	    	tagRes.save(tag) ;
