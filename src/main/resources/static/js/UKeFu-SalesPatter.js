@@ -139,16 +139,24 @@ $(document).ready(function(){
 		    		j.deleteConnection(p.connection);
 		    	}else{
 		    		p.connection.bind("click", function() {
-			            j.deleteConnection(this);
-			          //删除答案连接
-			              $.ajax({
-				             type: "get",
-				             url: "/apps/salespatter/question/answer/edit",
-				             data: {answerid:this.sourceId.substr(1),queid:''},
-				             dataType: "json",
-				             success: function(data){
-			                     }
-				         });
+		    			top.layer.confirm("确认删除该连接吗？", {icon: 3, title:'提示'}, function(index){
+		        			top.layer.close(index);
+		        			if(confirm){
+		        				j.deleteConnection(this);
+		  			          //删除答案连接
+		  			              $.ajax({
+		  				             type: "get",
+		  				             url: "/apps/salespatter/question/answer/edit",
+		  				             data: {answerid:this.sourceId.substr(1),queid:''},
+		  				             dataType: "json",
+		  				             success: function(data){
+		  			                     }
+		  				         });
+		        			}else{
+		        				
+		        			}
+		        		});
+			            
 			        });
 		    		//绑定跳转下一个问题
 		    		if(p.source && p.targetId && isinit){
