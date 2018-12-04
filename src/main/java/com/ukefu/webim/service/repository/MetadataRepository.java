@@ -13,6 +13,8 @@ public abstract interface MetadataRepository extends JpaRepository<MetadataTable
 	
 	public abstract MetadataTable findByTablename(String tablename);
 
+	public abstract List<MetadataTable> findByTablenameIn(List<String> tablename);
+	
 	public abstract Page<MetadataTable> findAll(Pageable paramPageable);
 	
 	public abstract int countByTablename(String tableName) ;
