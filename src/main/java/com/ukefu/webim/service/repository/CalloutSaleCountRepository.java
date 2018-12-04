@@ -10,5 +10,7 @@ public interface CalloutSaleCountRepository extends JpaRepository<CalloutSaleCou
 	
 	public List<CalloutSaleCount> findByOrgi(String orgi);
 	
+	public void deleteByOrgi(String orgi);
+	
 	public List<CalloutSaleCount> findByOrgiAndDataid(String orgi, String dataid);
 }

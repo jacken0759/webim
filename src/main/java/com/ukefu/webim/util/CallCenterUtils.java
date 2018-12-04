@@ -612,14 +612,12 @@ public class CallCenterUtils {
 	public static void getCalloutCount(String orgi, String type,String dataid){
 		CalloutSaleCountRepository calloutCountRes = UKDataContext.getContext().getBean(CalloutSaleCountRepository.class) ;
 		CallOutNamesRepository callNameRes = UKDataContext.getContext().getBean(CallOutNamesRepository.class) ;
-		List<CalloutSaleCount> countList = calloutCountRes.findByOrgi(orgi);
-		if(countList.size() > 0){
-			calloutCountRes.delete(countList);
-		}
+		calloutCountRes.deleteByOrgi(orgi);
+		
 		BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
 		queryBuilder.must(termQuery("orgi",orgi));
 		List<CalloutSaleCount> saleCountList = new ArrayList<>();
-		PageImpl<UKDataBean> aggUserList = SearchTools.aggregation(queryBuilder,"owneruser", true, 0, 10000);
+		PageImpl<UKDataBean> aggUserList = SearchTools.aggregation(queryBuilder,"owneruser", true, 0, 1);
 		if(aggUserList.getContent().size() > 0){
 			for(UKDataBean ukdata : aggUserList.getContent()){
 				if(ukdata.getValues() != null){
@@ -652,7 +650,7 @@ public class CallCenterUtils {
 			}
 			
 		}
-		PageImpl<UKDataBean> aggOrganList = SearchTools.aggregation(queryBuilder,"ownerdept", true, 0, 10000);
+		PageImpl<UKDataBean> aggOrganList = SearchTools.aggregation(queryBuilder,"ownerdept", true, 0, 1);
 		if(aggOrganList.getContent().size() > 0){
 			for(UKDataBean ukdata : aggOrganList.getContent()){
 				CalloutSaleCount userCount = new CalloutSaleCount();
@@ -681,7 +679,7 @@ public class CallCenterUtils {
 				saleCountList.add(userCount);
 			}
 		}
-		PageImpl<UKDataBean> aggAiList = SearchTools.aggregation(queryBuilder,"ownerai", true, 0, 10000);
+		PageImpl<UKDataBean> aggAiList = SearchTools.aggregation(queryBuilder,"ownerai", true, 0, 1);
 		if(aggAiList.getContent().size() > 0){
 			for(UKDataBean ukdata : aggAiList.getContent()){
 				CalloutSaleCount userCount = new CalloutSaleCount();
