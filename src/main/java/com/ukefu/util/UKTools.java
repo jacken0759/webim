@@ -1712,7 +1712,7 @@ public class UKTools {
 			PbxHost pbxHost = CallCenterUtils.pbxhost(statusEvent.getIpaddr()) ;		//根据 PbxHost配置的 方式获取 录音文件的读取方式
 			tempFile = File.createTempFile(statusEvent.getId(), fileName.substring(fileName.lastIndexOf("."))) ;
 			FileOutputStream voiceFileOutputStream = new FileOutputStream(tempFile) ;
-			if(!StringUtils.isBlank(pbxHost.getRecordpath())){
+			if(pbxHost!=null && !StringUtils.isBlank(pbxHost.getRecordpath())){
 				URL url = new URL(pbxHost.getRecordpath()+fileName);
 				HttpURLConnection conn = null ;
 		        try {

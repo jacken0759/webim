@@ -211,7 +211,7 @@ public class QcTask {
     public void checkVoiceTrans() {
 		if(UKDataContext.model.get("qc") != null) {
 			Page<StatusEvent> transList = null ;
-			do {
+			{
 				transList = statusEventRes.findAll(new Specification<StatusEvent>(){
 					@Override
 					public Predicate toPredicate(Root<StatusEvent> root, CriteriaQuery<?> query,
@@ -242,7 +242,7 @@ public class QcTask {
 						statusEventRes.save(needUpdateList) ;
 					}
 				}
-			}while(transList!=null && transList.getContent().size()>0) ;
+			} ;
 		}
 	}
 }
