@@ -59,6 +59,10 @@ public class ActivityResource extends Resource{
 	
 	private BatchDataProcess batchDataProcess ;
 	
+	private boolean isEnd = false;
+	private boolean isInit = true;
+	private Integer actiNum = null;//分配总数
+	private int currentSum = 0;//当前已查询总数
 	public ActivityResource(JobDetail jobDetail) {
 		this.jobDetail = jobDetail ;
 		this.formFilterRes = UKDataContext.getContext().getBean(FormFilterRepository.class) ;
@@ -73,6 +77,7 @@ public class ActivityResource extends Resource{
 	@Override
 	public void begin() throws Exception {
 		if(!StringUtils.isBlank(jobDetail.getFilterid())) {
+			
 			formFilter = formFilterRes.findByIdAndOrgi(jobDetail.getFilterid(), this.jobDetail.getOrgi()) ;
 			List<FormFilterItem> formFilterList = formFilterItemRes.findByOrgiAndFormfilterid(this.jobDetail.getOrgi(), jobDetail.getFilterid()) ;
 			if(formFilter!=null && !StringUtils.isBlank(formFilter.getFiltertype())) {
@@ -87,74 +92,92 @@ public class ActivityResource extends Resource{
 					}
 				}
 			}
+				
+			
+			if(this.callAgentList == null) {
+				this.callAgentList = UKDataContext.getContext().getBean(CallAgentRepository.class).findByActidAndOrgi(this.jobDetail.getId() , this.jobDetail.getOrgi()) ;	
+			}
+			
+			/**
+			 * 生成 活动任务， 然后完成分配 , 同时还需要生成 筛选表单的筛选记录 ， 在后台管理界面上可以看到
+			 */
+			if(this.callAgentList!=null && this.callAgentList.size() > 0) {
+				//要分配的总数
+				if(actiNum == null) {
+					actiNum = 0;
+					for(CallAgent c : this.callAgentList) {
+						actiNum = actiNum + c.getDisnum();
+					}
+				}
+				this.current = this.callAgentList.remove(0) ;
+			}
 			if(metadataTable!=null) {
 				/**
 				 * 只加载 未分配的有效名单数据
 				 */
 				if(isRecovery()) {
 					//回收数据 , 需要传入回收的目标  ： 包括 批次ID，任务ID，筛选ID，活动ID
-					dataList = SearchTools.recoversearch(this.jobDetail.getOrgi(), this.jobDetail.getExectype(), this.jobDetail.getExectarget() , metadataTable ,(int) Math.ceil(this.jobDetail.getStartindex()/5000), 5000) ;
+					dataList = SearchTools.recoversearch(this.jobDetail.getOrgi(), this.jobDetail.getExectype(), this.jobDetail.getExectarget() , metadataTable ,0, 5000) ;
 				}else {
-					dataList = SearchTools.dissearch(this.jobDetail.getOrgi(), formFilter, formFilterList , metadataTable ,(int) Math.ceil(this.jobDetail.getStartindex()/5000), 5000) ;
+					dataList = SearchTools.dissearch(this.jobDetail.getOrgi(), formFilter, formFilterList , metadataTable ,0, 5000) ;
 				}
-				if(dataList.getTotalElements() > dataList.getContent().size()) {
-					this.jobDetail.getReport().setRound(true);
+				//判断是否分配完毕
+				if(dataList.getTotalElements() > dataList.getContent().size() && actiNum != null && actiNum > dataList.getContent().size()) {
+					this.isEnd = false;
 				}else {
-					this.jobDetail.getReport().setRound(false);
+					this.isEnd = true;
 				}
 			}
-			this.callAgentList = UKDataContext.getContext().getBean(CallAgentRepository.class).findByActidAndOrgi(this.jobDetail.getId() , this.jobDetail.getOrgi()) ;
-			/**
-			 * 生成 活动任务， 然后完成分配 , 同时还需要生成 筛选表单的筛选记录 ， 在后台管理界面上可以看到
-			 */
-			if(this.callAgentList!=null && this.callAgentList.size() > 0) {
-				this.current = this.callAgentList.remove(0) ;
+			if(this.dataList!=null) {
+				this.currentSum = this.currentSum + this.dataList.getContent().size();
 			}
-			
 			this.jobDetail.setExecnum(this.jobDetail.getExecnum() + 1);
 			
-			if(this.isRecovery() && !StringUtils.isBlank(this.jobDetail.getExectype()) && (this.jobDetail.getExectype().equals("filterid") || this.jobDetail.getExectype().equals("filterskill") || this.jobDetail.getExectype().equals("taskskill") || this.jobDetail.getExectype().equals("taskid"))) {
-				if(this.jobDetail.getExectype().equals("filterid") || this.jobDetail.getExectype().equals("filterskill")) {
-					this.filter = this.callOutFilterRes.findByIdAndOrgi(this.jobDetail.getExectarget(), this.jobDetail.getOrgi()) ;
-				}else if(this.jobDetail.getExectype().equals("taskid") || this.jobDetail.getExectype().equals("taskskill") ) {
-					this.task = this.callOutTaskRes.findByIdAndOrgi(this.jobDetail.getExectarget(), this.jobDetail.getOrgi()) ;
-				}
-			}else {
-				task = new CallOutTask() ;
-				task.setName(this.jobDetail.getName() + "_" + UKTools.dateFormate.format(new Date()));
-				task.setBatid(formFilter.getBatid());
-				
-				task.setOrgi(this.jobDetail.getOrgi());
-				
-				if(this.isRecovery()) {
-					task.setExectype(UKDataContext.ActivityExecType.RECOVERY.toString());
+			
+			if(isInit) {
+				if(this.isRecovery() && !StringUtils.isBlank(this.jobDetail.getExectype()) && (this.jobDetail.getExectype().equals("filterid") || this.jobDetail.getExectype().equals("filterskill") || this.jobDetail.getExectype().equals("taskskill") || this.jobDetail.getExectype().equals("taskid"))) {
+					if(this.jobDetail.getExectype().equals("filterid") || this.jobDetail.getExectype().equals("filterskill")) {
+						this.filter = this.callOutFilterRes.findByIdAndOrgi(this.jobDetail.getExectarget(), this.jobDetail.getOrgi()) ;
+					}else if(this.jobDetail.getExectype().equals("taskid") || this.jobDetail.getExectype().equals("taskskill") ) {
+						this.task = this.callOutTaskRes.findByIdAndOrgi(this.jobDetail.getExectarget(), this.jobDetail.getOrgi()) ;
+					}
 				}else {
-					task.setExectype(UKDataContext.ActivityExecType.DEFAULT.toString());
+					task = new CallOutTask() ;
+					task.setName(this.jobDetail.getName() + "_" + UKTools.dateFormate.format(new Date()));
+					task.setBatid(formFilter.getBatid());
+					
+					task.setOrgi(this.jobDetail.getOrgi());
+					
+					if(this.isRecovery()) {
+						task.setExectype(UKDataContext.ActivityExecType.RECOVERY.toString());
+					}else {
+						task.setExectype(UKDataContext.ActivityExecType.DEFAULT.toString());
+					}
+					
+					task.setFilterid(formFilter.getId());
+					task.setActid(this.jobDetail.getId());
+					
+					task.setExecnum(this.jobDetail.getExecnum());
+					
+					task.setOrgan(this.jobDetail.getOrgan());
+					
+					task.setCreatetime(new Date());
+					if(this.dataList!=null) {
+						task.setNamenum((int) this.dataList.getTotalElements());
+						task.setNotassigned((int) this.dataList.getTotalElements());
+					}
+					
+					this.callOutTaskRes.save(task) ;
+					
+					filter = new CallOutFilter() ;
+					
+					formFilter.setExecnum(formFilter.getExecnum() + 1);
+					
+					UKTools.copyProperties(task, filter);
+					filter.setName(this.formFilter.getName()  + "_" + UKTools.dateFormate.format(new Date()));
+					filter.setExecnum(formFilter.getExecnum());
+					this.callOutFilterRes.save(filter) ;
 				}
-				
-				task.setFilterid(formFilter.getId());
-				task.setActid(this.jobDetail.getId());
-				
-				task.setExecnum(this.jobDetail.getExecnum());
-				
-				task.setOrgan(this.jobDetail.getOrgan());
-				
-				task.setCreatetime(new Date());
-				if(this.dataList!=null) {
-					task.setNamenum((int) this.dataList.getTotalElements());
-					task.setNotassigned((int) this.dataList.getTotalElements());
-				}
-				
-				this.callOutTaskRes.save(task) ;
-				
-				filter = new CallOutFilter() ;
-				
-				formFilter.setExecnum(formFilter.getExecnum() + 1);
-				
-				UKTools.copyProperties(task, filter);
-				filter.setName(this.formFilter.getName()  + "_" + UKTools.dateFormate.format(new Date()));
-				filter.setExecnum(formFilter.getExecnum());
-				this.callOutFilterRes.save(filter) ;
 			}
 		}
 	}
@@ -308,9 +331,9 @@ public class ActivityResource extends Resource{
 		OutputTextFormat outputTextFormat = null;
 		if(this.dataList!=null && this.current!=null) {
 			synchronized (this.dataList) {
-				if(atomInt.intValue() < this.dataList.getContent().size()) {
+				if(atomInt.intValue() < this.currentSum ) {
 					if(this.isRecovery()) {
-						UKDataBean dataBean = this.dataList.getContent().get(atomInt.intValue()) ;
+						UKDataBean dataBean = this.dataList.getContent().get(this.currentSum - atomInt.intValue() - 1) ;
 						outputTextFormat = new OutputTextFormat(this.jobDetail);
 						if(this.formFilter!=null) {
 							outputTextFormat.setTitle(this.formFilter.getName());
@@ -320,13 +343,13 @@ public class ActivityResource extends Resource{
 					}else if(this.dataList!=null) {
 						if(this.current.getDisnames().intValue() >= this.current.getDisnum() ) {
 							if(this.callAgentList.size() > 0) {
-								this.current = this.callAgentList.remove(0) ;
+								this.current = this.callAgentList.remove(0) ;//下一个
 							}else {
 								this.current = null ;
 							}
 						}
 						if(this.current != null) {
-							UKDataBean dataBean = this.dataList.getContent().get(atomInt.intValue()) ;
+							UKDataBean dataBean = this.dataList.getContent().get(this.currentSum - atomInt.intValue() - 1) ;
 							outputTextFormat = new OutputTextFormat(this.jobDetail);
 							if(this.formFilter!=null) {
 								outputTextFormat.setTitle(this.formFilter.getName());
@@ -344,8 +367,17 @@ public class ActivityResource extends Resource{
 							}
 						}
 					}
+				}else {
+					if(!isEnd) {
+						this.callAgentList.add(this.current) ;
+					}
 				}
 			}
+		}
+		if(outputTextFormat == null && !this.isEnd) {
+			this.isInit = false;
+			this.begin();
+			outputTextFormat = this.next();
 		}
 		return outputTextFormat;
 	}
