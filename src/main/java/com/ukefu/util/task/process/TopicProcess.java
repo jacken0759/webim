@@ -3,6 +3,8 @@ package com.ukefu.util.task.process;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ukefu.core.UKDataContext;
 import com.ukefu.webim.service.es.TopicRepository;
 import com.ukefu.webim.service.repository.TopicItemRepository;
@@ -22,8 +24,10 @@ public class TopicProcess implements JPAProcess{
 	@Override
 	public void process(Object data) {
 		Topic topic = (Topic) data ;
-		topicRes.save(topic) ;
-		this.process(data, topic.getOrgi());
+		if(topic != null && StringUtils.isNotBlank(topic.getTitle())) {
+			topicRes.save(topic) ;
+			this.process(data, topic.getOrgi());
+		}
 	}
 	/**
 	 * 只处理 类似问题

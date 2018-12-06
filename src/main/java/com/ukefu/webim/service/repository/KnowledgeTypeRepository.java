@@ -24,6 +24,10 @@ public abstract interface KnowledgeTypeRepository extends
 
 	public abstract KnowledgeType findByNameAndOrgi(String name, String orgi);
 
+	public abstract List<KnowledgeType> findByNameAndOrgiAndTypeid(String name,String orgi ,String typeid) ;
+	
+	public abstract List<KnowledgeType> findByNameAndOrgiAndTypeidAndIdNot(String name,String orgi ,String typeid, String id) ;
+	
 	public abstract KnowledgeType findByNameAndOrgiAndIdNot(String name, String orgi, String id);
 	
 	public Page<KnowledgeType> findAll(Specification<KnowledgeType> spec, Pageable pageable);  //分页按条件查询 
