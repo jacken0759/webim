@@ -238,17 +238,17 @@ public class TopicController extends Handler{
     @Menu(type = "xiaoe" , subtype = "knowledgetypesave")
     public ModelAndView knowledgetypesave(HttpServletRequest request ,@Valid KnowledgeType type, @Valid String aiid) {
     	//int tempTypeCount = knowledgeTypeRes.countByNameAndOrgiAndParentidNot(type.getName(), super.getOrgi(request) , !StringUtils.isBlank(type.getParentid()) ? type.getParentid() : "0") ;
-    	KnowledgeType knowledgeType = knowledgeTypeRes.findByNameAndOrgi(type.getName(), super.getOrgi(request)) ;
-    	if(knowledgeType == null){
+    	List<KnowledgeType> knowledgeTypeList = knowledgeTypeRes.findByNameAndOrgiAndTypeid(type.getName(), super.getOrgi(request),"0") ;
+    	if(knowledgeTypeList == null || knowledgeTypeList.size() == 0 ){
     		type.setOrgi(super.getOrgi(request));
     		type.setCreatetime(new Date());
     		type.setId(UKTools.getUUID());
-    		type.setTypeid(type.getId());
+    		type.setTypeid("0");
     		type.setUpdatetime(new Date());
     		if(StringUtils.isBlank(type.getParentid())){
     			type.setParentid("0");
     		}else{
-    			type.setTypeid(type.getParentid());
+    			type.setParentid(type.getParentid());
     		}
     		type.setCreater(super.getUser(request).getId());
     		knowledgeTypeRes.save(type) ;
@@ -276,8 +276,8 @@ public class TopicController extends Handler{
     @Menu(type = "xiaoe" , subtype = "knowledgetypeupdate")
     public ModelAndView knowledgetypeupdate(HttpServletRequest request ,@Valid KnowledgeType type, @Valid String aiid) {
     	//int tempTypeCount = knowledgeTypeRes.countByNameAndOrgiAndIdNot(type.getName(), super.getOrgi(request) , type.getId()) ;
-    	KnowledgeType knowledgeType = knowledgeTypeRes.findByNameAndOrgiAndIdNot(type.getName(), super.getOrgi(request),type.getId()) ;
-    	if(knowledgeType == null){
+    	List<KnowledgeType> knowledgeTypeList = knowledgeTypeRes.findByNameAndOrgiAndTypeidAndIdNot(type.getName(), super.getOrgi(request),"0",type.getId()) ;
+    	if(knowledgeTypeList == null || knowledgeTypeList.size() == 0 ){
     		KnowledgeType temp = knowledgeTypeRes.findByIdAndOrgi(type.getId(), super.getOrgi(request)) ;
     		temp.setName(type.getName());
     		temp.setParentid(type.getParentid());
