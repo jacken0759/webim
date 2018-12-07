@@ -127,7 +127,8 @@ public class IMEventHandler
 		}
 		if(agentUser!=null){
 			agentUser.setName(contacts.getName());
-			if(!StringUtils.isBlank(contacts.getName())) {
+			CousultInvite invite = OnlineUserUtils.cousult(agentUser.getAppid(), orgi, UKDataContext.getContext().getBean(ConsultInviteRepository.class)) ;
+			if(invite != null && invite.isShowcontacts() && !StringUtils.isBlank(contacts.getName())) {
 				agentUser.setUsername(contacts.getName());
 			}
 			agentUser.setPhone(contacts.getPhone());

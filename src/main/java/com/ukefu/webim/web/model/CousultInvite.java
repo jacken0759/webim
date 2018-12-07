@@ -170,7 +170,8 @@ public class CousultInvite implements java.io.Serializable{
 	
 	private boolean fullscreen ;		//启用访客端对话界面全屏显示
 	
-	
+	private boolean showcontacts ;		//启用访客端聊天显示联系人名称
+	private boolean agentshowcontacts ;		//启用坐席端聊天显示联系人名称
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -908,4 +909,17 @@ public class CousultInvite implements java.io.Serializable{
 	public void setLeavemsgunlimit(boolean leavemsgunlimit) {
 		this.leavemsgunlimit = leavemsgunlimit;
 	}
+	public boolean isShowcontacts() {
+		return showcontacts;
+	}
+	public void setShowcontacts(boolean showcontacts) {
+		this.showcontacts = showcontacts;
+	}
+	public boolean isAgentshowcontacts() {
+		return agentshowcontacts;
+	}
+	public void setAgentshowcontacts(boolean agentshowcontacts) {
+		this.agentshowcontacts = agentshowcontacts;
+	}
+	
 }

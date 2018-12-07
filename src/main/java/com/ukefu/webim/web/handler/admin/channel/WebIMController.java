@@ -233,8 +233,8 @@ public class WebIMController extends Handler{
     			tempInviteData.setTipusertitle(inviteData.getTipusertitle());
     			
     			tempInviteData.setFullscreen(inviteData.isFullscreen());
-    			
-    			
+    			tempInviteData.setShowcontacts(inviteData.isShowcontacts());
+    			tempInviteData.setAgentshowcontacts(inviteData.isAgentshowcontacts());
     			tempInviteData.setCtrlenter(inviteData.isCtrlenter());
     			
     			if(dialogad!=null && !StringUtils.isBlank(dialogad.getName()) && dialogad.getBytes()!=null && dialogad.getBytes().length >0){

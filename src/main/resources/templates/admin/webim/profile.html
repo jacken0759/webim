@@ -633,6 +633,34 @@
 												</div>
 											</div>
 										</div>
+										
+										<div class="ukefu-webim-prop">
+											<div class="ukefu-webim-tl" style="clear:both;">18、启用访客端优先显示关联联系人名称</div>
+											<div class="box-item">
+												<div class="row">
+													<div class="col-lg-8">
+														<p>启用后，访客端优先显示关联联系人名称</p>
+													</div>
+													<div class="col-lg-4" style="text-align:right;">
+														<input type="checkbox" title="启用" name="showcontacts" id="showcontacts" <#if inviteData?? && inviteData.showcontacts == true>checked="checked"</#if>>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										<div class="ukefu-webim-prop">
+											<div class="ukefu-webim-tl" style="clear:both;">19、启用坐席端优先显示关联联系人名称</div>
+											<div class="box-item">
+												<div class="row">
+													<div class="col-lg-8">
+														<p>启用后，坐席端优先显示关联联系人名称</p>
+													</div>
+													<div class="col-lg-4" style="text-align:right;">
+														<input type="checkbox" title="启用" name="agentshowcontacts" id="agentshowcontacts" <#if inviteData?? && inviteData.agentshowcontacts == true>checked="checked"</#if>>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 									<div class="col-md-5">
 										<div class="ukefu-im-preview ukefu-im-preview-dialog" id="pv" style="width:380px;position: fixed;">

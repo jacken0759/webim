@@ -42,7 +42,13 @@
 					</#if>
 					<div class="dialog-info">
 						<div class="address">
-							<span>${agentuser.username!''}</span>
+							<span>
+							<#if inviteData?? && inviteData.agentshowcontacts && agentuser.name??>
+							${agentuser.name!''}
+							<#else>
+							${agentuser.username!''}
+							</#if>
+							</span>
 						</div>
 						<div class="news">
 							<#if agentUser.servicetime??>${agentuser.servicetime?string('yyyy-MM-dd HH:mm:ss')}<#else>${agentuser.createtime?string('yyyy-MM-dd HH:mm:ss')}</#if> 

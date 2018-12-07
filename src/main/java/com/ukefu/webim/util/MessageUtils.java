@@ -10,10 +10,12 @@ import com.ukefu.util.client.NettyClients;
 import com.ukefu.webim.service.cache.CacheHelper;
 import com.ukefu.webim.service.repository.AgentUserTaskRepository;
 import com.ukefu.webim.service.repository.ChatMessageRepository;
+import com.ukefu.webim.service.repository.ConsultInviteRepository;
 import com.ukefu.webim.util.server.message.ChatMessage;
 import com.ukefu.webim.web.model.AgentUser;
 import com.ukefu.webim.web.model.AgentUserTask;
 import com.ukefu.webim.web.model.AiUser;
+import com.ukefu.webim.web.model.CousultInvite;
 import com.ukefu.webim.web.model.MessageOutContent;
 
 public class MessageUtils {
@@ -157,9 +159,8 @@ public class MessageUtils {
     		statusMessage.setMessage("当前坐席全忙，请稍候");
     	}else{
     		data.setUserid(agentUser.getUserid());
-    		data.setUsername(agentUser.getUsername());
     		data.setTouser(agentUser.getAgentno());
-    		
+    		data.setUsername(agentUser.getUsername());
     		data.setAgentuser(agentUser.getId());
     		
     		data.setAgentserviceid(agentUser.getAgentserviceid());
@@ -170,7 +171,6 @@ public class MessageUtils {
     		data.setMsgtype(msgtype);
     		
     		
-    		data.setUsername(agentUser.getUsername());
     		data.setUsession(agentUser.getUserid());				//agentUser作为 session id
     		data.setContextid(agentUser.getContextid());
     		data.setCalltype(UKDataContext.CallTypeEnum.IN.toString());
@@ -225,6 +225,12 @@ public class MessageUtils {
     		if(UKDataContext.MessageTypeEnum.MESSAGE.toString().equals(data.getType())){
     			UKDataContext.getContext().getBean(ChatMessageRepository.class).save(data) ;
     		}
+    		CousultInvite invite = OnlineUserUtils.cousult(agentUser.getAppid(), agentUser.getOrgi(), UKDataContext.getContext().getBean(ConsultInviteRepository.class)) ;
+    		if(invite != null && invite.isAgentshowcontacts() && !StringUtils.isBlank(agentUser.getName())) {
+				data.setUsername(agentUser.getName());
+			}else {
+				data.setUsername(agentUser.getUsername());
+			}
     	}
     	if(!StringUtils.isBlank(data.getUserid()) && UKDataContext.MessageTypeEnum.MESSAGE.toString().equals(data.getType())){
     		NettyClients.getInstance().sendIMEventMessage(data.getUserid(), UKDataContext.MessageTypeEnum.MESSAGE.toString(), outMessage);
