@@ -26,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -168,6 +169,8 @@ public class ContactsController extends Handler{
 		contacts.setPinyin(PinYinTools.getInstance().getFirstPinYin(contacts.getName()));
 		if(StringUtils.isBlank(contacts.getCusbirthday())) {
 			contacts.setCusbirthday(null);
+		}else {
+			contacts.setCusbirthday(contacts.getCusbirthday() + " 00:00:00");
 		}
 		contactsRes.save(contacts) ;
 		return request(super.createRequestPageTempletResponse("redirect:/apps/contacts/index.html?ckind="+contacts.getCkind()));
@@ -214,6 +217,8 @@ public class ContactsController extends Handler{
 	    	contacts.setPinyin(PinYinTools.getInstance().getFirstPinYin(contacts.getName()));
 	    	if(StringUtils.isBlank(contacts.getCusbirthday())) {
 				contacts.setCusbirthday(null);
+			}else {
+				contacts.setCusbirthday(contacts.getCusbirthday() + " 00:00:00");
 			}
 	    	contactsRes.save(contacts);
     	}
@@ -403,5 +408,11 @@ public class ContactsController extends Handler{
     	}
     	
         return request(super.createRequestPageTempletResponse("redirect:/apps/contacts/embed/index.html"));
+    }
+    
+    @RequestMapping("/updatemapping")
+    @ResponseBody
+    public void updatemapping(ModelMap map , HttpServletRequest request) {
+    	contactsRes.updateMapping();
     }
 }

@@ -19,4 +19,6 @@ public interface ContactsEsCommonRepository {
 	public Page<Contacts> findByCreaterAndSharesAndOrgi(String creater , String shares ,String orgi , Date begin , Date end, boolean includeDeleteData , String q , Pageable page) ;
 
 	public Page<Contacts> findByCreaterAndSharesAndOrgi(String creater, String shares,String orgi,Date begin, Date end, boolean includeDeleteData,BoolQueryBuilder boolQueryBuilder, String q, Pageable page);
+
+	void updateMapping();
 }

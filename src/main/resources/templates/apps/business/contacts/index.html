@@ -114,7 +114,11 @@
 								<#if contacts.gender?? && contacts.gender == '-1'>未知</#if>
 							</td>
 							<td>
+								<#if contacts.cusbirthday?? && contacts.cusbirthday?length gt 10>
+								${contacts.cusbirthday?substring(0,10)}
+								<#else>
 								${contacts.cusbirthday!''}
+								</#if>
 							</td>
 							<td>
 								${uKeFuDic[contacts.ckind!''].name!''} 

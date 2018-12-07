@@ -5,6 +5,7 @@ import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -178,5 +179,12 @@ public class ContactsRepositoryImpl implements ContactsEsCommonRepository{
 	    	boolQueryBuilder.must(new QueryStringQueryBuilder(q).defaultOperator(Operator.AND)) ;
 	    }
 		return processQuery(boolQueryBuilder , page);
+	}
+	@Override
+	public void updateMapping() {
+		Map m = elasticsearchTemplate.getMapping("uckefu", "uk_contacts");
+		((Map)((Map)m.get("properties")).get("cusbirthday")).put("format", "yyyy-MM-dd HH:mm:ss");
+		elasticsearchTemplate.putMapping("uckefu", "uk_contacts", m);
+		System.out.println(m);
 	}
 }

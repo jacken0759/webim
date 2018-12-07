@@ -75,7 +75,7 @@
 						<div class="layui-inline uckefu-inline">
 							<label class="layui-form-label">生日：</label>
 							<div class="layui-input-inline">
-								<input type="text" id="cusbirthday" name="cusbirthday" value="${contacts.cusbirthday!''}" autocomplete="off"
+								<input type="text" id="cusbirthday" name="cusbirthday" value="<#if contacts.cusbirthday?? && contacts.cusbirthday?length gt 10>${contacts.cusbirthday?substring(0,10)}<#else>${contacts.cusbirthday!''}</#if>" autocomplete="off"
 									class="layui-input">
 								<i class="layui-icon" style="position: absolute;right: 3px;top: 6px;font-size: 25px;">&#xe637;</i>
 							</div>

@@ -197,7 +197,9 @@ public class CustomerController extends Handler{
     		customerGroupForm.getContacts().setPinyin(PinYinTools.getInstance().getFirstPinYin(customerGroupForm.getContacts().getName()));
     		if(StringUtils.isBlank(customerGroupForm.getContacts().getCusbirthday())) {
     			customerGroupForm.getContacts().setCusbirthday(null);
-			}
+			}else {
+				customerGroupForm.getContacts().setCusbirthday(customerGroupForm.getContacts().getCusbirthday() + " 00:00:00");
+    		}
     		contactsRes.save(customerGroupForm.getContacts()) ;
     	}
         return request(super.createRequestPageTempletResponse("redirect:/apps/customer/index.html?ekind="+customerGroupForm.getEntcustomer().getEkind()));
