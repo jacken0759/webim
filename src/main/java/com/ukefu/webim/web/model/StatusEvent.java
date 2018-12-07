@@ -187,7 +187,14 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>,UserEv
 	
 	private int qualitypass=2;//质检是否合格(默认2为未质检)
 	
-
+	private String workstatus ;
+	@Transient
+	public String getWorkstatus() {
+		return workstatus;
+	}
+	public void setWorkstatus(String workstatus) {
+		this.workstatus = workstatus;
+	}
 	public String getUsername() {
 		return username;
 	}
