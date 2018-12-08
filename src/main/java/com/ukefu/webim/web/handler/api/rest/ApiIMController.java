@@ -316,7 +316,10 @@ public class ApiIMController extends Handler{
     			uploadDir.mkdirs() ;
     		}
     		String fileid = UKTools.md5(imgFile.getBytes()) ;
-    		if(imgFile.getContentType()!=null && imgFile.getContentType().indexOf("image") >= 0){
+    		/**
+    		 * 上传图片最大10M
+    		 */
+    		if(imgFile.getContentType()!=null && imgFile.getContentType().indexOf("image") >= 0 && imgFile.getSize() < 1024*1024*10){
 	    		fileName = "upload/"+fileid+"_original" ;
 	    		File imageFile = new File(path , fileName) ;
 	    		FileCopyUtils.copy(imgFile.getBytes(), imageFile);
@@ -340,10 +343,10 @@ public class ApiIMController extends Handler{
 		    		}
 	    		}
     		}else{
-    			upload = new UploadStatus("请选择文件");
+    			upload = new UploadStatus("请选择图片文件");
     		}
     	}else{
-    		upload = new UploadStatus("请选择文件");
+    		upload = new UploadStatus("请选择图片文件");
     	}
     	map.addAttribute("upload", upload) ;
         return view ; 
