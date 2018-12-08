@@ -18,7 +18,7 @@ public class LogTask {
 	@Autowired
 	private LogRepository logRes;
 	
-	@Scheduled(fixedDelay= 1000) // 每5秒执行一次
+	@Scheduled(fixedDelay= 1000 , initialDelay=10000) // 每5秒执行一次
 	public void log(){
 		/**
     	 * 日志处理
@@ -26,7 +26,7 @@ public class LogTask {
     	Log log = null ;
     	while((log = UKDataContext.tempLogQueue.poll()) != null){
     		SystemConfig systemConfig = UKTools.getSystemConfig();
-			if(systemConfig!=null && systemConfig.isSavelog()) { 
+			if(systemConfig!=null && systemConfig.isSavelog() && logRes!=null) { 
 				logRes.save(log) ;
 			}
 		}

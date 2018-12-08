@@ -473,18 +473,29 @@
     </#if>
     // 参数连接
 	var hostname = location.hostname ;
-    var socket = io.connect('${schema!'http'}://'+hostname+':${port}/im/user?userid=${userid!''}&orgi=${orgi!''}&session=${sessionid!''}&appid=${appid!''}&osname=${(osname!'')?url}&browser=${(browser!'')?url}<#if skill??>&skill=${skill}</#if><#if username??>&nickname=${username}</#if><#if agent??>&agent=${agent}</#if><#if title??>&title=${title?url}</#if><#if traceid??>&url=${url?url}</#if><#if traceid??>&traceid=${traceid}</#if>');
+    var socket = io.connect('${schema!'http'}://'+hostname+':${port}/im/user');
     socket.on('connect',function(){
-    	<#if contacts?? && contacts.name??>
     	socket.emit('new', {
+    		<#if contacts?? && contacts.name??>
 			name : "${contacts.name!''}",
 			phone:"${contacts.phone!''}",
 			email:"${contacts.email}",
 			memo:"${contacts.memo!''}",
+			</#if>
 			orgi:"${inviteData.orgi!''}",
-			appid : "${appid!''}"
+			appid : "${appid!''}",
+			userid:"${userid!''}",
+			user:"${userid!''}",
+			session:"${sessionid!''}",
+			osname:"${(osname!'')?url}",
+			browser:"${(browser!'')?url}"
+			<#if skill??>,skill:"${skill}"</#if>
+			<#if username??>,nickname:"${username}"</#if>
+			<#if agent??>,agent:"${agent}"</#if>
+			<#if title??>,title:"${title?url}"</#if>
+			<#if traceid??>,url:"${url?url}"</#if>
+			<#if traceid??>,traceid:${traceid}"</#if>
 		});
-    	</#if>
     })
     socket.on("agentstatus",function(data){
        document.getElementById('connect-message').innerHTML=data.message;

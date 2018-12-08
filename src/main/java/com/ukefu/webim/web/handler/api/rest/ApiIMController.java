@@ -46,7 +46,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/rest/webim")
+@RequestMapping("/api/webim")
 @Api(value = "在线客服" , description = "在线客服接口功能")
 public class ApiIMController extends Handler{
 

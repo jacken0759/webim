@@ -31,6 +31,7 @@ import com.ukefu.webim.web.model.AgentService;
 import com.ukefu.webim.web.model.AgentUser;
 import com.ukefu.webim.web.model.Contacts;
 import com.ukefu.webim.web.model.CousultInvite;
+import com.ukefu.webim.web.model.IMClient;
 import com.ukefu.webim.web.model.MessageOutContent;
 
 public class IMEventHandler     
@@ -46,31 +47,43 @@ public class IMEventHandler
     @OnConnect  
     public void onConnect(SocketIOClient client) 
     {  
+    }  
+      
+    //添加@OnDisconnect事件，客户端断开连接时调用，刷新客户端信息  
+    @OnDisconnect  
+    public void onDisconnect(SocketIOClient client)  
+    {  
+    	IMClient im = client.get("im") ;
+		if(im!=null && im.getUser()!=null){
+			try {
+				/**
+				 * 用户主动断开服务
+				 */
+				ServiceQuene.serviceFinish((AgentUser) CacheHelper.getAgentUserCacheBean().getCacheObject(im.getUser(), UKDataContext.SYSTEM_ORGI), im.getOrgi() , UKDataContext.EndByType.USER.toString()); 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			NettyClients.getInstance().removeIMEventClient(im.getUser() ,UKTools.getContextID(client.getSessionId().toString()));
+		}
+    }  
+      
+    //消息接收入口，用于接受网站资源用户传入的 个人信息
+    @OnEvent(value = "new")  
+    public void onEvent(SocketIOClient client, AckRequest request, IMClient im, Contacts contacts)   
+    {
     	try {
-			String user = client.getHandshakeData().getSingleUrlParam("userid") ;
-			String orgi = client.getHandshakeData().getSingleUrlParam("orgi") ;
-			String session = client.getHandshakeData().getSingleUrlParam("session") ;
-			String appid = client.getHandshakeData().getSingleUrlParam("appid") ;
-			String agent = client.getHandshakeData().getSingleUrlParam("agent") ;
-			String skill = client.getHandshakeData().getSingleUrlParam("skill") ;
-			
-			String title = client.getHandshakeData().getSingleUrlParam("title") ;
-			String url = client.getHandshakeData().getSingleUrlParam("url") ;
-			String traceid = client.getHandshakeData().getSingleUrlParam("traceid") ;
-			
-			String nickname = client.getHandshakeData().getSingleUrlParam("nickname") ;
-			
-			if(!StringUtils.isBlank(user)){
+    		client.set("im", im);
+			if(!StringUtils.isBlank(im.getUser())){
 				/**
 				 * 用户进入到对话连接 ， 排队用户请求 , 如果返回失败，表示当前坐席全忙，用户进入排队状态，当前提示信息 显示 当前排队的队列位置，不可进行对话，用户发送的消息作为留言处理
 				 */
 				InetSocketAddress address = (InetSocketAddress) client.getRemoteAddress()  ;
 				String ip = UKTools.getIpAddr(client.getHandshakeData().getHttpHeaders(), address.getHostString()) ;
-				NewRequestMessage newRequestMessage = OnlineUserUtils.newRequestMessage(user, orgi , session , appid , ip , client.getHandshakeData().getSingleUrlParam("osname") , client.getHandshakeData().getSingleUrlParam("browser") , UKDataContext.ChannelTypeEnum.WEBIM.toString() , skill , agent , nickname , title , url , traceid , UKDataContext.ChatInitiatorType.USER.toString()) ;
+				NewRequestMessage newRequestMessage = OnlineUserUtils.newRequestMessage(im.getUser(), im.getOrgi(), im.getSession(), im.getAppid(), ip , im.getOsname() , im.getBrowser() , UKDataContext.ChannelTypeEnum.WEBIM.toString() , im.getSkill(), im.getAgent(), im.getNickname(), im.getTitle() , im.getUrl(), im.getTraceid() , UKDataContext.ChatInitiatorType.USER.toString()) ;
 //				/**
 //				 * 加入到 缓存列表
 //				 */
-				NettyClients.getInstance().putIMEventClient(user, client);
+				NettyClients.getInstance().putIMEventClient(im.getUser(), client);
 //				
 				if(newRequestMessage!=null && !StringUtils.isBlank(newRequestMessage.getMessage())){
 					MessageOutContent outMessage = new MessageOutContent() ;
@@ -92,62 +105,37 @@ public class IMEventHandler
 			e.printStackTrace();
 			client.disconnect();
 		}
-    }  
-      
-    //添加@OnDisconnect事件，客户端断开连接时调用，刷新客户端信息  
-    @OnDisconnect  
-    public void onDisconnect(SocketIOClient client)  
-    {  
-    	String user = client.getHandshakeData().getSingleUrlParam("userid") ;
-		String orgi = client.getHandshakeData().getSingleUrlParam("orgi") ;
-		if(user!=null){
-			try {
-				/**
-				 * 用户主动断开服务
-				 */
-				ServiceQuene.serviceFinish((AgentUser) CacheHelper.getAgentUserCacheBean().getCacheObject(user, UKDataContext.SYSTEM_ORGI), orgi , UKDataContext.EndByType.USER.toString()); 
-			} catch (Exception e) {
-				e.printStackTrace();
+    	if(contacts!=null) {
+			AgentUser agentUser = (AgentUser) CacheHelper.getAgentUserCacheBean().getCacheObject(im.getUser(), im.getOrgi()) ;
+			AgentUserService service = UKDataContext.getContext().getBean(
+					AgentUserService.class);
+			if(agentUser == null){
+				agentUser = service.findByUseridAndOrgi(im.getUser() , im.getOrgi());
 			}
-			NettyClients.getInstance().removeIMEventClient(user ,UKTools.getContextID(client.getSessionId().toString()));
-		}
-    }  
-      
-    //消息接收入口，用于接受网站资源用户传入的 个人信息
-    @OnEvent(value = "new")  
-    public void onEvent(SocketIOClient client, AckRequest request, Contacts contacts)   
-    {
-    	String user = client.getHandshakeData().getSingleUrlParam("userid") ;
-		String orgi = client.getHandshakeData().getSingleUrlParam("orgi") ;
-		AgentUser agentUser = (AgentUser) CacheHelper.getAgentUserCacheBean().getCacheObject(user, orgi) ;
-		AgentUserService service = UKDataContext.getContext().getBean(
-				AgentUserService.class);
-		if(agentUser == null){
-			agentUser = service.findByUseridAndOrgi(user , orgi);
-		}
-		if(agentUser!=null){
-			agentUser.setName(contacts.getName());
-			CousultInvite invite = OnlineUserUtils.cousult(agentUser.getAppid(), orgi, UKDataContext.getContext().getBean(ConsultInviteRepository.class)) ;
-			if(invite != null && invite.isShowcontacts() && !StringUtils.isBlank(contacts.getName())) {
-				agentUser.setUsername(contacts.getName());
+			if(agentUser!=null){
+				agentUser.setName(contacts.getName());
+				CousultInvite invite = OnlineUserUtils.cousult(agentUser.getAppid(), im.getOrgi(), UKDataContext.getContext().getBean(ConsultInviteRepository.class)) ;
+				if(invite != null && invite.isShowcontacts() && !StringUtils.isBlank(contacts.getName())) {
+					agentUser.setUsername(contacts.getName());
+				}
+				agentUser.setPhone(contacts.getPhone());
+				agentUser.setEmail(contacts.getEmail());
+				agentUser.setResion(contacts.getMemo());
+				service.save(agentUser);
+				CacheHelper.getAgentUserCacheBean().put(agentUser.getUserid(), agentUser , UKDataContext.SYSTEM_ORGI) ;
 			}
-			agentUser.setPhone(contacts.getPhone());
-			agentUser.setEmail(contacts.getEmail());
-			agentUser.setResion(contacts.getMemo());
-			service.save(agentUser);
-			CacheHelper.getAgentUserCacheBean().put(agentUser.getUserid(), agentUser , UKDataContext.SYSTEM_ORGI) ;
-		}
-			
-		AgentServiceRepository agentServiceRes = UKDataContext.getContext().getBean(AgentServiceRepository.class) ;
-		List<AgentService> agentServiceList = agentServiceRes.findByUseridAndOrgi(user, orgi) ;
-		if(agentServiceList.size() > 0){
-			AgentService agentService = agentServiceList.get(0) ;
-			agentService.setName(contacts.getName());
-			agentService.setPhone(contacts.getName());
-			agentService.setEmail(contacts.getName());
-			agentService.setRegion(contacts.getMemo());
-			agentServiceRes.save(agentService) ;
-		}
+				
+			AgentServiceRepository agentServiceRes = UKDataContext.getContext().getBean(AgentServiceRepository.class) ;
+			List<AgentService> agentServiceList = agentServiceRes.findByUseridAndOrgi(im.getUser(), im.getOrgi()) ;
+			if(agentServiceList.size() > 0){
+				AgentService agentService = agentServiceList.get(0) ;
+				agentService.setName(contacts.getName());
+				agentService.setPhone(contacts.getName());
+				agentService.setEmail(contacts.getName());
+				agentService.setRegion(contacts.getMemo());
+				agentServiceRes.save(agentService) ;
+			}
+    	}
     }  
     
   //消息接收入口，坐席状态更新  

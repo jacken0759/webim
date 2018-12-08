@@ -30,7 +30,7 @@ public class ApplicationController extends Handler{
 	@RequestMapping("/")
 	@Menu(type = "apps" , subtype = "root" , access=true)
     public ModelAndView root(HttpServletRequest request) {
-		ModelAndView view = request(super.createRequestPageTempletResponse("redirect:/console.html"));
+		ModelAndView view = console(request);
 		if(!StringUtils.isBlank(request.getServerName())) {
 			EkmKnowbaseConfig kbconfig = ekmKnowbaseConfigRes.findByBasehost(request.getServerName()) ;
 			if(kbconfig != null) {
