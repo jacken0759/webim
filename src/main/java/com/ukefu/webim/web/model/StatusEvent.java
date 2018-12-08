@@ -195,6 +195,14 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>,UserEv
 	public void setWorkstatus(String workstatus) {
 		this.workstatus = workstatus;
 	}
+	private String extno;
+	@Transient
+	public String getExtno() {
+		return extno;
+	}
+	public void setExtno(String extno) {
+		this.extno = extno;
+	}
 	public String getUsername() {
 		return username;
 	}
@@ -861,5 +869,6 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>,UserEv
 	public void setTranid(String tranid) {
 		this.tranid = tranid;
 	}
+	
 	
 }
