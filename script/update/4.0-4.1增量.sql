@@ -630,11 +630,3 @@ INSERT INTO `uckefu`.`uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`
 INSERT INTO `uckefu`.`uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENTID`, `DESCRIPTION`, `MEMO`, `ICONSTR`, `ICONSKIN`, `CATETYPE`, `CREATER`, `CREATETIME`, `UPDATETIME`, `HASCHILD`, `SORTINDEX`, `DICID`, `DEFAULTVALUE`, `DISCODE`, `URL`, `MODULE`, `MLEVEL`, `RULES`, `MENUTYPE`) VALUES ('4028811c6763b3a2016763e0acd20180', '拨打成功名单', 'pub', 'A16_A04_A03', 'ukewo', 'auth', '4028811c6763b3a2016763dfa8fe0173', NULL, NULL, '&#x756e646566696e6564;', NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-11-30 17:08:47', NULL, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', '/apps/callout/ai/success.html', 'webim', '3', NULL, 'left');
 INSERT INTO `uckefu`.`uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENTID`, `DESCRIPTION`, `MEMO`, `ICONSTR`, `ICONSKIN`, `CATETYPE`, `CREATER`, `CREATETIME`, `UPDATETIME`, `HASCHILD`, `SORTINDEX`, `DICID`, `DEFAULTVALUE`, `DISCODE`, `URL`, `MODULE`, `MLEVEL`, `RULES`, `MENUTYPE`) VALUES ('4028811c6763b3a2016763e0e5ed0185', '拨打失败名单', 'pub', 'A16_A04_A04', 'ukewo', 'auth', '4028811c6763b3a2016763dfa8fe0173', NULL, NULL, '&#x756e646566696e6564;', NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-11-30 17:09:02', NULL, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', '/apps/callout/ai/faild.html', 'webim', '3', NULL, 'left');
 INSERT INTO `uckefu`.`uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENTID`, `DESCRIPTION`, `MEMO`, `ICONSTR`, `ICONSKIN`, `CATETYPE`, `CREATER`, `CREATETIME`, `UPDATETIME`, `HASCHILD`, `SORTINDEX`, `DICID`, `DEFAULTVALUE`, `DISCODE`, `URL`, `MODULE`, `MLEVEL`, `RULES`, `MENUTYPE`) VALUES ('402888816686bff7016687649b8300f2', '外呼机器人', 'pub', 'A16', 'ukewo', 'auth', '402888815d2fe37f015d2fe75cc80002', NULL, NULL, '<i class=\"kfont\" style=\"position: relative;\">&#xe691;</i>', NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-11-30 16:54:03', NULL, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', '/apps/callout/ai/index.html', 'webim', '1', NULL, 'left');
-
-ALTER TABLE uk_consult_invite ADD showcontacts tinyint(4) DEFAULT 0 COMMENT '启用访客端聊天显示联系人名称';
-ALTER TABLE uk_consult_invite ADD agentshowcontacts tinyint(4) DEFAULT 0 COMMENT '启用坐席端聊天显示联系人名称';
-
-
-
-
-
