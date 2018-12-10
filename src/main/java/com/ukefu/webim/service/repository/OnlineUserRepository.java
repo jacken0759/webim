@@ -77,12 +77,18 @@ public abstract interface OnlineUserRepository extends JpaRepository<OnlineUser,
 	@Query("select count(id) from StatusEvent where (discaller = ?1 or discalled = ?1) and misscall = false")
 	Long countByAniFromCallCenter(String ani);
 	
-	
-	@Query("select avg(ringduration) from StatusEvent where ani = ?1")
+	//振铃 只计算未接通电话
+	@Query("select avg(ringduration) from StatusEvent where ( discaller = ?1 or discalled = ?1 ) and answertime is null ")
 	Long avgByRingDurationFromCallCenter(String ani);
-	
-	@Query("select avg(duration) from StatusEvent where ani = ?1")
+	//通话 只计算接通电话
+	@Query("select avg(duration) from StatusEvent where ( discaller = ?1 or discalled = ?1 )  and answertime is not null and creater = 'answered' ")
 	Long avgByDurationFromCallCenter(String ani);
+	
+	@Query("select sum(ringduration) from StatusEvent where ( discaller = ?1 or discalled = ?1 )  and answertime is null ")
+	Long sumByRingDurationFromCallCenter(String ani);
+	
+	@Query("select sum(duration) from StatusEvent where ( discaller = ?1 or discalled = ?1 )  and answertime is not null and creater = 'answered' ")
+	Long sumByDurationFromCallCenter(String ani);
 	
 	@Query("select hourstr as dt, count(id) as calls from StatusEvent where orgi = ?1 and datestr = ?2 group by hourstr order by dt asc")
 	List<Object> findByOrgiAndDatestrRangeForAgent(String orgi , String start );
