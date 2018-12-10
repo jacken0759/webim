@@ -9,9 +9,9 @@
 <script>
 	layui.use('layer', function(){
 		<#if msg?? && msg =='CUBE_VALID_FAILED_1'>
-			layer.alert('删除元数据失败，存在关联数据', {icon: 2});
+			layer.alert('模型验证失败，至少要关联一个元数据（主表）', {icon: 2});
 		<#elseif msg?? && msg =='CUBE_VALID_FAILED_2'>
-		layer.alert('验证失败，立方体模型至少要有一个指标。', {icon: 2});
+		layer.alert('模型验证失败，立方体模型至少要有一个指标。', {icon: 2});
 		</#if>
 	});
 </script>

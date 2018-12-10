@@ -364,6 +364,7 @@ public class CubeController extends Handler{
 				}
 			}
 		}
+		String msg = "";
 		boolean hasLeastMeasure  = false ;
     	if("cube".equals(cube.getModeltype())) {
     		//立方体必须至少一个指标
@@ -371,8 +372,10 @@ public class CubeController extends Handler{
     		if(!cubeMeasureList.isEmpty()) {
     			hasLeastMeasure = true;
     		}
+    	}else {
+    		hasLeastMeasure = true;
     	}
-    	String msg = "";
+    	
     	if(!hasMasterTable) {
     		msg = "CUBE_VALID_FAILED_1";
     	}else if(!hasLeastMeasure) {
