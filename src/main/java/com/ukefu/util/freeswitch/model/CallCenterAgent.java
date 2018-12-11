@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.ukefu.util.UCKeFuTime;
 import com.ukefu.webim.web.model.Extention;
 
-public class CallCenterAgent implements java.io.Serializable{
+public class CallCenterAgent implements java.io.Serializable ,  Comparable<CallCenterAgent>{
 	/**
 	 * 
 	 */
@@ -163,5 +163,20 @@ public class CallCenterAgent implements java.io.Serializable{
 			}
 		}
 		return status ;
+	}
+	
+	@Override
+	public int compareTo(CallCenterAgent o) {
+		int retValue = 0 ;
+		if(this.getUpdatetime()!=null) {
+			if(o!=null && o.getUpdatetime()!=null) {
+				retValue = (int)(this.getUpdatetime().getTime() - o.getUpdatetime().getTime());
+			}else {
+				retValue = 1;
+			}
+		}else {
+			retValue = -1 ;
+		}
+		return retValue ;
 	}
 }
