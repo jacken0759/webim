@@ -636,3 +636,7 @@ ALTER TABLE uk_consult_invite ADD agentshowcontacts tinyint(4) DEFAULT 0 COMMENT
 
 ALTER TABLE uk_sessionconfig ADD transmsg varchar(255) DEFAULT NULL COMMENT '转接提示信息';
 ALTER TABLE uk_sessionconfig ADD enabletransmsg tinyint(4) DEFAULT 0 COMMENT '是否启用转接提示';
+
+ALTER TABLE uk_sales_product modify column price DECIMAL(9,2) DEFAULT 0;
+
+ALTER TABLE uk_jobdetailproduct modify column price DECIMAL(9,2) DEFAULT 0;

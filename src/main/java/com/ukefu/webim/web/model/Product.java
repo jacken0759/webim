@@ -59,7 +59,7 @@ public class Product implements java.io.Serializable{
 	private Date updatetime = new Date();
 	private String memo;
 	private String organ;
-	private int price;//价格
+	private double price;//价格
 	private int quota;//库存
 	
 	private String url;	//备用字段
@@ -208,11 +208,11 @@ public class Product implements java.io.Serializable{
 		this.id = id;
 	}
 
-	public int getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 
