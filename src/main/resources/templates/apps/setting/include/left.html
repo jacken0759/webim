@@ -24,7 +24,7 @@
 				<a href="/setting/role/index.html">角色授权</a>
 			</dd>
 			</#if>
-			<#if user?? && (user.roleAuthMap["A07"]?? || user.usertype == "0") >
+			<#if user?? && (user.roleAuthMap["A06_A01_A05"]?? || user.usertype == "0") >
 			<dd class="<#if subtype?? && subtype == "quickreply">layui-this</#if>">
 				<a href="/setting/quickreply/index.html">快捷回复</a>
 			</dd>
@@ -51,7 +51,7 @@
 		</dl>
 	</li>
 </#if>
-<#if user?? && (user.roleAuthMap["A11_A07"]?? || user.usertype == "0") >
+<#if user?? && (user.roleAuthMap["A06_A04"]?? || user.usertype == "0") >
 	<li class="layui-nav-item layui-nav-itemed">
 		<a class="layui-nav-title" href="javascript:;">会话服务类型设置</a>
 		<dl class="layui-nav-child">
