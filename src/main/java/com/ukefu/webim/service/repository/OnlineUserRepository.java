@@ -127,19 +127,19 @@ public abstract interface OnlineUserRepository extends JpaRepository<OnlineUser,
 	Long countByToadyDirectionFromStatusEvent(String orgi, String calltype, Date begin, Date end);
 	
 	//查询当天指定分机的 呼出-通话总数
-	@Query("select count(id) from StatusEvent where orgi = ?1 and calltype = ?2 and ani = ?3 and ?4 < createtime and createtime < ?5")
+	@Query("select count(id) from StatusEvent where orgi = ?1 and calltype = ?2 and discaller = ?3 and ?4 < createtime and createtime < ?5")
 	Long countByToadyAniFromStatusEvent(String orgi, String calltype, String ani, Date begin, Date end);
 
 	//查询指定分机当天-通话总数
-	@Query("select count(id) from StatusEvent where orgi = ?1 and (ani = ?2 or called = ?3) and ?4 < createtime and createtime < ?5")
+	@Query("select count(id) from StatusEvent where orgi = ?1 and (discaller = ?2 or discalled = ?3) and ?4 < createtime and createtime < ?5")
 	Long countByToadyExtentionFromStatusEvent(String orgi, String ani, String called, Date begin, Date end);
 	
-	//查询指定分机当天-平均通话时长
-	@Query("select AVG(duration) from StatusEvent where orgi = ?1 and (ani = ?2 or called = ?3) and ?4 < createtime and createtime < ?5")
+	//查询指定分机当天-平均通话时长 （接通）
+	@Query("select AVG(duration) from StatusEvent where orgi = ?1 and (discaller = ?2 or discalled = ?3) and ?4 < createtime and createtime < ?5 and answertime is not null and creater = 'answered' ")
 	Long countByToadyExtDurFromStatusEvent(String orgi, String ani, String called, Date begin, Date end);
 	
-	//查询指定分机当天-平均振铃时长
-	@Query("select AVG(ringduration) from StatusEvent where orgi = ?1 and (ani = ?2 or called = ?3) and ?4 < createtime and createtime < ?5")
+	//查询指定分机当天-平均振铃时长 (未接通)
+	@Query("select AVG(ringduration) from StatusEvent where orgi = ?1 and (discaller = ?2 or discalled = ?3) and ?4 < createtime and createtime < ?5 and answertime is null")
 	Long countByToadyExtRingFromStatusEvent(String orgi, String ani, String called, Date begin, Date end);
 	
 	//根据质检人和质检状态
