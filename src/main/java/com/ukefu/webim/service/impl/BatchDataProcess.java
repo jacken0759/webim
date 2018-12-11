@@ -1,6 +1,5 @@
 package com.ukefu.webim.service.impl;
 
-import java.util.Date;
 import java.util.Map;
 
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
@@ -28,7 +27,6 @@ public class BatchDataProcess implements JPAProcess{
 		UKDataBean dataBean = new UKDataBean();
 		if(data instanceof UKDataBean) {
 			dataBean = (UKDataBean)data;
-			dataBean.setCreatetime(new Date());
 		}else {
 			dataBean.setTable(this.metadata);
 			dataBean.setValues((Map<String, Object>) data);
