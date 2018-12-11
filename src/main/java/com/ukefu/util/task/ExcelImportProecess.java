@@ -104,7 +104,7 @@ public class ExcelImportProecess extends DataProcess{
             for(int i=1 ; i<totalRows; i++){
             	Row row = sheet.getRow(i) ;
             	Object data = null ;
-            	if(row!=null){
+            	if(row!=null && !isRowEmpty(row)){
 					if(event.getDSData().getClazz() != null) {
 						data = event.getDSData().getClazz().newInstance() ;
 					}
@@ -343,6 +343,15 @@ public class ExcelImportProecess extends DataProcess{
 		return tableProperties;
 	}
 	
+	//判断空行
+	private static boolean isRowEmpty(Row row) {
+		for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
+			Cell cell = row.getCell(c);
+			if (cell != null && cell.getCellType() != Cell.CELL_TYPE_BLANK)
+				return false;
+		}
+		return true;
+	}
 	private boolean isExcel2007(String fileName) {  
         return fileName.matches("^.+\\.(?i)(xlsx)$");  
     } 
