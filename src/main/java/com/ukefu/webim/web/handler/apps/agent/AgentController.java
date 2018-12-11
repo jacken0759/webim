@@ -1147,6 +1147,22 @@ public class AgentController extends Handler {
 						ServiceQuene.updateAgentStatus(transAgentStatus, agentUser, super.getOrgi(request), true);
 						agentService.setAgentno(agentno);
 						agentService.setAgentusername(transAgentStatus.getUsername());
+						
+						//推送转接提示
+						if(!StringUtils.isBlank(agentUser.getUserid())){
+							MessageOutContent outMessage = new MessageOutContent() ;
+							outMessage.setMessage(ServiceQuene.getTransMessage(agentService , agentUser.getChannel(),super.getOrgi(request)));
+							outMessage.setMessageType(UKDataContext.MediaTypeEnum.TEXT.toString());
+							outMessage.setCalltype(UKDataContext.CallTypeEnum.IN.toString());
+							outMessage.setNickName(agentStatus.getUsername());
+							outMessage.setCreatetime(UKTools.dateFormate.format(new Date()));
+							OutMessageRouter router = null ; 
+							router  = (OutMessageRouter) UKDataContext.getContext().getBean(agentUser.getChannel()) ;
+							SessionConfig sessionConfig = ServiceQuene.initSessionConfig(super.getOrgi(request)) ;
+							if(router!=null && sessionConfig != null && sessionConfig.isEnabletransmsg()){
+								router.handler(agentUser.getUserid(), UKDataContext.MessageTypeEnum.STATUS.toString(), agentUser.getAppid(), outMessage);
+							}
+						}
 					}
 					NettyClients.getInstance().sendAgentEventMessage(agentno, UKDataContext.MessageTypeEnum.NEW.toString(), agentUser);
 				}

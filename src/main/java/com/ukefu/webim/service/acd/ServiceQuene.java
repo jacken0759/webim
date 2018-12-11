@@ -198,7 +198,7 @@ public class ServiceQuene {
 						OutMessageRouter router = null ; 
 						router  = (OutMessageRouter) UKDataContext.getContext().getBean(agentUser.getChannel()) ;
 						if(router!=null){
-							router.handler(agentUser.getUserid(), UKDataContext.MessageTypeEnum.MESSAGE.toString(), agentUser.getAppid(), outMessage);
+							router.handler(agentUser.getUserid(), UKDataContext.MessageTypeEnum.STATUS.toString(), agentUser.getAppid(), outMessage);
 						}
 					}
 
@@ -761,7 +761,23 @@ public class ServiceQuene {
 		}
 		return successMsg ;
 	}
-	
+	/**
+	 * 转接提示信息
+	 * @param agentStatus
+	 * @return
+	 */
+	public static String getTransMessage(AgentService agentService ,String channel,String orgi){
+		String queneTip = "<span id='agentno'>"+agentService.getAgentusername()+"</span>" ;
+		if(!UKDataContext.ChannelTypeEnum.WEBIM.toString().equals(channel)){
+			queneTip = agentService.getAgentusername() ;
+		}
+		SessionConfig sessionConfig = initSessionConfig(orgi) ;
+		String successMsg = "已为你转接给坐席"+queneTip;
+		if(!StringUtils.isBlank(sessionConfig.getTransmsg())){
+			successMsg = sessionConfig.getTransmsg().replaceAll("\\{agent\\}", queneTip) ;
+		}
+		return successMsg ;
+	}
 	/**
 	 * 
 	 * @param agentStatus

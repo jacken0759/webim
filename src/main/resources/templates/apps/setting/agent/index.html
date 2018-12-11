@@ -708,6 +708,32 @@
 													</div>
 												</div>
 											</div>
+											<div class="ukefu-webim-prop">
+												<div class="ukefu-webim-tl" style="clear:both;">22、启用人工坐席转接成功提示消息</div>
+												<div class="box-item">
+													<div class="row">
+														<div class="col-lg-8">
+															<p>访客端转接信息提醒功能</p>
+															<p style="color:#888888;font-size:13px;margin-top:10px;">开启后，工坐席转接成功后访客端会有信息提醒</p>
+														</div>
+														<div class="col-lg-4" style="text-align:right;">
+															<input type="checkbox" title="启用" name="enabletransmsg" id="enabletransmsg" lay-filter="enabletransmsg" <#if sessionConfig?? && sessionConfig.enabletransmsg == true>checked="checked"</#if>>
+														</div>
+													</div>
+												</div>
+												<div class="box-item" id="enabletransmsg_tip" style="<#if sessionConfig?? && sessionConfig.enabletransmsg == false>display:none;</#if>">	
+													<div class="row">
+														<div class="col-lg-8">
+															<p>人工坐席转接成功提示消息（坐席使用{agent}替换）</p>
+														</div>
+													</div>
+													<div class="row" style="margin-top:10px;">
+														<div class="col-lg-12">
+															<textarea name=transmsg id="transmsg" autocomplete="off" class="layui-input" resize="false" style="height:90px;line-height:22px;resize: none;"><#if sessionConfig?? && sessionConfig.transmsg??>${sessionConfig.transmsg}<#else>已为您转接给坐席{agent}。</#if></textarea>
+														</div>
+													</div>
+												</div>
+											</div>
 											
 										</div>
 									</div>
@@ -806,6 +832,15 @@
 				$('#satisf_op').hide();
 			}
 		});
+		form.on("checkbox(enabletransmsg)" , function(data){
+			if(data.elem.checked == true){
+				$('#enabletransmsg_tip').show();		
+			}else{
+				
+				$('#enabletransmsg_tip').hide();
+			}
+		});
+		
 		form.on("select(worktype)" , function(data){
 			if(data.value == 'work'){
 				$('.work').show();		

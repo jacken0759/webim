@@ -53,6 +53,9 @@ public class SessionConfig implements java.io.Serializable{
 	private String noagentmsg ;		//无客服在线提示信息
 	private String agentbusymsg ;	//坐席忙提示信息
 	
+	private String transmsg ;	//转接提示信息
+	private boolean enabletransmsg ;	//转接提示信息
+	
 	private boolean agentautoleave;	//坐席关闭浏览器后自动离线
 	
 	private String successmsg ;		//坐席分配成功提示消息
@@ -449,4 +452,18 @@ public class SessionConfig implements java.io.Serializable{
 		}
 		return sessionConfigItemList ;
 	}
+	public String getTransmsg() {
+		return transmsg;
+	}
+	public void setTransmsg(String transmsg) {
+		this.transmsg = transmsg;
+	}
+	public boolean isEnabletransmsg() {
+		return enabletransmsg;
+	}
+	public void setEnabletransmsg(boolean enabletransmsg) {
+		this.enabletransmsg = enabletransmsg;
+	}
+	
+	
 }
