@@ -640,3 +640,5 @@ ALTER TABLE uk_sessionconfig ADD enabletransmsg tinyint(4) DEFAULT 0 COMMENT '�
 ALTER TABLE uk_sales_product modify column price DECIMAL(9,2) DEFAULT 0;
 
 ALTER TABLE uk_jobdetailproduct modify column price DECIMAL(9,2) DEFAULT 0;
+
+ALTER TABLE uk_sessionconfig ADD enablersession tinyint(4) DEFAULT 0 COMMENT '是否启用恢复对话功能';

@@ -714,7 +714,7 @@
 													<div class="row">
 														<div class="col-lg-8">
 															<p>访客端转接信息提醒功能</p>
-															<p style="color:#888888;font-size:13px;margin-top:10px;">开启后，工坐席转接成功后访客端会有信息提醒</p>
+															<p style="color:#888888;font-size:13px;margin-top:10px;">开启后，人工坐席转接成功后访客端会有信息提醒</p>
 														</div>
 														<div class="col-lg-4" style="text-align:right;">
 															<input type="checkbox" title="启用" name="enabletransmsg" id="enabletransmsg" lay-filter="enabletransmsg" <#if sessionConfig?? && sessionConfig.enabletransmsg == true>checked="checked"</#if>>
@@ -734,7 +734,20 @@
 													</div>
 												</div>
 											</div>
-											
+											<div class="ukefu-webim-prop">
+												<div class="ukefu-webim-tl" style="clear:both;">23、启用会话恢复功能</div>
+												<div class="box-item">
+													<div class="row">
+														<div class="col-lg-8">
+															<p>会话恢复功能</p>
+															<p style="color:#888888;font-size:13px;margin-top:10px;">开启后，访客重新发起会话时会优先恢复与之前坐席的会话</p>
+														</div>
+														<div class="col-lg-4" style="text-align:right;">
+															<input type="checkbox" title="启用" name="enablersession" id="enablersession" lay-filter="enablersession" <#if sessionConfig?? && sessionConfig.enablersession == true>checked="checked"</#if>>
+														</div>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>

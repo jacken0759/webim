@@ -103,6 +103,7 @@ public class SessionConfig implements java.io.Serializable{
 	private String servicedic ;			//会话分类
 	private boolean servicekind ;		//启用服务分类
 	
+	private boolean enablersession ;	//启用恢复对话功能
 	
 	@Id
 	@Column(length = 32)
@@ -463,6 +464,12 @@ public class SessionConfig implements java.io.Serializable{
 	}
 	public void setEnabletransmsg(boolean enabletransmsg) {
 		this.enabletransmsg = enabletransmsg;
+	}
+	public boolean isEnablersession() {
+		return enablersession;
+	}
+	public void setEnablersession(boolean enablersession) {
+		this.enablersession = enablersession;
 	}
 	
 	

@@ -427,18 +427,18 @@ public class ServiceQuene {
 		/**
 		 * 查询条件，当前在线的 坐席，并且 未达到最大 服务人数的坐席
 		 */
-		
+		SessionConfig config = initSessionConfig(orgi) ;
 		List<AgentStatus> agentStatusList = new ArrayList<AgentStatus>();
 		PagingPredicate<String, AgentStatus> pagingPredicate = null ;
 		AgentStatus agentStatus = null ;
 		/**
 		 * 处理ACD 的 技能组请求和 坐席请求
 		 */
-		if(!StringUtils.isBlank(agentUser.getAgentno())){
+		if(!StringUtils.isBlank(agentUser.getAgentno()) && config.isEnablersession() && CacheHelper.getAgentStatusCacheBean().getCacheObject(agentUser.getAgentno(), agentUser.getOrgi()) != null){
 			agentStatusList.add((AgentStatus) CacheHelper.getAgentStatusCacheBean().getCacheObject(agentUser.getAgentno(), agentUser.getOrgi())) ;
 		}
 		if(agentStatusList.size() == 0) {
-			if(!StringUtils.isBlank(agentUser.getAgent())){
+			if(!StringUtils.isBlank(agentUser.getAgent()) && CacheHelper.getAgentStatusCacheBean().getCacheObject(agentUser.getAgent(), agentUser.getOrgi()) != null){
 				pagingPredicate = new PagingPredicate<String, AgentStatus>(  new SqlPredicate( " busy = false AND agentno = '" + agentUser.getAgent()+"' AND orgi = '" + orgi +"'") , 1 );
 			}else if(!StringUtils.isBlank(agentUser.getSkill())){
 				pagingPredicate = new PagingPredicate<String, AgentStatus>(  new SqlPredicate( " busy = false AND skill = '" + agentUser.getSkill()+"' AND orgi = '" + orgi +"'") , 1 );
@@ -450,7 +450,6 @@ public class ServiceQuene {
 		AgentService agentService = null ;	//放入缓存的对象
 		if(agentStatusList!=null && agentStatusList.size() > 0){
 			agentStatus = agentStatusList.get(0) ;
-			SessionConfig config = initSessionConfig(orgi) ;
 			if(agentStatus !=null && config !=null && agentStatus.getUsers() >= config.getMaxuser()){
 				agentStatus = null ;
 				/**
