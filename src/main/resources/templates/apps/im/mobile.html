@@ -414,7 +414,7 @@
 			<#if agent??>,agent:"${agent}"</#if>
 			<#if title??>,title:"${title?url}"</#if>
 			<#if traceid??>,url:"${url?url}"</#if>
-			<#if traceid??>,traceid:${traceid}"</#if>
+			<#if traceid??>,traceid:"${traceid}"</#if>
 		});
     })
     socket.on("agentstatus",function(data){
