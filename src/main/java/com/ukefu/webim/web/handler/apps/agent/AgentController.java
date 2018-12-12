@@ -547,7 +547,7 @@ public class AgentController extends Handler {
 	    	
 	    	if(!StringUtils.isBlank(user.getOrgan())){
 	    		Organ organ = organRes.findByIdAndOrgi(user.getOrgan(), super.getOrgiByTenantshare(request)) ;
-	    		if(organ!=null && organ.isSkill()){
+	    		if(organ!=null){
 	    			agentStatus.setSkill(organ.getId());
 	    			agentStatus.setSkillname(organ.getName());
 	    		}
