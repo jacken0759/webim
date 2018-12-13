@@ -93,20 +93,22 @@ public class ActivityResource extends Resource{
 				}
 			}
 				
-			
-			if(this.callAgentList == null) {
-				this.callAgentList = UKDataContext.getContext().getBean(CallAgentRepository.class).findByActidAndOrgi(this.jobDetail.getId() , this.jobDetail.getOrgi()) ;	
+			if(isInit) {
+				if(this.callAgentList == null) {
+					this.callAgentList = UKDataContext.getContext().getBean(CallAgentRepository.class).findByActidAndOrgi(this.jobDetail.getId() , this.jobDetail.getOrgi()) ;	
+				}
 			}
-			
 			/**
 			 * 生成 活动任务， 然后完成分配 , 同时还需要生成 筛选表单的筛选记录 ， 在后台管理界面上可以看到
 			 */
 			if(this.callAgentList!=null && this.callAgentList.size() > 0) {
-				//要分配的总数
-				if(actiNum == null) {
-					actiNum = 0;
-					for(CallAgent c : this.callAgentList) {
-						actiNum = actiNum + c.getDisnum();
+				if(isInit) {
+					//要分配的总数
+					if(this.actiNum == null) {
+						this.actiNum = 0;
+						for(CallAgent c : this.callAgentList) {
+							this.actiNum = this.actiNum + c.getDisnum();
+						}
 					}
 				}
 				this.current = this.callAgentList.remove(0) ;
@@ -117,12 +119,12 @@ public class ActivityResource extends Resource{
 				 */
 				if(isRecovery()) {
 					//回收数据 , 需要传入回收的目标  ： 包括 批次ID，任务ID，筛选ID，活动ID
-					dataList = SearchTools.recoversearch(this.jobDetail.getOrgi(), this.jobDetail.getExectype(), this.jobDetail.getExectarget() , metadataTable ,0, 5000) ;
+					this.dataList = SearchTools.recoversearch(this.jobDetail.getOrgi(), this.jobDetail.getExectype(), this.jobDetail.getExectarget() , metadataTable ,0, 5000) ;
 				}else {
-					dataList = SearchTools.dissearch(this.jobDetail.getOrgi(), formFilter, formFilterList , metadataTable ,0, 5000) ;
+					this.dataList = SearchTools.dissearch(this.jobDetail.getOrgi(), formFilter, formFilterList , metadataTable ,0, 5000) ;
 				}
 				//判断是否分配完毕
-				if(dataList.getTotalElements() > dataList.getContent().size() && actiNum != null && actiNum > dataList.getContent().size()) {
+				if(this.dataList.getTotalElements() > this.dataList.getContent().size() && actiNum != null && actiNum > this.dataList.getContent().size()) {
 					this.isEnd = false;
 				}else {
 					this.isEnd = true;
@@ -179,6 +181,7 @@ public class ActivityResource extends Resource{
 					this.callOutFilterRes.save(filter) ;
 				}
 			}
+			
 		}
 	}
 
@@ -318,12 +321,14 @@ public class ActivityResource extends Resource{
 				}
 			}
 		}
-		meta.getDataBean().getValues().put("updatetime", System.currentTimeMillis()) ;
-		
-		/**
-		 * 更新记录（是否同时保存分配信息，以便于查看分配历史？）
-		 */
-		batchDataProcess.process(meta.getDataBean());
+		if(meta.getDataBean() != null) {
+			meta.getDataBean().getValues().put("updatetime", System.currentTimeMillis()) ;
+			
+			/**
+			 * 更新记录（是否同时保存分配信息，以便于查看分配历史？）
+			 */
+			batchDataProcess.process(meta.getDataBean());
+		}
 	}
 
 	@Override
@@ -368,16 +373,17 @@ public class ActivityResource extends Resource{
 						}
 					}
 				}else {
-					if(!isEnd) {
+					if(!this.isEnd) {
 						this.callAgentList.add(this.current) ;
 					}
 				}
 			}
 		}
-		if(outputTextFormat == null && !this.isEnd) {
+		if(outputTextFormat == null && !this.isEnd && this.current!=null ) {
 			this.isInit = false;
+			batchDataProcess.end();
 			this.begin();
-			outputTextFormat = this.next();
+			outputTextFormat = new OutputTextFormat(this.jobDetail) ;
 		}
 		return outputTextFormat;
 	}
