@@ -1,5 +1,6 @@
 package com.ukefu.webim.web.handler.admin.organ;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,13 +12,14 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ukefu.core.UKDataContext;
-import com.ukefu.util.Menu;
+import com.ukefu.util.Menu; 
 import com.ukefu.webim.service.cache.CacheHelper;
 import com.ukefu.webim.service.repository.AreaTypeRepository;
 import com.ukefu.webim.service.repository.OrganRepository;
@@ -302,16 +304,16 @@ public class OrganController extends Handler{
     		msg = "admin_organ_not_exist" ;
     	}
     	return request(super.createRequestPageTempletResponse("redirect:/admin/organ/index.html?msg="+msg));
-    }
+    } 
     
     @RequestMapping("/auth")
     @Menu(type = "admin" , subtype = "organ")
     public ModelAndView auth(ModelMap map ,HttpServletRequest request , @Valid String id) {
     	
     	SysDic sysDic = sysDicRes.findByCode(UKDataContext.UKEFU_SYSTEM_AUTH_DIC) ;
-    	if(sysDic!=null){
-    		map.addAttribute("resourceList", sysDicRes.findByDicid(sysDic.getId())) ;
-    	}
+    	if(sysDic!=null){ 
+    		map.addAttribute("resourceList", sysDicRes.findByDicid(sysDic.getId(),new PageRequest(0,1000, Direction.ASC , "createtime")).getContent()) ; 
+    	 }
     	
     	map.addAttribute("sysDic", sysDic) ;
     	Organ organData = organRepository.findByIdAndOrgi(id, super.getOrgiByTenantshare(request)) ;
