@@ -68,26 +68,26 @@ public abstract interface OnlineUserRepository extends JpaRepository<OnlineUser,
 	@Query("select count(id) from AgentService where orgi = ?1 and appid = ?2 and createtime > ?3 and createtime < ?4")
 	Long countByOrgiAndAppidForCount(String orgi ,String appid ,Date start,Date end);
 	
-	@Query("select count(id) from StatusEvent where discaller = ?1 and misscall = false")
+	@Query("select count(id) from StatusEvent where discaller = ?1 ")
 	Long countByCallerFromCallCenter(String caller);
 	
-	@Query("select count(id) from StatusEvent where discalled = ?1 and misscall = false")
+	@Query("select count(id) from StatusEvent where discalled = ?1 ")
 	Long countByCalledFromCallCenter(String called);
 	
-	@Query("select count(id) from StatusEvent where (discaller = ?1 or discalled = ?1) and misscall = false")
+	@Query("select count(id) from StatusEvent where (discaller = ?1 or discalled = ?1) ")
 	Long countByAniFromCallCenter(String ani);
 	
 	//振铃 只计算未接通电话
-	@Query("select avg(ringduration) from StatusEvent where ( discaller = ?1 or discalled = ?1 ) and answertime is null ")
+	@Query("select avg(ringduration) from StatusEvent where ( discaller = ?1 or discalled = ?1 ) and misscall = true ")
 	Long avgByRingDurationFromCallCenter(String ani);
 	//通话 只计算接通电话
-	@Query("select avg(duration) from StatusEvent where ( discaller = ?1 or discalled = ?1 )  and answertime is not null and creater = 'answered' ")
+	@Query("select avg(duration) from StatusEvent where ( discaller = ?1 or discalled = ?1 )  and misscall = false ")
 	Long avgByDurationFromCallCenter(String ani);
 	
-	@Query("select sum(ringduration) from StatusEvent where ( discaller = ?1 or discalled = ?1 )  and answertime is null ")
+	@Query("select sum(ringduration) from StatusEvent where ( discaller = ?1 or discalled = ?1 )  and misscall = true ")
 	Long sumByRingDurationFromCallCenter(String ani);
 	
-	@Query("select sum(duration) from StatusEvent where ( discaller = ?1 or discalled = ?1 )  and answertime is not null and creater = 'answered' ")
+	@Query("select sum(duration) from StatusEvent where ( discaller = ?1 or discalled = ?1 )  and misscall = false ")
 	Long sumByDurationFromCallCenter(String ani);
 	
 	@Query("select hourstr as dt, count(id) as calls from StatusEvent where orgi = ?1 and datestr = ?2 group by hourstr order by dt asc")
@@ -135,11 +135,11 @@ public abstract interface OnlineUserRepository extends JpaRepository<OnlineUser,
 	Long countByToadyExtentionFromStatusEvent(String orgi, String ani, String called, Date begin, Date end);
 	
 	//查询指定分机当天-平均通话时长 （接通）
-	@Query("select AVG(duration) from StatusEvent where orgi = ?1 and (discaller = ?2 or discalled = ?3) and ?4 < createtime and createtime < ?5 and answertime is not null and creater = 'answered' ")
+	@Query("select AVG(duration) from StatusEvent where orgi = ?1 and (discaller = ?2 or discalled = ?3) and ?4 < createtime and createtime < ?5 and misscall = false ")
 	Long countByToadyExtDurFromStatusEvent(String orgi, String ani, String called, Date begin, Date end);
 	
 	//查询指定分机当天-平均振铃时长 (未接通)
-	@Query("select AVG(ringduration) from StatusEvent where orgi = ?1 and (discaller = ?2 or discalled = ?3) and ?4 < createtime and createtime < ?5 and answertime is null")
+	@Query("select AVG(ringduration) from StatusEvent where orgi = ?1 and (discaller = ?2 or discalled = ?3) and ?4 < createtime and createtime < ?5 and misscall = true ")
 	Long countByToadyExtRingFromStatusEvent(String orgi, String ani, String called, Date begin, Date end);
 	
 	//根据质检人和质检状态
