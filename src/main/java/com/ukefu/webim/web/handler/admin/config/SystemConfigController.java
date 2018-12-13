@@ -178,10 +178,10 @@ public class SystemConfigController extends Handler{
     		config.setCreater(super.getUser(request).getId());
     		config.setCreatetime(new Date());
     		systemConfig = config ;
-    		jkspassword = systemConfig.getJkspassword() ;
+    		jkspassword = UKTools.encryption(systemConfig.getJkspassword() );
     	}else{
-    		jkspassword = systemConfig.getJkspassword() ;
     		UKTools.copyProperties(config,systemConfig);
+    		jkspassword = UKTools.encryption(systemConfig.getJkspassword() );
     	}
     	if(config.isEnablessl()){
 	    	if(keyfile!=null && keyfile.getBytes()!=null && keyfile.getBytes().length > 0 && keyfile.getOriginalFilename()!=null && keyfile.getOriginalFilename().length() > 0){
@@ -194,7 +194,7 @@ public class SystemConfigController extends Handler{
 		    	Properties prop = new Properties();     
 		    	FileOutputStream oFile = new FileOutputStream(sslFilePath);//true表示追加打开
 		    	if(systemConfig.getJkspassword()!=null) {
-		    		prop.setProperty("key-store-password", UKTools.encryption(systemConfig.getJkspassword())) ;
+		    		prop.setProperty("key-store-password", jkspassword) ;
 		    	}
 		    	prop.setProperty("key-store",systemConfig.getJksfile()) ;
 		    	prop.store(oFile , "SSL Properties File");
@@ -254,7 +254,7 @@ public class SystemConfigController extends Handler{
     	}
     	
     	if(!StringUtils.isBlank(jkspassword)) {
-    		systemConfig.setJkspassword(UKTools.encryption(jkspassword));
+    		systemConfig.setJkspassword(jkspassword);
     	}
     	systemConfigRes.save(systemConfig) ;
     	
