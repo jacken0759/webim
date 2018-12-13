@@ -46,6 +46,9 @@ public class DSData {
 		this.task = task ;
 		this.database = database ;
 		this.jobDetail = jobDetail ;
+		if(this.jobDetail != null) {
+			this.report = this.jobDetail.getReport() ;
+		}
 	}
 	
 	public MetadataTable getTask() {

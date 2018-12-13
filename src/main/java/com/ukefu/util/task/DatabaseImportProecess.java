@@ -30,6 +30,7 @@ import com.ukefu.webim.web.model.UKeFuDic;
 
 public class DatabaseImportProecess extends DataProcess{
 	private AtomicInteger pages = new AtomicInteger() , errors = new AtomicInteger(); 
+	private static final int PER_PAGE_SIZE = 5000 ;
 	
 	public DatabaseImportProecess(DSDataEvent event){
 		super(event);
@@ -49,7 +50,7 @@ public class DatabaseImportProecess extends DataProcess{
 					resultNum = 0 ;
 					if(event.getDSData().getJobDetail()!=null && !StringUtils.isBlank(event.getDSData().getJobDetail().getSource())) {
 			            statement = connection.createStatement() ;
-			            TabelSql tableSQL = DatabaseMetaDataHandler.getSQL(event.getDSData().getDatabase(), event.getDSData().getJobDetail().getSource() , pages.intValue() , 5000) ;
+			            TabelSql tableSQL = DatabaseMetaDataHandler.getSQL(event.getDSData().getDatabase(), event.getDSData().getJobDetail().getSource() , pages.intValue() , PER_PAGE_SIZE) ;
 			            result = statement.executeQuery(tableSQL.getSql()) ;
 			            resultNum = processDb(event , result);
 			            if(result!=null) {
@@ -59,7 +60,7 @@ public class DatabaseImportProecess extends DataProcess{
 			            	statement.close();
 			            }
 					}
-				}while(resultNum > 0);
+				}while(resultNum == PER_PAGE_SIZE);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
