@@ -29,6 +29,8 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.ukefu.util.UKTools;
+
 /**
  * @author jaddy0302 Rivulet Reporter.java 2010-3-7
  * 
@@ -46,7 +48,7 @@ public class Reporter implements java.io.Serializable{
 	private String dataid ;
 	private String title ;
 
-	private String id;
+	private String id = UKTools.getUUID();
 	private String status ;
 	private String amount ;
 	private long pages ;
@@ -80,7 +82,7 @@ public class Reporter implements java.io.Serializable{
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "assigned")
 	public String getId() {
 		return id;
 	}
