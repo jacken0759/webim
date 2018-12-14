@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -198,7 +199,7 @@ public class RoleController extends Handler{
     public ModelAndView auth(ModelMap map , HttpServletRequest request , @Valid String id) {
     	SysDic sysDic = sysDicRes.findByCode(UKDataContext.UKEFU_SYSTEM_AUTH_DIC) ;
     	if(sysDic!=null){
-    		map.addAttribute("resourceList", sysDicRes.findByDicid(sysDic.getId())) ;
+    		map.addAttribute("resourceList", sysDicRes.findByDicid(sysDic.getId(),new PageRequest(0,1000, Direction.ASC , "createtime")).getContent()) ;
     	}
     	map.addAttribute("sysDic", sysDic) ;
     	Role role = roleRepository.findByIdAndOrgi(id, super.getOrgiByTenantshare(request)) ;
