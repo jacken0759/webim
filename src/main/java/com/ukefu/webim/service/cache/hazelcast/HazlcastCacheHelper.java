@@ -6,7 +6,9 @@ import com.ukefu.webim.service.cache.CacheInstance;
 import com.ukefu.webim.service.cache.hazelcast.impl.AgentStatusCache;
 import com.ukefu.webim.service.cache.hazelcast.impl.AgentUserCache;
 import com.ukefu.webim.service.cache.hazelcast.impl.ApiUserCache;
+import com.ukefu.webim.service.cache.hazelcast.impl.CallCenterAgentCache;
 import com.ukefu.webim.service.cache.hazelcast.impl.CallCenterCache;
+import com.ukefu.webim.service.cache.hazelcast.impl.CallOutCache;
 import com.ukefu.webim.service.cache.hazelcast.impl.JobCache;
 import com.ukefu.webim.service.cache.hazelcast.impl.MultiCache;
 import com.ukefu.webim.service.cache.hazelcast.impl.OnlineCache;
@@ -58,7 +60,7 @@ public class HazlcastCacheHelper implements CacheInstance{
 	}
 	@Override
 	public CacheBean getCallCenterAgentCacheBean() {
-		return UKDataContext.getContext().getBean(CallCenterCache.class).getCacheInstance(CacheServiceEnum.CALLCENTER_AGENT.toString()) ;
+		return UKDataContext.getContext().getBean(CallCenterAgentCache.class).getCacheInstance(CacheServiceEnum.CALLCENTER_AGENT.toString()) ;
 	}
 	@Override
 	public CacheBean getApiUserCacheBean() {
@@ -71,7 +73,7 @@ public class HazlcastCacheHelper implements CacheInstance{
 	@Override
 	public CacheBean getCallOutCacheBean() {
 		// TODO Auto-generated method stub
-		return UKDataContext.getContext().getBean(JobCache.class).getCacheInstance(CacheServiceEnum.HAZLCAST_CALLOUT_CACHE.toString()) ;
+		return UKDataContext.getContext().getBean(CallOutCache.class).getCacheInstance(CacheServiceEnum.HAZLCAST_CALLOUT_CACHE.toString()) ;
 	}
 	@Override
 	public CacheBean getQcQueueBean() {
