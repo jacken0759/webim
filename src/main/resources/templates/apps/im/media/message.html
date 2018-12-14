@@ -42,7 +42,7 @@
 	<ul class="info-list">
 		<#list chatMessage.suggest as item>
 		<li class="ukefu-suggest-item">
-			<a href="javascript:void(0)" class="suggestitem" onclick="sendMessageTextWithID('${item.title!''}' , '${item.id!''}')">
+			<a href="javascript:void(0)" class="suggestitem" onclick="sendMessageTextWithID('${(item.title!'')?replace("'","")}' , '${item.id!''}')">
 				${item.title!''}
 			</a>
 		</li>
