@@ -34,6 +34,15 @@ public class CallCenterAgent implements java.io.Serializable ,  Comparable<CallC
 	
 	private String nameid ;
 	
+	private String agent;
+	
+	public String getAgent() {
+		return agent;
+	}
+	public void setAgent(String agent) {
+		this.agent = agent;
+	}
+	
 	public CallCenterAgent(String userid, String extno , String orgi) {
 		this.userid = userid ;
 		this.extno = extno ;
