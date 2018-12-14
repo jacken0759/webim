@@ -61,7 +61,7 @@ public class ActivityResource extends Resource{
 	
 	private boolean isEnd = false;
 	private boolean isInit = true;
-	private Integer actiNum = null;//分配总数
+	private Integer actiNum = null;//分配总数 - 已分配数
 	private int currentSum = 0;//当前已查询总数
 	public ActivityResource(JobDetail jobDetail) {
 		this.jobDetail = jobDetail ;
@@ -110,6 +110,26 @@ public class ActivityResource extends Resource{
 							this.actiNum = this.actiNum + c.getDisnum();
 						}
 					}
+					//以活动抽取数量为准 
+					if(this.actiNum > this.jobDetail.getNamenum()) {
+						this.actiNum = this.jobDetail.getNamenum();
+					}
+					//分配策略 部分分配
+					if("part".equals(this.jobDetail.getDistype())) {
+						if("part".equals(this.jobDetail.getDistpolicy())) {
+							//比例
+							int n = (this.jobDetail.getNamenum() * this.jobDetail.getPolicynum())/100;
+							//以活动抽取数量为准 
+							if(this.actiNum > n) {
+								this.actiNum = n;
+							}
+						}else if("num".equals(this.jobDetail.getDistpolicy())) {
+							//以活动抽取数量为准 
+							if(this.actiNum > this.jobDetail.getPolicynum()) {
+								this.actiNum = this.jobDetail.getPolicynum();
+							}
+						}
+					}
 				}
 				this.current = this.callAgentList.remove(0) ;
 			}
@@ -123,8 +143,8 @@ public class ActivityResource extends Resource{
 				}else {
 					this.dataList = SearchTools.dissearch(this.jobDetail.getOrgi(), formFilter, formFilterList , metadataTable ,0, 5000) ;
 				}
-				//判断是否分配完毕
-				if(this.dataList.getTotalElements() > this.dataList.getContent().size() && actiNum != null && actiNum > this.dataList.getContent().size()) {
+				//判断是否分配完毕 剩余分配数>当前查询总数
+				if(this.dataList.getTotalElements() > this.dataList.getContent().size() && actiNum != null && (this.actiNum- this.atomInt.intValue()) > this.dataList.getContent().size()) {
 					this.isEnd = false;
 				}else {
 					this.isEnd = true;
@@ -334,7 +354,7 @@ public class ActivityResource extends Resource{
 	@Override
 	public OutputTextFormat next() throws Exception {
 		OutputTextFormat outputTextFormat = null;
-		if(this.dataList!=null && this.current!=null) {
+		if(this.dataList!=null && this.current!=null && this.actiNum > atomInt.intValue() ) {
 			synchronized (this.dataList) {
 				if(atomInt.intValue() < this.currentSum ) {
 					if(this.isRecovery()) {
