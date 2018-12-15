@@ -1157,6 +1157,7 @@ public class UKTools {
 		String retValue = templet ;
 		if(templet!=null && templet.length()>0 && templet.indexOf("$")>=0){
 			cfg = new Configuration();
+			cfg.setClassicCompatible(true);
 			TempletLoader loader = new TempletLoader(templet) ;
 			cfg.setTemplateLoader(loader);   
 			cfg.setDefaultEncoding("UTF-8");  
