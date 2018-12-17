@@ -83,7 +83,7 @@ public class ExcelExporterProcess {
 
 		// 设置单元格字体 
 		Font font = wb.createFont(); 
-		font.setFontName("微软雅黑"); 
+		//font.setFontName("微软雅黑"); 
 		font.setFontHeight((short) 200); 
 		cellStyle.setFont(font); 
 		cellStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
@@ -100,7 +100,7 @@ public class ExcelExporterProcess {
 	private CellStyle createFirstCellStyle(){
 		CellStyle cellStyle = baseCellStyle();
 		Font font = wb.createFont();
-		font.setFontName("微软雅黑"); 
+		//font.setFontName("微软雅黑"); 
 		font.setFontHeight((short) 180);
 		cellStyle.setFont(font);
 		
@@ -229,7 +229,7 @@ public class ExcelExporterProcess {
 		
 		Font font = wb.createFont(); 
 		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD); 
-		font.setFontName("宋体"); 
+		//font.setFontName("宋体"); 
 		font.setFontHeight((short) 200); 
 		cellStyle.setFont(font); 
 		
