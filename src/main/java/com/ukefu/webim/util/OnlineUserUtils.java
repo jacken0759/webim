@@ -281,7 +281,8 @@ public class OnlineUserUtils {
 				area = topicType;
 			}
 		}else{
-			if(!StringUtils.isBlank(topicType.getParentid()) && !topicType.getParentid().equals("0")){
+			//不等于自己
+			if(!StringUtils.isBlank(topicType.getParentid()) && !topicType.getParentid().equals("0") && !topicType.getParentid().equals(topicType.getId())){
 				for(KnowledgeType temp : topicTypeList){
 					if(temp.getId().equals(topicType.getParentid())){
 						if(!StringUtils.isBlank(temp.getArea())){
