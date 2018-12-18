@@ -80,7 +80,7 @@ public class ApiIMController extends Handler{
 	 * @param id	snsaccountid
 	 * @return
 	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}")
 	@Menu(type = "apps" , subtype = "webim" , access = true)
 	@ApiOperation("获取在线客服")
     public ResponseEntity<RestResult> list(HttpServletRequest request , @PathVariable String id) {
@@ -97,7 +97,7 @@ public class ApiIMController extends Handler{
 	 * @param username	搜索用户名，精确搜索
 	 * @return
 	 */
-	@RequestMapping(value = "/session", method = RequestMethod.GET)
+	@RequestMapping(value = "/session")
 	@Menu(type = "apps" , subtype = "webim" , access = true)
 	@ApiOperation("获取在线客服会话ID")
     public ResponseEntity<RestResult> session(HttpServletRequest request) {
@@ -113,7 +113,7 @@ public class ApiIMController extends Handler{
 	 * @throws TemplateException 
 	 * @throws IOException 
 	 */
-	@RequestMapping(value = "/query", method = RequestMethod.GET)
+	@RequestMapping(value = "/query")
 	@Menu(type = "apps" , subtype = "webim" , access = true)
 	@ApiOperation("获取推荐知识")
     public ResponseEntity<RestResult> query(HttpServletRequest request,@Valid String q,@Valid String appid) throws IOException, TemplateException {
@@ -128,7 +128,7 @@ public class ApiIMController extends Handler{
 	 * @throws TemplateException 
 	 * @throws IOException 
 	 */
-	@RequestMapping(value = "/hot", method = RequestMethod.GET)
+	@RequestMapping(value = "/hot")
 	@Menu(type = "apps" , subtype = "webim" , access = true)
 	@ApiOperation("获取推荐知识")
     public ResponseEntity<RestResult> hot(HttpServletRequest request,@Valid String q , @Valid String aiid) throws IOException, TemplateException {
@@ -141,7 +141,7 @@ public class ApiIMController extends Handler{
 	 * @param aiid    , AI标识	
 	 * @return
 	 */
-	@RequestMapping(value = "/ai", method = RequestMethod.GET)
+	@RequestMapping(value = "/ai")
 	@Menu(type = "apps" , subtype = "webim" , access = true)
 	@ApiOperation("获取在线客服会话ID")
     public ResponseEntity<RestResult> session(HttpServletRequest request , @Valid String aiid, @Valid String orgi) {
@@ -160,7 +160,7 @@ public class ApiIMController extends Handler{
 	 * @p 分页信息
 	 * @return
 	 */
-	@RequestMapping(value = "/chat/his", method = RequestMethod.GET)
+	@RequestMapping(value = "/chat/his")
 	@Menu(type = "apps" , subtype = "webim" , access = true)
 	@ApiOperation("获取在线客服会话历史消息")
     public ResponseEntity<RestResult> history(HttpServletRequest request , @Valid String userid, @Valid String orgi) {
@@ -174,7 +174,7 @@ public class ApiIMController extends Handler{
 	 * @p 分页信息
 	 * @return
 	 */
-	@RequestMapping(value = "/agent", method = RequestMethod.GET)
+	@RequestMapping(value = "/agent")
 	@Menu(type = "apps" , subtype = "webim" , access = true)
 	@ApiOperation("获取在线客服会话历史消息")
     public ResponseEntity<RestResult> agent(HttpServletRequest request , @Valid String orgi) {
@@ -188,7 +188,7 @@ public class ApiIMController extends Handler{
 	 * @p 分页信息
 	 * @return
 	 */
-	@RequestMapping(value = "/url", method = RequestMethod.GET)
+	@RequestMapping(value = "/url")
 	@Menu(type = "apps" , subtype = "webim" , access = true)
 	@ApiOperation("获取图片和语音信息资源的访问URL地址信息")
     public ResponseEntity<RestResult> url(HttpServletRequest request , @Valid String orgi) {
@@ -203,7 +203,7 @@ public class ApiIMController extends Handler{
 	 * @p 分页信息
 	 * @return
 	 */
-	@RequestMapping(value = "/satis", method = RequestMethod.GET)
+	@RequestMapping(value = "/satis")
 	@Menu(type = "apps" , subtype = "webim" , access = true)
 	@ApiOperation("获取满意度调查")
     public ResponseEntity<RestResult> satis(HttpServletRequest request , @Valid String orgi) {
@@ -262,7 +262,7 @@ public class ApiIMController extends Handler{
 	 * @p 分页信息
 	 * @return
 	 */
-	@RequestMapping(value = "/message/useful", method = RequestMethod.GET)
+	@RequestMapping(value = "/message/useful")
 	@Menu(type = "apps" , subtype = "webim" , access = true)
 	@ApiOperation("获取满意度调查")
     public ResponseEntity<RestResult> useful(HttpServletRequest request , @Valid String orgi , @Valid String id) {
@@ -282,7 +282,7 @@ public class ApiIMController extends Handler{
 	 * @p 分页信息
 	 * @return
 	 */
-	@RequestMapping(value = "/message/unuseful", method = RequestMethod.GET)
+	@RequestMapping(value = "/message/unuseful")
 	@Menu(type = "apps" , subtype = "webim" , access = true)
 	@ApiOperation("获取满意度调查")
     public ResponseEntity<RestResult> unuseful(HttpServletRequest request , @Valid String orgi , @Valid String id) {
@@ -297,7 +297,7 @@ public class ApiIMController extends Handler{
         return new ResponseEntity<>(new RestResult(RestResultType.OK), HttpStatus.OK);
     }
 	
-	@RequestMapping(value = "/suggest/mobile/{appid}", method = RequestMethod.GET)
+	@RequestMapping(value = "/suggest/mobile/{appid}")
     @Menu(type = "im" , subtype = "index" , access = true)
     public ResponseEntity<RestResult> mobilesuggest(ModelMap map , HttpServletRequest request , HttpServletResponse response,  @PathVariable String appid ,@Valid String q ,@Valid String traceid,@Valid String aiid ,@Valid String p ,@Valid String exchange, @Valid String title ,@Valid String url, @Valid String skill, @Valid String id , @Valid String userid , @Valid String agent , @Valid String name , @Valid String email ,@Valid String phone,@Valid String ai,@Valid String orgi ,@Valid String product,@Valid String description,@Valid String imgurl,@Valid String pid,@Valid String purl) throws Exception {
     	return new ResponseEntity<>(new RestResult(RestResultType.OK ,!StringUtils.isBlank(appid) && !StringUtils.isBlank(q) ? OnlineUserUtils.suggest(q, orgi, userid,OnlineUserUtils.cousult(appid ,null, consultInviteRepository) , aiid , skill  ): null), HttpStatus.OK);
