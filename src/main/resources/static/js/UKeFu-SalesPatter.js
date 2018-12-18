@@ -110,7 +110,8 @@ $(document).ready(function(){
 			    });
 			    j.makeTarget(eval(val), {
 			        dropOptions: { hoverClass: "hover" },
-			        anchor:"Continuous",
+			        /*anchor:"Continuous",*/
+			        anchor:"Top",
 			        endpoint:[ "Dot", { radius: 2, cssClass:"large-green" } ]
 			    });
 		    	//渲染底下元素（答案）
@@ -135,19 +136,20 @@ $(document).ready(function(){
 		    });
 		    //监听连接线事件
 		    j.bind("connection", function(p) {
-		    	if($(p.source).attr("parent-id") == $(p.target).attr("id")){
-		    		j.deleteConnection(p.connection);
+		    	if(false/*$(p.source).attr("parent-id") == $(p.target).attr("id")*/){
+		    		//j.deleteConnection(p.connection);
 		    	}else{
 		    		p.connection.bind("click", function() {
+		    			var obj = this;
 		    			top.layer.confirm("确认删除该连接吗？", {icon: 3, title:'提示'}, function(index){
 		        			top.layer.close(index);
 		        			if(confirm){
-		        				j.deleteConnection(this);
+		        				j.deleteConnection(obj);
 		  			          //删除答案连接
 		  			              $.ajax({
 		  				             type: "get",
 		  				             url: "/apps/salespatter/question/answer/edit",
-		  				             data: {answerid:this.sourceId.substr(1),queid:''},
+		  				             data: {answerid:obj.sourceId.substr(1),queid:''},
 		  				             dataType: "json",
 		  				             success: function(data){
 		  			                     }
