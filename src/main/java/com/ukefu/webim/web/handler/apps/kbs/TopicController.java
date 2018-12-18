@@ -159,7 +159,7 @@ public class TopicController extends Handler{
     	if(!StringUtils.isBlank(id)){
     		map.put("topic", topicRes.findOne(id)) ;
     	}
-    	List<KnowledgeType> knowledgeTypeList = knowledgeTypeRes.findByOrgi(super.getOrgi(request))  ; 
+    	List<KnowledgeType> knowledgeTypeList = knowledgeTypeRes.findByOrgiAndTypeid(super.getOrgi(request),"0")  ; 
     	map.put("knowledgeTypeList", knowledgeTypeList);
     	return request(super.createRequestPageTempletResponse("/apps/business/topic/edit"));
     }
