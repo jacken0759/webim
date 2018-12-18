@@ -111,6 +111,8 @@ public class UKDataContext {
 		
 		uKeFuResourceMap.put(TaskType.ACTIVE.toString(), ActivityResource.class) ;
 		
+		uKeFuResourceMap.put(TaskType.RECOVERY.toString(), ActivityResource.class) ;
+		
 		uKeFuResourceMap.put(TaskType.BATCH.toString(), BatchResource.class) ;
 		//质检分配任务
 		uKeFuResourceMap.put(TaskType.QUALITY.toString(), QualityResource.class) ;
@@ -430,7 +432,8 @@ public class UKDataContext {
 		BATCH,
 		ACTIVE,
 		QUALITY,
-		AISALES;//电销机器人任务
+		AISALES,//电销机器人任务
+		RECOVERY;//回收
 		public String toString(){
 			return super.toString().toLowerCase() ;
 		}

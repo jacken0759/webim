@@ -66,14 +66,33 @@ public class SearchTools {
 		queryBuilder.must(termQuery("validresult", "valid")) ;
 		
 		switch(cmd) {
-			case "actid" : queryBuilder.must(termQuery("actid", id)) ; break ;
+			//case "actid" : queryBuilder.must(termQuery("actid", id)) ; break ;
 			case "batid" : queryBuilder.must(termQuery("batid", id)) ; break ;
-			case "taskid" : queryBuilder.must(termQuery("taskid", id)) ; break ;
-			case "filterid" : queryBuilder.must(termQuery("filterid", id)) ; break ;
-			case "agent" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_AGENT, id)) ; break ;
+			case "batsuccess" :queryBuilder.must(termQuery("batid", id)) ; 
+								queryBuilder.must(termQuery("callstatus", UKDataContext.NamesCalledEnum.SUCCESS.toString()));break ;
+			case "batfailed" : queryBuilder.must(termQuery("batid", id)) ; 
+								queryBuilder.must(termQuery("callstatus", UKDataContext.NamesCalledEnum.FAILD.toString()));break ;
+			//case "taskid" : queryBuilder.must(termQuery("taskid", id)) ; break ;
+			//case "filterid" : queryBuilder.must(termQuery("filterid", id)) ; break ;
+			case "agent" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_AGENT, id)) ;
+							queryBuilder.should(termQuery("callstatus", UKDataContext.NameStatusTypeEnum.NOTCALL.toString()));
+							queryBuilder.should(termQuery("callstatus", UKDataContext.NameStatusTypeEnum.WASTE.toString()));break ;
+			case "agentsuccess" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_AGENT, id)) ; 
+								queryBuilder.must(termQuery("callstatus", UKDataContext.NamesCalledEnum.SUCCESS.toString()));break ;
+			case "agentfailed" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_AGENT, id)) ; 
+								queryBuilder.must(termQuery("callstatus", UKDataContext.NamesCalledEnum.FAILD.toString()));break ;
+			case "ai" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_AI, id)) ; break ;
+			case "aisuccess" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_AI, id)) ; 
+								queryBuilder.must(termQuery("callstatus", UKDataContext.NamesCalledEnum.SUCCESS.toString()));break ;
+			case "aifailed" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_AI, id)) ;
+							queryBuilder.must(termQuery("callstatus", UKDataContext.NamesCalledEnum.FAILD.toString()));break ;
 			case "skill" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, id)) ; break ;
-			case "taskskill" : queryBuilder.must(termQuery("taskid", id)).must(termQuery("status", UKDataContext.NamesDisStatusType.DISAGENT.toString())) ; break ;
-			case "filterskill" : queryBuilder.must(termQuery("filterid", id)).must(termQuery("status", UKDataContext.NamesDisStatusType.DISAGENT.toString())) ; break ;
+			case "skillsuccess" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, id)) ; 
+						queryBuilder.must(termQuery("callstatus", UKDataContext.NamesCalledEnum.SUCCESS.toString()));break ;
+			case "skillfailed" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, id)) ;
+						queryBuilder.must(termQuery("callstatus", UKDataContext.NamesCalledEnum.FAILD.toString()));break ;
+			//case "taskskill" : queryBuilder.must(termQuery("taskid", id)).must(termQuery("status", UKDataContext.NamesDisStatusType.DISAGENT.toString())) ; break ;
+			//case "filterskill" : queryBuilder.must(termQuery("filterid", id)).must(termQuery("status", UKDataContext.NamesDisStatusType.DISAGENT.toString())) ; break ;
 			default : queryBuilder.must(termQuery("actid", "NOT_EXIST_KEY")) ;  //必须传入一个进来;
 		}
 		

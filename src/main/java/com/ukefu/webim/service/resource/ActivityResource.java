@@ -1,7 +1,13 @@
 package com.ukefu.webim.service.resource;
 
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang3.StringUtils;
@@ -63,6 +69,12 @@ public class ActivityResource extends Resource{
 	private boolean isInit = true;
 	private Integer actiNum = null;//分配总数 - 已分配数
 	private int currentSum = 0;//当前已查询总数
+	
+	//回收要更新的表数据
+	Map<String,Map<String,Integer>> taskids;
+	Map<String,Map<String,Integer>> filterids;
+	Map<String,Map<String,Integer>> batids;
+	
 	public ActivityResource(JobDetail jobDetail) {
 		this.jobDetail = jobDetail ;
 		this.formFilterRes = UKDataContext.getContext().getBean(FormFilterRepository.class) ;
@@ -76,200 +88,347 @@ public class ActivityResource extends Resource{
 	
 	@Override
 	public void begin() throws Exception {
-		if(!StringUtils.isBlank(jobDetail.getFilterid())) {
-			
-			formFilter = formFilterRes.findByIdAndOrgi(jobDetail.getFilterid(), this.jobDetail.getOrgi()) ;
-			List<FormFilterItem> formFilterList = formFilterItemRes.findByOrgiAndFormfilterid(this.jobDetail.getOrgi(), jobDetail.getFilterid()) ;
-			if(formFilter!=null && !StringUtils.isBlank(formFilter.getFiltertype())) {
-				if(formFilter.getFiltertype().equals(UKDataContext.FormFilterTypeEnum.BATCH.toString())) {
-					batch = batchRes.findByIdAndOrgi(formFilter.getBatid(), this.jobDetail.getOrgi()) ;
-					if(batch!=null && !StringUtils.isBlank(batch.getActid())) {
-						metadataTable = metadataRes.findByTablename(batch.getActid()) ;
-					}
-				}else {	//业务表
-					if(!StringUtils.isBlank(formFilter.getTableid())) {
-						metadataTable = metadataRes.findById(formFilter.getTableid()) ;
-					}
-				}
+		if(this.isRecovery()) {
+			if(this.isInit) {
+				this.taskids = new HashMap<String,Map<String,Integer>>();
+				this.filterids = new HashMap<String,Map<String,Integer>>();
+				this.batids = new HashMap<String,Map<String,Integer>>();
 			}
-				
-			if(isInit) {
-				if(this.callAgentList == null) {
-					this.callAgentList = UKDataContext.getContext().getBean(CallAgentRepository.class).findByActidAndOrgi(this.jobDetail.getId() , this.jobDetail.getOrgi()) ;	
-				}
+			//回收数据 , 需要传入回收的目标  ： 包括 批次ID，任务ID，筛选ID，活动ID
+			this.dataList = SearchTools.recoversearch(this.jobDetail.getOrgi(), this.jobDetail.getExectype(), this.jobDetail.getExectarget() , metadataTable ,0, 5000) ;
+			//判断是否分配完毕
+			if(this.dataList.getTotalElements() > this.dataList.getContent().size()) {
+				this.isEnd = false;
+			}else {
+				this.isEnd = true;
 			}
-			/**
-			 * 生成 活动任务， 然后完成分配 , 同时还需要生成 筛选表单的筛选记录 ， 在后台管理界面上可以看到
-			 */
-			if(this.callAgentList!=null && this.callAgentList.size() > 0) {
-				if(isInit) {
-					//要分配的总数
-					if(this.actiNum == null) {
-						this.actiNum = 0;
-						for(CallAgent c : this.callAgentList) {
-							this.actiNum = this.actiNum + c.getDisnum();
-						}
-					}
-					//以活动抽取数量为准 
-					if(this.actiNum > this.jobDetail.getNamenum()) {
-						this.actiNum = this.jobDetail.getNamenum();
-					}
-					//分配策略 部分分配
-					if("part".equals(this.jobDetail.getDistype())) {
-						if("part".equals(this.jobDetail.getDistpolicy())) {
-							//比例
-							int n = (this.jobDetail.getNamenum() * this.jobDetail.getPolicynum())/100;
-							//以活动抽取数量为准 
-							if(this.actiNum > n) {
-								this.actiNum = n;
-							}
-						}else if("num".equals(this.jobDetail.getDistpolicy())) {
-							//以活动抽取数量为准 
-							if(this.actiNum > this.jobDetail.getPolicynum()) {
-								this.actiNum = this.jobDetail.getPolicynum();
-							}
-						}
-					}
-				}
-				this.current = this.callAgentList.remove(0) ;
-			}
-			if(metadataTable!=null) {
-				/**
-				 * 只加载 未分配的有效名单数据
-				 */
-				if(isRecovery()) {
-					//回收数据 , 需要传入回收的目标  ： 包括 批次ID，任务ID，筛选ID，活动ID
-					this.dataList = SearchTools.recoversearch(this.jobDetail.getOrgi(), this.jobDetail.getExectype(), this.jobDetail.getExectarget() , metadataTable ,0, 5000) ;
-				}else {
-					this.dataList = SearchTools.dissearch(this.jobDetail.getOrgi(), formFilter, formFilterList , metadataTable ,0, 5000) ;
-				}
-				//判断是否分配完毕 剩余分配数>当前查询总数
-				if(this.dataList.getTotalElements() > this.dataList.getContent().size() && actiNum != null && (this.actiNum- this.atomInt.intValue()) > this.dataList.getContent().size()) {
-					this.isEnd = false;
-				}else {
-					this.isEnd = true;
-				}
+			if(this.isInit) {
+				this.actiNum =(int) this.dataList.getTotalElements();
+				this.current = new CallAgent();
 			}
 			if(this.dataList!=null) {
 				this.currentSum = this.currentSum + this.dataList.getContent().size();
 			}
 			this.jobDetail.setExecnum(this.jobDetail.getExecnum() + 1);
-			
-			
-			if(isInit) {
-				if(this.isRecovery() && !StringUtils.isBlank(this.jobDetail.getExectype()) && (this.jobDetail.getExectype().equals("filterid") || this.jobDetail.getExectype().equals("filterskill") || this.jobDetail.getExectype().equals("taskskill") || this.jobDetail.getExectype().equals("taskid"))) {
-					if(this.jobDetail.getExectype().equals("filterid") || this.jobDetail.getExectype().equals("filterskill")) {
-						this.filter = this.callOutFilterRes.findByIdAndOrgi(this.jobDetail.getExectarget(), this.jobDetail.getOrgi()) ;
-					}else if(this.jobDetail.getExectype().equals("taskid") || this.jobDetail.getExectype().equals("taskskill") ) {
-						this.task = this.callOutTaskRes.findByIdAndOrgi(this.jobDetail.getExectarget(), this.jobDetail.getOrgi()) ;
+		}else {
+			if(!StringUtils.isBlank(jobDetail.getFilterid())) {
+				
+				formFilter = formFilterRes.findByIdAndOrgi(jobDetail.getFilterid(), this.jobDetail.getOrgi()) ;
+				List<FormFilterItem> formFilterList = formFilterItemRes.findByOrgiAndFormfilterid(this.jobDetail.getOrgi(), jobDetail.getFilterid()) ;
+				if(formFilter!=null && !StringUtils.isBlank(formFilter.getFiltertype())) {
+					if(formFilter.getFiltertype().equals(UKDataContext.FormFilterTypeEnum.BATCH.toString())) {
+						batch = batchRes.findByIdAndOrgi(formFilter.getBatid(), this.jobDetail.getOrgi()) ;
+						if(batch!=null && !StringUtils.isBlank(batch.getActid())) {
+							metadataTable = metadataRes.findByTablename(batch.getActid()) ;
+						}
+					}else {	//业务表
+						if(!StringUtils.isBlank(formFilter.getTableid())) {
+							metadataTable = metadataRes.findById(formFilter.getTableid()) ;
+						}
 					}
-				}else {
-					task = new CallOutTask() ;
-					task.setName(this.jobDetail.getName() + "_" + UKTools.dateFormate.format(new Date()));
-					task.setBatid(formFilter.getBatid());
-					
-					task.setOrgi(this.jobDetail.getOrgi());
-					
-					if(this.isRecovery()) {
-						task.setExectype(UKDataContext.ActivityExecType.RECOVERY.toString());
-					}else {
-						task.setExectype(UKDataContext.ActivityExecType.DEFAULT.toString());
-					}
-					
-					task.setFilterid(formFilter.getId());
-					task.setActid(this.jobDetail.getId());
-					
-					task.setExecnum(this.jobDetail.getExecnum());
-					
-					task.setOrgan(this.jobDetail.getOrgan());
-					
-					task.setCreatetime(new Date());
-					if(this.dataList!=null) {
-						task.setNamenum((int) this.dataList.getTotalElements());
-						task.setNotassigned((int) this.dataList.getTotalElements());
-					}
-					
-					this.callOutTaskRes.save(task) ;
-					
-					filter = new CallOutFilter() ;
-					
-					formFilter.setExecnum(formFilter.getExecnum() + 1);
-					
-					UKTools.copyProperties(task, filter);
-					filter.setName(this.formFilter.getName()  + "_" + UKTools.dateFormate.format(new Date()));
-					filter.setExecnum(formFilter.getExecnum());
-					this.callOutFilterRes.save(filter) ;
 				}
+					
+				if(isInit) {
+					if(this.callAgentList == null) {
+						this.callAgentList = UKDataContext.getContext().getBean(CallAgentRepository.class).findByActidAndOrgi(this.jobDetail.getId() , this.jobDetail.getOrgi()) ;	
+					}
+				}
+				/**
+				 * 生成 活动任务， 然后完成分配 , 同时还需要生成 筛选表单的筛选记录 ， 在后台管理界面上可以看到
+				 */
+				if(this.callAgentList!=null && this.callAgentList.size() > 0) {
+					if(isInit) {
+						//要分配的总数
+						if(this.actiNum == null) {
+							this.actiNum = 0;
+							for(CallAgent c : this.callAgentList) {
+								this.actiNum = this.actiNum + c.getDisnum();
+							}
+						}
+						//以活动抽取数量为准 
+						if(this.actiNum > this.jobDetail.getNamenum()) {
+							this.actiNum = this.jobDetail.getNamenum();
+						}
+						//分配策略 部分分配
+						if("part".equals(this.jobDetail.getDistype())) {
+							if("part".equals(this.jobDetail.getDistpolicy())) {
+								//比例
+								int n = (this.jobDetail.getNamenum() * this.jobDetail.getPolicynum())/100;
+								//以活动抽取数量为准 
+								if(this.actiNum > n) {
+									this.actiNum = n;
+								}
+							}else if("num".equals(this.jobDetail.getDistpolicy())) {
+								//以活动抽取数量为准 
+								if(this.actiNum > this.jobDetail.getPolicynum()) {
+									this.actiNum = this.jobDetail.getPolicynum();
+								}
+							}
+						}
+					}
+					this.current = this.callAgentList.remove(0) ;
+				}
+				if(metadataTable!=null) {
+					
+					this.dataList = SearchTools.dissearch(this.jobDetail.getOrgi(), formFilter, formFilterList , metadataTable ,0, 5000) ;
+					//判断是否分配完毕 剩余分配数>当前查询总数
+					if(this.dataList.getTotalElements() > this.dataList.getContent().size() && actiNum != null && (this.actiNum- this.atomInt.intValue()) > this.dataList.getContent().size()) {
+						this.isEnd = false;
+					}else {
+						this.isEnd = true;
+					}
+				}
+				if(this.dataList!=null) {
+					this.currentSum = this.currentSum + this.dataList.getContent().size();
+				}
+				this.jobDetail.setExecnum(this.jobDetail.getExecnum() + 1);
+				
+				
+				if(isInit) {
+					/*if(this.isRecovery() && !StringUtils.isBlank(this.jobDetail.getExectype()) && (this.jobDetail.getExectype().equals("filterid") || this.jobDetail.getExectype().equals("filterskill") || this.jobDetail.getExectype().equals("taskskill") || this.jobDetail.getExectype().equals("taskid"))) {
+						if(this.jobDetail.getExectype().equals("filterid") || this.jobDetail.getExectype().equals("filterskill")) {
+							this.filter = this.callOutFilterRes.findByIdAndOrgi(this.jobDetail.getExectarget(), this.jobDetail.getOrgi()) ;
+						}else if(this.jobDetail.getExectype().equals("taskid") || this.jobDetail.getExectype().equals("taskskill") ) {
+							this.task = this.callOutTaskRes.findByIdAndOrgi(this.jobDetail.getExectarget(), this.jobDetail.getOrgi()) ;
+						}
+					}else {*/
+						task = new CallOutTask() ;
+						task.setName(this.jobDetail.getName() + "_" + UKTools.dateFormate.format(new Date()));
+						task.setBatid(formFilter.getBatid());
+						
+						task.setOrgi(this.jobDetail.getOrgi());
+						
+						if(this.isRecovery()) {
+							task.setExectype(UKDataContext.ActivityExecType.RECOVERY.toString());
+						}else {
+							task.setExectype(UKDataContext.ActivityExecType.DEFAULT.toString());
+						}
+						
+						task.setFilterid(formFilter.getId());
+						task.setActid(this.jobDetail.getId());
+						
+						task.setExecnum(this.jobDetail.getExecnum());
+						
+						task.setOrgan(this.jobDetail.getOrgan());
+						
+						task.setCreatetime(new Date());
+						if(this.dataList!=null) {
+							task.setNamenum((int) this.dataList.getTotalElements());
+							task.setNotassigned((int) this.dataList.getTotalElements());
+						}
+						
+						this.callOutTaskRes.save(task) ;
+						
+						filter = new CallOutFilter() ;
+						
+						formFilter.setExecnum(formFilter.getExecnum() + 1);
+						
+						UKTools.copyProperties(task, filter);
+						filter.setName(this.formFilter.getName()  + "_" + UKTools.dateFormate.format(new Date()));
+						filter.setExecnum(formFilter.getExecnum());
+						this.callOutFilterRes.save(filter) ;
+					/*}*/
+				}
+				
 			}
-			
 		}
+		
+		
 	}
 
 	@Override
 	public void end(boolean clear) throws Exception {
-		if(this.atomInt.intValue() > 0) {
-			this.batchDataProcess.end();
-		}
-		//doNothing
-		/**
-		 * FormFilter的执行信息更新，执行次数
-		 */
-		if(formFilterRes!=null && this.formFilter != null) {
-			this.formFilter.setFilternum(this.formFilter.getFilternum()+1);
-			formFilterRes.save(this.formFilter) ;
-		}
-		/**
-		 * 批次的信息更新，批次剩余未分配的名单总数 ， 已分配的名单总数
-		 */
-		if(this.batchRes!=null && this.batch != null) {
-			if(this.isRecovery()) {
-				batch.setAssigned(batch.getAssigned() - this.atomInt.intValue());
-			}else {
-				batch.setAssigned(batch.getAssigned() + this.atomInt.intValue());
+		try {
+			if(this.atomInt.intValue() > 0) {
+				this.batchDataProcess.end();
 			}
-			batch.setNotassigned(batch.getNamenum() - batch.getAssigned());
-			this.batchRes.save(batch) ;
-		}
-		if(this.task!=null) {
+			//doNothing
 			if(this.isRecovery()) {
-				if(!StringUtils.isBlank(this.jobDetail.getExecto())) {
-					this.task.setReorgannum(this.atomInt.intValue());
-				}else {
-					this.task.setRenum(this.atomInt.intValue());
+				List<String> idList = new ArrayList<String>();
+				Iterator<String> iterator = taskids.keySet().iterator() ;
+				while(iterator.hasNext()){
+					String itemp = iterator.next();
+					if(!StringUtils.isBlank(itemp)){
+						idList.add(itemp) ;
+					}
 				}
-			}else {
-				this.task.setAssigned(this.assignInt.intValue());
-				this.task.setAssignedorgan(this.assignorganInt.intValue());
-				this.task.setAssignedai(this.assignAiInt.intValue());
-				this.task.setNotassigned(this.task.getNamenum() - this.assignInt.intValue() - this.assignorganInt.intValue() - this.assignAiInt.intValue());
-			}
-			this.callOutTaskRes.save(this.task) ;
-		}
-		if(this.filter!=null) {
-			if(this.isRecovery()) {
-				if(!StringUtils.isBlank(this.jobDetail.getExecto())) {
-					this.filter.setReorgannum(this.atomInt.intValue());
-				}else {
-					this.filter.setRenum(this.atomInt.intValue());
+				List<CallOutTask> taskList = callOutTaskRes.findAll(idList) ;
+				if(taskList.size() > 0){
+					for(CallOutTask task : taskList){
+						Map<String,Integer> m = taskids.get(task.getId());
+						if(m.get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT) != null){//已分配给坐席
+							task.setAssigned(task.getAssigned() - m.get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));// 分配到坐席数
+							task.setNotassigned(task.getNotassigned() +  m.get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));// 未分配数
+							
+							//回收到部门
+							if(StringUtils.isNotBlank(this.jobDetail.getExecto())) {
+								task.setAssignedorgan(task.getAssignedorgan() + m.get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));
+								task.setNotassigned(task.getNotassigned() -  m.get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));
+							}
+							
+						}
+						if(m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN) != null){//分配给部门
+							task.setAssignedorgan(task.getAssignedorgan() - m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));// 分配到坐席数
+							task.setNotassigned(task.getNotassigned() +  m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));// 未分配数
+							
+							//回收到部门
+							if(StringUtils.isNotBlank(this.jobDetail.getExecto())) {
+								task.setAssignedorgan(task.getAssignedorgan() + m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));
+								task.setNotassigned(task.getNotassigned() -  m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));
+							}
+							
+						}
+						if(m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI) != null){//分配给Ai
+							task.setAssignedai(task.getAssignedai() - m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI));// 分配到坐席数
+							task.setNotassigned(task.getNotassigned() +  m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI));// 未分配数
+							
+							//回收到部门
+							if(StringUtils.isNotBlank(this.jobDetail.getExecto())) {
+								task.setAssignedorgan(task.getAssignedorgan() + m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI));
+								task.setNotassigned(task.getNotassigned() -  m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI));
+							}
+						}
+						
+						if(StringUtils.isNotBlank(this.jobDetail.getExecto())) {
+							task.setReorgannum(task.getReorgannum() +  (m.get("sum")!=null?m.get("sum"):0));// 回收到池子数
+						}else {
+							task.setRenum(task.getRenum() +  (m.get("sum")!=null?m.get("sum"):0));// 回收到池子数
+						}
+						
+					}
+					callOutTaskRes.save(taskList);
 				}
+				
+				List<String> filteridList = new ArrayList<String>();
+				Iterator<String> filint = filterids.keySet().iterator() ;
+				while(filint.hasNext()){
+					String filtemp = filint.next();
+					if(!StringUtils.isBlank(filtemp)){
+						filteridList.add(filtemp) ;
+					}
+				}
+				List<CallOutFilter> filterList = callOutFilterRes.findAll(filteridList) ;
+				if(filterList.size() > 0){
+					for(CallOutFilter filter : filterList){
+						Map<String,Integer> m = filterids.get(filter.getId());
+						if(m.get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT) != null){//已分配给坐席
+							filter.setAssigned(filter.getAssigned() - m.get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));// 分配到坐席数
+							filter.setNotassigned(filter.getNotassigned() +  m.get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));// 未分配数
+							//回收到部门
+							if(StringUtils.isNotBlank(this.jobDetail.getExecto())) {
+								filter.setAssignedorgan(filter.getAssignedorgan() + m.get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));
+								filter.setNotassigned(filter.getNotassigned() -  m.get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));
+							}
+						}
+						if(m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN) != null){//分配给部门
+							filter.setAssignedorgan(filter.getAssignedorgan() - m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));// 分配到坐席数
+							filter.setNotassigned(filter.getNotassigned() +  m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));// 未分配数
+							
+							//回收到部门
+							if(StringUtils.isNotBlank(this.jobDetail.getExecto())) {
+								filter.setAssignedorgan(filter.getAssignedorgan() + m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));
+								filter.setNotassigned(filter.getNotassigned() -  m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));
+							}
+							
+						}
+						if(m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI) != null){//分配给Ai
+							filter.setAssignedai(filter.getAssignedai() - m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI));// 分配到坐席数
+							filter.setNotassigned(filter.getNotassigned() +  m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI));// 未分配数
+							
+							//回收到部门
+							if(StringUtils.isNotBlank(this.jobDetail.getExecto())) {
+								filter.setAssignedorgan(filter.getAssignedorgan() + m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI));
+								filter.setNotassigned(filter.getNotassigned() -  m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI));
+							}
+						}
+						
+						if(StringUtils.isNotBlank(this.jobDetail.getExecto())) {
+							filter.setReorgannum(filter.getReorgannum() +  (m.get("sum")!=null?m.get("sum"):0));// 回收到池子数
+						}else {
+							filter.setRenum(filter.getRenum() +  (m.get("sum")!=null?m.get("sum"):0));// 回收到池子数
+						}
+						
+					}
+				}
+				callOutFilterRes.save(filterList);
+				List<String> batidList = new ArrayList<String>();
+				Iterator<String> batint = batids.keySet().iterator() ;
+				while(batint.hasNext()){
+					String batemp = batint.next();
+					if(!StringUtils.isBlank(batemp)){
+						batidList.add(batemp) ;
+					}
+				}
+				List<JobDetail> batList = batchRes.findAll(batidList) ;
+				if(batList.size() > 0){
+					for(JobDetail batch : batList){
+						Map<String,Integer> m = batids.get(batch.getId());
+						if(StringUtils.isBlank(this.jobDetail.getExecto())) {
+							batch.setAssigned(batch.getAssigned() -  (m.get("sum")!=null?m.get("sum"):0));// 回收到池子数
+							batch.setNotassigned(batch.getNotassigned() +  (m.get("sum")!=null?m.get("sum"):0));// 回收到池子数
+						}
+						
+					}
+				}
+				batchRes.save(batList);
 			}else {
-				this.filter.setAssigned(this.assignInt.intValue());
-				this.filter.setAssignedorgan(this.assignorganInt.intValue());
-				this.filter.setAssignedai(this.assignAiInt.intValue());
-				this.filter.setNotassigned(this.task.getNamenum() - this.assignInt.intValue() - this.assignorganInt.intValue() - this.assignAiInt.intValue());
+				/**
+				 * FormFilter的执行信息更新，执行次数
+				 */
+				if(formFilterRes!=null && this.formFilter != null) {
+					this.formFilter.setFilternum(this.formFilter.getFilternum()+1);
+					formFilterRes.save(this.formFilter) ;
+				}
+				/**
+				 * 批次的信息更新，批次剩余未分配的名单总数 ， 已分配的名单总数
+				 */
+				if(this.batchRes!=null && this.batch != null) {
+					if(this.isRecovery()) {
+						batch.setAssigned(batch.getAssigned() - this.atomInt.intValue());
+					}else {
+						batch.setAssigned(batch.getAssigned() + this.atomInt.intValue());
+					}
+					batch.setNotassigned(batch.getNamenum() - batch.getAssigned());
+					this.batchRes.save(batch) ;
+				}
+				if(this.task!=null) {
+					if(this.isRecovery()) {
+						if(!StringUtils.isBlank(this.jobDetail.getExecto())) {
+							this.task.setReorgannum(this.atomInt.intValue());
+						}else {
+							this.task.setRenum(this.atomInt.intValue());
+						}
+					}else {
+						this.task.setAssigned(this.assignInt.intValue());
+						this.task.setAssignedorgan(this.assignorganInt.intValue());
+						this.task.setAssignedai(this.assignAiInt.intValue());
+						this.task.setNotassigned(this.task.getNamenum() - this.assignInt.intValue() - this.assignorganInt.intValue() - this.assignAiInt.intValue());
+					}
+					this.callOutTaskRes.save(this.task) ;
+				}
+				if(this.filter!=null) {
+					if(this.isRecovery()) {
+						if(!StringUtils.isBlank(this.jobDetail.getExecto())) {
+							this.filter.setReorgannum(this.atomInt.intValue());
+						}else {
+							this.filter.setRenum(this.atomInt.intValue());
+						}
+					}else {
+						this.filter.setAssigned(this.assignInt.intValue());
+						this.filter.setAssignedorgan(this.assignorganInt.intValue());
+						this.filter.setAssignedai(this.assignAiInt.intValue());
+						this.filter.setNotassigned(this.task.getNamenum() - this.assignInt.intValue() - this.assignorganInt.intValue() - this.assignAiInt.intValue());
+					}
+					this.callOutFilterRes.save(this.filter) ;
+				}
 			}
-			this.callOutFilterRes.save(this.filter) ;
+			
+			CallCenterUtils.getCalloutCount(this.jobDetail.getOrgi(),null,null);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}finally {
+			this.updateTask();
 		}
-		
-		/**
-		 * 更新任务状态，记录生成的任务信息
-		 */
-		this.jobDetail.setExecmd(null);
-		this.jobDetail.setExectype(null);
-		this.jobDetail.setExectarget(null);
-		this.jobDetail.setExecto(null);
-		
-		CallCenterUtils.getCalloutCount(this.jobDetail.getOrgi(),null,null);
 	}
 
 	@Override
@@ -283,18 +442,80 @@ public class ActivityResource extends Resource{
 		 * 执行分配
 		 */
 		if(this.isRecovery()) {
-			if(!StringUtils.isBlank(this.jobDetail.getExecto())) {
-				meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_AGENT, null) ;
-				meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_AI, null) ;
-//				meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, this.jobDetail.getExecto()) ;
-				meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_TIME, System.currentTimeMillis()) ;
-				meta.getDataBean().getValues().put("status", UKDataContext.NamesDisStatusType.DISORGAN.toString()) ;
-			}else {
-				meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_AI, null) ;
-				meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_AGENT, null) ;
-				meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, null) ;
-				meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_TIME, null) ;
-				meta.getDataBean().getValues().put("status", UKDataContext.NamesDisStatusType.NOT.toString()) ;
+			if(meta!=null && meta.getDataBean()!=null) {
+				
+				//修改拨打任务记录数
+				if(taskids.get(meta.getDataBean().getValues().get("taskid")) == null){
+					taskids.put((String)meta.getDataBean().getValues().get("taskid"), new HashMap<String,Integer>()) ;
+				}
+				if(taskids.get(meta.getDataBean().getValues().get("taskid")) != null){
+					Map<String,Integer> m = taskids.get(meta.getDataBean().getValues().get("taskid"));
+					if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT) != null) {
+						//坐席
+						m.put(UKDataContext.UKEFU_SYSTEM_DIS_AGENT, m.get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT)+1:1);
+					}else if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AI) != null) {
+						//ai
+						m.put(UKDataContext.UKEFU_SYSTEM_DIS_AI, m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI)+1:1);
+					}else if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN) != null && StringUtils.isBlank(this.jobDetail.getExecto())) {
+						m.put(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN)+1:1);
+					}
+					m.put("sum", m.get("sum")!=null?m.get("sum")+1:1);
+					taskids.put((String)meta.getDataBean().getValues().get("taskid"),m) ;
+					
+				}
+				
+				//修改筛选记录数
+				if(filterids.get(meta.getDataBean().getValues().get("calloutfilid")) == null){
+					filterids.put((String)meta.getDataBean().getValues().get("calloutfilid"), new HashMap<String,Integer>()) ;
+				}
+				if(filterids.get(meta.getDataBean().getValues().get("calloutfilid")) != null) {
+					Map<String,Integer> m = filterids.get(meta.getDataBean().getValues().get("calloutfilid"));
+					if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT) != null) {
+						//坐席
+						m.put(UKDataContext.UKEFU_SYSTEM_DIS_AGENT, m.get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT)+1:1);
+					}else if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AI) != null) {
+						//ai
+						m.put(UKDataContext.UKEFU_SYSTEM_DIS_AI, m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI)+1:1);
+					}else if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN) != null && StringUtils.isBlank(this.jobDetail.getExecto())) {
+						m.put(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN)+1:1);
+					}
+					m.put("sum", m.get("sum")!=null?m.get("sum")+1:1);
+					filterids.put((String)meta.getDataBean().getValues().get("calloutfilid"),m) ;
+				}
+				
+				
+				//修改批次记录数
+				if(batids.get(meta.getDataBean().getValues().get("batid")) == null){
+					batids.put((String)meta.getDataBean().getValues().get("batid"), new HashMap<String,Integer>()) ;
+				}
+				if(batids.get(meta.getDataBean().getValues().get("batid")) != null){
+					Map<String,Integer> m = batids.get(meta.getDataBean().getValues().get("batid"));
+					if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT) != null) {
+						//坐席
+						m.put(UKDataContext.UKEFU_SYSTEM_DIS_AGENT, m.get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT)+1:1);
+					}else if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AI) != null) {
+						//ai
+						m.put(UKDataContext.UKEFU_SYSTEM_DIS_AI, m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI)+1:1);
+					}else if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN) != null && StringUtils.isBlank(this.jobDetail.getExecto())) {
+						m.put(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN)+1:1);
+					}
+					m.put("sum", m.get("sum")!=null?m.get("sum")+1:1);
+					batids.put((String)meta.getDataBean().getValues().get("batid"),m) ;
+				}
+				if(!StringUtils.isBlank(this.jobDetail.getExecto())) {
+					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_AGENT, null) ;
+					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_AI, null) ;
+					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_TIME, System.currentTimeMillis()) ;
+					meta.getDataBean().getValues().put("status", UKDataContext.NamesDisStatusType.DISORGAN.toString()) ;
+					meta.getDataBean().getValues().put("callstatus", UKDataContext.NameStatusTypeEnum.NOTCALL.toString());
+				}else {
+					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_AI, null) ;
+					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_AGENT, null) ;
+					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, null) ;
+					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_TIME, null) ;
+					meta.getDataBean().getValues().put("status", UKDataContext.NamesDisStatusType.NOT.toString()) ;
+					meta.getDataBean().getValues().put("callstatus", UKDataContext.NameStatusTypeEnum.NOTCALL.toString());
+				}
 			}
 		}else {
 			if(this.current!=null && meta!=null && meta.getDataBean()!=null) {
@@ -393,7 +614,7 @@ public class ActivityResource extends Resource{
 						}
 					}
 				}else {
-					if(!this.isEnd) {
+					if(!this.isEnd && !isRecovery()) {
 						this.callAgentList.add(this.current) ;
 					}
 				}
