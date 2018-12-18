@@ -642,3 +642,10 @@ ALTER TABLE uk_sales_product modify column price DECIMAL(9,2) DEFAULT 0;
 ALTER TABLE uk_jobdetailproduct modify column price DECIMAL(9,2) DEFAULT 0;
 
 ALTER TABLE uk_sessionconfig ADD enablersession tinyint(4) DEFAULT 0 COMMENT '是否启用恢复对话功能';
+
+
+ALTER TABLE uk_act_config ADD forecast tinyint(4) DEFAULT 0 COMMENT '启用预测式外呼';
+ALTER TABLE uk_act_config ADD forecastratio int DEFAULT 0 COMMENT '预测阀值';
+ALTER TABLE uk_act_config ADD fmaxavgtime int DEFAULT 0 COMMENT '预计最大平均通话时长';
+ALTER TABLE uk_act_config ADD fminavgtime int DEFAULT 0 COMMENT '预计最小平均通话时长';
+ALTER TABLE uk_act_config ADD favgaftertime int DEFAULT 0 COMMENT '预计平均后处理时长';
