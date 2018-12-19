@@ -9,6 +9,7 @@ import com.ukefu.util.es.SearchTools;
 import com.ukefu.util.es.UKDataBean;
 import com.ukefu.util.freeswitch.model.CallCenterAgent;
 import com.ukefu.webim.service.cache.CacheHelper;
+import com.ukefu.webim.web.model.CallOutConfig;
 
 public class NamesTask implements Runnable{
 	
@@ -41,10 +42,21 @@ public class NamesTask implements Runnable{
 				
 				CallOutUtils.processNames(name, agent, agent.getOrgi(), (int)(names.getTotalElements() - 1)) ;
 			}else {
-				agent.setWorkstatus(UKDataContext.WorkStatusEnum.IDLE.toString());
-				NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "error", "nonames");
-				
-				NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "docallout", agent);
+				/**
+				 * 检查启用预测式外呼功能
+				 */
+				CallOutConfig config = CallOutUtils.initCallOutConfig(agent.getOrgi()) ;
+				if(config!=null && config.isForecast()) {
+					
+				}else {
+					NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "error", "nonames");
+					if(config!=null && config.isEnableauto()) {
+						
+					}else {
+						agent.setWorkstatus(UKDataContext.WorkStatusEnum.IDLE.toString());
+						NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "docallout", agent);
+					}
+				}
 			}
 			
 			CacheHelper.getCallCenterAgentCacheBean().put(agent.getUserid(), agent, agent.getOrgi());

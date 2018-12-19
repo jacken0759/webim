@@ -37,6 +37,15 @@ public class CallOutConfig implements java.io.Serializable{
 	private boolean enabletaithreads ;		//启用机器人并发外呼限制
 	private int aithreads ;					//机器人外呼并发数量
 	
+	private boolean enableauto ;			//启用预览式外呼全自动功能
+	
+	private boolean forecast ;				//是否启用预测式外呼功能
+	private int forecastratio ;				//预测阀值
+	
+	private int fmaxavgtime ;			//预计最大平均通话时长
+	private int fminavgtime ;			//预计最小平均通话时长
+	private int favgaftertime ;			//预计平均后处理时长
+	
 	
 	private String defaultvalue ;	//默认 allow
 	private String strategy;		//策略
@@ -154,5 +163,41 @@ public class CallOutConfig implements java.io.Serializable{
 	}
 	public void setPreviewautocallout(boolean previewautocallout) {
 		this.previewautocallout = previewautocallout;
+	}
+	public boolean isForecast() {
+		return forecast;
+	}
+	public void setForecast(boolean forecast) {
+		this.forecast = forecast;
+	}
+	public int getForecastratio() {
+		return forecastratio;
+	}
+	public void setForecastratio(int forecastratio) {
+		this.forecastratio = forecastratio;
+	}
+	public int getFmaxavgtime() {
+		return fmaxavgtime;
+	}
+	public void setFmaxavgtime(int fmaxavgtime) {
+		this.fmaxavgtime = fmaxavgtime;
+	}
+	public int getFminavgtime() {
+		return fminavgtime;
+	}
+	public void setFminavgtime(int fminavgtime) {
+		this.fminavgtime = fminavgtime;
+	}
+	public int getFavgaftertime() {
+		return favgaftertime;
+	}
+	public void setFavgaftertime(int favgaftertime) {
+		this.favgaftertime = favgaftertime;
+	}
+	public boolean isEnableauto() {
+		return enableauto;
+	}
+	public void setEnableauto(boolean enableauto) {
+		this.enableauto = enableauto;
 	}
 }

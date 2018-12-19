@@ -29,6 +29,7 @@ public class UKDataContext {
 	public static final String UKEFU_SYSTEM_COMMENT_ITEM_DIC = "com.dic.webim.comment.item" ;
 	
 	public static final String UKEFU_SYSTEM_DIS_AI = "ownerai" ;
+	public static final String UKEFU_SYSTEM_DIS_FORECAST = "ownerforecast" ;
 	public static final String UKEFU_SYSTEM_DIS_AGENT = "owneruser" ;
 	public static final String UKEFU_SYSTEM_ASSUSER = "assuser" ;
 	public static final String UKEFU_SYSTEM_DIS_ORGAN = "ownerdept" ;
@@ -159,7 +160,7 @@ public class UKDataContext {
 	 *
 	 */
 	public enum NamesDisStatusType{
-		NOT,DISAGENT,DISORGAN,DISAI;
+		NOT,DISAGENT,DISORGAN,DISAI,DISFORECAST;
 		public String toString(){
 			return super.toString().toLowerCase() ;
 		}

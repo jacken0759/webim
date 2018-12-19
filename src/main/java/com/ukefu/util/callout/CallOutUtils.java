@@ -99,14 +99,12 @@ public class CallOutUtils {
 				callOutName.setOrgi(orgi);
 				if(task!=null) {
 					callOutName.setName(task.getName());	//任务名称
+					callOutName.setActid(task.getActid());
 				}
 				if(batch!=null) {
 					callOutName.setBatname(batch.getName());
 					callOutName.setMetaname(batch.getActid());
 				}
-				
-				
-				callOutName.setActid(task.getActid());
 				callOutName.setBatid(batid);
 				
 				callOutName.setTaskid(taskid);
@@ -167,9 +165,8 @@ public class CallOutUtils {
 					NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "preview", callOutName);
 				}
 			}else if(agent!=null){
-				agent.setWorkstatus(UKDataContext.WorkStatusEnum.IDLE.toString());
 				NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "error", "nophonenumber");
-				
+				agent.setWorkstatus(UKDataContext.WorkStatusEnum.IDLE.toString());
 				NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "docallout", agent);
 			}
 			callOutNamesRes.save(callOutName) ;

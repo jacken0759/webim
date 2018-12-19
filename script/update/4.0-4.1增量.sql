@@ -649,3 +649,5 @@ ALTER TABLE uk_act_config ADD forecastratio int DEFAULT 0 COMMENT '预测阀值'
 ALTER TABLE uk_act_config ADD fmaxavgtime int DEFAULT 0 COMMENT '预计最大平均通话时长';
 ALTER TABLE uk_act_config ADD fminavgtime int DEFAULT 0 COMMENT '预计最小平均通话时长';
 ALTER TABLE uk_act_config ADD favgaftertime int DEFAULT 0 COMMENT '预计平均后处理时长';
+
+ALTER TABLE uk_act_config ADD enableauto tinyint(4) DEFAULT 0 COMMENT '启用全自动的预览式外呼';
