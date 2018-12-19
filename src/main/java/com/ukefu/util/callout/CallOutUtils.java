@@ -165,8 +165,8 @@ public class CallOutUtils {
 					NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "preview", callOutName);
 				}
 			}else if(agent!=null){
-				NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "error", "nophonenumber");
 				agent.setWorkstatus(UKDataContext.WorkStatusEnum.IDLE.toString());
+				NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "error", "nophonenumber");
 				NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "docallout", agent);
 			}
 			callOutNamesRes.save(callOutName) ;

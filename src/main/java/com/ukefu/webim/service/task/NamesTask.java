@@ -49,13 +49,9 @@ public class NamesTask implements Runnable{
 				if(config!=null && config.isForecast()) {
 					
 				}else {
+					agent.setWorkstatus(UKDataContext.WorkStatusEnum.IDLE.toString());
 					NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "error", "nonames");
-					if(config!=null && config.isEnableauto()) {
-						
-					}else {
-						agent.setWorkstatus(UKDataContext.WorkStatusEnum.IDLE.toString());
-						NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "docallout", agent);
-					}
+					NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "docallout", agent);
 				}
 			}
 			
