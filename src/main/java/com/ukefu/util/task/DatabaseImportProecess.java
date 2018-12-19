@@ -45,7 +45,7 @@ public class DatabaseImportProecess extends DataProcess{
 		try {
 			if(event!=null && event.getDSData()!=null && event.getDSData().getDatabase()!=null) {
 				Class.forName(event.getDSData().getDatabase().getDriverclazz()) ;
-				connection = DriverManager.getConnection(event.getDSData().getDatabase().getDatabaseurl() , event.getDSData().getDatabase().getAccount() , UKTools.decryption(event.getDSData().getDatabase().getPassword())) ;
+				connection = DriverManager.getConnection(event.getDSData().getDatabase().getDatabaseurl() , event.getDSData().getDatabase().getAccount() , !StringUtils.isBlank(event.getDSData().getDatabase().getPassword()) ? UKTools.decryption(event.getDSData().getDatabase().getPassword()):"") ;
 				do {
 					resultNum = 0 ;
 					if(event.getDSData().getJobDetail()!=null && !StringUtils.isBlank(event.getDSData().getJobDetail().getSource())) {

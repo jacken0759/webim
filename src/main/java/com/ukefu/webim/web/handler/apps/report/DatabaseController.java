@@ -104,7 +104,7 @@ public class DatabaseController extends Handler{
     			Database database = databaseRes.findByIdAndOrgi(db.getId() , super.getOrgi(request)) ;
 				if(database!=null && !StringUtils.isBlank(database.getDriverclazz())) {
 					Class.forName(database.getDriverclazz()) ;
-					conn = DriverManager.getConnection(database.getDatabaseurl() , database.getAccount() , UKTools.decryption(database.getPassword())) ;
+					conn = DriverManager.getConnection(database.getDatabaseurl() , database.getAccount() , !StringUtils.isBlank(database.getPassword())?UKTools.decryption(database.getPassword()):"") ;
 					map.addAttribute("result", true) ;
 				}
     		} catch (Exception e) {
