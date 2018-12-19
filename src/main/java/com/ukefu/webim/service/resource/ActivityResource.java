@@ -1,7 +1,5 @@
 package com.ukefu.webim.service.resource;
 
-import static org.elasticsearch.index.query.QueryBuilders.termQuery;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -505,11 +503,13 @@ public class ActivityResource extends Resource{
 				if(!StringUtils.isBlank(this.jobDetail.getExecto())) {
 					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_AGENT, null) ;
 					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_AI, null) ;
+					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST, null) ;
 					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_TIME, System.currentTimeMillis()) ;
 					meta.getDataBean().getValues().put("status", UKDataContext.NamesDisStatusType.DISORGAN.toString()) ;
 					meta.getDataBean().getValues().put("callstatus", UKDataContext.NameStatusTypeEnum.NOTCALL.toString());
 				}else {
 					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_AI, null) ;
+					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST, null) ;
 					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_AGENT, null) ;
 					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, null) ;
 					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_TIME, null) ;
@@ -557,6 +557,11 @@ public class ActivityResource extends Resource{
 				}else if("ai".equals(this.current.getDistype())) {
 					meta.getDataBean().getValues().put("status", UKDataContext.NamesDisStatusType.DISAI.toString()) ;
 					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_AI, this.current.getDistarget()) ;
+					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, this.current.getOrgan()) ;
+					this.assignAiInt.incrementAndGet() ;
+				}else if("forecast".equals(this.current.getDistype())) {
+					meta.getDataBean().getValues().put("status", UKDataContext.NamesDisStatusType.DISFORECAST.toString()) ;
+					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST, this.current.getDistarget()) ;
 					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, this.current.getOrgan()) ;
 					this.assignAiInt.incrementAndGet() ;
 				}
