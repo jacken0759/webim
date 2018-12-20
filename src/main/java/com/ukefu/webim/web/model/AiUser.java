@@ -39,6 +39,14 @@ public class AiUser implements java.io.Serializable{
 	private int errortimes ;	//错误次数
 	private String queresultid ;//问卷结果主表ID
 	
+	private boolean interrupt = false;//是否允许打断
+	private int interrupttime = 3000;//打断开始时间
+	
+	private int maxspreak = 10000;//最大说话时长
+	
+	private boolean bridge = false;//转接
+	private String trans;//转接号码
+	
 	private LinkedList<QueSurveyResultQuestion> questionList;
 	
 	public AiUser(String id , String userid, long time,String orgi , IP ipdata){
@@ -245,13 +253,45 @@ public class AiUser implements java.io.Serializable{
 		this.questionList = questionList;
 	}
 	
-	public static void main(String[] args) {
-		LinkedList<String>  list = new LinkedList<>();
-		list.add("12321");
-		System.out.println(list.getLast());
-		list.add("21332233");
-		System.out.println(list.getLast());
-		list.add("5555");
-		System.out.println(list.getLast());
+	public boolean isInterrupt() {
+		return interrupt;
 	}
+
+	public void setInterrupt(boolean interrupt) {
+		this.interrupt = interrupt;
+	}
+
+	public int getMaxspreak() {
+		return maxspreak;
+	}
+
+	public void setMaxspreak(int maxspreak) {
+		this.maxspreak = maxspreak;
+	}
+
+	public boolean isBridge() {
+		return bridge;
+	}
+
+	public void setBridge(boolean bridge) {
+		this.bridge = bridge;
+	}
+
+	public String getTrans() {
+		return trans;
+	}
+
+	public void setTrans(String trans) {
+		this.trans = trans;
+	}
+
+	public int getInterrupttime() {
+		return interrupttime;
+	}
+
+	public void setInterrupttime(int interrupttime) {
+		this.interrupttime = interrupttime;
+	}
+	
+	
 }

@@ -23,7 +23,13 @@ public class QueSurveyQuestion implements java.io.Serializable{
 	private String title;    //问题标题
 	private String name;//问题名称
 	private String sortindex;//问题序号
-	private int quetype;//问题类型（选择题/问答题）
+	private int quetype;//问题类型（选择题0/问答题1/结束2/转接3）
+	
+	private String trans;//转接号码
+	private boolean interrupt;//打断
+	private int interrupttime;//打断开始时间
+	private int maxspreak;//最大说话时长
+	
 	private String orgi;//租户ID
 	private String creater;//创建人
 	private Date createtime;//创建时间
@@ -371,5 +377,31 @@ public class QueSurveyQuestion implements java.io.Serializable{
 	public void setOffsety(int offsety) {
 		this.offsety = offsety;
 	}
+	public String getTrans() {
+		return trans;
+	}
+	public void setTrans(String trans) {
+		this.trans = trans;
+	}
+
+	public int getMaxspreak() {
+		return maxspreak;
+	}
+	public void setMaxspreak(int maxspreak) {
+		this.maxspreak = maxspreak;
+	}
+	public boolean isInterrupt() {
+		return interrupt;
+	}
+	public void setInterrupt(boolean interrupt) {
+		this.interrupt = interrupt;
+	}
+	public int getInterrupttime() {
+		return interrupttime;
+	}
+	public void setInterrupttime(int interrupttime) {
+		this.interrupttime = interrupttime;
+	}
+	
 	
 }
