@@ -17,6 +17,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import com.ukefu.core.UKDataContext;
 import com.ukefu.webim.service.cache.CacheHelper;
+import com.ukefu.webim.web.model.User;
 
 public class ApiRequestMatchingFilter implements Filter {
     private RequestMatcher[] ignoredRequests;
@@ -50,7 +51,17 @@ public class ApiRequestMatchingFilter implements Filter {
 	        	 if(StringUtils.isBlank(authorization)){
 	        		 authorization = request.getParameter("authorization") ;
 	        	 }
-	        	 if(!StringUtils.isBlank(authorization) && CacheHelper.getApiUserCacheBean().getCacheObject(authorization, UKDataContext.SYSTEM_ORGI) != null){
+	        	 Object data = null ;
+	        	 if(!StringUtils.isBlank(authorization)){
+		        	 data = CacheHelper.getApiUserCacheBean().getCacheObject(authorization, UKDataContext.SYSTEM_ORGI) ;
+		        	 if(!StringUtils.isBlank(request.getParameter("userid")) && data instanceof User) {
+		        		 User user = (User)data ;
+			        	 if(StringUtils.isBlank(user.getId()) || !user.getId().equals(request.getParameter("userid"))) {
+			        		 authorization = null ;
+			        	 }
+		        	 }
+	        	 }
+	        	 if(!StringUtils.isBlank(authorization)){
 	        		 chain.doFilter(req,resp);
 	        	 }else{
 		        	 response.sendRedirect("/tokens/error");
