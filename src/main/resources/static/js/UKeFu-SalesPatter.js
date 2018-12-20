@@ -106,6 +106,25 @@ $(document).ready(function(){
 							         });
 				        		}
 				            } 
+					    	,
+					        drag:function(e){
+					        	var boxheight = $(".console-box").height();
+					        	var boxwidth = $(".console-box").width();
+					        	var elmheight = e.el.offsetTop;
+					        	var elmwidth = e.el.offsetLeft;
+					        	if(boxheight < (elmheight + 200)){
+					        		$(".console-box").height(elmheight + 200);
+					        		 $(".layui-body").animate(
+					        			        {scrollTop:elmheight + 200},0 /*scroll实现定位滚动*/
+					        			        );
+					        	}
+					        	if(boxwidth < (elmwidth + 200)){
+					        		$(".console-box").width(elmwidth + 200);
+					        		 $(".layui-body").animate(
+					        			        {scrollLeft:elmwidth + 200},0 /*scroll实现定位滚动*/
+					        			        );
+					        	}
+					        }
 				        } 
 			    });
 			    j.makeTarget(eval(val), {
