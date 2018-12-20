@@ -54,7 +54,7 @@ public class ApiRequestMatchingFilter implements Filter {
 	        	 Object data = null ;
 	        	 if(!StringUtils.isBlank(authorization)){
 		        	 data = CacheHelper.getApiUserCacheBean().getCacheObject(authorization, UKDataContext.SYSTEM_ORGI) ;
-		        	 if(!StringUtils.isBlank(request.getParameter("userid")) && data instanceof User) {
+		        	 if(data != null && !StringUtils.isBlank(request.getParameter("userid")) && data instanceof User) {
 		        		 User user = (User)data ;
 			        	 if(StringUtils.isBlank(user.getId()) || !user.getId().equals(request.getParameter("userid"))) {
 			        		 authorization = null ;
