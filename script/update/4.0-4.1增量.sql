@@ -657,3 +657,8 @@ ALTER TABLE uk_que_survey_question ADD interrupt tinyint(4) DEFAULT 0 COMMENT '�
 ALTER TABLE uk_que_survey_question ADD trans VARCHAR(255) DEFAULT NULL COMMENT '转接号码';
 ALTER TABLE uk_que_survey_question ADD maxspreak int DEFAULT 0 COMMENT '最大说话时长';
 ALTER TABLE uk_que_survey_question ADD interrupttime int DEFAULT 0 COMMENT '打断开始时间';
+
+
+ALTER TABLE uk_act_task ADD assignedforecast int DEFAULT 0 COMMENT '分配到队列的数量';
+ALTER TABLE uk_act_filter_his ADD assignedforecast int DEFAULT 0 COMMENT '分配到队列的数量';
+ALTER TABLE uk_act_callnames ADD ownerforecast VARCHAR(50) DEFAULT NULL COMMENT '分配的队列';

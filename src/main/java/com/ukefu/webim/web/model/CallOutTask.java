@@ -55,6 +55,8 @@ public class CallOutTask implements Serializable{
 	private int assigned ;		//已分配到坐席
 	private int assignedorgan ;	//已分配到部门
 	private int assignedai ;	//已分配到AI
+	private int assignedforecast ;	//已分配到队列
+	
 	private int notassigned;	//未分配
 	private String description ;//备注
 	
@@ -238,4 +240,14 @@ public class CallOutTask implements Serializable{
 	public void setAssignedai(int assignedai) {
 		this.assignedai = assignedai;
 	}
+
+	public int getAssignedforecast() {
+		return assignedforecast;
+	}
+
+	public void setAssignedforecast(int assignedforecast) {
+		this.assignedforecast = assignedforecast;
+	}
+	
+	
 }

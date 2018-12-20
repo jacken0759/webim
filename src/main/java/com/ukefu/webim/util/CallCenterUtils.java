@@ -40,6 +40,7 @@ import com.ukefu.util.es.SearchTools;
 import com.ukefu.util.es.UKDataBean;
 import com.ukefu.webim.service.cache.CacheHelper;
 import com.ukefu.webim.service.repository.CallAgentRepository;
+import com.ukefu.webim.service.repository.CallCenterSkillRepository;
 import com.ukefu.webim.service.repository.CallOutFilterRepository;
 import com.ukefu.webim.service.repository.CallOutNamesHisRepository;
 import com.ukefu.webim.service.repository.CallOutNamesRepository;
@@ -377,6 +378,8 @@ public class CallCenterUtils {
 		//}
 		//机器人
 		map.addAttribute("aiList",UKDataContext.getContext().getBean(ExtentionRepository.class).findByExtypeAndOrgi(UKDataContext.ExtentionType.IVR.toString() , user.getOrgi()));
+		//队列
+		map.addAttribute("forcastQueueList",UKDataContext.getContext().getBean(CallCenterSkillRepository.class).findByOrgi(user.getOrgi()));
 		map.addAttribute("statusList",UKeFuDic.getInstance().getDic("com.dic.callout.activity"));
 	}
 	/**

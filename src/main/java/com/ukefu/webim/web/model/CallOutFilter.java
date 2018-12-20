@@ -59,7 +59,7 @@ public class CallOutFilter implements Serializable{
 	private String name;		//导入的任务名称 ， 自动生成， 规则为 yyyyMMdd--ORDER
 	
 	private int assignedai;	//已分配到AI
-
+	private int assignedforecast ;	//已分配到队列
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -237,6 +237,14 @@ public class CallOutFilter implements Serializable{
 
 	public void setAssignedai(int assignedai) {
 		this.assignedai = assignedai;
+	}
+
+	public int getAssignedforecast() {
+		return assignedforecast;
+	}
+
+	public void setAssignedforecast(int assignedforecast) {
+		this.assignedforecast = assignedforecast;
 	}
 	
 }

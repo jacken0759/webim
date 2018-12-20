@@ -127,7 +127,9 @@ public class CallOutUtils {
 				callOutName.setMemo((String) name.getValues().get("apmemo"));
 				
 				callOutName.setOwneruser((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));
-				callOutName.setOwnerdept((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));
+				callOutName.setOwnerdept((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));
+				callOutName.setOwnerai((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AI));
+				callOutName.setOwnerforecast((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST));
 				callOutName.setLeavenum(leavenames);
 			}
 			
@@ -228,6 +230,7 @@ public class CallOutUtils {
 			callOutName.setOwneruser((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));
 			callOutName.setOwnerdept((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));
 			callOutName.setOwnerai((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AI));
+			callOutName.setOwnerforecast((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST));
 			callOutName.setLeavenum(leavenames);
 		}
 		
@@ -275,7 +278,7 @@ public class CallOutUtils {
 		metaDataTable.getTableproperty().add(initProperties(UKDataContext.UKEFU_SYSTEM_DIS_AGENT, "分配用户", "String", event.getOrgi() , event.getTablename() , true)) ;
 		metaDataTable.getTableproperty().add(initProperties(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, "分配部门", "String", event.getOrgi() , event.getTablename() , true)) ;
 		metaDataTable.getTableproperty().add(initProperties(UKDataContext.UKEFU_SYSTEM_DIS_TIME, "分配时间", "Datetime", event.getOrgi() , event.getTablename() , true)) ;
-		
+		metaDataTable.getTableproperty().add(initProperties(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST, "分配队列", "String", event.getOrgi() , event.getTablename() , true)) ;
 		metaDataTable.getTableproperty().add(initProperties("status", "状态", "String", event.getOrgi() , event.getTablename() , true)) ;
 		
 		/**

@@ -61,6 +61,7 @@ public class ActivityResource extends Resource{
 	
 	private AtomicInteger assignorganInt = new AtomicInteger() /***分配到坐席***/, assignInt = new AtomicInteger() /***分配到部门***/ , assignAiInt = new AtomicInteger() /***分配到AI***/ ,atomInt = new AtomicInteger() ;
 	
+	private AtomicInteger assignForecastInt = new AtomicInteger() /***分配到预测式外呼***/;
 	private BatchDataProcess batchDataProcess ;
 	
 	private boolean isEnd = false;
@@ -286,7 +287,16 @@ public class ActivityResource extends Resource{
 								task.setNotassigned(task.getNotassigned() -  m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI));
 							}
 						}
-						
+						if(m.get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST) != null){//分配给预测式外呼
+							task.setAssignedforecast(task.getAssignedforecast() - m.get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST));// 分配到坐席数
+							task.setNotassigned(task.getNotassigned() +  m.get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST));// 未分配数
+							
+							//回收到部门
+							if(StringUtils.isNotBlank(this.jobDetail.getExecto())) {
+								task.setAssignedorgan(task.getAssignedorgan() + m.get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST));
+								task.setNotassigned(task.getNotassigned() -  m.get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST));
+							}
+						}
 						if(StringUtils.isNotBlank(this.jobDetail.getExecto())) {
 							task.setReorgannum(task.getReorgannum() +  (m.get("sum")!=null?m.get("sum"):0));// 回收到池子数
 						}else {
@@ -339,7 +349,16 @@ public class ActivityResource extends Resource{
 								filter.setNotassigned(filter.getNotassigned() -  m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI));
 							}
 						}
-						
+						if(m.get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST) != null){//分配给预测式外呼
+							filter.setAssignedforecast(filter.getAssignedforecast() - m.get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST));// 分配到坐席数
+							filter.setNotassigned(filter.getNotassigned() +  m.get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST));// 未分配数
+							
+							//回收到部门
+							if(StringUtils.isNotBlank(this.jobDetail.getExecto())) {
+								filter.setAssignedorgan(filter.getAssignedorgan() + m.get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST));
+								filter.setNotassigned(filter.getNotassigned() -  m.get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST));
+							}
+						}
 						if(StringUtils.isNotBlank(this.jobDetail.getExecto())) {
 							filter.setReorgannum(filter.getReorgannum() +  (m.get("sum")!=null?m.get("sum"):0));// 回收到池子数
 						}else {
@@ -400,7 +419,9 @@ public class ActivityResource extends Resource{
 						this.task.setAssigned(this.assignInt.intValue());
 						this.task.setAssignedorgan(this.assignorganInt.intValue());
 						this.task.setAssignedai(this.assignAiInt.intValue());
-						this.task.setNotassigned(this.task.getNamenum() - this.assignInt.intValue() - this.assignorganInt.intValue() - this.assignAiInt.intValue());
+						this.task.setAssignedai(this.assignAiInt.intValue());
+						this.task.setAssignedforecast(this.assignForecastInt.intValue());
+						this.task.setNotassigned(this.task.getNamenum() - this.assignInt.intValue() - this.assignorganInt.intValue() - this.assignAiInt.intValue() - this.assignForecastInt.intValue());
 					}
 					this.callOutTaskRes.save(this.task) ;
 				}
@@ -415,7 +436,8 @@ public class ActivityResource extends Resource{
 						this.filter.setAssigned(this.assignInt.intValue());
 						this.filter.setAssignedorgan(this.assignorganInt.intValue());
 						this.filter.setAssignedai(this.assignAiInt.intValue());
-						this.filter.setNotassigned(this.task.getNamenum() - this.assignInt.intValue() - this.assignorganInt.intValue() - this.assignAiInt.intValue());
+						this.filter.setAssignedforecast(this.assignForecastInt.intValue());
+						this.filter.setNotassigned(this.task.getNamenum() - this.assignInt.intValue() - this.assignorganInt.intValue() - this.assignAiInt.intValue() - this.assignForecastInt.intValue());
 					}
 					this.callOutFilterRes.save(this.filter) ;
 				}
@@ -454,6 +476,9 @@ public class ActivityResource extends Resource{
 					}else if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AI) != null) {
 						//ai
 						m.put(UKDataContext.UKEFU_SYSTEM_DIS_AI, m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI)+1:1);
+					}else if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST) != null) {
+						//预测式外呼
+						m.put(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST, m.get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST)+1:1);
 					}else if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN) != null && StringUtils.isBlank(this.jobDetail.getExecto())) {
 						m.put(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN)+1:1);
 					}
@@ -474,6 +499,9 @@ public class ActivityResource extends Resource{
 					}else if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AI) != null) {
 						//ai
 						m.put(UKDataContext.UKEFU_SYSTEM_DIS_AI, m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI)+1:1);
+					}else if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST) != null) {
+						//预测式外呼
+						m.put(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST, m.get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST)+1:1);
 					}else if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN) != null && StringUtils.isBlank(this.jobDetail.getExecto())) {
 						m.put(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN)+1:1);
 					}
@@ -494,6 +522,9 @@ public class ActivityResource extends Resource{
 					}else if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AI) != null) {
 						//ai
 						m.put(UKDataContext.UKEFU_SYSTEM_DIS_AI, m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_AI)+1:1);
+					}else if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST) != null) {
+						//预测式外呼
+						m.put(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST, m.get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST)+1:1);
 					}else if(meta.getDataBean().getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN) != null && StringUtils.isBlank(this.jobDetail.getExecto())) {
 						m.put(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN)!=null?m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN)+1:1);
 					}
@@ -563,7 +594,7 @@ public class ActivityResource extends Resource{
 					meta.getDataBean().getValues().put("status", UKDataContext.NamesDisStatusType.DISFORECAST.toString()) ;
 					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST, this.current.getDistarget()) ;
 					meta.getDataBean().getValues().put(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, this.current.getOrgan()) ;
-					this.assignAiInt.incrementAndGet() ;
+					this.assignForecastInt.incrementAndGet() ;
 				}
 			}
 		}

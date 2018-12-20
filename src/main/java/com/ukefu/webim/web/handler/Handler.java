@@ -245,6 +245,12 @@ public class Handler {
 			queryBuilder.must(termQuery("ownerdept", request.getParameter("ownerdept"))) ;
 			map.put("ownerdept", request.getParameter("ownerdept")) ;
 		}
+		
+		//队列
+		if(!StringUtils.isBlank(request.getParameter("ownerforecast"))) {
+			queryBuilder.must(termQuery("ownerforecast", request.getParameter("ownerforecast"))) ;
+			map.put("ownerforecast", request.getParameter("ownerforecast")) ;
+		}
 		//分配状态
 		if(!StringUtils.isBlank(request.getParameter("status"))) {
 			queryBuilder.must(termQuery("status", request.getParameter("status"))) ;
