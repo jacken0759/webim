@@ -27,6 +27,7 @@ public class CallCenterAgent implements java.io.Serializable ,  Comparable<CallC
 	private String siptrunk ;
 	
 	private String skill ;
+	private String forecastvalue ;
 	
 	private String phonenum ;	//通话中的电话号码
 	
@@ -169,6 +170,12 @@ public class CallCenterAgent implements java.io.Serializable ,  Comparable<CallC
 	}
 	public void setSkill(String skill) {
 		this.skill = skill;
+	}
+	public String getForecastvalue() {
+		return forecastvalue;
+	}
+	public void setForecastvalue(String forecastvalue) {
+		this.forecastvalue = forecastvalue;
 	}
 	public String getTime() {
 		String formattime = null;
