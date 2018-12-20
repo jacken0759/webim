@@ -567,7 +567,8 @@ public class UKDataContext {
 		OUTCALL,
 		CALLOUT,
 		PREVIEW,
-		OUTBOUNDCALL;
+		OUTBOUNDCALL,
+		FORECAST;
 		public String toString(){
 			return super.toString().toLowerCase() ;
 		}

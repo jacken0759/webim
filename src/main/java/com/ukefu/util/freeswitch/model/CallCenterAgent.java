@@ -26,6 +26,8 @@ public class CallCenterAgent implements java.io.Serializable ,  Comparable<CallC
 	private String workstatus ;
 	private String siptrunk ;
 	
+	private String skill ;
+	
 	private String phonenum ;	//通话中的电话号码
 	
 	private String eventid ;
@@ -35,6 +37,8 @@ public class CallCenterAgent implements java.io.Serializable ,  Comparable<CallC
 	private String nameid ;
 	
 	private String agent;
+	
+	private boolean forecast ;
 	
 	public String getAgent() {
 		return agent;
@@ -152,7 +156,20 @@ public class CallCenterAgent implements java.io.Serializable ,  Comparable<CallC
 	public void setReady(boolean ready) {
 		this.ready = ready;
 	}
-
+	
+	public boolean isForecast() {
+		return forecast;
+	}
+	public void setForecast(boolean forecast) {
+		this.forecast = forecast;
+	}
+	
+	public String getSkill() {
+		return skill;
+	}
+	public void setSkill(String skill) {
+		this.skill = skill;
+	}
 	public String getTime() {
 		String formattime = null;
 		if(updatetime!=null) {
