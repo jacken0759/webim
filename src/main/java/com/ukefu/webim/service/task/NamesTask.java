@@ -37,9 +37,10 @@ public class NamesTask implements Runnable{
 			/**
 			 * 找到名单，生成拨打任务，工作界面上，坐席只能看到自己的名单
 			 */
+			agent.setForecastvalue(null);
+			agent.setForecast(false);
 			if(names!=null && names.getContent().size() > 0) {
 				UKDataBean name = names.getContent().get(0) ;
-				
 				CallOutUtils.processNames(name, agent, agent.getOrgi(), (int)(names.getTotalElements() - 1)) ;
 			}else {
 				/**
@@ -48,6 +49,8 @@ public class NamesTask implements Runnable{
 				CallOutConfig config = CallOutUtils.initCallOutConfig(agent.getOrgi()) ;
 				if(config!=null && config.isForecast()) {
 					agent.setWorkstatus(UKDataContext.WorkStatusEnum.CALLOUT.toString());
+					agent.setForecastvalue(agent.getSkill());
+					agent.setForecast(true);
 					NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "docallout", agent);
 				}else {
 					agent.setWorkstatus(UKDataContext.WorkStatusEnum.IDLE.toString());

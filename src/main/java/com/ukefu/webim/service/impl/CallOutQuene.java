@@ -109,6 +109,7 @@ public class CallOutQuene {
 		Long names = (Long) callOutMap.aggregate(Aggregators.<Map.Entry<String, CallOutNames>>count(), new AiCallOutFilterPredicate(orgi,ownerai)) ;
 		return names!=null ? names.intValue() : 0 ;
 	}
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static int countAgentCallOut(String orgi) {
 		/**
