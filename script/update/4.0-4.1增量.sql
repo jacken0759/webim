@@ -655,7 +655,7 @@ ALTER TABLE uk_act_config ADD enableauto tinyint(4) DEFAULT 0 COMMENT '启用全
 
 ALTER TABLE uk_que_survey_question ADD interrupt tinyint(4) DEFAULT 0 COMMENT '打断 0不允许';
 ALTER TABLE uk_que_survey_question ADD trans VARCHAR(255) DEFAULT NULL COMMENT '转接号码';
-ALTER TABLE uk_que_survey_question ADD maxspreak int DEFAULT 0 COMMENT '最大说话时长';
+ALTER TABLE uk_que_survey_question ADD maxspreak int DEFAULT 10 COMMENT '最大说话时长';
 ALTER TABLE uk_que_survey_question ADD interrupttime int DEFAULT 0 COMMENT '打断开始时间';
 
 
