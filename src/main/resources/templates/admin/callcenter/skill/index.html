@@ -3,8 +3,8 @@
         <h1 class="site-h1" style="background-color:#FFFFFF;">技能组列表
             <#if skillList??>（${skillList?size}）</#if>
             <span style="float:right;">
-                <button class="layui-btn layui-btn-sm green" href="/admin/callcenter/skill/add.html?hostid=${pbxHost.id!''}" data-toggle="ajax" data-width="550" data-height="260" data-title="添加技能组">添加技能组</button>
-                <button class="layui-btn layui-btn-sm green" href="/admin/callcenter/skill/imp.html?hostid=${pbxHost.id!''}" data-toggle="ajax" data-width="550" data-height="400" data-title="导入坐席">导入坐席</button></span>
+                <button class="layui-btn layui-btn-sm green" href="/admin/callcenter/skill/add.html?hostid=${pbxHost.id!''}" data-toggle="ajax" data-width="550" data-height="360" data-title="添加技能组">添加技能组</button>
+                <button class="layui-btn layui-btn-sm green" href="/admin/callcenter/skill/imp.html?hostid=${pbxHost.id!''}" data-toggle="ajax" data-width="550" data-height="450" data-title="导入坐席">导入坐席</button></span>
         </h1>
         <div class="row">
             <div class="col-lg-12" style="padding-left:5px;">
@@ -12,7 +12,16 @@
                 	<#if skillList??>
                 	<#list skillList as skill>
                     <div class="layui-colla-item">
-                        <h2 class="layui-colla-title">${skill.name!''}（${skill.skill!''}）</h2>
+                        <h2 class="layui-colla-title">${skill.name!''}（${skill.skill!''}）
+                        	<span style="float:right">
+									<a class="layui-btn layui-btn-sm green" href="/admin/callcenter/skill/edit.html??hostid=${pbxHost.id!''}&id=${skill.id!''}" data-toggle="ajax" data-width="550" data-height="360" title="编辑">
+										编辑
+									</a>
+									<a class="layui-btn layui-btn-sm layui-btn-danger" href="/admin/callcenter/skill/delete.html?id=${skill.id!''}" data-toggle="tip"  title="确定要删除队列吗？" data-callback="loadURL" data-target="#callCenterContent">
+										删除
+									</a>
+							</span>
+                        </h2>
                         <div class="layui-colla-content layui-show" style="padding:0px;">
                             <table class="layui-table" lay-skin="line" style="border-left:0px;">
                                 <colgroup>
@@ -44,9 +53,6 @@
                     </#if>
                 </div>
             </div>
-        </div>
-        <div class="row" style="padding:5px;">
-            <div class="col-lg-12" id="page" style="text-align:center;"></div>
         </div>
     </div>
 </div>

@@ -48,7 +48,7 @@ public class SipTrunkController extends Handler{
 	@RequestMapping(value = "/siptrunk")
     @Menu(type = "callcenter" , subtype = "extention" , access = true)
     public ModelAndView detail(ModelMap map , HttpServletRequest request , HttpServletResponse response ,@Valid String extno) throws IOException, TemplateException {
-		SipTrunk sipTrunk = CallCenterUtils.siptrunk(extno, sipTrunkRes, extentionRes) ;
+		SipTrunk sipTrunk = CallCenterUtils.siptrunk(extno,super.getOrgi(request), sipTrunkRes, extentionRes) ;
 		map.addAttribute("siptrunk" , sipTrunk);
 		response.setContentType("Content-type: text/plain; charset=utf-8"); 
     	return request(super.createRequestPageTempletResponse("/apps/business/callcenter/extention/siptrunk"));
@@ -57,7 +57,7 @@ public class SipTrunkController extends Handler{
 	@RequestMapping(value = "/agent")
     @Menu(type = "callcenter" , subtype = "agent" , access = true)
     public ModelAndView agent(ModelMap map , HttpServletRequest request , HttpServletResponse response ,@Valid String ani ,@Valid String dest,@Valid String sip) throws IOException, TemplateException {
-		SipTrunk sipTrunk = CallCenterUtils.siptrunk(sip, sipTrunkRes) ;
+		SipTrunk sipTrunk = CallCenterUtils.siptrunk(sip,super.getOrgi(request), sipTrunkRes) ;
 		map.addAttribute("siptrunk" , sipTrunk);
 		String agent  = null ;
 		response.setContentType("Content-type: text/plain; charset=utf-8"); 

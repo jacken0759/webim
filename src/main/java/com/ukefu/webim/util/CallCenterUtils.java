@@ -94,9 +94,9 @@ public class CallCenterUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static SipTrunk siptrunk(String extno , SipTrunkRepository sipTrunkRes, ExtentionRepository extRes){
+	public static SipTrunk siptrunk(String extno ,String orgi, SipTrunkRepository sipTrunkRes, ExtentionRepository extRes){
 		SipTrunk sipTrunk = null;
-		List<Extention> extList = extRes.findByExtention(extno) ;
+		List<Extention> extList = extRes.findByExtentionAndOrgi(extno, orgi) ;
 		if(extList.size() > 0){
 			Extention ext = extList.get(0) ;
 			if(!StringUtils.isBlank(ext.getSiptrunk())) {
@@ -149,13 +149,13 @@ public class CallCenterUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static SipTrunk siptrunk(String name , SipTrunkRepository sipTrunkRes){
+	public static SipTrunk siptrunk(String name ,String orgi, SipTrunkRepository sipTrunkRes){
 		SipTrunk sipTrunk = null;
-		List<SipTrunk> sipTrunkList = sipTrunkRes.findByName(name) ;
+		List<SipTrunk> sipTrunkList = sipTrunkRes.findByNameAndOrgi(name,orgi) ;
 		if(sipTrunkList.size() > 0){
 			sipTrunk = sipTrunkList.get(0) ;
 		}else {
-			sipTrunkList = sipTrunkRes.findByDefaultsip(true) ;
+			sipTrunkList = sipTrunkRes.findByDefaultsipAndOrgi(true,orgi) ;
 			if(sipTrunkList.size() > 0) {
 				sipTrunk = sipTrunkList.get(0) ;
 			}

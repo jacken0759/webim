@@ -16,7 +16,15 @@ import com.ukefu.core.UKDataContext;
 import com.ukefu.util.Menu;
 import com.ukefu.util.extra.CallCenterInterface;
 import com.ukefu.webim.service.cache.CacheHelper;
+import com.ukefu.webim.service.repository.AclRepository;
+import com.ukefu.webim.service.repository.CallCenterSkillRepository;
+import com.ukefu.webim.service.repository.ExtentionRepository;
+import com.ukefu.webim.service.repository.IvrMenuRepository;
+import com.ukefu.webim.service.repository.MediaRepository;
 import com.ukefu.webim.service.repository.PbxHostRepository;
+import com.ukefu.webim.service.repository.RouterRulesRepository;
+import com.ukefu.webim.service.repository.SipTrunkRepository;
+import com.ukefu.webim.service.repository.SkillExtentionRepository;
 import com.ukefu.webim.web.handler.Handler;
 import com.ukefu.webim.web.model.PbxHost;
 
@@ -26,6 +34,27 @@ public class CallCenterController extends Handler{
 	
 	@Autowired
 	private PbxHostRepository pbxHostRes ;
+	
+	@Autowired
+	private ExtentionRepository extentionRes;
+	
+	@Autowired
+	private CallCenterSkillRepository skillRes ;
+	
+	@Autowired
+	private SkillExtentionRepository skillExtentionRes;
+	
+	@Autowired
+	private RouterRulesRepository routerRulesRes ;
+	
+	@Autowired
+	private AclRepository aclRes ;
+	
+	@Autowired
+	private SipTrunkRepository sipTrunkRes ;
+	
+	@Autowired
+	private MediaRepository mediaRes ;
 	
 	@RequestMapping(value = "/index")
     @Menu(type = "callcenter" , subtype = "callcenter" , access = false , admin = true)
@@ -151,6 +180,20 @@ public class CallCenterController extends Handler{
 				}
 			}
 			CacheHelper.getSystemCacheBean().delete(pbxHost.getIpaddr() ,pbxHost.getOrgi()) ;
+			//删除关联数据
+			//删除分机配置
+			extentionRes.delete(extentionRes.findByHostidAndOrgi(pbxHost.getId() , super.getOrgi(request))	);
+			//删除队列信息
+			skillRes.delete(skillRes.findByHostidAndOrgi(pbxHost.getId() , super.getOrgi(request)));
+			skillExtentionRes.delete(skillExtentionRes.findByHostidAndOrgi(pbxHost.getId(), super.getOrgi(request)));
+			//删除路由规则
+			routerRulesRes.delete(routerRulesRes.findByHostidAndOrgi(pbxHost.getId(), super.getOrgi(request)));
+			//删除acl
+			aclRes.delete(aclRes.findByHostidAndOrgi(pbxHost.getId(), super.getOrgi(request)));
+			//删除sip网关
+			sipTrunkRes.delete(sipTrunkRes.findByHostidAndOrgi(pbxHost.getId(), super.getOrgi(request)));
+			//删除 媒体资源
+			mediaRes.delete(mediaRes.findByHostidAndOrgi(pbxHost.getId(), super.getOrgi(request)));
 		}
 		return request(super.createRequestPageTempletResponse("redirect:/admin/callcenter/pbxhost.html"));
     }

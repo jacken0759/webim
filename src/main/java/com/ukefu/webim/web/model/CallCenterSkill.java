@@ -29,6 +29,8 @@ public class CallCenterSkill implements java.io.Serializable{
 	private String creater ;
 	private Date createtime = new Date();
 	private Date updatetime = new Date();
+	
+	private String siptrunk;//绑定网关
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -94,4 +96,11 @@ public class CallCenterSkill implements java.io.Serializable{
 	public void setHostid(String hostid) {
 		this.hostid = hostid;
 	}
+	public String getSiptrunk() {
+		return siptrunk;
+	}
+	public void setSiptrunk(String siptrunk) {
+		this.siptrunk = siptrunk;
+	}
+	
 }

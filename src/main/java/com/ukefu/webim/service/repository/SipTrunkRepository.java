@@ -15,6 +15,8 @@ public interface SipTrunkRepository extends JpaRepository<SipTrunk, String> {
 	
 	public List<SipTrunk> findByName(String name);
 	
+	public List<SipTrunk> findByNameAndOrgi(String name,String orgi);
+	
 	public List<SipTrunk> findByDefaultsipAndOrgi(boolean def, String orgi);
 	
 	public List<SipTrunk> findByDefaultsip(boolean def);
