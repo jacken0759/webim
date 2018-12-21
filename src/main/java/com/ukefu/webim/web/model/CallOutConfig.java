@@ -36,6 +36,10 @@ public class CallOutConfig implements java.io.Serializable{
 	
 	private boolean enabletaithreads ;		//启用机器人并发外呼限制
 	private int aithreads ;					//机器人外呼并发数量
+
+	private boolean enablefthreads ;		//启用预测式外呼并发限制
+	private int fthreads ;					//预测式外呼并发数量
+	
 	
 	private boolean enableauto ;			//启用预览式外呼全自动功能
 	
@@ -199,5 +203,17 @@ public class CallOutConfig implements java.io.Serializable{
 	}
 	public void setEnableauto(boolean enableauto) {
 		this.enableauto = enableauto;
+	}
+	public boolean isEnablefthreads() {
+		return enablefthreads;
+	}
+	public void setEnablefthreads(boolean enablefthreads) {
+		this.enablefthreads = enablefthreads;
+	}
+	public int getFthreads() {
+		return fthreads;
+	}
+	public void setFthreads(int fthreads) {
+		this.fthreads = fthreads;
 	}
 }

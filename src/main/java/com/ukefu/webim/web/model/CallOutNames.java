@@ -417,5 +417,4 @@ public class CallOutNames implements java.io.Serializable{
 	public void setOwnerforecast(String ownerforecast) {
 		this.ownerforecast = ownerforecast;
 	}
-	
 }
