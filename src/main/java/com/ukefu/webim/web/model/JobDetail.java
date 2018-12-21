@@ -151,6 +151,9 @@ public class JobDetail implements Serializable{
 	private String extention;//要执行的机器人id
 	private boolean enabletaithreads ;		//当前任务 启用机器人并发外呼限制
 	private int aithreads ;					//当前任务 机器人外呼并发数量
+	
+	private String forecastid;//队列id
+	
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -887,4 +890,14 @@ public class JobDetail implements Serializable{
 	public void setEndtime(String endtime) {
 		this.endtime = endtime;
 	}
+
+	public String getForecastid() {
+		return forecastid;
+	}
+
+	public void setForecastid(String forecastid) {
+		this.forecastid = forecastid;
+	}
+	
+	
 }

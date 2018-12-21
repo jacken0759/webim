@@ -662,3 +662,5 @@ ALTER TABLE uk_que_survey_question ADD interrupttime int DEFAULT 0 COMMENT '打�
 ALTER TABLE uk_act_task ADD assignedforecast int DEFAULT 0 COMMENT '分配到队列的数量';
 ALTER TABLE uk_act_filter_his ADD assignedforecast int DEFAULT 0 COMMENT '分配到队列的数量';
 ALTER TABLE uk_act_callnames ADD ownerforecast VARCHAR(50) DEFAULT NULL COMMENT '分配的队列';
+
+ALTER TABLE uk_jobdetail ADD forecastid varchar(50) DEFAULT NULL COMMENT '预测式外呼 队列ID';

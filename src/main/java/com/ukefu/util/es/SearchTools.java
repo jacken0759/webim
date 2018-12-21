@@ -81,6 +81,13 @@ public class SearchTools {
 								queryBuilder.must(termQuery("callstatus", UKDataContext.NamesCalledEnum.SUCCESS.toString()));break ;
 			case "agentfailed" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_AGENT, id)) ; 
 								queryBuilder.must(termQuery("callstatus", UKDataContext.NamesCalledEnum.FAILD.toString()));break ;
+			case "forecast" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST, id)) ;
+						queryBuilder.should(termQuery("callstatus", UKDataContext.NameStatusTypeEnum.NOTCALL.toString()));
+						queryBuilder.should(termQuery("callstatus", UKDataContext.NameStatusTypeEnum.WASTE.toString()));break ;
+			case "forecastsuccess" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST, id)) ; 
+							queryBuilder.must(termQuery("callstatus", UKDataContext.NamesCalledEnum.SUCCESS.toString()));break ;
+			case "forecastfailed" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST, id)) ; 
+							queryBuilder.must(termQuery("callstatus", UKDataContext.NamesCalledEnum.FAILD.toString()));break ;					
 			case "ai" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_AI, id)) ; break ;
 			case "aisuccess" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_AI, id)) ; 
 								queryBuilder.must(termQuery("callstatus", UKDataContext.NamesCalledEnum.SUCCESS.toString()));break ;

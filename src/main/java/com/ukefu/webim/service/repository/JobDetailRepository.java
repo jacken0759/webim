@@ -33,4 +33,6 @@ public abstract interface JobDetailRepository extends JpaRepository<JobDetail, S
 	
 	//通过orgi和机器人id查询
 	public abstract List<JobDetail> findByOrgiAndExtention(String orgi, String extention);
+	
+	public abstract Page<JobDetail> findByOrgiAndForecastid(String orgi, String forecastid,Pageable page);
 }

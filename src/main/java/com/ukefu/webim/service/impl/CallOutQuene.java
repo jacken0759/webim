@@ -17,6 +17,7 @@ import com.ukefu.webim.service.quene.AiCallOutFilterPredicate;
 import com.ukefu.webim.service.quene.CallCenterAgentOrgiFilterPredicate;
 import com.ukefu.webim.service.quene.CallCenterAgentReadyOrgiFilterPredicate;
 import com.ukefu.webim.service.quene.CallCenterInCallOrgiFilterPredicate;
+import com.ukefu.webim.service.quene.ForecastCallOutFilterPredicate;
 import com.ukefu.webim.web.model.AgentReport;
 import com.ukefu.webim.web.model.CallOutNames;
 
@@ -132,5 +133,25 @@ public class CallOutQuene {
 			callOutNamesList.addAll(((IMap<String , CallOutNames>) CacheHelper.getCallOutCacheBean().getCache()).values(pagingPredicate)) ;
 		}
 		return callOutNamesList ;
+	}
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static int countForecastCallOut(String orgi) {
+		/**
+		 * 统计当前在线的坐席数量
+		 */
+		IMap callOutMap = (IMap<String, Object>) CacheHelper.getCallOutCacheBean().getCache() ;
+		Long names = (Long) callOutMap.aggregate(Aggregators.<Map.Entry<String, CallOutNames>>count(), new ForecastCallOutFilterPredicate(orgi)) ;
+		return names!=null ? names.intValue() : 0 ;
+	}
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static int countForecastCallOut(String orgi,String ownerforecast) {
+		/**
+		 * 统计当前在线的坐席数量
+		 */
+		IMap callOutMap = (IMap<String, Object>) CacheHelper.getCallOutCacheBean().getCache() ;
+		Long names = (Long) callOutMap.aggregate(Aggregators.<Map.Entry<String, CallOutNames>>count(), new ForecastCallOutFilterPredicate(orgi,ownerforecast)) ;
+		return names!=null ? names.intValue() : 0 ;
 	}
 }

@@ -123,6 +123,12 @@ public class UKDataContext {
 		} catch (ClassNotFoundException e) {
 			//e.printStackTrace();
 		}
+		//预测式外呼
+		try {
+			uKeFuResourceMap.put(TaskType.FORECAST.toString(), Class.forName("com.ukefu.webim.service.resource.ForecastCalloutResource"));
+		} catch (ClassNotFoundException e) {
+			//e.printStackTrace();
+		}
 	}
 	
 	public enum AskSectionType{
@@ -434,7 +440,8 @@ public class UKDataContext {
 		ACTIVE,
 		QUALITY,
 		AISALES,//电销机器人任务
-		RECOVERY;//回收
+		RECOVERY,//回收
+		FORECAST;//预测式外呼拨打任务
 		public String toString(){
 			return super.toString().toLowerCase() ;
 		}
@@ -830,7 +837,8 @@ public class UKDataContext {
 
 	public enum CallOutType{
 		AGENT,
-		AI;
+		AI,
+		FORECAST;
 		
 		public String toString(){
 			return super.toString().toLowerCase() ;
