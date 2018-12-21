@@ -182,6 +182,25 @@ public class SearchTools {
 		queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_AI,aiid));
 		return search(queryBuilder, p, ps);
 	}
+	
+	/**
+	 * 通过ai id 查询
+	 * @param orgi
+	 * @param agent
+	 * @param p
+	 * @param ps
+	 * @return
+	 */
+	public static PageImpl<UKDataBean> forecastsearch(String orgi ,String queueid, int p, int ps){
+		BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
+		queryBuilder.must(termQuery("orgi", orgi)) ;
+		queryBuilder.must(termQuery("callstatus", UKDataContext.NameStatusTypeEnum.NOTCALL.toString())) ;
+		
+		queryBuilder.must(termQuery("validresult", "valid")) ;
+		queryBuilder.must(termQuery("status", UKDataContext.NamesDisStatusType.DISFORECAST.toString())) ;
+		queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_FORECAST,queueid));
+		return search(queryBuilder, p, ps);
+	}
 	/**
 	 * 
 	 * @param orgi
