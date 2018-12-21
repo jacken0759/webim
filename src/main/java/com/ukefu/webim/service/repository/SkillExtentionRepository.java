@@ -10,6 +10,6 @@ public interface SkillExtentionRepository extends JpaRepository<SkillExtention, 
 	
 	public SkillExtention findByIdAndOrgi(String id , String orgi);
 	public List<SkillExtention> findByHostidAndOrgi(String hostid , String orgi);
-	
+	public List<SkillExtention> findByExtentionAndOrgi(String extention , String orgi);
 	public List<SkillExtention> findBySkillidAndOrgi(String skillid,String orgi);
 }
