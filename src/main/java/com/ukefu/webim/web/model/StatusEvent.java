@@ -56,6 +56,8 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>,UserEv
 	
 	
 	private boolean current ;//
+	private boolean forecast ;
+	private String skill ;
 	
 	private boolean init ;//
 	private String tracesip ;	//SIP消息记录
@@ -869,6 +871,16 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>,UserEv
 	public void setTranid(String tranid) {
 		this.tranid = tranid;
 	}
-	
-	
+	public boolean isForecast() {
+		return forecast;
+	}
+	public void setForecast(boolean forecast) {
+		this.forecast = forecast;
+	}
+	public String getSkill() {
+		return skill;
+	}
+	public void setSkill(String skill) {
+		this.skill = skill;
+	}
 }
