@@ -668,3 +668,10 @@ ALTER TABLE uk_act_filter_his ADD assignedforecast int DEFAULT 0 COMMENT '分配
 ALTER TABLE uk_act_callnames ADD ownerforecast VARCHAR(50) DEFAULT NULL COMMENT '分配的队列';
 
 ALTER TABLE uk_jobdetail ADD forecastid varchar(50) DEFAULT NULL COMMENT '预测式外呼 队列ID';
+
+
+
+ALTER TABLE uk_callcenter_skill ADD siptrunk varchar(50) DEFAULT NULL COMMENT '绑定网关';
+
+ALTER TABLE uk_callcenter_event ADD forecast tinyint(4) DEFAULT 0 COMMENT '预测式外呼';
+ALTER TABLE uk_callcenter_event ADD skill varchar(50) DEFAULT NULL COMMENT '外呼队列';
