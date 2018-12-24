@@ -315,7 +315,7 @@
 								</dd>
 								</#if>
 							</#if>
-							<#if models?? && models["forecastsales"]?? && models["sales"] == true>
+							<#if models?? && models["sales"] == true>
 								<#if user?? &&( user.roleAuthMap["A18"]?? || user.usertype == "0") >
 								<dd class="ukefu-left-menu" data-tooltip="预测式外呼">
 									<a href="javascript:void(0)" data-title="预测式外呼" data-href="/apps/callout/forecast/index.html" class="iframe_btn" data-id="maincontent" data-type="tabChange"> 

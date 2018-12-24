@@ -775,6 +775,21 @@
 										</div>
 									</div>
 								</div>
+								
+								<div class="ukefu-webim-prop">
+									<div class="ukefu-webim-tl" style="clear:both;">21、服务器访问IP白名单</div>
+									<div class="box-item">
+										<div class="row">
+											<div class="col-lg-8">
+												<p>白名单控制功能，从语音服务器访问的时候，进行地址校验</p>
+												<p style="color:#888888;font-size:13px;margin-top:10px;">启用白名单后，从语言服务器访问当前服务器需要增加IP白名单</p>
+											</div>
+											<div class="col-lg-4" style="text-align:right;">
+												<input type="text" name="whitelistip" value="<#if systemConfig.whitelistip?? && systemConfig.whitelistip!= ''>${systemConfig.whitelistip!''}</#if>" autocomplete="off" class="layui-input">
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="ukefu-im-preview ukefu-im-preview-dialog" id="pv" style="width:380px;position: fixed;background-color:#e6e6e6;">

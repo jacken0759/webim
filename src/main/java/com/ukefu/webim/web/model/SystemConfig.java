@@ -50,6 +50,7 @@ public class SystemConfig implements java.io.Serializable{
 	private String mapkey ;
 	private boolean workorders ;	//工单启用三栏布局
 	private String iconstr;			//修改服务器url地址
+	private String whitelistip;			//服务器IP白名单
 	
 	private boolean callout ;		//允许在电话号码上点击呼出
 	private boolean auth ;			//启用权限控制
@@ -466,6 +467,12 @@ public class SystemConfig implements java.io.Serializable{
 	}
 	public void setEnabledis(boolean enabledis) {
 		this.enabledis = enabledis;
+	}
+	public String getWhitelistip() {
+		return whitelistip;
+	}
+	public void setWhitelistip(String whitelistip) {
+		this.whitelistip = whitelistip;
 	}
 	@Transient
 	public String getBackgroundColor(){
