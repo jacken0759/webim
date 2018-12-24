@@ -222,8 +222,8 @@ public class UKDataContext {
 		EMPNO,	//空号
 		ARREARS,//欠费
 		APPO,	//预约拨打
-		INVALID;//无效名单
-		
+		INVALID,//无效名单
+		ERROR;//异常
 		public String toString(){
 			return super.toString().toLowerCase() ;
 		}

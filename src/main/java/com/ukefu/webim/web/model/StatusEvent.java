@@ -211,6 +211,7 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>,UserEv
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	private String callresult;
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -883,4 +884,12 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>,UserEv
 	public void setSkill(String skill) {
 		this.skill = skill;
 	}
+	public String getCallresult() {
+		return callresult;
+	}
+	public void setCallresult(String callresult) {
+		this.callresult = callresult;
+	}
+	
+	
 }

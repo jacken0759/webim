@@ -304,7 +304,7 @@ public class CallOutUtils {
 		metaDataTable.getTableproperty().add(initProperties("apstatus", "是否预约", "String", event.getOrgi() , event.getTablename() , true)) ;
 		metaDataTable.getTableproperty().add(initProperties("aptime", "预约时间", "Date", event.getOrgi() , event.getTablename() , true)) ;
 		metaDataTable.getTableproperty().add(initProperties("apmemo", "预约备注", "String", event.getOrgi() , event.getTablename() , true)) ;
-		
+		metaDataTable.getTableproperty().add(initProperties("callresult", "拨打结果信息", "String", event.getOrgi() , event.getTablename() , true)) ;
 		metaDataTable.getTableproperty().add(initProperties("calltime", "拨打时间", "Date", event.getOrgi() , event.getTablename() , true)) ;
 		metaDataTable.getTableproperty().add(initProperties("firstcalltimes", "首次拨打时间", "Date", event.getOrgi() , event.getTablename() , true)) ;
 		metaDataTable.getTableproperty().add(initProperties("firstcallstatus", "首次拨打结果", "String", event.getOrgi() , event.getTablename() , true)) ;
