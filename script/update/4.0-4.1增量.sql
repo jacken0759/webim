@@ -675,5 +675,7 @@ ALTER TABLE uk_callcenter_skill ADD siptrunk varchar(50) DEFAULT NULL COMMENT '�
 
 ALTER TABLE uk_callcenter_event ADD forecast tinyint(4) DEFAULT 0 COMMENT '预测式外呼';
 ALTER TABLE uk_callcenter_event ADD skill varchar(50) DEFAULT NULL COMMENT '外呼队列';
+ALTER TABLE uk_callcenter_event ADD forecastid varchar(50) DEFAULT NULL COMMENT '外呼队列ID';
 
+ALTER TABLE uk_systemconfig ADD whitelistip text DEFAULT NULL COMMENT '白名单';
 ALTER TABLE uk_callcenter_event ADD callresult varchar(500) DEFAULT NULL COMMENT '拨打结果信息';
