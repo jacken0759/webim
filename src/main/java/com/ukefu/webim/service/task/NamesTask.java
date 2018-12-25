@@ -1,5 +1,7 @@
 package com.ukefu.webim.service.task;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 import com.ukefu.core.UKDataContext;
@@ -9,6 +11,8 @@ import com.ukefu.util.es.SearchTools;
 import com.ukefu.util.es.UKDataBean;
 import com.ukefu.util.freeswitch.model.CallCenterAgent;
 import com.ukefu.webim.service.cache.CacheHelper;
+import com.ukefu.webim.service.repository.CallCenterSkillRepository;
+import com.ukefu.webim.web.model.CallCenterSkill;
 import com.ukefu.webim.web.model.CallOutConfig;
 
 public class NamesTask implements Runnable{
@@ -46,13 +50,20 @@ public class NamesTask implements Runnable{
 				/**
 				 * 检查启用预测式外呼功能
 				 */
+				boolean tip = true ; 
 				CallOutConfig config = CallOutUtils.initCallOutConfig(agent.getOrgi()) ;
 				if(config!=null && config.isForecast()) {
-					agent.setWorkstatus(UKDataContext.WorkStatusEnum.CALLOUT.toString());
-					agent.setForecastvalue(agent.getSkill());
-					agent.setForecast(true);
-					NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "docallout", agent);
-				}else {
+					CallCenterSkillRepository callCenterSkillRes = UKDataContext.getContext().getBean(CallCenterSkillRepository.class) ;
+					List<CallCenterSkill> callCenterSkillList = callCenterSkillRes.findByNameAndOrgi(agent.getExtno() , agent.getOrgi()) ;
+					if(callCenterSkillList.size() > 0) {
+						agent.setWorkstatus(UKDataContext.WorkStatusEnum.CALLOUT.toString());
+						agent.setForecastvalue(agent.getSkill());
+						agent.setForecast(true);
+						NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "docallout", agent);
+						tip = false ;
+					}
+				}
+				if(tip){
 					agent.setWorkstatus(UKDataContext.WorkStatusEnum.IDLE.toString());
 					NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "error", "nonames");
 					NettyClients.getInstance().sendCallCenterMessage(agent.getExtno(), "docallout", agent);
