@@ -149,8 +149,8 @@ public class JobDetail implements Serializable{
 
 	
 	private String extention;//要执行的机器人id
-	private boolean enabletaithreads ;		//当前任务 启用机器人并发外呼限制
-	private int aithreads ;					//当前任务 机器人外呼并发数量
+	private boolean enabletaithreads ;		//当前任务 启用机器人并发外呼限制 //预测式外呼并发外呼限制
+	private int aithreads ;					//当前任务 机器人外呼并发数量 //预测式外呼并发外呼限制数量
 	
 	private String forecastid;//队列id
 	
