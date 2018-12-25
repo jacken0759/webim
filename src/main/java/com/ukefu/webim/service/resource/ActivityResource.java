@@ -94,7 +94,7 @@ public class ActivityResource extends Resource{
 				this.batids = new HashMap<String,Map<String,Integer>>();
 			}
 			//回收数据 , 需要传入回收的目标  ： 包括 批次ID，任务ID，筛选ID，活动ID
-			this.dataList = SearchTools.recoversearch(this.jobDetail.getOrgi(), this.jobDetail.getExectype(), this.jobDetail.getExectarget() , metadataTable ,0, 5000) ;
+			this.dataList = SearchTools.recoversearch(this.jobDetail.getOrgi(), this.jobDetail.getExectype(), this.jobDetail.getExectarget() , metadataTable ,0, 1000) ;
 			//判断是否分配完毕
 			if(this.dataList.getTotalElements() > this.dataList.getContent().size()) {
 				this.isEnd = false;
@@ -169,7 +169,7 @@ public class ActivityResource extends Resource{
 				}
 				if(metadataTable!=null) {
 					
-					this.dataList = SearchTools.dissearch(this.jobDetail.getOrgi(), formFilter, formFilterList , metadataTable ,0, 5000) ;
+					this.dataList = SearchTools.dissearch(this.jobDetail.getOrgi(), formFilter, formFilterList , metadataTable ,0, 1000) ;
 					//判断是否分配完毕 剩余分配数>当前查询总数
 					if(this.dataList.getTotalElements() > this.dataList.getContent().size() && actiNum != null && (this.actiNum- this.atomInt.intValue()) > this.dataList.getContent().size()) {
 						this.isEnd = false;
