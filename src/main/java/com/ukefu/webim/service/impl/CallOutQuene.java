@@ -77,7 +77,7 @@ public class CallOutQuene {
 	public static List<CallCenterAgent> forecastAgent(String forecastid){
 		List<CallCenterAgent> agentList = new ArrayList<CallCenterAgent>();
 		if(CacheHelper.getCallCenterAgentCacheBean()!=null && CacheHelper.getCallCenterAgentCacheBean().getCache()!=null) {
-			PagingPredicate<String, CallCenterAgent> pagingPredicate = new PagingPredicate<String, CallCenterAgent>( Predicates.and(Predicates.like("forecastvalue", forecastid) , Predicates.equal("workstatus", UKDataContext.WorkStatusEnum.CALLOUT.toString()))  , 1 ) ;
+			PagingPredicate<String, CallCenterAgent> pagingPredicate = new PagingPredicate<String, CallCenterAgent>( new SqlPredicate( "forecastvalue like '%"+forecastid+"%' AND workstatus ='"+UKDataContext.WorkStatusEnum.CALLOUT.toString()+"'" )   , 1 ) ;
 			agentList.addAll(((IMap<String , CallCenterAgent>) CacheHelper.getCallCenterAgentCacheBean().getCache()).values(pagingPredicate)) ;
 		}
 		return agentList ;
@@ -206,13 +206,13 @@ public class CallOutQuene {
 	 */
 	public synchronized static CallCenterAgent updateAgentStatus(String forecastid ,String orgi){
 		CallCenterAgent agent = null ;
-		Lock lock = CacheHelper.getCallCenterAgentCacheBean().getLock("LOCK", orgi) ;
+		Lock lock = CacheHelper.getCallCenterAgentCacheBean().getLock("AgentLOCK", orgi) ;
 		lock.lock();
 		try{
 			List<CallCenterAgent> agents = forecastAgent(forecastid) ;
 			if(agents!=null && agents.size() > 0) {
 				agent = agents.get(0) ;
-				agent.setWorkstatus(UKDataContext.WorkStatusEnum.OUTBOUNDCALL.toString());
+				agent.setWorkstatus(UKDataContext.WorkStatusEnum.PREVIEW.toString());
 				CacheHelper.getCallCenterAgentCacheBean().put(agent.getUserid(), agent, orgi);
 			}
 		}finally{
