@@ -332,6 +332,7 @@ public class ActivityResource extends Resource{
 							filter.setAssignedorgan(filter.getAssignedorgan() - m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));// 分配到坐席数
 							filter.setNotassigned(filter.getNotassigned() +  m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));// 未分配数
 							
+							filter.setReorgannum(filter.getReorgannum() -   m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));
 							//回收到部门
 							if(StringUtils.isNotBlank(this.jobDetail.getExecto())) {
 								filter.setAssignedorgan(filter.getAssignedorgan() + m.get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));

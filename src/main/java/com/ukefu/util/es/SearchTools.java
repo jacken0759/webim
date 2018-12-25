@@ -108,6 +108,8 @@ public class SearchTools {
 			case "skill" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, id)) ; 
 						queryBuilder.should(termQuery("callstatus", UKDataContext.NameStatusTypeEnum.NOTCALL.toString()));
 						queryBuilder.should(termQuery("callstatus", UKDataContext.NameStatusTypeEnum.WASTE.toString()));break ;
+			case "skillnot" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, id)) ; //未分配
+					queryBuilder.should(termQuery("status", UKDataContext.NamesDisStatusType.NOT.toString()));break ;
 			case "skillsuccess" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, id)) ; 
 						queryBuilder.must(termQuery("callstatus", UKDataContext.NamesCalledEnum.SUCCESS.toString()));break ;
 			case "skillfailed" : queryBuilder.must(termQuery(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN, id)) ;
