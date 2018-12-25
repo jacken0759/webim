@@ -366,6 +366,18 @@ public class ESDataExchangeImpl{
 		aggregition.subAggregation(AggregationBuilders.range("focustimes.three").field("focustimes").addRange(10, 20)) ;
 		aggregition.subAggregation(AggregationBuilders.range("focustimes.four").field("focustimes").addRange(20, Integer.MAX_VALUE)) ;
 		
+		//振铃时长
+		aggregition.subAggregation(AggregationBuilders.range("ringtime.one").field("ringtime").addRange(0, 10000)) ;
+		aggregition.subAggregation(AggregationBuilders.range("ringtime.two").field("ringtime").addRange(10000, 30000)) ;
+		aggregition.subAggregation(AggregationBuilders.range("ringtime.three").field("ringtime").addRange(30000, 60000)) ;
+		aggregition.subAggregation(AggregationBuilders.range("ringtime.four").field("ringtime").addRange(60000, Integer.MAX_VALUE)) ;
+		
+		
+		aggregition.subAggregation(AggregationBuilders.avg("incall.arg").field("incall")) ;
+		
+		aggregition.subAggregation(AggregationBuilders.max("incall.max").field("incall")) ;
+		
+		aggregition.subAggregation(AggregationBuilders.min("incall.min").field("incall")) ;
 		
 		searchBuilder.addAggregation(aggregition) ;
 		
