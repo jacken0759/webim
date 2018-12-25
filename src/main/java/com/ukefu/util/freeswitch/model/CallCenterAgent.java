@@ -38,7 +38,9 @@ public class CallCenterAgent implements java.io.Serializable ,  Comparable<CallC
 	private String nameid ;
 	
 	private String agent;
-	
+	private long hanguptime ;
+	private String dataid ;
+	private String metaid ;
 	private boolean forecast ;
 	
 	public String getAgent() {
@@ -176,6 +178,24 @@ public class CallCenterAgent implements java.io.Serializable ,  Comparable<CallC
 	}
 	public void setForecastvalue(String forecastvalue) {
 		this.forecastvalue = forecastvalue;
+	}
+	public long getHanguptime() {
+		return hanguptime;
+	}
+	public void setHanguptime(long hanguptime) {
+		this.hanguptime = hanguptime;
+	}
+	public String getDataid() {
+		return dataid;
+	}
+	public void setDataid(String dataid) {
+		this.dataid = dataid;
+	}
+	public String getMetaid() {
+		return metaid;
+	}
+	public void setMetaid(String metaid) {
+		this.metaid = metaid;
 	}
 	public String getTime() {
 		String formattime = null;

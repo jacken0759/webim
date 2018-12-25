@@ -548,6 +548,7 @@ public class ActivityResource extends Resource{
 					meta.getDataBean().getValues().put("status", UKDataContext.NamesDisStatusType.NOT.toString()) ;
 					meta.getDataBean().getValues().put("callstatus", UKDataContext.NameStatusTypeEnum.NOTCALL.toString());
 				}
+				meta.getDataBean().getValues().put("afterprocesstime", 0);
 			}
 		}else {
 			if(this.current!=null && meta!=null && meta.getDataBean()!=null) {
