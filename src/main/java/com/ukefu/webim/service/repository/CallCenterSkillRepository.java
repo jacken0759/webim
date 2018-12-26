@@ -13,8 +13,6 @@ public interface CallCenterSkillRepository extends JpaRepository<CallCenterSkill
 	
 	public List<CallCenterSkill> findByOrgi(String orgi);
 	
-	public List<CallCenterSkill> findByExtentionAndOrgi(String extention ,String orgi);
-	
 	public int countBySkillAndOrgi(String skill, String orgi) ;
 	
 	public int countByNameAndOrgiAndIdNot(String name, String orgi,String id) ;
