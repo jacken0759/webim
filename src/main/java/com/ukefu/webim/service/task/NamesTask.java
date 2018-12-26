@@ -11,9 +11,9 @@ import com.ukefu.util.es.SearchTools;
 import com.ukefu.util.es.UKDataBean;
 import com.ukefu.util.freeswitch.model.CallCenterAgent;
 import com.ukefu.webim.service.cache.CacheHelper;
-import com.ukefu.webim.service.repository.CallCenterSkillRepository;
-import com.ukefu.webim.web.model.CallCenterSkill;
+import com.ukefu.webim.service.repository.SkillExtentionRepository;
 import com.ukefu.webim.web.model.CallOutConfig;
+import com.ukefu.webim.web.model.SkillExtention;
 
 public class NamesTask implements Runnable{
 	
@@ -53,8 +53,8 @@ public class NamesTask implements Runnable{
 				boolean tip = true ; 
 				CallOutConfig config = CallOutUtils.initCallOutConfig(agent.getOrgi()) ;
 				if(config!=null && config.isForecast()) {
-					CallCenterSkillRepository callCenterSkillRes = UKDataContext.getContext().getBean(CallCenterSkillRepository.class) ;
-					List<CallCenterSkill> callCenterSkillList = callCenterSkillRes.findByExtentionAndOrgi(agent.getExtno() , agent.getOrgi()) ;
+					SkillExtentionRepository callCenterSkillRes = UKDataContext.getContext().getBean(SkillExtentionRepository.class) ;
+					List<SkillExtention> callCenterSkillList = callCenterSkillRes.findByExtentionAndOrgi(agent.getExtno() , agent.getOrgi()) ;
 					if(callCenterSkillList.size() > 0) {
 						agent.setWorkstatus(UKDataContext.WorkStatusEnum.CALLOUT.toString());
 						agent.setForecastvalue(agent.getSkill());
