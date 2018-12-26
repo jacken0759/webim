@@ -19,9 +19,13 @@ import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.histogram.InternalDateHistogram;
+import org.elasticsearch.search.aggregations.bucket.missing.InternalMissing;
 import org.elasticsearch.search.aggregations.bucket.range.InternalRange;
 import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.metrics.avg.InternalAvg;
+import org.elasticsearch.search.aggregations.metrics.max.InternalMax;
+import org.elasticsearch.search.aggregations.metrics.min.InternalMin;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -373,13 +377,26 @@ public class ESDataExchangeImpl{
 		aggregition.subAggregation(AggregationBuilders.range("ringtime.four").field("ringtime").addRange(60000, Integer.MAX_VALUE)) ;
 		
 		
-		aggregition.subAggregation(AggregationBuilders.avg("incall.arg").field("incall")) ;
+		//后处理时长
+		aggregition.subAggregation(AggregationBuilders.missing("afterprocesstime.missing").field("afterprocesstime")) ;
+		aggregition.subAggregation(AggregationBuilders.range("afterprocesstime.one").field("afterprocesstime").addRange(0, 10000)) ;
+		aggregition.subAggregation(AggregationBuilders.range("afterprocesstime.two").field("afterprocesstime").addRange(10000, 30000)) ;
+		aggregition.subAggregation(AggregationBuilders.range("afterprocesstime.three").field("afterprocesstime").addRange(30000, 60000)) ;
+		aggregition.subAggregation(AggregationBuilders.range("afterprocesstime.four").field("afterprocesstime").addRange(60000, Integer.MAX_VALUE)) ;
+				
+		aggregition.subAggregation(AggregationBuilders.avg("incall.avg").field("incall")) ;
 		
 		aggregition.subAggregation(AggregationBuilders.max("incall.max").field("incall")) ;
 		
 		aggregition.subAggregation(AggregationBuilders.min("incall.min").field("incall")) ;
 		
-		searchBuilder.addAggregation(aggregition) ;
+		aggregition.subAggregation(AggregationBuilders.avg("afterprocesstime.avg").field("afterprocesstime")) ;
+		
+		aggregition.subAggregation(AggregationBuilders.max("afterprocesstime.max").field("afterprocesstime")) ;
+		
+		aggregition.subAggregation(AggregationBuilders.min("afterprocesstime.min").field("afterprocesstime")) ;
+		
+		searchBuilder.addAggregation(aggregition);
 		
 		
 		SearchResponse response = searchBuilder.setQuery(query).execute().actionGet();
@@ -427,6 +444,26 @@ public class ESDataExchangeImpl{
 									if(data!=null) {
 										dataBean.getValues().put(range.getName(), data.getDocCount()) ;
 									}
+								}
+							}else if(temp instanceof InternalAvg) {
+								InternalAvg avg  = (InternalAvg) temp ;
+								if(avg!=null) {
+									dataBean.getValues().put(avg.getName(), avg.getValue()) ;
+								}
+							}else if(temp instanceof InternalMax) {
+								InternalMax max  = (InternalMax) temp ;
+								if(max!=null) {
+									dataBean.getValues().put(max.getName(), max.getValue()) ;
+								}
+							}else if(temp instanceof InternalMin) {
+								InternalMin min  = (InternalMin) temp ;
+								if(min!=null) {
+									dataBean.getValues().put(min.getName(), min.getValue()) ;
+								}
+							}else if(temp instanceof InternalMissing) {
+								InternalMissing missing  = (InternalMissing) temp ;
+								if(missing!=null) {
+									dataBean.getValues().put(missing.getName(), missing.getDocCount()) ;
 								}
 							}
 						}
