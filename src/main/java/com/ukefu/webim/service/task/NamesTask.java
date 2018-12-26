@@ -54,7 +54,7 @@ public class NamesTask implements Runnable{
 				CallOutConfig config = CallOutUtils.initCallOutConfig(agent.getOrgi()) ;
 				if(config!=null && config.isForecast()) {
 					CallCenterSkillRepository callCenterSkillRes = UKDataContext.getContext().getBean(CallCenterSkillRepository.class) ;
-					List<CallCenterSkill> callCenterSkillList = callCenterSkillRes.findByNameAndOrgi(agent.getExtno() , agent.getOrgi()) ;
+					List<CallCenterSkill> callCenterSkillList = callCenterSkillRes.findByExtentionAndOrgi(agent.getExtno() , agent.getOrgi()) ;
 					if(callCenterSkillList.size() > 0) {
 						agent.setWorkstatus(UKDataContext.WorkStatusEnum.CALLOUT.toString());
 						agent.setForecastvalue(agent.getSkill());
