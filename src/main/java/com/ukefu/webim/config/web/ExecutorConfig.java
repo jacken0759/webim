@@ -12,7 +12,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Configuration
 public class ExecutorConfig {
 	private static int CORE_POOL_SIZE = 1;
-	private static int MAX_POOL_SIZE = 20;
+	private static int MAX_POOL_SIZE = 100;
 
 	/**
 	 * 作业平台使用的线程池
