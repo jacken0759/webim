@@ -808,14 +808,15 @@ public class ServiceQuene {
 	}
 	public static String getQueneMessage(int queneIndex , String channel,String orgi){
 		
-		String queneTip = "<span id='queneindex'>"+queneIndex+"</span>" ;
+		String queneTip = "<span id='queneindex'>"+queneIndex+"</span>" , indexTip = "<span id='queneindex'>"+(queneIndex + 1)+"</span>";
 		if(!UKDataContext.ChannelTypeEnum.WEBIM.toString().equals(channel)){
 			queneTip = String.valueOf(queneIndex) ;
+			indexTip = String.valueOf(queneIndex+1) ;
 		}
 		SessionConfig sessionConfig = initSessionConfig(orgi) ;
 		String agentBusyTipMsg = "正在排队，请稍候,在您之前，还有  "+queneTip+" 位等待用户。"  ;
 		if(!StringUtils.isBlank(sessionConfig.getAgentbusymsg())){
-			agentBusyTipMsg = sessionConfig.getAgentbusymsg().replaceAll("\\{num\\}", queneTip) ;
+			agentBusyTipMsg = sessionConfig.getAgentbusymsg().replaceAll("\\{num\\}", queneTip).replaceAll("\\{index\\}", indexTip) ;
 		}
 		return agentBusyTipMsg;
 	}
