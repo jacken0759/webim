@@ -23,6 +23,7 @@ import com.ukefu.webim.service.acd.ServiceQuene;
 import com.ukefu.webim.service.cache.CacheHelper;
 import com.ukefu.webim.service.impl.CallOutQuene;
 import com.ukefu.webim.service.repository.AgentUserTaskRepository;
+import com.ukefu.webim.service.repository.BlackListRepository;
 import com.ukefu.webim.service.repository.ChatMessageRepository;
 import com.ukefu.webim.service.repository.ConsultInviteRepository;
 import com.ukefu.webim.service.repository.JobDetailRepository;
@@ -35,6 +36,7 @@ import com.ukefu.webim.web.model.AgentUser;
 import com.ukefu.webim.web.model.AgentUserTask;
 import com.ukefu.webim.web.model.AiConfig;
 import com.ukefu.webim.web.model.AiUser;
+import com.ukefu.webim.web.model.BlackEntity;
 import com.ukefu.webim.web.model.CousultInvite;
 import com.ukefu.webim.web.model.JobDetail;
 import com.ukefu.webim.web.model.MessageOutContent;
@@ -53,6 +55,9 @@ public class WebIMTask {
 	
 	@Autowired
 	private JobDetailRepository jobDetailRes ;
+	
+	@Autowired
+	private BlackListRepository blackListRes ;
 	
 	@Autowired
 	private TaskExecutor taskExecutor;
@@ -334,6 +339,18 @@ public class WebIMTask {
 			List<CallCenterAgent> agents = CallOutQuene.service() ;
 			for(CallCenterAgent agent : agents) {
 				taskExecutor.execute(new NamesTask(agent));
+			}
+		}
+	}
+	
+	
+	@Scheduled(fixedDelay= 5000 , initialDelay = 20000) // 每三秒 , 加载 标记为执行中的任务何 即将执行的 计划任务
+    public void blackListClean() {
+		if(UKDataContext.needRunTask()) {
+			Page<BlackEntity> blackList = blackListRes.findByEndtimeLessThan(new Date(), new PageRequest(0, 20)) ;
+			for(BlackEntity blackEntity : blackList) {
+				blackListRes.delete(blackEntity);
+				CacheHelper.getSystemCacheBean().getCacheObject(blackEntity.getUserid(),  blackEntity.getOrgi())  ;
 			}
 		}
 	}

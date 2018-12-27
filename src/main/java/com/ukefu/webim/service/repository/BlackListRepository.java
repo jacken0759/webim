@@ -1,5 +1,6 @@
 package com.ukefu.webim.service.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -15,6 +16,8 @@ public abstract interface BlackListRepository  extends JpaRepository<BlackEntity
 	public abstract BlackEntity findByUseridAndOrgi(String userid , String orgi);
 	
 	public abstract Page<BlackEntity> findByOrgi(String orgi , Pageable page);
+	
+	public abstract Page<BlackEntity> findByEndtimeLessThan(Date endtime , Pageable page);
 	
 	public abstract List<BlackEntity> findByOrgi(String orgi);
 	
