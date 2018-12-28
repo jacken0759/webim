@@ -225,8 +225,7 @@ public class AgentEventHandler
     		client.sendEvent(UKDataContext.MessageTypeEnum.MESSAGE.toString(), data);
     		
 	    	if(!StringUtils.isBlank(data.getTouser())){
-	    		OutMessageRouter router = null ; 
-	    		router  = (OutMessageRouter) UKDataContext.getContext().getBean(agentUser.getChannel()) ;
+	    		OutMessageRouter router = (OutMessageRouter) UKDataContext.getContext().getBean(agentUser.getChannel()) ;
 	    		if(router!=null){
 	    			router.handler(data.getTouser(), UKDataContext.MessageTypeEnum.MESSAGE.toString(), agentUser.getAppid(), outMessage);
 	    		}
