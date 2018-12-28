@@ -125,7 +125,7 @@ public class WebIMTask {
 							processMessage(sessionConfig, sessionConfig.getQuenetimeoutmsg() , sessionConfig.getServicename(), agentUser , null , task);
 							try {
 								ServiceQuene.serviceFinish(agentUser, task.getOrgi() , UKDataContext.EndByType.QUEUE.toString());
-								agentUserTaskRes.delete(task);
+								CacheHelper.getAgentUserCacheBean().delete(task.getUserid(), UKDataContext.SYSTEM_ORGI);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
