@@ -67,6 +67,7 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import com.ctc.wstx.util.StringUtil;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
@@ -583,7 +584,7 @@ public class UKTools {
 				Object[] value = (Object[]) values.get(i) ;
 				WebIMReport report = new WebIMReport();
 				if(value.length==2){
-					if(value[0] == null || value[0].toString().equalsIgnoreCase("null")){
+					if(value[0] == null || value[0].toString().equalsIgnoreCase("null")||StringUtils.isBlank(value[0].toString())){
 						report.setData("未知");
 					}else{
 						report.setData((String) value[0]);
