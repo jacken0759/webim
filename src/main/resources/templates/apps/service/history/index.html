@@ -238,8 +238,8 @@
 				,groups: 5 //连续显示分页数
 				,jump:function(data , first){
 					if(!first){
-						location.href = "/service/history/index.html?p="+data.curr ;
-					}
+						location.href = "/service/history/index.html?p="+data.curr+"&username=${username!''}"+"&channel=${channel!''}"+"&skill=${skill!''}"+ "&agent=${agent!''}"+"&begin=${begin!''}"+"&end=${end!''}"+"&sbegin=${sbegin!''}"+"&send=${send!''}";;
+								}
 				}
 		   });
 		});
