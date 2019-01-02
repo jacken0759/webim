@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-12-25 17:20:14
+Date: 2019-01-02 15:50:17
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -1322,6 +1322,30 @@ CREATE TABLE `uk_callcenter_pbxhost` (
 
 -- ----------------------------
 -- Records of uk_callcenter_pbxhost
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_callcenter_pbxhostlog`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_callcenter_pbxhostlog`;
+CREATE TABLE `uk_callcenter_pbxhostlog` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `name` varchar(50) DEFAULT NULL COMMENT '语音服务器名称',
+  `code` varchar(50) DEFAULT NULL COMMENT '语音服务器代码',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `username` varchar(32) DEFAULT NULL COMMENT '创建人用户名',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `result` tinyint(4) DEFAULT '0' COMMENT '语音服务器重连结果',
+  `hostid` varchar(50) DEFAULT NULL COMMENT '语音服务器ID',
+  `execupdate` tinyint(4) DEFAULT '0' COMMENT '是否执行了更新操作',
+  `description` varchar(255) DEFAULT NULL COMMENT '描述信息',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='语音服务器自动连接日志';
+
+-- ----------------------------
+-- Records of uk_callcenter_pbxhostlog
 -- ----------------------------
 
 -- ----------------------------
@@ -10431,7 +10455,7 @@ INSERT INTO `uk_user` VALUES ('402880ec67b9c9f40167b9fa58040095', null, 'test222
 INSERT INTO `uk_user` VALUES ('4028811b61834723016183ec57760392', null, 'chenfarong', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'chen@ukewo.cn', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-02-11 16:12:39', null, '2018-06-29 17:40:30', null, '18510129455', '2018-02-11 16:12:39', null, '0', '陈法蓉', null, '0', null, null, null, '0', '0', '0', '2018-06-29 17:40:37', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b642f5f8c01642f60ed440683', null, 'test1', '130811dbd239c97bd9ce933de7349f20', '5', 'ad@te.com', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-06-24 09:20:38', null, '2018-11-20 09:05:49', '4028811b66d257820166d28cb868022b', '18510129433', '2018-06-24 09:20:38', null, '0', 'test1', null, '0', null, null, null, '0', '0', '0', '2018-11-20 09:06:03', null, null, null, '0', '0', '0', '0', null);
 INSERT INTO `uk_user` VALUES ('4028811b645dc08f01645e0512ce0935', null, 'yiliao', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'asd@ac.com', null, null, null, null, null, null, null, null, null, null, null, '4028811b645dc08f01645e005f3d08dd', 'ukewo', null, '2018-07-03 10:42:28', null, '2018-07-03 10:43:31', null, '18512212955', '2018-07-03 10:42:28', null, '0', '医疗', null, '0', null, null, null, '0', '0', '0', '2018-07-03 10:43:39', null, null, null, '0', '0', '0', '0', null);
-INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '402880ec67b9c9f40167ba07936f00cb', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-12-25 16:18:06', null, null, null, '0', '1', '1', '0', null);
+INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '402880ec67b9c9f40167ba07936f00cb', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2018-12-27 11:47:16', null, null, null, '0', '1', '1', '0', null);
 
 -- ----------------------------
 -- Table structure for `uk_userevent`
