@@ -693,3 +693,22 @@ INSERT INTO `uk_sysdic` VALUES ('4028801e67df2f6e0167df819cc504c9', '业务概�
 INSERT INTO `uk_sysdic` VALUES ('4028801e67df2f6e0167df814cb604c5', '预测式外呼', 'pub', 'A18', NULL, 'auth', '402888815d2fe37f015d2fe75cc80002', NULL, NULL, ' ', NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-12-13 17:58:59', NULL, 0, 0, '402888815d2fe37f015d2fe75cc80002', 0, 0, ' ', 'webim', '1', NULL, 'left');
 INSERT INTO `uk_sysdic` VALUES ('4028801e67df2f6e0167df80d45404c1', '拨打异常名单', 'pub', 'A17_A02_A11', NULL, 'auth', '402880fb67722ac2016776cab52100f0', NULL, NULL, ' ', NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-12-24 17:17:01', NULL, 0, 0, '402888815d2fe37f015d2fe75cc80002', 0, 0, ' ', 'webim', '3', NULL, 'left');
 INSERT INTO `uk_sysdic` VALUES ('4028801e67df2f6e0167df807fd904bd', '拨打异常名单', 'pub', 'A16_A04_A05', NULL, 'auth', '4028811c6763b3a2016763dfa8fe0173', NULL, NULL, ' ', NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2018-12-24 17:16:39', NULL, 0, 0, '402888815d2fe37f015d2fe75cc80002', 0, 0, ' 拨打异常名单', 'webim', '3', NULL, 'left');
+
+
+
+
+CREATE TABLE `uk_callcenter_pbxhostlog` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `name` varchar(50) DEFAULT NULL COMMENT '语音服务器名称',
+  `code` varchar(50) DEFAULT NULL COMMENT '语音服务器代码',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `username` varchar(32) DEFAULT NULL COMMENT '创建人用户名',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `result` tinyint(4) DEFAULT 0 COMMENT '语音服务器重连结果',
+  `hostid` varchar(50) DEFAULT NULL COMMENT '语音服务器ID',
+  `execupdate` tinyint(4) DEFAULT 0 COMMENT '是否执行了更新操作',
+  `description` varchar(255) DEFAULT NULL COMMENT '描述信息',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='语音服务器自动连接日志';
