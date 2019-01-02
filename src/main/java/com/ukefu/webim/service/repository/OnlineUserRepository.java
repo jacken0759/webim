@@ -68,27 +68,27 @@ public abstract interface OnlineUserRepository extends JpaRepository<OnlineUser,
 	@Query("select count(id) from AgentService where orgi = ?1 and appid = ?2 and createtime > ?3 and createtime < ?4")
 	Long countByOrgiAndAppidForCount(String orgi ,String appid ,Date start,Date end);
 	
-	@Query("select count(id) from StatusEvent where discaller = ?1 ")
-	Long countByCallerFromCallCenter(String caller);
+	@Query("select count(id) from StatusEvent where discaller = ?1 and orgi = ?2")
+	Long countByCallerFromCallCenter(String caller,String orgi);
 	
-	@Query("select count(id) from StatusEvent where discalled = ?1 ")
-	Long countByCalledFromCallCenter(String called);
+	@Query("select count(id) from StatusEvent where discalled = ?1 and orgi = ?2")
+	Long countByCalledFromCallCenter(String called ,String orgi);
 	
-	@Query("select count(id) from StatusEvent where (discaller = ?1 or discalled = ?1) ")
-	Long countByAniFromCallCenter(String ani);
+	@Query("select count(id) from StatusEvent where (discaller = ?1 or discalled = ?1) and orgi = ?2")
+	Long countByAniFromCallCenter(String ani,String orgi);
 	
 	//振铃 只计算未接通电话
-	@Query("select avg(ringduration) from StatusEvent where ( discaller = ?1 or discalled = ?1 ) and misscall = true ")
-	Long avgByRingDurationFromCallCenter(String ani);
+	@Query("select avg(ringduration) from StatusEvent where ( discaller = ?1 or discalled = ?1 ) and misscall = true  and orgi = ?2")
+	Long avgByRingDurationFromCallCenter(String ani,String orgi);
 	//通话 只计算接通电话
-	@Query("select avg(duration) from StatusEvent where ( discaller = ?1 or discalled = ?1 )  and misscall = false ")
-	Long avgByDurationFromCallCenter(String ani);
+	@Query("select avg(duration) from StatusEvent where ( discaller = ?1 or discalled = ?1 )  and misscall = false and orgi = ?2")
+	Long avgByDurationFromCallCenter(String ani,String orgi);
 	
-	@Query("select sum(ringduration) from StatusEvent where ( discaller = ?1 or discalled = ?1 )  and misscall = true ")
-	Long sumByRingDurationFromCallCenter(String ani);
+	@Query("select sum(ringduration) from StatusEvent where ( discaller = ?1 or discalled = ?1 )  and misscall = true and orgi = ?2")
+	Long sumByRingDurationFromCallCenter(String ani,String orgi);
 	
-	@Query("select sum(duration) from StatusEvent where ( discaller = ?1 or discalled = ?1 )  and misscall = false ")
-	Long sumByDurationFromCallCenter(String ani);
+	@Query("select sum(duration) from StatusEvent where ( discaller = ?1 or discalled = ?1 )  and misscall = false and orgi = ?2")
+	Long sumByDurationFromCallCenter(String ani,String orgi);
 	
 	@Query("select hourstr as dt, count(id) as calls from StatusEvent where orgi = ?1 and datestr = ?2 group by hourstr order by dt asc")
 	List<Object> findByOrgiAndDatestrRangeForAgent(String orgi , String start );
