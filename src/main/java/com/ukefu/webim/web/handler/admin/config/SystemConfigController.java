@@ -181,7 +181,11 @@ public class SystemConfigController extends Handler{
     		jkspassword = UKTools.encryption(systemConfig.getJkspassword() );
     	}else{
     		UKTools.copyProperties(config,systemConfig);
-    		jkspassword = UKTools.encryption(systemConfig.getJkspassword() );
+    		if(StringUtils.isBlank(config.getJkspassword())){
+    			jkspassword = systemConfig.getJkspassword();
+        	}else {
+        		jkspassword = UKTools.encryption(systemConfig.getJkspassword() );
+        	}
     	}
     	if(config.isEnablessl()){
 	    	if(keyfile!=null && keyfile.getBytes()!=null && keyfile.getBytes().length > 0 && keyfile.getOriginalFilename()!=null && keyfile.getOriginalFilename().length() > 0){
