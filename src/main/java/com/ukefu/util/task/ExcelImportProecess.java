@@ -77,186 +77,189 @@ public class ExcelImportProecess extends DataProcess{
             } catch (IOException ex) {  
                 ex.printStackTrace();
             }  
-            Sheet sheet = wb.getSheetAt(0);  
-            Row titleRow = sheet.getRow(0);
-            Row valueRow = sheet.getRow(1);
-            int totalRows = sheet.getPhysicalNumberOfRows(); 
-            int colNum = titleRow.getPhysicalNumberOfCells();
-            for(int i=2 ; i<totalRows && valueRow == null ; i++){
-            	valueRow = sheet.getRow(i);
-            	if(valueRow !=null){
-            		break ;
-            	}
-            }
-            /**
-             * 需要检查Mapping 是否存在
-             */
             long start = System.currentTimeMillis() ;
-            Map<Object, List> refValues = new HashMap<Object , List>() ;
-            MetadataTable table = event.getDSData().getTask() ;
-            for(TableProperties tp : table.getTableproperty()){
-            	if(tp.isReffk() && !StringUtils.isBlank(tp.getReftbid())){
-            		DataExchangeInterface exchange = (DataExchangeInterface) UKDataContext.getContext().getBean(tp.getReftbid()) ;
-            		refValues.put(tp.getFieldname(), exchange.getListDataByIdAndOrgi(null, null, event.getOrgi())) ;
-            	}
-            }
-            
-            for(int i=1 ; i<totalRows; i++){
-            	Row row = sheet.getRow(i) ;
-            	Object data = null ;
-            	if(row!=null && !isRowEmpty(row)){
-					if(event.getDSData().getClazz() != null) {
-						data = event.getDSData().getClazz().newInstance() ;
-					}
-					Map<Object, Object> values = new HashMap<Object , Object>() ;
-					ArrayListMultimap<String, Object> multiValues = ArrayListMultimap.create();
-					boolean skipDataVal = false; //跳过数据校验
-					StringBuffer pkStr = new StringBuffer() , allStr = new StringBuffer();
-					for(int col=0 ; col<colNum ; col++){
-						Cell value = row.getCell(col) ;
-						Cell title = titleRow.getCell(col) ;
-						String titleValue = getValue(title) ;
-						if(!StringUtils.isBlank(titleValue)) {
-							titleValue = titleValue.trim() ;
+            if(wb!=null) {
+	            Sheet sheet = wb.getSheetAt(0);  
+	            Row titleRow = sheet.getRow(0);
+	            Row valueRow = sheet.getRow(1);
+	            int totalRows = sheet.getPhysicalNumberOfRows(); 
+	            int colNum = titleRow.getPhysicalNumberOfCells();
+	            for(int i=2 ; i<totalRows && valueRow == null ; i++){
+	            	valueRow = sheet.getRow(i);
+	            	if(valueRow !=null){
+	            		break ;
+	            	}
+	            }
+	            /**
+	             * 需要检查Mapping 是否存在
+	             */
+	            
+	            Map<Object, List> refValues = new HashMap<Object , List>() ;
+	            MetadataTable table = event.getDSData().getTask() ;
+	            for(TableProperties tp : table.getTableproperty()){
+	            	if(tp.isReffk() && !StringUtils.isBlank(tp.getReftbid())){
+	            		DataExchangeInterface exchange = (DataExchangeInterface) UKDataContext.getContext().getBean(tp.getReftbid()) ;
+	            		refValues.put(tp.getFieldname(), exchange.getListDataByIdAndOrgi(null, null, event.getOrgi())) ;
+	            	}
+	            }
+	            
+	            for(int i=1 ; i<totalRows; i++){
+	            	Row row = sheet.getRow(i) ;
+	            	Object data = null ;
+	            	if(row!=null && !isRowEmpty(row)){
+						if(event.getDSData().getClazz() != null) {
+							data = event.getDSData().getClazz().newInstance() ;
 						}
-						TableProperties tableProperties = getTableProperties(event, titleValue);
-						if(tableProperties!=null && value!=null){
-							String valuestr = getValue(value) ;
-							if(!StringUtils.isBlank(valuestr)) {
-								if(tableProperties.isModits()){
-									if(!StringUtils.isBlank(valuestr)) {
-										multiValues.put(tableProperties.getFieldname(), valuestr) ;
-									}
-								}else{
-									if(tableProperties.isSeldata()){
-										SysDic sysDic = UKeFuDic.getInstance().getDicItem(valuestr) ;
-										if(sysDic!=null){
-											values.put(tableProperties.getFieldname(), sysDic.getName()) ;
-										}else{
-											List<SysDic> dicItemList = UKeFuDic.getInstance().getSysDic(tableProperties.getSeldatacode());
-											if(dicItemList!=null && dicItemList.size() > 0) {
-												for(SysDic dicItem : dicItemList) {
-													if(dicItem.getName().equals(valuestr)) {
-														values.put(tableProperties.getFieldname(), dicItem.isDiscode()?dicItem.getCode():dicItem.getId()) ; break ;
+						Map<Object, Object> values = new HashMap<Object , Object>() ;
+						ArrayListMultimap<String, Object> multiValues = ArrayListMultimap.create();
+						boolean skipDataVal = false; //跳过数据校验
+						StringBuffer pkStr = new StringBuffer() , allStr = new StringBuffer();
+						for(int col=0 ; col<colNum ; col++){
+							Cell value = row.getCell(col) ;
+							Cell title = titleRow.getCell(col) ;
+							String titleValue = getValue(title) ;
+							if(!StringUtils.isBlank(titleValue)) {
+								titleValue = titleValue.trim() ;
+							}
+							TableProperties tableProperties = getTableProperties(event, titleValue);
+							if(tableProperties!=null && value!=null){
+								String valuestr = getValue(value) ;
+								if(!StringUtils.isBlank(valuestr)) {
+									if(tableProperties.isModits()){
+										if(!StringUtils.isBlank(valuestr)) {
+											multiValues.put(tableProperties.getFieldname(), valuestr) ;
+										}
+									}else{
+										if(tableProperties.isSeldata()){
+											SysDic sysDic = UKeFuDic.getInstance().getDicItem(valuestr) ;
+											if(sysDic!=null){
+												values.put(tableProperties.getFieldname(), sysDic.getName()) ;
+											}else{
+												List<SysDic> dicItemList = UKeFuDic.getInstance().getSysDic(tableProperties.getSeldatacode());
+												if(dicItemList!=null && dicItemList.size() > 0) {
+													for(SysDic dicItem : dicItemList) {
+														if(dicItem.getName().equals(valuestr)) {
+															values.put(tableProperties.getFieldname(), dicItem.isDiscode()?dicItem.getCode():dicItem.getId()) ; break ;
+														}
 													}
 												}
 											}
+										}else if(tableProperties.isReffk() && refValues.get(tableProperties.getFieldname())!=null){
+											List keys = refValues.get(tableProperties.getFieldname()) ;
+											if(keys != null) {
+												values.put(tableProperties.getFieldname() , getRefid(tableProperties,refValues.get(tableProperties.getFieldname()) , valuestr)) ;
+											}
+										}else{
+											values.put(tableProperties.getFieldname(), valuestr) ;
 										}
-									}else if(tableProperties.isReffk() && refValues.get(tableProperties.getFieldname())!=null){
-										List keys = refValues.get(tableProperties.getFieldname()) ;
-										if(keys != null) {
-											values.put(tableProperties.getFieldname() , getRefid(tableProperties,refValues.get(tableProperties.getFieldname()) , valuestr)) ;
+										if(tableProperties.isPk() && !tableProperties.getFieldname().equalsIgnoreCase("id")){
+											pkStr.append(valuestr) ;
 										}
-									}else{
-										values.put(tableProperties.getFieldname(), valuestr) ;
 									}
-									if(tableProperties.isPk() && !tableProperties.getFieldname().equalsIgnoreCase("id")){
-										pkStr.append(valuestr) ;
-									}
+									allStr.append(valuestr) ;
 								}
-								allStr.append(valuestr) ;
-							}
-							event.getDSData().getReport().setBytes(event.getDSData().getReport().getBytes() + valuestr.length());
-							event.getDSData().getReport().getAtompages().incrementAndGet() ;
-						}
-					}
-					values.put("orgi", event.getOrgi()) ;
-					if(values.get("id") == null){
-						if(pkStr.length() > 0) {
-							values.put("id", UKTools.md5(pkStr.append(event.getDSData().getTask().getTablename()).toString())) ;
-						}else {
-							values.put("id", UKTools.md5(allStr.append(event.getDSData().getTask().getTablename()).toString())) ;
-						}
-					}
-					if(event.getValues()!=null && event.getValues().size() > 0){
-						values.putAll(event.getValues());
-					}
-					values.putAll(multiValues.asMap());
-					String validFaildMessage = null ;
-					for(TableProperties tp : table.getTableproperty()){
-						if(!StringUtils.isBlank(tp.getDefaultvaluetitle())) {
-							String valuestr = (String) values.get(tp.getFieldname()) ;
-							if(tp.getDefaultvaluetitle().indexOf("required") >= 0 && StringUtils.isBlank(valuestr)) {
-								skipDataVal = true ; validFaildMessage = "required" ;break ;
-							}else if(valuestr!=null && (tp.getDefaultvaluetitle().indexOf("numstr") >= 0 && !valuestr.matches("[\\d]{1,}"))) {
-								skipDataVal = true ; validFaildMessage = "numstr" ;break ;
-							}else if(valuestr!=null && (tp.getDefaultvaluetitle().indexOf("datenum") >= 0 || tp.getDefaultvaluetitle().indexOf("datetime") >= 0 )) {
-								if(!valuestr.matches("[\\d]{4,4}-[\\d]{2,2}-[\\d]{2,2}") && !valuestr.matches("[\\d]{4,4}-[\\d]{2,2}-[\\d]{2} [\\d]{2,2}:[\\d]{2,2}:[\\d]{2,2}")) {
-									skipDataVal = true ; validFaildMessage = "datenum" ; break ;
-								}else {
-									if(valuestr.matches("[\\d]{4,4}-[\\d]{2,2}-{1,1}")) {
-										if("date".equals(tp.getDefaultfieldvalue())) {
-											values.put(tp.getFieldname(),UKTools.simpleDateFormat.parse(valuestr));
-										}else {
-											values.put(tp.getFieldname(),UKTools.simpleDateFormat.format(UKTools.simpleDateFormat.parse(valuestr)));
-										}
-									}else if(valuestr.matches("[\\d]{4,4}-[\\d]{2,2}-[\\d]{2,2} [\\d]{2,2}:[\\d]{2,2}:[\\d]{2,2}")) {
-										if("date".equals(tp.getDefaultfieldvalue())) {
-											values.put(tp.getFieldname(),UKTools.dateFormate.parse(valuestr));
-										}else {
-											values.put(tp.getFieldname(),UKTools.simpleDateFormat.format(UKTools.dateFormate.parse(valuestr)));
-										}
-										
-									}
-								}
+								event.getDSData().getReport().setBytes(event.getDSData().getReport().getBytes() + valuestr.length());
+								event.getDSData().getReport().getAtompages().incrementAndGet() ;
 							}
 						}
-		            	if(tp.isReffk() && !StringUtils.isBlank(tp.getReftbid()) && refValues.get(tp.getFieldname()) == null){
-		            		DataExchangeInterface exchange = (DataExchangeInterface) UKDataContext.getContext().getBean(tp.getReftbid()) ;
-		            		exchange.process(data, event.getOrgi());
-		            	}
-		            }
-					
-					if(!values.containsKey("orgi")) {
-						skipDataVal = true ;
-					}
-					event.getDSData().getReport().setTotal(pages.intValue());
-					values.put("creater", event.getValues().get("creater")) ;
-					if(data!=null && skipDataVal == false) {
-						UKTools.populate(data, values);
-						pages.incrementAndGet() ;
-						event.getDSData().getProcess().process(data);
-					}else if(data == null){
-						/**
-						 * 导入的数据，只写入ES
-						 */
-						if(skipDataVal == true) {	//跳过
-							values.put("status", "invalid") ;
-							values.put("validresult", "invalid") ;
-							values.put("validmessage", validFaildMessage!=null ? validFaildMessage : "") ;
-						}else {
-							values.put("validresult", "valid") ;
+						values.put("orgi", event.getOrgi()) ;
+						if(values.get("id") == null){
+							if(pkStr.length() > 0) {
+								values.put("id", UKTools.md5(pkStr.append(event.getDSData().getTask().getTablename()).toString())) ;
+							}else {
+								values.put("id", UKTools.md5(allStr.append(event.getDSData().getTask().getTablename()).toString())) ;
+							}
 						}
-						values.put("status", UKDataContext.NamesDisStatusType.NOT.toString()) ;
-						values.put("batid", event.getBatid()) ;
-						
-						values.put("createtime", System.currentTimeMillis()) ;
-						values.put("callstatus", UKDataContext.NameStatusTypeEnum.NOTCALL.toString()) ;
-						values.put("execid", event.getDSData().getReport().getId()) ;
-						
-						if(i%500 == 0) {
-							UKDataContext.getContext().getBean(ReporterRepository.class).save(event.getDSData().getReport()) ;
+						if(event.getValues()!=null && event.getValues().size() > 0){
+							values.putAll(event.getValues());
 						}
+						values.putAll(multiValues.asMap());
+						String validFaildMessage = null ;
+						for(TableProperties tp : table.getTableproperty()){
+							if(!StringUtils.isBlank(tp.getDefaultvaluetitle())) {
+								String valuestr = (String) values.get(tp.getFieldname()) ;
+								if(tp.getDefaultvaluetitle().indexOf("required") >= 0 && StringUtils.isBlank(valuestr)) {
+									skipDataVal = true ; validFaildMessage = "required" ;break ;
+								}else if(valuestr!=null && (tp.getDefaultvaluetitle().indexOf("numstr") >= 0 && !valuestr.matches("[\\d]{1,}"))) {
+									skipDataVal = true ; validFaildMessage = "numstr" ;break ;
+								}else if(valuestr!=null && (tp.getDefaultvaluetitle().indexOf("datenum") >= 0 || tp.getDefaultvaluetitle().indexOf("datetime") >= 0 )) {
+									if(!valuestr.matches("[\\d]{4,4}-[\\d]{2,2}-[\\d]{2,2}") && !valuestr.matches("[\\d]{4,4}-[\\d]{2,2}-[\\d]{2} [\\d]{2,2}:[\\d]{2,2}:[\\d]{2,2}")) {
+										skipDataVal = true ; validFaildMessage = "datenum" ; break ;
+									}else {
+										if(valuestr.matches("[\\d]{4,4}-[\\d]{2,2}-{1,1}")) {
+											if("date".equals(tp.getDefaultfieldvalue())) {
+												values.put(tp.getFieldname(),UKTools.simpleDateFormat.parse(valuestr));
+											}else {
+												values.put(tp.getFieldname(),UKTools.simpleDateFormat.format(UKTools.simpleDateFormat.parse(valuestr)));
+											}
+										}else if(valuestr.matches("[\\d]{4,4}-[\\d]{2,2}-[\\d]{2,2} [\\d]{2,2}:[\\d]{2,2}:[\\d]{2,2}")) {
+											if("date".equals(tp.getDefaultfieldvalue())) {
+												values.put(tp.getFieldname(),UKTools.dateFormate.parse(valuestr));
+											}else {
+												values.put(tp.getFieldname(),UKTools.simpleDateFormat.format(UKTools.dateFormate.parse(valuestr)));
+											}
+											
+										}
+									}
+								}
+							}
+			            	if(tp.isReffk() && !StringUtils.isBlank(tp.getReftbid()) && refValues.get(tp.getFieldname()) == null){
+			            		DataExchangeInterface exchange = (DataExchangeInterface) UKDataContext.getContext().getBean(tp.getReftbid()) ;
+			            		exchange.process(data, event.getOrgi());
+			            	}
+			            }
 						
-						if(values.get("cusid")==null) {
+						if(!values.containsKey("orgi")) {
+							skipDataVal = true ;
+						}
+						event.getDSData().getReport().setTotal(pages.intValue());
+						values.put("creater", event.getValues().get("creater")) ;
+						if(data!=null && skipDataVal == false) {
+							UKTools.populate(data, values);
+							pages.incrementAndGet() ;
+							event.getDSData().getProcess().process(data);
+						}else if(data == null){
 							/**
-							 * 
+							 * 导入的数据，只写入ES
 							 */
-							values.put("cusid", values.get("id"))  ;
+							if(skipDataVal == true) {	//跳过
+								values.put("status", "invalid") ;
+								values.put("validresult", "invalid") ;
+								values.put("validmessage", validFaildMessage!=null ? validFaildMessage : "") ;
+							}else {
+								values.put("validresult", "valid") ;
+							}
+							values.put("status", UKDataContext.NamesDisStatusType.NOT.toString()) ;
+							values.put("batid", event.getBatid()) ;
+							
+							values.put("createtime", System.currentTimeMillis()) ;
+							values.put("callstatus", UKDataContext.NameStatusTypeEnum.NOTCALL.toString()) ;
+							values.put("execid", event.getDSData().getReport().getId()) ;
+							
+							if(i%500 == 0) {
+								UKDataContext.getContext().getBean(ReporterRepository.class).save(event.getDSData().getReport()) ;
+							}
+							
+							if(values.get("cusid")==null) {
+								/**
+								 * 
+								 */
+								values.put("cusid", values.get("id"))  ;
+							}
+							pages.incrementAndGet() ;
+							event.getDSData().getProcess().process(values);
+							
+							/**
+							 * 访客信息表
+							 */
 						}
-						pages.incrementAndGet() ;
-						event.getDSData().getProcess().process(values);
-						
-						/**
-						 * 访客信息表
-						 */
-					}
-					if(skipDataVal == true) {	//跳过
-						errors.incrementAndGet();
-						continue ;
-					}
-            	}
-			}
+						if(skipDataVal == true) {	//跳过
+							errors.incrementAndGet();
+							continue ;
+						}
+	            	}
+				}
+            }
             
             event.setTimes(System.currentTimeMillis() - start);
             event.getDSData().getReport().setEndtime(new Date());
@@ -344,6 +347,7 @@ public class ExcelImportProecess extends DataProcess{
 	}
 	
 	//判断空行
+	@SuppressWarnings("deprecation")
 	private static boolean isRowEmpty(Row row) {
 		for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
 			Cell cell = row.getCell(c);
