@@ -11,11 +11,12 @@
     	<div class="layui-form-item">
             <label class="layui-form-label">启用机器人类型：</label>
             <div class="layui-input-inline" style="width: 400px;">
-                <input type="radio" title="智能机器人" name="aitype" id="enableai" value="smartai" lay-filter="enable_ai" <#if !(extention?? && extention.aitype == 'businessai')>checked="checked"</#if>>
+            	<input type="radio" title="IVR" name="aitype" id="enableai" value="ivr" lay-filter="enable_ivr" <#if extention?? && extention.aitype == 'ivr'>checked="checked"</#if>>
+                <input type="radio" title="智能机器人" name="aitype" id="enableai" value="smartai" lay-filter="enable_ai" <#if extention?? && extention.aitype == 'smartai'>checked="checked"</#if>>
                 <input type="radio" title="业务机器人" name="aitype" id="enableai" value="businessai" lay-filter="bus_ai" <#if extention?? && extention.aitype == 'businessai'>checked="checked"</#if>>
             </div>
         </div>
-        <div class="box-item" id="ai_tip" style="<#if extention?? && extention.aitype == 'businessai'>display:none;</#if>">	
+        <div class="box-item" id="ai_tip" style="<#if !(extention?? && extention.aitype == 'smartai')>display:none;</#if>">	
 	        <div class="layui-form-item">
 	            <label class="layui-form-label">选择智能机器人：</label>
 	            <div class="layui-input-inline" style="width:450px;">
@@ -57,7 +58,7 @@
 	            </div>
 	        </div>
 	    </div>
-        <div class="box-item" id="ai_bus" style="<#if extention?? && extention.aitype == 'smartai'>display:none;</#if>">	
+        <div class="box-item" id="ai_bus" style="<#if !(extention?? && extention.aitype == 'businessai')>display:none;</#if>">	
 	       	<div class="layui-form-item">
 	       		<label class="layui-form-label">业务类型：</label>
 		       	<div class="layui-input-inline">
@@ -105,6 +106,10 @@
 	layui.use('form', function(){
 	  var form = layui.form;
 	  form.render();
+	  form.on("radio(enable_ivr)" , function(data){
+		  $('#ai_tip').hide();		
+		  $('#ai_bus').hide();
+	  });
 	  form.on("radio(enable_ai)" , function(data){
 		  $('#ai_tip').show();		
 		  $('#ai_bus').hide();
