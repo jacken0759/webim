@@ -4,7 +4,7 @@
             <#if skillList??>（${skillList?size}）</#if>
             <span style="float:right;">
                 <button class="layui-btn layui-btn-sm green" href="/admin/callcenter/skill/add.html?hostid=${pbxHost.id!''}" data-toggle="ajax" data-width="550" data-height="360" data-title="添加技能组">添加技能组</button>
-                <button class="layui-btn layui-btn-sm green" href="/admin/callcenter/skill/imp.html?hostid=${pbxHost.id!''}" data-toggle="ajax" data-width="550" data-height="450" data-title="导入坐席">导入坐席</button></span>
+                <#if skillList?? && (skillList?size gt 0)><button class="layui-btn layui-btn-sm green" href="/admin/callcenter/skill/imp.html?hostid=${pbxHost.id!''}" data-toggle="ajax" data-width="550" data-height="450" data-title="导入坐席">导入坐席</button></#if></span>
         </h1>
         <div class="row">
             <div class="col-lg-12" style="padding-left:5px;">
