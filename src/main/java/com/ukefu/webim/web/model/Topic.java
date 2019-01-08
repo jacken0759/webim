@@ -91,7 +91,7 @@ public class Topic implements java.io.Serializable{
 	
 	private User user ;
 
-	
+	private String relevance; //关联知识
 	
 	
 	/**
@@ -399,6 +399,14 @@ public class Topic implements java.io.Serializable{
 
 	public void setAiid(String aiid) {
 		this.aiid = aiid;
+	}
+
+	public String getRelevance() {
+		return relevance;
+	}
+
+	public void setRelevance(String relevance) {
+		this.relevance = relevance;
 	}
 	
 }
