@@ -180,6 +180,9 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>,UserEv
 	private String username;
 	private String organ;
 	
+	private boolean dtmf ;		//是否记录了DTMF信息
+	private String dtmfrec ;	//DTMF记录
+	
 	private int trans;		//是否语音转写（0未转写1已转写）
 	private Date transbegin;//语音转写开始时间
 	private Date transend;	//语音转写结束时间
@@ -897,5 +900,16 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>,UserEv
 	public void setCallresult(String callresult) {
 		this.callresult = callresult;
 	}
-	
+	public boolean isDtmf() {
+		return dtmf;
+	}
+	public void setDtmf(boolean dtmf) {
+		this.dtmf = dtmf;
+	}
+	public String getDtmfrec() {
+		return dtmfrec;
+	}
+	public void setDtmfrec(String dtmfrec) {
+		this.dtmfrec = dtmfrec;
+	}
 }
