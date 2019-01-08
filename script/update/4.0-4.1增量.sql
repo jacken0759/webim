@@ -730,5 +730,6 @@ CREATE TABLE `uk_callcenter_pbxhostlog` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='语音服务器自动连接日志';
 
+ALTER TABLE uk_callcenter_event ADD dtmf tinyint(4) DEFAULT 0 COMMENT '记录DTMF事件';
+ALTER TABLE uk_callcenter_event ADD dtmfrec varchar(255) DEFAULT NULL COMMENT 'DTMF记录';
 ALTER TABLE uk_xiaoe_topic ADD relevance text COMMENT '关联知识';
-
