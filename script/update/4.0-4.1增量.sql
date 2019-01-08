@@ -712,3 +712,21 @@ CREATE TABLE `uk_callcenter_pbxhostlog` (
   `description` varchar(255) DEFAULT NULL COMMENT '描述信息',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='语音服务器自动连接日志';
+
+
+CREATE TABLE `uk_callcenter_pbxhostlog` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `name` varchar(50) DEFAULT NULL COMMENT '语音服务器名称',
+  `code` varchar(50) DEFAULT NULL COMMENT '语音服务器代码',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `username` varchar(32) DEFAULT NULL COMMENT '创建人用户名',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `result` tinyint(4) DEFAULT '0' COMMENT '语音服务器重连结果',
+  `hostid` varchar(50) DEFAULT NULL COMMENT '语音服务器ID',
+  `execupdate` tinyint(4) DEFAULT '0' COMMENT '是否执行了更新操作',
+  `description` varchar(255) DEFAULT NULL COMMENT '描述信息',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='语音服务器自动连接日志';
+
