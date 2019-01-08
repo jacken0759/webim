@@ -22,7 +22,9 @@
     <script type="text/javascript" src="/im/js/kindeditor/lang/zh-CN.js"></script>
     <script src="/im/js/socket.io.js"></script>
     <script src="/js/recordmp3.js"></script>
+    <#if inviteData?? && inviteData.enablevoice?? && inviteData.enablevoice == true>
     <script src="/js/ukefu-voice.js"></script>
+    </#if>
     <script src="/js/weixinAudio.js"></script>
     <script src="/js/template.js"></script>
     <script type="text/javascript">

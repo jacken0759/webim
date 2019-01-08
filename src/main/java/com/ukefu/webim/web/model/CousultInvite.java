@@ -164,6 +164,8 @@ public class CousultInvite implements java.io.Serializable{
 	
 	private int suggestnum;			//推荐条数
 	
+	private boolean enablevoice ;   //启用语音功能
+	
 	private String oqrdetailurl ;		//外部推荐内容URL
 	private String oqrdetailinput ;	//外部推荐详情输入格式化模板
 	private String oqrdetailoutput ;	//外部推荐详情输出格式化模板
@@ -921,5 +923,10 @@ public class CousultInvite implements java.io.Serializable{
 	public void setAgentshowcontacts(boolean agentshowcontacts) {
 		this.agentshowcontacts = agentshowcontacts;
 	}
-	
+	public boolean isEnablevoice() {
+		return enablevoice;
+	}
+	public void setEnablevoice(boolean enablevoice) {
+		this.enablevoice = enablevoice;
+	}
 }
