@@ -237,6 +237,8 @@ public class WebIMController extends Handler{
     			tempInviteData.setAgentshowcontacts(inviteData.isAgentshowcontacts());
     			tempInviteData.setCtrlenter(inviteData.isCtrlenter());
     			
+    			tempInviteData.setEnablevoice(inviteData.isEnablevoice());
+    			
     			if(dialogad!=null && !StringUtils.isBlank(dialogad.getName()) && dialogad.getBytes()!=null && dialogad.getBytes().length >0){
 	    			String fileName = "ad/"+inviteData.getId()+dialogad.getOriginalFilename().substring(dialogad.getOriginalFilename().lastIndexOf(".")) ;
 	    			File file = new File(path , fileName) ;
