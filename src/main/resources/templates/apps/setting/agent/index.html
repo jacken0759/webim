@@ -864,7 +864,10 @@
 		});
 	});
 	$('#wh_time_range').on("click" , function(){
-		
+		if($('#wh_start_h').val()>$('#wh_end_h').val()){
+			top.layer.alert("起始时间不得超过结束时间！", {icon: 2});	
+			return ;
+		}
 		
 		var timeRangeTitle = null;
 		if($('#wh_worktype').val() == 'work'){
