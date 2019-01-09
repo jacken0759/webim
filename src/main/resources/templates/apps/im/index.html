@@ -629,7 +629,9 @@
 	window.onresize = function(){
 		R3Helper.resize();		
 	};
+	<#if inviteData?? && inviteData.enablevoice?? && inviteData.enablevoice == true>
 	UCKeFuVoice.init("webim");
+	</#if>
 </script>
 <script id="message_tpl" type="text/html">
 	<p class="weixinAudio" id="voice_media_<%:=data.id%>" style="<% if(data.duration > 30) {%>width:300px;<% }else{ %>width:<%:=50+data.duration* 10%>px;<%}%>">
