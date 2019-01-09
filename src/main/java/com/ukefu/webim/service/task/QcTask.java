@@ -229,7 +229,7 @@ public class QcTask {
 						if(qConfig!=null && qConfig.isPhonetic() && !StringUtils.isBlank(qConfig.getEngine())) {
 							PhoneticTranscription trans = (PhoneticTranscription) UKDataContext.getContext().getBean(qConfig.getEngine()) ;
 							if(trans!=null) {
-								if(!StringUtils.isBlank(statusEvent.getTaskid())) {
+								if(!StringUtils.isBlank(statusEvent.getTranid())) {
 									boolean needUpdata = trans.getStatus(statusEvent, qConfig) ;
 									if(needUpdata) {
 										needUpdateList.add(statusEvent)  ;
