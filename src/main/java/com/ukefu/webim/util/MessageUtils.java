@@ -281,13 +281,10 @@ public class MessageUtils {
     	
     	if(!StringUtils.isBlank(userid)){
     		data.setUserid(userid);
-    		data.setUsername(data.getUsername());
     		data.setTouser(userid);
     		
     		data.setAgentuser(userid);
     		
-    		
-    		data.setAgentserviceid(data.getContextid());
     		data.setChatype(chatype);
     		
     		data.setChannel(channel);
@@ -297,9 +294,7 @@ public class MessageUtils {
     		
     		data.setMsgtype(msgtype);
     		
-    		data.setUsername(data.getUsername());
     		data.setUsession(data.getUserid());				//agentUser作为 session id
-    		data.setContextid(data.getContextid());
     		data.setCalltype(direction);
     		
     		if(data.isQuickagent()) {

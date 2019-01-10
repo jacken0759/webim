@@ -124,7 +124,7 @@ $(document).ready(function(){
 					        	var elmwidth = e.el.offsetLeft;
 					        	if(boxheight < (elmheight + 200)){
 					        		$("#canvas").height(elmheight + 200);
-					        		 $(".layui-body").animate(
+					        		 $(".console-box").animate(
 					        			        {scrollTop:elmheight + 200},0 /*scroll实现定位滚动*/
 					        			        );
 					        	}
