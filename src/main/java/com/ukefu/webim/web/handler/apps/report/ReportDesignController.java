@@ -1,5 +1,6 @@
 package com.ukefu.webim.web.handler.apps.report;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.commons.codec.binary.Base64;
@@ -24,6 +26,7 @@ import com.ukefu.core.UKDataContext;
 import com.ukefu.util.Menu;
 import com.ukefu.util.UKTools;
 import com.ukefu.util.bi.ReportData;
+import com.ukefu.util.bi.UKExcelUtil;
 import com.ukefu.webim.service.repository.ColumnPropertiesRepository;
 import com.ukefu.webim.service.repository.MetadataRepository;
 import com.ukefu.webim.service.repository.OrganRepository;
@@ -679,6 +682,7 @@ public class ReportDesignController extends Handler {
 	public ModelAndView getelement(ModelMap map, HttpServletRequest request, @Valid String id,@Valid String publishedid, HashMap<String,String> semap) throws Exception {
 		if (!StringUtils.isBlank(id)) {
 			ReportModel model = this.getModel(id, super.getOrgi(request),publishedid);
+			map.addAttribute("publishedid", publishedid);
 			if(model!=null) {
 				map.addAttribute("eltemplet", UKTools.getTemplate(model.getTempletid()));
 			}
@@ -703,6 +707,42 @@ public class ReportDesignController extends Handler {
 			}
 		}
 		return request(super.createRequestPageTempletResponse("/apps/business/report/design/elementajax"));
+	}
+	
+	/**
+	 * 异步 请求 报表的模板组件
+	 * 
+	 * @param map
+	 * @param request
+	 * @param template
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/exp")
+	@Menu(type = "report", subtype = "reportdesign")
+	public void exp(ModelMap map, HttpServletRequest request, HttpServletResponse response , @Valid String id,@Valid String publishedid, HashMap<String,String> semap) throws Exception {
+		if (!StringUtils.isBlank(id)) {
+			ReportModel model = this.getModel(id, super.getOrgi(request),publishedid);
+			if (model != null && !StringUtils.isBlank(model.getPublishedcubeid())) {
+				List<PublishedCube> cubeList = publishedCubeRepository.findByIdAndOrgi(model.getPublishedcubeid() , super.getOrgi(request));
+				if(cubeList.size() > 0) {
+					PublishedCube cube = cubeList.get(0) ;
+					if (canGetReportData(model, cube.getCube())) {
+						ReportData reportData = null ;
+						try {
+							reportData = reportCubeService.getReportData(model, cube.getCube(), request, true, semap) ;
+							response.setHeader("content-disposition", "attachment;filename=UCKeFu-Report-"+new SimpleDateFormat("yyyy-MM-dd").format(new Date())+".xlsx");
+							new UKExcelUtil(reportData , response.getOutputStream() , model.getName()).createFile() ;
+							
+						}catch(Exception ex) {
+							map.addAttribute("msg",ex.getMessage());
+						}
+					}
+				}
+			}
+		}
+		return ;
 	}
 	private ReportModel getModel(String id,String orgi,String publishedid) {
 		if(!StringUtils.isBlank(publishedid)) {

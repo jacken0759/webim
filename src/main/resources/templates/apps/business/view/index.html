@@ -82,7 +82,7 @@
 			</h1>
 			<#if reportFilters?? && reportFilters?size gt 0>
 			<div class="ukefu-filters-content layui-form">
-				<form  action="/apps/report/view.html?id=${report.id!''}" method="post">
+				<form  action="/apps/report/view.html?id=${report.id!''}" method="post" id="report_search">
 				<div  class="ui-sortable layui-row " >
 					<div class="layui-col-md11" id="ukefu-filter-list">
 						<#if reportFilters??>
@@ -135,12 +135,25 @@
 					 let params = $(data.form).serialize();
 					 let ajaxelements = $(".ukefu-element-ajax");
 					 $.each(ajaxelements,function(){
-						 loadURL($(this).attr("data-url")+"&"+params,"#"+$(this).attr("id"));
+						 var id = $(this).data("id");
+						 loadURL($(this).attr("data-url")+"&"+params,"#"+$(this).attr("id"),function(){
+							 var mid = $('#exp_'+id).data("id");
+							 var publishedid = $('#exp_'+id).data("publishedid");
+							 $('#exp_'+id).html("<a href='/apps/report/design/exp.html?id="+id+"&publishedid="+publishedid+"&"+params+"' target='_blank'><i class='layui-icon'>&#xe601;</i>导出</a>");
+						 });
 					 })
 					  return false;
 					});
 				  form.render();
 				});
+			let ajaxelements = $(".ukefu-element-ajax");
+			 $.each(ajaxelements,function(){
+				 let params = $('#report_search').serialize();
+				 var id = $(this).data("id");
+				 var mid = $('#exp_'+id).data("id");
+				 var publishedid = $('#exp_'+id).data("publishedid");
+				 $('#exp_'+id).html("<a href='/apps/report/design/exp.html?id="+id+"&publishedid="+publishedid+"&"+params+"' target='_blank'><i class='layui-icon'>&#xe601;</i>导出</a>");
+			 })
 		</script>
 	</body>
 </html>
