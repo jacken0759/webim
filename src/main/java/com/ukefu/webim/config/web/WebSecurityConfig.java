@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
@@ -36,17 +37,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public Filter tokenInfoTokenFilterSecurityInterceptor() throws Exception
     {
-        RequestMatcher autconfig = new AntPathRequestMatcher("/autoconfig/**");
-        RequestMatcher configprops = new AntPathRequestMatcher("/configprops/**");
-        RequestMatcher beans = new AntPathRequestMatcher("/beans/**");
-        RequestMatcher dump = new AntPathRequestMatcher("/dump/**");
-        RequestMatcher env = new AntPathRequestMatcher("/env/**");
-        RequestMatcher health = new AntPathRequestMatcher("/health/**");
-        RequestMatcher info = new AntPathRequestMatcher("/info/**");
-        RequestMatcher mappings = new AntPathRequestMatcher("/mappings/**");
-        RequestMatcher metrics = new AntPathRequestMatcher("/metrics/**");
-        RequestMatcher trace = new AntPathRequestMatcher("/trace/**");
-        RequestMatcher druid = new AntPathRequestMatcher("/druid/**");
+        RequestMatcher autconfig = new RegexRequestMatcher("/autoconfig([\\S\\s]*?)",null);
+        RequestMatcher configprops = new RegexRequestMatcher("/configprops([\\S\\s]*?)",null);
+        RequestMatcher beans = new RegexRequestMatcher("/beans([\\S\\s]*?)",null);
+        RequestMatcher dump = new RegexRequestMatcher("/dump([\\S\\s]*?)",null);
+        RequestMatcher env = new RegexRequestMatcher("/env([\\S\\s]*?)",null);
+        RequestMatcher health = new RegexRequestMatcher("/health([\\S\\s]*?)",null);
+        RequestMatcher info = new RegexRequestMatcher("/info([\\S\\s]*?)",null);
+        RequestMatcher mappings = new RegexRequestMatcher("/mappings([\\S\\s]*?)",null);
+        RequestMatcher metrics = new RegexRequestMatcher("/metrics([\\S\\s]*?)",null);
+        RequestMatcher trace = new RegexRequestMatcher("/trace([\\S\\s]*?)",null);
+        RequestMatcher druid = new RegexRequestMatcher("/druid([\\S\\s]*?)",null);
         
         return new DelegateRequestMatchingFilter(autconfig , configprops , beans , dump , env , health , info , mappings , metrics , trace, druid);
     }
