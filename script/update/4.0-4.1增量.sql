@@ -714,3 +714,7 @@ CREATE TABLE `uk_callcenter_pbxhostlog` (
 ALTER TABLE uk_callcenter_event ADD dtmf tinyint(4) DEFAULT 0 COMMENT '记录DTMF事件';
 ALTER TABLE uk_callcenter_event ADD dtmfrec varchar(255) DEFAULT NULL COMMENT 'DTMF记录';
 ALTER TABLE uk_xiaoe_topic ADD relevance text COMMENT '关联知识';
+
+ALTER TABLE uk_act_config ADD appointment tinyint(4) DEFAULT '0' COMMENT '外销弹屏页，是否预约项的默认值（0是/1否）';
+
+ALTER TABLE uk_qc_config ADD phonetrans tinyint(4) DEFAULT '0' COMMENT '启用语音转写配置';
