@@ -2,10 +2,18 @@ layui.use(['layer', 'form'], function(){
 	var layer = layui.layer, form = layui.form;
 });
 $(document).ready(function(){
+	var initHeight = $("#init-height").val();
+	if(initHeight > 0){
+		$("#canvas").height(parseInt(initHeight) + 200);
+	}
+	var initWidth = $("#init-width").val();
+	if(initWidth > 0){
+		$("#canvas").width(parseInt(initWidth) + 200);
+	}
 	//获取所有的group-container
 	var groups = [];
 	
-	$(".group-container").each(function(i,val){
+	$(".group-container-ques").each(function(i,val){
 		groups.push($(this).attr("id"));
 	});
 	  jsPlumb.ready(function () {
@@ -23,6 +31,8 @@ $(document).ready(function(){
 		        ],
 		        Container: "canvas"});
 
+		    j.draggable("canvas");
+		    
 		    var connectorPaintStyle = {
 		            strokeWidth: 2,
 		            stroke: "#32c24d",
@@ -108,19 +118,19 @@ $(document).ready(function(){
 				            } 
 					    	,
 					        drag:function(e){
-					        	var boxheight = $(".console-box").height();
-					        	var boxwidth = $(".console-box").width();
+					        	var boxheight = $("#canvas").height();
+					        	var boxwidth = $("#canvas").width();
 					        	var elmheight = e.el.offsetTop;
 					        	var elmwidth = e.el.offsetLeft;
 					        	if(boxheight < (elmheight + 200)){
-					        		$(".console-box").height(elmheight + 200);
+					        		$("#canvas").height(elmheight + 200);
 					        		 $(".layui-body").animate(
 					        			        {scrollTop:elmheight + 200},0 /*scroll实现定位滚动*/
 					        			        );
 					        	}
 					        	if(boxwidth < (elmwidth + 200)){
-					        		$(".console-box").width(elmwidth + 200);
-					        		 $(".layui-body").animate(
+					        		$("#canvas").width(elmwidth + 200);
+					        		 $(".console-box").animate(
 					        			        {scrollLeft:elmwidth + 200},0 /*scroll实现定位滚动*/
 					        			        );
 					        	}

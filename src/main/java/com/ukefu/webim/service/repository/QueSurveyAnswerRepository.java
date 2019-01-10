@@ -21,6 +21,10 @@ public abstract interface QueSurveyAnswerRepository extends JpaRepository<QueSur
   
   public abstract List<QueSurveyAnswer> findByOrgiAndProcessid(String orgi ,String processid);
   
+  public abstract List<QueSurveyAnswer> findByOrgiAndProcessidAndAnstype(String orgi ,String processid,String anstype);
+  
+  public abstract List<QueSurveyAnswer> findByOrgiAndQuestionidAndAnstype(String orgi ,String questionid,String anstype);
+  
   public abstract List<QueSurveyAnswer> findByOrgiAndQuestionid(String orgi, String questionid);
   
   public abstract List<QueSurveyAnswer> findAll(Specification<QueSurveyAnswer> spec) ;

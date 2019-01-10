@@ -720,3 +720,6 @@ ALTER TABLE uk_act_config ADD appointment tinyint(4) DEFAULT '0' COMMENT '外销
 ALTER TABLE uk_qc_config ADD phonetrans tinyint(4) DEFAULT '0' COMMENT '启用语音转写配置';
 
 ALTER TABLE uk_callcenter_event ADD workstatus varchar(32) DEFAULT NULL COMMENT '名单业务状态';
+
+ALTER TABLE uk_que_survey_answer ADD anstype VARCHAR(2) DEFAULT '0' COMMENT '话术答案类型 0默认 1公共';
+

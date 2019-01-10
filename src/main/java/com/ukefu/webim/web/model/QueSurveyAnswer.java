@@ -37,6 +37,7 @@ public class QueSurveyAnswer implements java.io.Serializable{
 	private String hangupmsg ;		//结束文字
 	private String hangupvoice ;	//结束语音
 
+	private String anstype;//答案类型 0默认 1公共
 	
 	@Id
 	@Column(length = 32)
@@ -138,5 +139,13 @@ public class QueSurveyAnswer implements java.io.Serializable{
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	public String getAnstype() {
+		return anstype;
+	}
+	public void setAnstype(String anstype) {
+		this.anstype = anstype;
+	}
+	
+	
 	
 }
