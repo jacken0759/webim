@@ -1,9 +1,9 @@
 <div class="uk-layui-form">
-	<form class="layui-form uk-form" action="/admin/metadata/imptbsave.html">
+	<form class="layui-form" action="/admin/metadata/imptbsave.html">
 		<input type="hidden" name="role" value="${role.id!''}">
 		<div class="layui-form-item">
-			<div class="layui-input-inline">
-				<select multiple = "multiple" name="tables" class="ukefu-form-multiple">
+			<div class="layui-input-inline" style="width: 100%;">
+				<select multiple = "multiple" name="tables" class="ukefu-form-multiple" style="width: 100%;">
 					<#if tablesList??>
 					<#list tablesList as table>
 						<option value="${table.name}">${table.name!''}</option>
