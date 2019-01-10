@@ -56,6 +56,8 @@ public class CallOutConfig implements java.io.Serializable{
 	
 	private boolean previewautocallout ;	//启用主动预览下的自动外呼功能
 	
+	private boolean appointment;//来点弹屏页，是否预约项的默认值（0是/1否）
+	
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -215,5 +217,11 @@ public class CallOutConfig implements java.io.Serializable{
 	}
 	public void setFthreads(int fthreads) {
 		this.fthreads = fthreads;
+	}
+	public boolean isAppointment() {
+		return appointment;
+	}
+	public void setAppointment(boolean appointment) {
+		this.appointment = appointment;
 	}
 }
