@@ -72,8 +72,8 @@
 	layui.use(['laypage', 'layer'], function(){
 		  var laypage = layui.laypage
 		  ,layer = layui.layer;
-		  <#if msg??>
-		  top.layer.msg('${msg}');
+		  <#if msg?? && msg=='exist'>
+		  top.layer.msg('创建新字典项失败！');
 		  </#if>
 		  laypage.render({
 				elem: 'page'

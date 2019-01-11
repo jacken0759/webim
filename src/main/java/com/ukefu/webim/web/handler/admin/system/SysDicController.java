@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -100,7 +101,10 @@ public class SysDicController extends Handler{
     
     @RequestMapping("/dicitem")
     @Menu(type = "admin" , subtype = "sysdic")
-    public ModelAndView dicitem(ModelMap map , HttpServletRequest request , @Valid String id) {
+    public ModelAndView dicitem(ModelMap map , HttpServletRequest request , @Valid String id , @Valid String msg) {
+    	if (!StringUtils.isBlank(msg)) {
+    		map.addAttribute("msg", msg) ;
+		}
     	map.addAttribute("sysDic", sysDicRes.findById(id)) ;
     	map.addAttribute("sysDicList", sysDicRes.findByParentid( id , new PageRequest(super.getP(request), super.getPs(request) , Direction.DESC , "createtime")));
         return request(super.createAdminTempletResponse("/admin/system/sysdic/dicitem"));
@@ -154,7 +158,8 @@ public class SysDicController extends Handler{
     
     @RequestMapping("/dicitem/batsave")
     @Menu(type = "admin" , subtype = "sysdic")
-    public ModelAndView dicitembatsave(HttpServletRequest request ,@Valid SysDic sysDic , @Valid String content , @Valid String p) {
+    public ModelAndView dicitembatsave(ModelMap map , HttpServletRequest request ,@Valid SysDic sysDic , @Valid String content , @Valid String p) {
+    	String msg = "";
     	String[] dicitems = content.split("[\n\r\n]") ;
 		int count = 0 ;
 		for(String dicitem : dicitems){
@@ -175,11 +180,13 @@ public class SysDicController extends Handler{
 					sysDicRes.save(dic) ;
 				}
 				
+			}else{
+				msg = "batsaveFailure" ;
 			}
 		}
 		reloadSysDicItem(sysDicRes.findById(sysDic.getParentid()), request);
 		
-    	return request(super.createRequestPageTempletResponse("redirect:/admin/sysdic/dicitem.html?id="+sysDic.getParentid()+"&p="+p));
+    	return request(super.createRequestPageTempletResponse("redirect:/admin/sysdic/dicitem.html?id="+sysDic.getParentid()+"&p="+p+"&msg="+msg));
     }
     
     @RequestMapping("/dicitem/edit")

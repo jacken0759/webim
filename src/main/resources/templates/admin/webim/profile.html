@@ -492,9 +492,16 @@
 														<p>g、智能机器人对话服务连接成功提示</p>
 														<p style="color:#888888;font-size:13px;margin-top:10px;">智能机器人服务连接成功的提示用语</p>
 													</div>
-													<div class="col-lg-4">
+													<!-- <div class="col-lg-12">
 														<div class="layui-input-block">
-														    <input type="text" name="aisuccesstip" maxlength="100" value="${inviteData.aisuccesstip!'欢迎使用优客服小E，我来帮您解答问题'}" autocomplete="off" class="layui-input">
+														    <input type="text" name="aisuccesstip" maxlength="100" value="${invitedata.aisuccesstip!'欢迎使用优客服小e，我来帮您解答问题'}" autocomplete="off" class="layui-input">
+														</div>	
+													</div> -->
+												</div>
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-12">
+														<div class="layui-input-block">
+															<textarea name="aisuccesstip" autocomplete="off" class="layui-input" style="height:90px;line-height:22px;">${inviteData.aisuccesstip!'欢迎使用优客服小E，我来帮您解答问题'}</textarea>
 														</div>	
 													</div>
 												</div>
