@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.ukefu.webim.web.model.JobDetail;
 import com.ukefu.webim.web.model.SaleStatus;
 
 public abstract interface SaleStatusRepository extends JpaRepository<SaleStatus, String> {
