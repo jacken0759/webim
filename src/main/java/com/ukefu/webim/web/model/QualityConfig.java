@@ -42,6 +42,8 @@ public class QualityConfig implements java.io.Serializable{
 	private int archivetime ;//质检自动归档时间
 	private int aplarchivetime ;//已申诉质检自动归档时间
 	
+	private boolean phonetrans;
+	
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -141,6 +143,12 @@ public class QualityConfig implements java.io.Serializable{
 	}
 	public void setAplarchivetime(int aplarchivetime) {
 		this.aplarchivetime = aplarchivetime;
+	}
+	public boolean isPhonetrans() {
+		return phonetrans;
+	}
+	public void setPhonetrans(boolean phonetrans) {
+		this.phonetrans = phonetrans;
 	}
 	
 }
