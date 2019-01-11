@@ -723,3 +723,6 @@ ALTER TABLE uk_callcenter_event ADD workstatus varchar(32) DEFAULT NULL COMMENT 
 
 ALTER TABLE uk_que_survey_answer ADD anstype VARCHAR(2) DEFAULT '0' COMMENT '话术答案类型 0默认 1公共';
 
+
+ALTER TABLE uk_callcenter_event ADD hangupcase varchar(32) DEFAULT NULL COMMENT '挂断原因';
+ALTER TABLE uk_callcenter_event ADD hangupinitiator varchar(32) DEFAULT NULL COMMENT '挂断方';

@@ -195,6 +195,9 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>,UserEv
 	
 	private String workstatus ;
 	
+	private String hangupcase ;		//挂断原因	
+	private String hangupinitiator ;//挂断发起方
+	
 	public String getWorkstatus() {
 		return workstatus;
 	}
@@ -911,5 +914,17 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>,UserEv
 	}
 	public void setDtmfrec(String dtmfrec) {
 		this.dtmfrec = dtmfrec;
+	}
+	public String getHangupcase() {
+		return hangupcase;
+	}
+	public void setHangupcase(String hangupcase) {
+		this.hangupcase = hangupcase;
+	}
+	public String getHangupinitiator() {
+		return hangupinitiator;
+	}
+	public void setHangupinitiator(String hangupinitiator) {
+		this.hangupinitiator = hangupinitiator;
 	}
 }

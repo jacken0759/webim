@@ -381,7 +381,8 @@ public class UKDataContext {
 	 */
 	public enum ChatInitiatorType{
 		AGENT , 
-		USER ;
+		USER,
+		SYSTEM;
 		public String toString(){
 			return super.toString().toLowerCase() ;
 		}
