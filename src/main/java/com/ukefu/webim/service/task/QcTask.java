@@ -200,7 +200,7 @@ public class QcTask {
 			if(data instanceof StatusEvent) {
 				StatusEvent statusEvent = (StatusEvent)data ;
 				QualityConfig qConfig = UKTools.initQualityConfig(statusEvent.getOrgi()) ;
-				if(qConfig!=null && qConfig.isPhonetic()) {
+				if(qConfig!=null && qConfig.isPhonetrans()) {//是否启动语音转写配置
 					UKTools.published(statusEvent);
 				}
 			}
@@ -229,7 +229,7 @@ public class QcTask {
 						if(qConfig!=null && qConfig.isPhonetic() && !StringUtils.isBlank(qConfig.getEngine())) {
 							PhoneticTranscription trans = (PhoneticTranscription) UKDataContext.getContext().getBean(qConfig.getEngine()) ;
 							if(trans!=null) {
-								if(!StringUtils.isBlank(statusEvent.getTranid())) {
+								if(!StringUtils.isBlank(statusEvent.getTranid())) {//根据转写引擎返回的任务ID去查询，实时转写状态
 									boolean needUpdata = trans.getStatus(statusEvent, qConfig) ;
 									if(needUpdata) {
 										needUpdateList.add(statusEvent)  ;
