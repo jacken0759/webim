@@ -726,3 +726,5 @@ ALTER TABLE uk_que_survey_answer ADD anstype VARCHAR(2) DEFAULT '0' COMMENT '话
 
 ALTER TABLE uk_callcenter_event ADD hangupcase varchar(32) DEFAULT NULL COMMENT '挂断原因';
 ALTER TABLE uk_callcenter_event ADD hangupinitiator varchar(32) DEFAULT NULL COMMENT '挂断方';
+
+ALTER TABLE uk_user ADD disabledesk tinyint(4) DEFAULT 0 COMMENT '关闭默认进入操作指南页';
