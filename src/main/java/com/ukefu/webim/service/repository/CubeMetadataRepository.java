@@ -16,4 +16,6 @@ public abstract interface CubeMetadataRepository extends JpaRepository<CubeMetad
 	public List<CubeMetadata> findByCubeidAndMtypeNot(String cubeid, String mtype);
 
 	public int countByTbAndCubeid(MetadataTable tb, String cubeid); 
+	
+	public CubeMetadata findById(String id); 
 }

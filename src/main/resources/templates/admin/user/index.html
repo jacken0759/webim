@@ -82,7 +82,7 @@
 					  			编辑
 					  		</a>
 					  		<#if !(user.usertype?? && user.usertype == "0") && user.datastatus != true >
-					  		<a href="/admin/user/delete.html?id=${user.id!''}" style="margin-left:10px;" data-toggle="tip" data-title="请确认是否删除记录？">
+					  		<a href="/admin/user/delete.html?id=${user.id!''}" style="margin-left:10px;" data-toggle="tip" data-title="请确认是否删除该用户？">
 					  			<i class="layui-icon" style="color:red;">&#x1006;</i>
 					  			删除
 					  		</a>

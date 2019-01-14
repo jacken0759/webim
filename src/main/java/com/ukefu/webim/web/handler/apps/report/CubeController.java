@@ -134,7 +134,7 @@ public class CubeController extends Handler{
     			}
     		}
     	}
-    	return request(super.createRequestPageTempletResponse("redirect:/apps/business/report/cube/index.html"));
+    	return request(super.createRequestPageTempletResponse("redirect:/apps/report/cube/index.html"));
 	}
     
     @RequestMapping("/index")
@@ -233,7 +233,10 @@ public class CubeController extends Handler{
     public ModelAndView imptb(final ModelMap map , HttpServletRequest request,@Valid String cubeid) throws Exception {
     	
 		map.put("tablesList", metadataRes.findByOrgi(super.getOrgi(request)));
-		map.put("cubeid",cubeid );
+		if (!StringUtils.isBlank(cubeid)) {
+			map.put("cubeid",cubeid );
+			map.put("cubeMetadataList", cubeMetadataRes.findByCubeid(cubeid));
+		}
 		return request(super.createRequestPageTempletResponse("/apps/business/report/cube/cubemetadata/imptb"));
     }
     @RequestMapping("/imptbsave")
@@ -292,7 +295,7 @@ public class CubeController extends Handler{
     	String msg = "";
     	if(!StringUtils.isBlank(cubeMetadata.getId())){
     		boolean flag = true;
-    		CubeMetadata temp = cubeMetadataRes.findOne(cubeMetadata.getId()) ;
+    		CubeMetadata temp = cubeMetadataRes.findById(cubeMetadata.getId()) ;
     		String tablename = null;
     		String tableid = null;
     		if(temp.getTb()!=null) {
