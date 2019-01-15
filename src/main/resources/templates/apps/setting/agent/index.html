@@ -263,7 +263,7 @@
 													<div class="row">
 														<div class="col-lg-8">
 															<p>非工作时间段提醒功能</p>
-															<p style="color:#888888;font-size:13px;margin-top:10px;">开启后，当前时间不在工作时间段内访问将会提示</p>
+															<p style="color:#888888;font-size:13px;margin-top:10px;">开启后，当前时间不在工作时间段内访问将会提示，首先需要到【客服设置】->【坐席服务日期设置】中新增坐席服务的（日期类型、工作类型）</p>
 														</div>
 														<div class="col-lg-4" style="text-align:right;">
 															<input type="checkbox" title="启用" name="hourcheck" id="hourcheck" lay-filter="hourcheck" <#if sessionConfig?? && sessionConfig.hourcheck == true>checked="checked"</#if>>
@@ -273,7 +273,7 @@
 												<div class="box-item" id="hourcheck_tip" style="<#if sessionConfig?? && sessionConfig.hourcheck == false>display:none;</#if>">	
 													<div class="row" style="margin-bottom:20px;">
 														<div class="col-lg-12">
-															<p>a、设置工作时间段</p>
+															<p>a、设置工作时间段<i class="layui-icon" title="工作时间段，开始时间大于结束时间时，则实行24小时制" style="font-size: 10px;">&#xe60b;</i></p>
 															<p style="color:#888888;font-size:13px;margin-top:10px;">只有设置工作时间段之后，留言功能才生效</p>
 														</div>
 													</div>
