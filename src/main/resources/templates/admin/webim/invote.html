@@ -156,7 +156,7 @@
 											<div class="ukefu-webim-tl">7、自定义访客邀请框背景图片</div>
 											<div class="box-item" style="position: relative;">
 												<span class="ukefu-logo">
-													<img src="<#if inviteData?? && inviteData.consult_invite_bg??>/res/image.html?id=${inviteData.consult_invite_bg?url}<#else>/im/img/webwxgetmsgimg.jpg</#if>" style="height:175px;">
+													<img src="<#if inviteData?? && inviteData.consult_invite_bg??>/res/image.html?id=${inviteData.consult_invite_bg?url}<#else>/im/img/webwxgetmsgimg.jpg</#if>" style="height:175px;max-width: 200px;">
 												</span>
 												<div class="layui-box layui-upload-button" style="position:absolute;left: 290px;">
 													<input type="file" name=invotebg accept="image/gif, image/jpeg, image/png" lay-ext="jpg|png|gif"  class="layui-upload-file" onchange="$('#invotebg').html($(this).val());">
