@@ -186,6 +186,7 @@
 						<#if user??>${user.uname!''}<#if tenant??&&tenant.tenantname??>（${tenant.tenantname!''}）</#if></#if></a>
 						<dl class="layui-nav-child">
 					      <dd><a href="/apps/profile.html" data-toggle="ajax" data-width="750" data-title="修改资料">个人资料</a></dd>
+					      <#if user?? && user.usertype == '0'><dd><a  href="javascript:void(0)" onclick="return false;"  data-title="操作引导" data-href="/apps/desk.html" class="iframe_btn" data-id="maincontent" data-type="tabChange">操作引导</a></dd></#if>
 					      <dd><a href="/logout.html">退出系统</a></dd>
 					    </dl>
 					</li>
@@ -377,7 +378,7 @@
 				</div>
 				<div class="layui-tab-content product-content ukefu-tab">
 					<div class="layui-tab-item layui-show" style="height:100%;">
-						<iframe frameborder="0" src="<#if vt?? && vt==true>/apps/tenant/index.html<#else>/apps/content.html</#if>" id="maincontent" name="maincontent" width="100%" height="100%"></iframe>
+						<iframe frameborder="0" src="<#if user?? && user.usertype == '0' && user.disabledesk == false>/apps/desk.html<#else><#if vt?? && vt==true>/apps/tenant/index.html<#else>/apps/content.html</#if></#if>" id="maincontent" name="maincontent" width="100%" height="100%"></iframe>
 					</div>
 				</div>
 			</div>

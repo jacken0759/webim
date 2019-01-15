@@ -81,6 +81,8 @@ public class User implements java.io.Serializable{
 	private int maxuser ;		//排队队列最大数值 ， 开启坐席功能后启用
 	private String ordertype ;		//坐席的工作队列排序方式
 	
+	private boolean disabledesk ;	//关闭默认进入操作指南页
+	
 	
 	private Date lastlogintime = new Date();	//最后登录时间
 	
@@ -503,4 +505,11 @@ public class User implements java.io.Serializable{
 	public void setCcagent(CallCenterAgent ccagent) {
 		this.ccagent = ccagent;
 	}
+	public boolean isDisabledesk() {
+		return disabledesk;
+	}
+	public void setDisabledesk(boolean disabledesk) {
+		this.disabledesk = disabledesk;
+	}
+	
 }

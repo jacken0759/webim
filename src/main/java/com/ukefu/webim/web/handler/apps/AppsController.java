@@ -163,6 +163,36 @@ public class AppsController extends Handler{
 		return request(super.createRequestPageTempletResponse("/apps/desktop/profile"));
 	}
 	
+	@RequestMapping("/apps/desk")
+	@Menu(type="apps", subtype="desk" , admin=true)
+    public ModelAndView desk(HttpServletRequest request) {
+        return request(super.createAppsTempletResponse("/apps/desktop/desk"));
+    }
+	
+	@RequestMapping("/apps/desk/disabledesk")
+	@Menu(type="apps", subtype="desk" , admin=true)
+    public void disabledesk(HttpServletRequest request) {
+		User user = super.getUser(request) ;
+		if(user!=null) {
+			user.setDisabledesk(true);
+			super.setUser(request, user);
+			userRes.save(user) ;
+		}
+		return ;
+    }
+	
+	@RequestMapping("/apps/desk/enabledesk")
+	@Menu(type="apps", subtype="desk" , admin=true)
+    public void enabledesk(HttpServletRequest request) {
+		User user = super.getUser(request) ;
+		if(user!=null) {
+			user.setDisabledesk(false);
+			super.setUser(request, user);
+			userRes.save(user) ;
+		}
+		return ;
+    }
+	
 	@RequestMapping({"/apps/profile/save"})
 	@Menu(type="apps", subtype="content")
 	public ModelAndView profile(ModelMap map , HttpServletRequest request , @Valid User user,@Valid String index){
