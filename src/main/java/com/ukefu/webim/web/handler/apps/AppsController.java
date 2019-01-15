@@ -171,26 +171,26 @@ public class AppsController extends Handler{
 	
 	@RequestMapping("/apps/desk/disabledesk")
 	@Menu(type="apps", subtype="desk" , admin=true)
-    public void disabledesk(HttpServletRequest request) {
+    public ModelAndView disabledesk(HttpServletRequest request) {
 		User user = super.getUser(request) ;
 		if(user!=null) {
 			user.setDisabledesk(true);
 			super.setUser(request, user);
 			userRes.save(user) ;
 		}
-		return ;
+		return request(super.createRequestPageTempletResponse("/apps/desktop/empty"));
     }
 	
 	@RequestMapping("/apps/desk/enabledesk")
 	@Menu(type="apps", subtype="desk" , admin=true)
-    public void enabledesk(HttpServletRequest request) {
+    public ModelAndView enabledesk(HttpServletRequest request) {
 		User user = super.getUser(request) ;
 		if(user!=null) {
 			user.setDisabledesk(false);
 			super.setUser(request, user);
 			userRes.save(user) ;
 		}
-		return ;
+		return request(super.createRequestPageTempletResponse("/apps/desktop/empty"));
     }
 	
 	@RequestMapping({"/apps/profile/save"})
