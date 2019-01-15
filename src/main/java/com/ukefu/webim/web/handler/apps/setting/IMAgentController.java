@@ -170,7 +170,9 @@ public class IMAgentController extends Handler{
     		BlackEntity tempBlackEntity = blackListRes.findByIdAndOrgi(id, super.getOrgi(request)) ;
     		if(tempBlackEntity!=null){
 		    	blackListRes.delete(tempBlackEntity);
-		    	CacheHelper.getSystemCacheBean().delete(tempBlackEntity.getUserid(), UKDataContext.SYSTEM_ORGI) ;
+		    	if (!StringUtils.isBlank(tempBlackEntity.getUserid())) {
+		    		CacheHelper.getSystemCacheBean().delete(tempBlackEntity.getUserid(), UKDataContext.SYSTEM_ORGI) ;
+				}
     		}
     	}
     	return request(super.createRequestPageTempletResponse("redirect:/setting/blacklist.html"));
