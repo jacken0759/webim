@@ -49,7 +49,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         RequestMatcher trace = new RegexRequestMatcher("/trace([\\S\\s]*?)",null);
         RequestMatcher druid = new RegexRequestMatcher("/druid([\\S\\s]*?)",null);
         
-        return new DelegateRequestMatchingFilter(autconfig , configprops , beans , dump , env , health , info , mappings , metrics , trace, druid);
+        RequestMatcher admin = new RegexRequestMatcher("/admin([\\S\\s]*?)",null);
+        
+        return new DelegateRequestMatchingFilter(autconfig , configprops , beans , dump , env , health , info , mappings , metrics , trace, druid , admin);
     }
     
     @Bean
