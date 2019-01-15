@@ -19,6 +19,9 @@
 				<button class="layui-btn layui-btn-sm green" href="/setting/quickreply/add.html<#if quickType??>?parentid=${quickType.id!''}</#if>" data-toggle="ajax" data-width="750" data-title="创建新问答">
 					添加问答
 				</button>
+				<button class="layui-btn layui-btn-sm layui-btn-danger" href="/setting/quickreply/batdel/reply.html?id=${quickType.id!''}" data-toggle="tip" data-title="请确认是否删除该分类下的全部问答？">
+					删除全部问答
+				</button>
 				<#if quickType??>
 					<div class="layui-btn-group ukefu-btn-group">
 						<button class="layui-btn layui-btn-sm" href="/setting/quickreply/imp.html?<#if quickType??>type=${quickType.id}</#if>" title="导入快捷回复" data-toggle="ajax" data-width="950" data-height="600">

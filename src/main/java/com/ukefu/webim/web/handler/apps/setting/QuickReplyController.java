@@ -322,4 +322,14 @@ public class QuickReplyController extends Handler{
 		}
         return ;
     }
+    
+    @RequestMapping({"/batdel/reply"})
+   	@Menu(type="apps", subtype="kbs")
+   	public ModelAndView batdelReply(ModelMap map , HttpServletRequest request , @Valid String id){
+       	if(!StringUtils.isBlank(id)){
+       		Page<QuickReply> quickReplyList = quickReplyRes.getByOrgiAndCate(super.getOrgi(request), id, null, new PageRequest(0, 10000)) ;
+       		quickReplyRes.delete(quickReplyList.getContent());
+       	}
+       	return request(super.createRequestPageTempletResponse("redirect:/setting/quickreply/index.html?typeid="+id));
+   	}
 }
