@@ -1,9 +1,9 @@
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="site-h1" style="background-color:#FFFFFF;">
-			元数据列表<#if sysDicList??>（${metadataList.totalElements!''}）</#if>
+			元数据列表<#if metadataList??>（${metadataList.totalElements!''}）</#if>
 			<span style="float:right;">
-				<button class="layui-btn layui-btn-sm green" href="/admin/metadata/imptb.html" data-toggle="ajax" data-width="550" data-title="导入元数据">
+				<button class="layui-btn layui-btn-sm green" href="/admin/metadata/imptb.html" data-toggle="ajax" data-width="750" data-height="600" data-title="导入元数据">
 					导入元数据
 				</button>
 				<button class="layui-btn layui-btn-sm green" href="/admin/metadata/addsql.html" data-toggle="ajax" data-width="550" data-title="导入SQL">
@@ -112,12 +112,17 @@
 		});
 		
 	});	
+	layui.use('layer', function(){
+		  var layer = layui.layer;
+		  <#if msg?? && msg == 'bat_delete_success'>
+		  layer.msg('批量删除元数据成功！', {icon: 6});
+		  <#elseif msg?? && msg == 'bat_delete_faild'>
+		  layer.msg('请勾选需要删除的记录！', {icon: 5});
+		  </#if>
+		}); 
 	layui.use(['laypage', 'layer'], function(){
 		  var laypage = layui.laypage
 		  ,layer = layui.layer;
-		  <#if msg??>
-		  top.layer.msg('${msg}');
-		  </#if>
 		  laypage.render({
 				elem: 'page'
 				,pages: <#if metadataList??>${metadataList.totalPages}<#else>0</#if> //总页数

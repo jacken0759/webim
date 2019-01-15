@@ -6,7 +6,7 @@
 				<button class="layui-btn layui-btn-sm green" href="javascript:void(0)" data-toggle="ajax" data-width="550" data-title="批量修改"  id="batedit">
 					批量修改
 				</button>
-				<a class="layui-btn layui-btn-sm layui-btn-danger" href="javascript:void(0)" id="batdel" data-toggle="tip" data-title="删除数据表项同时会删除数据表元数据下的所有内容，请确认是否继续操作”？" title="删除数据表">
+				<a class="layui-btn layui-btn-sm layui-btn-danger" href="javascript:void(0)" id="batdel" data-toggle="tip" data-title="请确认是否删除勾选的字段？">
 					批量删除
 				</a>
 				<a class="layui-btn layui-btn-sm layui-btn-danger" href="/admin/metadata/sync.html?id=${table.id!''}" id="batsync" data-toggle="tip" data-title="同步${table.name!''}数据表结构，请确认是否继续操作”？">
@@ -114,4 +114,12 @@
 			
 		});
 	});	
+	layui.use('layer', function(){
+		  var layer = layui.layer;
+		  <#if msg?? && msg == 'bat_delete_success'>
+		  layer.alert('批量删除元数据成功！', {icon: 6});
+		  <#elseif msg?? && msg == 'bat_delete_faild'>
+		  layer.alert('请勾选需要删除的记录！', {icon: 5});
+		  </#if>
+		}); 
 </script>

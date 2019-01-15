@@ -64,8 +64,9 @@ public class MetadataController extends Handler{
 
     @RequestMapping("/index")
     @Menu(type = "admin" , subtype = "metadata" , admin = true)
-    public ModelAndView index(ModelMap map , HttpServletRequest request) throws SQLException {
+    public ModelAndView index(ModelMap map , HttpServletRequest request ,String msg) throws SQLException {
     	map.addAttribute("metadataList", metadataRes.findAll(new PageRequest(super.getP(request), super.getPs(request)))) ;
+    	map.addAttribute("msg", msg);
         return request(super.createAdminTempletResponse("/admin/system/metadata/index"));
     }
     
@@ -278,10 +279,13 @@ public class MetadataController extends Handler{
     @RequestMapping("/batdelete")
     @Menu(type = "admin" , subtype = "metadata" , admin = true)
     public ModelAndView batdelete(ModelMap map , HttpServletRequest request , @Valid String[] ids) throws SQLException {
+    	String msg = "bat_delete_success";
     	if(ids!=null && ids.length>0){
     		metadataRes.delete(metadataRes.findAll(Arrays.asList(ids)) );
+    	}else {
+    		msg = "bat_delete_faild";
     	}
-    	return request(super.createRequestPageTempletResponse("redirect:/admin/metadata/index.html"));
+    	return request(super.createRequestPageTempletResponse("redirect:/admin/metadata/index.html?msg="+msg));
     }
     
     @RequestMapping("/properties/delete")
@@ -295,26 +299,30 @@ public class MetadataController extends Handler{
     @RequestMapping("/properties/batdelete")
     @Menu(type = "admin" , subtype = "metadata" , admin = true)
     public ModelAndView propertiesbatdelete(ModelMap map , HttpServletRequest request , @Valid String[] ids, @Valid String tbid) throws SQLException {
+    	String msg = "bat_delete_success";
     	if(ids!=null && ids.length>0){
     		tablePropertiesRes.delete(tablePropertiesRes.findAll(Arrays.asList(ids)) );
+    	}else {
+    		msg = "bat_delete_faild";
     	}
-        return request(super.createRequestPageTempletResponse("redirect:/admin/metadata/table.html?id="+ tbid));
+        return request(super.createRequestPageTempletResponse("redirect:/admin/metadata/table.html?id="+ tbid+"&msg="+msg));
     }
     
     @RequestMapping("/table")
     @Menu(type = "admin" , subtype = "metadata" , admin = true)
-    public ModelAndView table(ModelMap map , HttpServletRequest request , @Valid String id) throws SQLException {
+    public ModelAndView table(ModelMap map , HttpServletRequest request , @Valid String id, @Valid String msg) throws SQLException {
     	map.addAttribute("propertiesList", tablePropertiesRes.findByDbtableid(id)) ;
     	map.addAttribute("tbid", id) ;
     	map.addAttribute("table", metadataRes.findById(id)) ;
+    	map.addAttribute("msg", msg);
         return request(super.createAdminTempletResponse("/admin/system/metadata/table"));
     }
     
     @RequestMapping("/imptb")
     @Menu(type = "admin" , subtype = "metadata" , admin = true)
     public ModelAndView imptb(final ModelMap map , HttpServletRequest request) throws Exception {
-    	
-		Session session = (Session) em.getDelegate();
+    	this.search(map, request);
+    	Session session = (Session) em.getDelegate();
 		session.doWork(new Work() {
 			public void execute(Connection connection) throws SQLException {
 				try {
@@ -327,9 +335,22 @@ public class MetadataController extends Handler{
 		    	}
 			}
 		});
-
+		
 		return request(super
-				.createRequestPageTempletResponse("/admin/system/metadata/imptb"));
+				.createRequestPageTempletResponse("/admin/system/metadata/tablelist"));
+    }
+    
+    public void search(ModelMap map ,HttpServletRequest request) {
+    	List<MetadataTable> metaList = metadataRes.findByOrgi(super.getOrgi(request));
+		if(metaList != null && !metaList.isEmpty()) {
+			StringBuffer str = new StringBuffer();
+			for(MetadataTable MetadataTable : metaList) {
+				str.append(MetadataTable.getName());
+				str.append(",");
+			}
+			System.out.println(str);
+			map.addAttribute("metadataTable", str);
+		}
     }
     
     @RequestMapping("/imptbsave")
