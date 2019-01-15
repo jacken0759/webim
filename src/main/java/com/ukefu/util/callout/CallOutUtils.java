@@ -125,6 +125,7 @@ public class CallOutUtils {
 					callOutName.setReservation(false);
 				}
 				callOutName.setMemo((String) name.getValues().get("apmemo"));
+				callOutName.setWorkstatus((String) name.getValues().get("workstatus"));
 				
 				callOutName.setOwneruser((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));
 				callOutName.setOwnerdept((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));
@@ -227,7 +228,7 @@ public class CallOutUtils {
 				callOutName.setReservation(false);
 			}
 			callOutName.setMemo((String) name.getValues().get("apmemo"));
-			
+			callOutName.setWorkstatus((String) name.getValues().get("workstatus"));
 			callOutName.setOwneruser((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AGENT));
 			callOutName.setOwnerdept((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_ORGAN));
 			callOutName.setOwnerai((String) name.getValues().get(UKDataContext.UKEFU_SYSTEM_DIS_AI));
