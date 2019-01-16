@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2019-01-08 17:55:39
+Date: 2019-01-16 09:43:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -262,6 +262,7 @@ CREATE TABLE `uk_act_config` (
   `enableauto` tinyint(4) DEFAULT '0' COMMENT '启用全自动的预览式外呼',
   `fthreads` int(11) DEFAULT '0' COMMENT '预测式外呼并发数量',
   `enablefthreads` tinyint(4) DEFAULT '0' COMMENT '启用预测式外呼并发控制',
+  `appointment` tinyint(4) DEFAULT '0' COMMENT '外销弹屏页，是否预约项的默认值（0是/1否）',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='电销配置表';
 
@@ -1061,6 +1062,9 @@ CREATE TABLE `uk_callcenter_event` (
   `callresult` varchar(500) DEFAULT NULL COMMENT '拨打结果信息',
   `dtmf` tinyint(4) DEFAULT '0' COMMENT '记录DTMF事件',
   `dtmfrec` varchar(255) DEFAULT NULL COMMENT 'DTMF记录',
+  `hangupcase` varchar(32) DEFAULT NULL COMMENT '挂断原因',
+  `hangupinitiator` varchar(32) DEFAULT NULL COMMENT '挂断方',
+  `workstatus` varchar(32) DEFAULT NULL COMMENT '名单业务状态',
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='通话记录表';
 
@@ -4104,6 +4108,7 @@ CREATE TABLE `uk_qc_config` (
   `organ` varchar(32) DEFAULT NULL COMMENT '企业ID',
   `archivetime` int(11) DEFAULT '3' COMMENT '质检自动归档时间，默认3天',
   `aplarchivetime` int(11) DEFAULT '3' COMMENT '已申诉质检自动归档时间，默认3天',
+  `phonetrans` tinyint(4) DEFAULT '0' COMMENT '启用语音转写配置',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='质监系统 - 配置表';
 
@@ -4583,6 +4588,7 @@ CREATE TABLE `uk_que_survey_answer` (
   `hangupmsg` varchar(255) DEFAULT NULL COMMENT '挂断提示语文字',
   `hangupvoice` varchar(32) DEFAULT NULL COMMENT '挂断提示语语音',
   `title` varchar(255) DEFAULT NULL COMMENT '标题',
+  `anstype` varchar(2) DEFAULT '0' COMMENT '话术答案类型 0默认 1公共',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='问卷调查-问题答案表';
 
@@ -10513,13 +10519,14 @@ CREATE TABLE `uk_user` (
   `SUPERUSER` tinyint(4) DEFAULT NULL COMMENT '是否超级管理员',
   `maxuser` int(11) DEFAULT '0' COMMENT '最大接入访客数量',
   `ordertype` varchar(20) DEFAULT NULL COMMENT '默认排序方式',
+  `disabledesk` tinyint(4) DEFAULT '0' COMMENT '关闭默认进入操作指南页',
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='用户表';
 
 -- ----------------------------
 -- Records of uk_user
 -- ----------------------------
-INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2018-09-21 23:00:17', '402880ec67b9c9f40167ba07936f00cb', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2019-01-08 17:24:55', null, null, null, '0', '1', '1', '0', null);
+INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2019-01-15 19:01:41', '402880ec67b9c9f40167ba07936f00cb', '18510129577', null, null, '0', '系统管理员', '0', '0', null, '北京', '北京', '2', '1', '0', '2019-01-15 18:59:06', null, null, null, '0', '1', '1', '0', null, '0');
 
 -- ----------------------------
 -- Table structure for `uk_userevent`
