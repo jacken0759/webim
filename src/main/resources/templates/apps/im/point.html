@@ -165,7 +165,7 @@ var ukefu = {
 							<#if pointAd.adtype =="image">
 							"<a href='${pointAd.url!''}' title='${pointAd.tiptext!''}' target='_blank'><img src='${schema!'http'}://${hostname!''}<#if port?? && port != 80>:${port!''}</#if>${pointAd.imgurl!''}' style='max-width:140px;max-height:90px;margin:0 5px;vertical-align: middle;'/></a>"+
 							<#else>
-							"<div style='padding:0px 5px 10px 5px;border-bottom:1px solid #dedede;'><a href='${pointAd.url!''}' title='${pointAd.tiptext!''}' target='_blank' id='point_ad_text'>${((pointAd.content!'')?replace('\r\n','<br>'))?no_esc}</a></div>"+
+							"<div style='padding:0px 5px 10px 5px;'><a href='${pointAd.url!''}' title='${pointAd.tiptext!''}' target='_blank' id='point_ad_text'>${((pointAd.content!'')?replace('\r\n','<br>'))?no_esc}</a></div>"+
 							</#if>
 						<#else>
 						"<img src='${schema!'http'}://${hostname!''}<#if port?? && port != 80>:${port!''}</#if>/images/title.jpg' style='width:140px;margin:0 5px;vertical-align: middle;'/>"+
@@ -240,7 +240,7 @@ var ukefu = {
 			<#if inviteAd.adtype =="image">
 			"<a href='${inviteAd.url!''}' title='${inviteAd.tiptext!''}' target='_blank'><img src='${schema!'http'}://${hostname!''}<#if port?? && port != 80>:${port!''}</#if>${inviteAd.imgurl!''}' style='max-width:420px;max-height:178px;margin:0px;vertical-align: middle;'/></a>"
 			<#else>
-			"<div style='padding:0px 5px 10px 5px;border-bottom:1px solid #dedede;'><a href='${inviteAd.url!''}' title='${inviteAd.tiptext!''}' target='_blank' id='point_ad_text'>${(inviteAd.content!'')?no_esc}</a></div>"
+			"<div style='padding:0px 5px 10px 5px;'><a href='${inviteAd.url!''}' title='${inviteAd.tiptext!''}' target='_blank' id='point_ad_text'>${(inviteAd.content!'')?no_esc}</a></div>"
 			</#if>
 			var inviteBody = document.getElementById('ukefu_consult_body');
 			if(inviteBody){
