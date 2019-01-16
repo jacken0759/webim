@@ -12,7 +12,13 @@
 						<i class="layui-icon ukewo-btn" style="font-size:20px;"></i>
 						<div class="ukefu-bt-text">
 							<div class="ukefu-bt-text-title">
-								全部联系人
+								<#assign name = "全部联系人">
+								<#if uKeFuDic['com.dic.contacts.ckind']??>
+								<#list uKeFuDic['com.dic.contacts.ckind'] as dic>
+								<#if ckind?? && ckind == dic.id><#assign name = dic.name></#if>
+								</#list>
+								</#if>
+								${name}
 							</div>
 						</div>
 					</span>

@@ -12,7 +12,15 @@
 						<i class="layui-icon ukewo-btn" style="font-size:20px;"></i>
 						<div class="ukefu-bt-text">
 							<div class="ukefu-bt-text-title">
-								全部客户
+								<#assign name = "全部客户">
+								<#if uKeFuDic['com.dic.contacts.entype']??>
+								<#list uKeFuDic['com.dic.contacts.entype'] as dic>
+								<#if ekind?? && ekind == dic.id>
+								<#assign name = dic.name>
+								</#if>
+								</#list>
+								</#if>
+								${name}
 							</div>
 						</div>
 					</span>
