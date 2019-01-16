@@ -57,7 +57,8 @@
 						pattern = ('字数超过限制，请适当删除部分内容');
 						//超过字数限制自动截取			 						
 						strValue = strValue.substring(0,limitNum);
-						editor.html(strValue);      
+						editor.html("");    
+						editor.appendHtml(strValue);
 					} else {
 						//计算剩余字数
 						var result = limitNum - this.count(); 
