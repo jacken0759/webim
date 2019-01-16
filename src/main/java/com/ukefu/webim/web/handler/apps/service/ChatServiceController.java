@@ -485,7 +485,7 @@ public class ChatServiceController extends Handler{
 	@RequestMapping("/expall")
 	@Menu(type = "callcenter", subtype = "callcenter")
 	public void expall(ModelMap map, HttpServletRequest request, HttpServletResponse response) throws IOException {
-		Iterable<AgentService> agentServiceList = agentServiceRes.findAll(new PageRequest(0, 10000));
+		Iterable<AgentService> agentServiceList = agentServiceRes.findByOrgi(super.getOrgi(request), new PageRequest(0, 10000));
 
 		MetadataTable table = metadataRes.findByTablename("uk_agentservice");
 		List<Map<String, Object>> values = new ArrayList<Map<String, Object>>();
@@ -561,6 +561,9 @@ public class ChatServiceController extends Handler{
 
 		return;
 	}
+	/**
+	 * 	机器人历史会话 - 首页
+	 */
 	@RequestMapping("/aihistory/index")
     @Menu(type = "service" , subtype = "aihistory" , admin= true)
     public ModelAndView xiaoeHis(ModelMap map , HttpServletRequest request ,final String username,final String channel ,final String servicetype,final String skill,final String agent,final String servicetimetype,final String begin,final String end , final String sbegin,final String send) {
@@ -623,6 +626,101 @@ public class ChatServiceController extends Handler{
 		
         return request(super.createAppsTempletResponse("/apps/service/aihistory/index"));
     }
+	/**
+	 * 	导出全部机器人会话历史
+	 */
+	@RequestMapping("/aihistory/expall")
+	@Menu(type = "callcenter", subtype = "callcenter")
+	public void aiexpall(ModelMap map, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		//Iterable<AgentService> agentServiceList = agentServiceRes.findByOrgi(super.getOrgi(request), new PageRequest(0, 10000));
+		
+		final String orgi = super.getOrgi(request);
+		Iterable<AgentService> agentServiceList = agentServiceRes.findAll(new Specification<AgentService>(){
+			@Override
+			public Predicate toPredicate(Root<AgentService> root, CriteriaQuery<?> query,CriteriaBuilder cb) {
+				List<Predicate> list = new ArrayList<Predicate>();  
+				list.add(cb.equal(root.get("aiservice").as(boolean.class), true)) ;
+				list.add(cb.equal(root.get("orgi").as(String.class), orgi)) ;
+				Predicate[] p = new Predicate[list.size()];  
+			    return cb.and(list.toArray(p));   
+			}
+		},new PageRequest(0, 10000, Direction.DESC , "createtime")) ;
+		
+		MetadataTable table = metadataRes.findByTablename("uk_agentservice");
+		List<Map<String, Object>> values = new ArrayList<Map<String, Object>>();
+		for (AgentService agentService : agentServiceList) {
+			values.add(UKTools.transBean2Map(agentService));
+		}
+
+		response.setHeader("content-disposition", "attachment;filename=UCKeFu-AgentService-History-"
+				+ new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".xls");
+
+		ExcelExporterProcess excelProcess = new ExcelExporterProcess(values, table, response.getOutputStream());
+		excelProcess.process();
+		return;
+	}
+	/**
+	 * 	导出当前搜索出来的，机器人会话
+	 */
+	@RequestMapping("/aihistory/expsearch")
+	@Menu(type = "callcenter", subtype = "callcenter")
+	public void aiExpsearch(ModelMap map , HttpServletResponse response , HttpServletRequest request ,final String username,final String channel ,final String servicetype,final String skill,final String agent,final String servicetimetype,final String begin,final String end , final String sbegin,final String send) throws IOException {
+		final String orgi = super.getOrgi(request);
+		Page<AgentService> page = agentServiceRes.findAll(new Specification<AgentService>(){
+			@Override
+			public Predicate toPredicate(Root<AgentService> root, CriteriaQuery<?> query,CriteriaBuilder cb) {
+				List<Predicate> list = new ArrayList<Predicate>();  
+				list.add(cb.equal(root.get("aiservice").as(boolean.class), true)) ;
+				list.add(cb.equal(root.get("orgi").as(String.class), orgi)) ;
+				if(!StringUtils.isBlank(username)) {
+					list.add(cb.equal(root.get("username").as(String.class), username)) ;
+				}
+				if(!StringUtils.isBlank(channel)) {
+					list.add(cb.equal(root.get("channel").as(String.class), channel)) ;
+				}
+				if(!StringUtils.isBlank(agent)) {
+					list.add(cb.equal(root.get("agentno").as(String.class), agent)) ;
+				}
+				if(!StringUtils.isBlank(skill)) {
+					list.add(cb.equal(root.get("skill").as(String.class), skill)) ;
+				}
+				try {
+					if(!StringUtils.isBlank(begin) && begin.matches("[\\d]{4}-[\\d]{2}-[\\d]{2} [\\d]{2}:[\\d]{2}:[\\d]{2}")){
+						list.add(cb.greaterThanOrEqualTo(root.get("logindate").as(Date.class), UKTools.dateFormate.parse(begin))) ;
+					}
+					if(!StringUtils.isBlank(end) && end.matches("[\\d]{4}-[\\d]{2}-[\\d]{2} [\\d]{2}:[\\d]{2}:[\\d]{2}")){
+						list.add(cb.lessThanOrEqualTo(root.get("logindate").as(Date.class), UKTools.dateFormate.parse(end))) ;
+					}
+					
+					if(!StringUtils.isBlank(sbegin) && sbegin.matches("[\\d]{4}-[\\d]{2}-[\\d]{2} [\\d]{2}:[\\d]{2}:[\\d]{2}")){
+						list.add(cb.greaterThanOrEqualTo(root.get("servicetime").as(Date.class), UKTools.dateFormate.parse(sbegin))) ;
+					}
+					if(!StringUtils.isBlank(send) && send.matches("[\\d]{4}-[\\d]{2}-[\\d]{2} [\\d]{2}:[\\d]{2}:[\\d]{2}")){
+						list.add(cb.lessThanOrEqualTo(root.get("servicetime").as(Date.class), UKTools.dateFormate.parse(send))) ;
+					}
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				
+				Predicate[] p = new Predicate[list.size()];  
+			    return cb.and(list.toArray(p));   
+			}
+		},new PageRequest(0,10000, Direction.DESC , "createtime")) ;
+
+		MetadataTable table = metadataRes.findByTablename("uk_agentservice");
+		List<Map<String, Object>> values = new ArrayList<Map<String, Object>>();
+		for (AgentService agentService : page.getContent()) {
+			values.add(UKTools.transBean2Map(agentService));
+		}
+
+		response.setHeader("content-disposition", "attachment;filename=UCKeFu-AgentService-History-"
+				+ new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".xls");
+
+		ExcelExporterProcess excelProcess = new ExcelExporterProcess(values, table, response.getOutputStream());
+		excelProcess.process();
+
+		return;
+	}
 	
 	/*
 	 * 导出全部机器人会话内容
@@ -637,7 +735,7 @@ public class ChatServiceController extends Handler{
 		for (ChatMessage chatmessage : chatList) {
 			values.add(UKTools.transBean2Map(chatmessage));
 		}
-		response.setHeader("content-disposition", "attachment;filename=UCKeFu-ChatMessage-History-"
+		response.setHeader("content-disposition", "attachment;filename=UCKeFu-ChatMessage-Content-"
 				+ new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".xls");
 		ExcelExporterProcess excelProcess = new ExcelExporterProcess(values, table, response.getOutputStream());
 		excelProcess.process();
@@ -727,7 +825,7 @@ public class ChatServiceController extends Handler{
 			values.add(UKTools.transBean2Map(chatmessage));
 		}
 
-		response.setHeader("content-disposition", "attachment;filename=UCKeFu-ChatMessage-History-"
+		response.setHeader("content-disposition", "attachment;filename=UCKeFu-ChatMessage-Content-"
 				+ new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".xls");
 
 		ExcelExporterProcess excelProcess = new ExcelExporterProcess(values, table, response.getOutputStream());
