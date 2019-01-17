@@ -214,4 +214,12 @@
 				}
 		   });
 		});
+	layui.use('layer', function(){
+		  var layer = layui.layer;
+		  <#if msg?? && msg == 'upload_format_faild'>
+		  layer.alert('请上传后缀名为 （xls）或（xlsx）的Excel文件！', {icon: 5});
+		  <#elseif msg?? && msg == 'upload_nochoose_faild'>
+		  layer.alert('请选择需要上传的Excel文件！', {icon: 5});
+		  </#if>
+		});
 </script>

@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.ukefu.webim.web.model.JobDetail;
 import com.ukefu.webim.web.model.MetadataTable;
 
 public abstract interface MetadataRepository extends JpaRepository<MetadataTable, String>{
@@ -20,4 +22,6 @@ public abstract interface MetadataRepository extends JpaRepository<MetadataTable
 	public abstract int countByTablename(String tableName) ;
 
 	public abstract List<MetadataTable> findByOrgi(String orgi);
+	
+	public abstract List<MetadataTable> findAll(Specification<MetadataTable> spec) ;
 }

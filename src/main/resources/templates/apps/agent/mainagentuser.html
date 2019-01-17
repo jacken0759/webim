@@ -20,7 +20,7 @@
 					<a href="/agent/statf.html?userid=${curagentuser.userid!''}&agentserviceid=${curagentuser.agentserviceid!''}&id=${curagentuser.id}" data-toggle="load" data-target="#ukefu-chat-agent"><button class="layui-btn layui-btn-sm"><i class="layui-icon">&#xe600;</i>邀请评价</button></a>
 					</#if>
 				</#if>
-				<a href="/agent/summary.html?userid=${curagentuser.userid!''}&agentserviceid=${curagentuser.agentserviceid!''}&agentuserid=${curagentuser.id}" data-toggle="ajax" data-width="950" data-height="450" title="记录服务小结"><button class="layui-btn layui-btn-sm"><i class="kfont">&#xe65c;</i>服务小结</button></a>
+				<a href="/agent/summary.html?userid=${curagentuser.userid!''}&agentserviceid=${curagentuser.agentserviceid!''}&agentuserid=${curagentuser.id}" data-toggle="ajax" data-width="950" data-height="500" title="新建服务小结"><button class="layui-btn layui-btn-sm"><i class="kfont">&#xe65c;</i>服务小结</button></a>
 				<a href="/agent/transfer.html?userid=${curagentuser.userid!''}&agentserviceid=${curagentuser.agentserviceid!''}&agentuserid=${curagentuser.id}" data-toggle="ajax" data-width="950" data-height="550" title="选择转接对象"><button class="layui-btn layui-btn-sm"><i class="kfont">&#xe7be;</i>转接坐席</button></a>
 				<a href="/agent/end.html?userid=${curagentuser.id!''}" data-toggle="tip" data-title="请确认是否关闭和用户“<#if inviteData?? && inviteData.agentshowcontacts && curagentuser.name??>${curagentuser.name!''}<#else>${curagentuser.username!''}</#if>”的对话？"><button class="layui-btn layui-btn-sm layui-btn-danger"><i class="kfont">&#xe621;</i> 结束对话</button></a>
 			</div>
@@ -168,6 +168,7 @@
 				    <li>知识库</li>
 				    </#if>
 			    </#if>
+			    <li>小结</li>
 			  </ul>
 			  <div class="layui-tab-content" style="padding: 5px 0px 0px;">
 			    <div class="layui-tab-item layui-show">
@@ -410,6 +411,9 @@
 				    </div>
 				    </#if>
 			    </#if>
+			    <div class="layui-tab-item" id="summarys">
+			    	<#include "/apps/agent/summarylist.html">
+			    </div>
 			  </div>
 			</div>
 			

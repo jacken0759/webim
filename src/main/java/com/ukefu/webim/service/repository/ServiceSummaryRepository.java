@@ -1,6 +1,8 @@
 package com.ukefu.webim.service.repository;
 
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,4 +23,8 @@ public interface ServiceSummaryRepository extends JpaRepository<AgentServiceSumm
 	public abstract Page<AgentServiceSummary> findByChannelAndOrgi(String string, String orgi, Pageable pageable);
 	
 	public abstract Page<AgentServiceSummary> findByChannelNotAndOrgi(String string, String orgi, Pageable pageable);
+	
+	public abstract List<AgentServiceSummary> findByOrgiAndStatuseventid(String orgi , String statuseventid);
+	
+	public abstract Page<AgentServiceSummary> findByOrgiAndAgentserviceid(String orgi , String agentserviceid, Pageable pageable);
 }

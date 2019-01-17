@@ -228,10 +228,14 @@ public class AgentController extends Handler {
 			view.addObject("curagentuser", agentUser);
 			view.addObject("inviteData",  OnlineUserUtils.cousult(agentUser.getAppid(), agentUser.getOrgi(), inviteRepository));
 			if(!StringUtils.isBlank(agentUser.getAgentserviceid())){
-				AgentServiceSummary summary = this.serviceSummaryRes.findByAgentserviceidAndOrgi(agentUser.getAgentserviceid(), super.getOrgi(request)) ;
-				if(summary!=null){
-					view.addObject("summary", summary) ;
-				}
+				/*
+				 * AgentServiceSummary summary =
+				 * this.serviceSummaryRes.findByAgentserviceidAndOrgi(agentUser.
+				 * getAgentserviceid(), super.getOrgi(request)) ; if(summary!=null){
+				 * view.addObject("summary", summary) ; }
+				 */
+				Page<AgentServiceSummary> summaryList = this.serviceSummaryRes.findByOrgiAndAgentserviceid(super.getOrgi(request), agentUser.getAgentserviceid(),new PageRequest(0, super.getPs(request), Sort.Direction.DESC, new String[] { "createtime" }));
+				view.addObject("summaryList", summaryList) ;
 			}
 
 			if(sessionConfig.isOtherquickplay() && !StringUtils.isBlank(sessionConfig.getOqrsearchurl())) {
@@ -304,7 +308,7 @@ public class AgentController extends Handler {
 			List<QuickType> priQuickTypeList = quickTypeRes.findByOrgiAndQuicktypeAndCreater(super.getOrgi(request), UKDataContext.QuickTypeEnum.PRI.toString(), super.getUser(request).getId()) ; 
 			quickTypeList.addAll(priQuickTypeList) ;
 			view.addObject("pubQuickTypeList", quickTypeList) ;
-			
+			map.addAttribute("tagsSummary", tagRes.findByOrgiAndTagtype(super.getOrgi(request) , UKDataContext.ModelType.SUMMARY.toString())) ;
 			//文字客服
 			SysDic sysDic = sysDicRes.findByCode("sessionWords");
 			if(agentService != null &&sysDic != null){
@@ -375,10 +379,14 @@ public class AgentController extends Handler {
 			}
 			
 			if(!StringUtils.isBlank(agentUser.getAgentserviceid())){
-				AgentServiceSummary summary = this.serviceSummaryRes.findByAgentserviceidAndOrgi(agentUser.getAgentserviceid(), super.getOrgi(request)) ;
-				if(summary!=null){
-					view.addObject("summary", summary) ;
-				}
+				/*
+				 * AgentServiceSummary summary =
+				 * this.serviceSummaryRes.findByAgentserviceidAndOrgi(agentUser.
+				 * getAgentserviceid(), super.getOrgi(request)) ; if(summary!=null){
+				 * view.addObject("summary", summary) ; }
+				 */
+				Page<AgentServiceSummary> summaryList = this.serviceSummaryRes.findByOrgiAndAgentserviceid(super.getOrgi(request), agentUser.getAgentserviceid(),new PageRequest(0, super.getPs(request), Sort.Direction.DESC, new String[] { "createtime" }));
+				view.addObject("summaryList", summaryList) ;
 			}
 			
 			view.addObject("agentUserMessageList", this.chatMessageRepository.findByUsessionAndOrgi(agentUser.getUserid() , super.getOrgi(request), new PageRequest(0, 20, Direction.DESC , "updatetime")));
@@ -461,7 +469,7 @@ public class AgentController extends Handler {
 		List<QuickType> priQuickTypeList = quickTypeRes.findByOrgiAndQuicktypeAndCreater(super.getOrgi(request), UKDataContext.QuickTypeEnum.PRI.toString(), super.getUser(request).getId()) ; 
 		quickTypeList.addAll(priQuickTypeList) ;
 		view.addObject("pubQuickTypeList", quickTypeList) ;
-		
+		map.addAttribute("tagsSummary", tagRes.findByOrgiAndTagtype(super.getOrgi(request) , UKDataContext.ModelType.SUMMARY.toString())) ;
 		return view ;
 	}
 	
@@ -1016,21 +1024,21 @@ public class AgentController extends Handler {
 	@Menu(type = "apps", subtype = "summary")
     public ModelAndView summary(ModelMap map , HttpServletRequest request , @Valid String userid , @Valid String agentserviceid, @Valid String agentuserid){ 
 		if(!StringUtils.isBlank(userid) && !StringUtils.isBlank(agentuserid)){
-			AgentUser agentUser = this.agentUserRepository.findByIdAndOrgi(agentuserid, super.getOrgi(request)) ;
-			if(agentUser!=null && !StringUtils.isBlank(agentUser.getAgentserviceid())){
-				AgentServiceSummary summary = this.serviceSummaryRes.findByAgentserviceidAndOrgi(agentUser.getAgentserviceid(), super.getOrgi(request)) ;
-				if(summary!=null){
-					map.addAttribute("summary", summary) ;
-				}
-			}
-			map.addAttribute("tags", tagRes.findByOrgiAndTagtype(super.getOrgi(request) , UKDataContext.ModelType.SUMMARY.toString())) ;
+//			AgentUser agentUser = this.agentUserRepository.findByIdAndOrgi(agentuserid, super.getOrgi(request)) ;
+//			if(agentUser!=null && !StringUtils.isBlank(agentUser.getAgentserviceid())){
+//				AgentServiceSummary summary = this.serviceSummaryRes.findByAgentserviceidAndOrgi(agentUser.getAgentserviceid(), super.getOrgi(request)) ;
+//				if(summary!=null){
+//					map.addAttribute("summary", summary) ;
+//				}
+//			}
+			map.addAttribute("tagsSummary", tagRes.findByOrgiAndTagtype(super.getOrgi(request) , UKDataContext.ModelType.SUMMARY.toString())) ;
 			map.addAttribute("userid", userid) ;
 			map.addAttribute("agentserviceid", agentserviceid) ;
 			map.addAttribute("agentuserid", agentuserid) ;
 			
 		}
 		
-    	return request(super.createRequestPageTempletResponse("/apps/agent/summary")) ; 
+    	return request(super.createRequestPageTempletResponse("/apps/agent/addsum")) ; 
     }
 	
 	@RequestMapping(value="/summary/save")  
@@ -1390,4 +1398,129 @@ public class AgentController extends Handler {
 			}
 		}
 	}
+    @RequestMapping("/summary/add")
+    @Menu(type = "workorders" , subtype = "add" , access = false)
+    public ModelAndView addSummary(ModelMap map , HttpServletRequest request , @Valid String contactsid, @Valid String userid , @Valid String agentserviceid, @Valid String agentuserid, @Valid String sort) {
+		map.addAttribute("userid", userid);
+		map.addAttribute("contactsid", contactsid);
+		map.addAttribute("agentserviceid", agentserviceid);
+		map.addAttribute("agentuserid", agentuserid);
+		map.addAttribute("sort", sort);
+		map.addAttribute("tagsSummary", tagRes.findByOrgiAndTagtype(super.getOrgi(request) , UKDataContext.ModelType.SUMMARY.toString())) ;
+        return request(super.createRequestPageTempletResponse("/apps/agent/addsummary"));
+    }
+	@RequestMapping(value="/summary/add/save")  
+	@Menu(type = "apps", subtype = "summarysave")
+    public ModelAndView saveSummary(ModelMap map , HttpServletRequest request  ,HttpServletResponse response , @Valid AgentServiceSummary summary , @Valid String contactsid , @Valid String userid , @Valid String agentserviceid, @Valid String agentuserid, @Valid String sort){ 
+		if(!StringUtils.isBlank(userid) && !StringUtils.isBlank(agentuserid)){
+			summary.setOrgi(super.getOrgi(request));
+			summary.setCreater(super.getUser(request).getId());
+			
+			summary.setCreatetime(new Date());
+			
+			AgentService service = agentServiceRepository.findByIdAndOrgi(agentserviceid, super.getOrgi(request)) ;
+			summary.setAgent(service.getAgentno());
+			summary.setAgentno(service.getAgentno());
+			summary.setUsername(service.getUsername());
+			summary.setAgentusername(service.getAgentusername());
+			summary.setChannel(service.getChannel());
+			summary.setLogindate(service.getLogindate());
+			summary.setContactsid(service.getContactsid());
+			summary.setEmail(service.getEmail());
+			summary.setPhonenumber(service.getPhone());
+			serviceSummaryRes.save(summary) ;
+		}
+		map.addAttribute("userid", userid);
+		map.addAttribute("contactsid", contactsid);
+		map.addAttribute("agentserviceid", agentserviceid);
+		map.addAttribute("agentuserid", agentuserid);
+		map.addAttribute("tagsSummary", tagRes.findByOrgiAndTagtype(super.getOrgi(request) , UKDataContext.ModelType.SUMMARY.toString())) ;
+		Page<AgentServiceSummary> summaryList = this.serviceSummaryRes.findByOrgiAndAgentserviceid(super.getOrgi(request), agentserviceid,new PageRequest(0, super.getPs(request), Sort.Direction.DESC, new String[] { "createtime" }));
+		map.addAttribute("summaryList", summaryList) ;
+		this.getCuragentuser(map, request, response, sort);
+		return request(super.createRequestPageTempletResponse("/apps/agent/summarylist"));
+    }
+	
+	public void getCuragentuser(ModelMap map , HttpServletRequest request  ,HttpServletResponse response , @Valid String sort) {
+		User user = super.getUser(request) ;
+		Sort defaultSort = null ;
+		if(StringUtils.isBlank(sort)){
+			Cookie[] cookies = request.getCookies();//这样便可以获取一个cookie数组
+			if(cookies!=null){
+				for(Cookie cookie : cookies){
+					if(cookie.getName().equals("sort")){
+						sort = cookie.getValue() ;break ; 
+					}
+				}
+			}
+		}
+		if(!StringUtils.isBlank(sort)){
+			List<Order> list = new ArrayList<Order>();
+			if(sort.equals("lastmessage")){
+				list.add(new Order(Direction.DESC,"status")) ;
+				list.add(new Order(Direction.DESC,"lastmessage")) ;
+			}else if(sort.equals("logintime")){
+				list.add(new Order(Direction.DESC,"status")) ;
+				list.add(new Order(Direction.DESC,"createtime")) ;
+			}else if(sort.equals("default")){
+				defaultSort = new Sort(Direction.DESC,"status") ;
+				Cookie name = new Cookie("sort",null);
+				name.setMaxAge(0);
+				response.addCookie(name);
+			}
+			if(list.size() > 0){
+				defaultSort = new Sort(list) ;
+				Cookie name = new Cookie("sort",sort);
+				name.setMaxAge(60*60*24*365);
+				response.addCookie(name);
+				map.addAttribute("sort", sort) ;
+			}
+		}else{
+			defaultSort = new Sort(Direction.DESC,"status") ;
+		}
+		List<AgentUser> agentUserList = agentUserRepository.findByAgentnoAndOrgi(user.getId() , super.getOrgi(request) , defaultSort);
+		map.addAttribute("agentUserList", agentUserList) ;
+		SessionConfig sessionConfig = ServiceQuene.initSessionConfig(super.getOrgi(request)) ;
+		map.addAttribute("sessionConfig", sessionConfig) ;
+		if(agentUserList.size() > 0){
+			AgentUser agentUser = agentUserList.get(0) ;
+			agentUser = (AgentUser) agentUserList.get(0);
+			map.addAttribute("curagentuser", agentUser);
+		}
+	}
+	
+	@RequestMapping("/summary/edit")
+    @Menu(type = "workorders" , subtype = "add" , access = false)
+    public ModelAndView editSummary(ModelMap map , HttpServletRequest request , @Valid String contactsid, @Valid String userid , @Valid String agentserviceid, @Valid String agentuserid, @Valid String id ,@Valid String sort) {
+		map.addAttribute("userid", userid);
+		map.addAttribute("contactsid", contactsid);
+		map.addAttribute("agentserviceid", agentserviceid);
+		map.addAttribute("agentuserid", agentuserid);
+		AgentServiceSummary summary = serviceSummaryRes.findByIdAndOrgi(id, super.getOrgi(request));
+		map.addAttribute("summary", summary);
+		map.addAttribute("sort", sort);
+		map.addAttribute("tagsSummary", tagRes.findByOrgiAndTagtype(super.getOrgi(request) , UKDataContext.ModelType.SUMMARY.toString())) ;
+        return request(super.createRequestPageTempletResponse("/apps/agent/editsummary"));
+    }
+	@RequestMapping(value="/summary/edit/save")  
+	@Menu(type = "apps", subtype = "summarysave")
+    public ModelAndView saveEditSummary(ModelMap map , HttpServletRequest request , @Valid AgentServiceSummary summary , @Valid String contactsid, @Valid String userid , @Valid String agentserviceid, @Valid String agentuserid ,HttpServletResponse response , @Valid String sort){ 
+		if(!StringUtils.isBlank(summary.getId())){
+			summary.setOrgi(super.getOrgi(request));
+			summary.setCreater(super.getUser(request).getId());
+			summary.setCreatetime(new Date());
+			summary.setChannel(UKDataContext.ChannelTypeEnum.PHONE.toString());
+			serviceSummaryRes.save(summary) ;
+			map.addAttribute("contactsid", contactsid);
+			map.addAttribute("userid", userid);
+			map.addAttribute("contactsid", contactsid);
+			map.addAttribute("agentserviceid", agentserviceid);
+			map.addAttribute("agentuserid", agentuserid);
+		}
+		this.getCuragentuser(map, request, response, sort);
+		Page<AgentServiceSummary> summaryList = this.serviceSummaryRes.findByOrgiAndAgentserviceid(super.getOrgi(request), agentserviceid,new PageRequest(0, super.getPs(request), Sort.Direction.DESC, new String[] { "createtime" }));
+		map.addAttribute("summaryList", summaryList) ;
+		map.addAttribute("tagsSummary", tagRes.findByOrgiAndTagtype(super.getOrgi(request) , UKDataContext.ModelType.SUMMARY.toString())) ;
+		return request(super.createRequestPageTempletResponse("/apps/agent/summarylist"));
+    }
 }

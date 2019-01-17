@@ -74,7 +74,7 @@ public class CustomerController extends Handler{
 	
     @RequestMapping("/index")
     @Menu(type = "customer" , subtype = "index")
-    public ModelAndView index(ModelMap map , HttpServletRequest request , @Valid String q , @Valid String ekind) {
+    public ModelAndView index(ModelMap map , HttpServletRequest request , @Valid String q , @Valid String ekind, @Valid String msg) {
     	BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
     	if(!StringUtils.isBlank(q)){
         	map.put("q", q) ;
@@ -84,7 +84,7 @@ public class CustomerController extends Handler{
         	map.put("ekind", ekind) ;
         }
     	map.addAttribute("entCustomerList", entCustomerRes.findByCreaterAndSharesAndOrgi(super.getUser(request).getId(), super.getUser(request).getId(),super.getOrgi(request), null , null , false, boolQueryBuilder , q , new PageRequest(super.getP(request) , super.getPs(request)))) ;
-    	
+    	map.addAttribute("msg", msg);
     	return request(super.createAppsTempletResponse("/apps/business/customer/index"));
     }
     
@@ -262,28 +262,39 @@ public class CustomerController extends Handler{
     @RequestMapping("/impsave")
     @Menu(type = "customer" , subtype = "customer")
     public ModelAndView impsave(ModelMap map , HttpServletRequest request , @RequestParam(value = "cusfile", required = false) MultipartFile cusfile,@Valid String ekind) throws IOException {
-    	DSDataEvent event = new DSDataEvent();
-    	String fileName = "customer/"+UKTools.getUUID()+cusfile.getOriginalFilename().substring(cusfile.getOriginalFilename().lastIndexOf(".")) ;
-    	File excelFile = new File(path , fileName) ;
-    	if(!excelFile.getParentFile().exists()){
-    		excelFile.getParentFile().mkdirs() ;
-    	}
-    	MetadataTable table = metadataRes.findByTablename("uk_entcustomer") ;
-    	if(table!=null){
-	    	FileUtils.writeByteArrayToFile(new File(path , fileName), cusfile.getBytes());
-	    	event.setDSData(new DSData(table,excelFile , cusfile.getContentType(), super.getUser(request)));
-	    	event.getDSData().setClazz(EntCustomer.class);
-	    	event.getDSData().setProcess(new EntCustomerProcess(entCustomerRes));
-	    	event.setOrgi(super.getOrgi(request));
-	    	/*if(!StringUtils.isBlank(ekind)){
-	    		event.getValues().put("ekind", ekind) ;
-	    	}*/
-	    	event.getValues().put("creater", super.getUser(request).getId()) ;
-	    	reporterRes.save(event.getDSData().getReport()) ;
-	    	new ExcelImportProecess(event).process() ;		//启动导入任务
+    	String msg = "upload_success";
+    	if(!cusfile.isEmpty()) {
+    		if(cusfile.getOriginalFilename().endsWith("xlsx") || cusfile.getOriginalFilename().endsWith("xls")) {
+    			DSDataEvent event = new DSDataEvent();
+    	    	String fileName = "customer/"+UKTools.getUUID()+cusfile.getOriginalFilename().substring(cusfile.getOriginalFilename().lastIndexOf(".")) ;
+    	    	File excelFile = new File(path , fileName) ;
+    	    	if(!excelFile.getParentFile().exists()){
+    	    		excelFile.getParentFile().mkdirs() ;
+    	    	}
+    	    	MetadataTable table = metadataRes.findByTablename("uk_entcustomer") ;
+    	    	if(table!=null){
+    		    	FileUtils.writeByteArrayToFile(new File(path , fileName), cusfile.getBytes());
+    		    	event.setDSData(new DSData(table,excelFile , cusfile.getContentType(), super.getUser(request)));
+    		    	event.getDSData().setClazz(EntCustomer.class);
+    		    	event.getDSData().setProcess(new EntCustomerProcess(entCustomerRes));
+    		    	event.setOrgi(super.getOrgi(request));
+    		    	/*if(!StringUtils.isBlank(ekind)){
+    		    		event.getValues().put("ekind", ekind) ;
+    		    	}*/
+    		    	event.getValues().put("creater", super.getUser(request).getId()) ;
+    		    	reporterRes.save(event.getDSData().getReport()) ;
+    		    	new ExcelImportProecess(event).process() ;		//启动导入任务
+    	    	}
+    		}else {
+    			msg = "upload_format_faild";
+    		}
+    	}else {
+    		msg = "upload_nochoose_faild";
     	}
     	
-    	return request(super.createRequestPageTempletResponse("redirect:/apps/customer/index.html"));
+    	
+    	
+    	return request(super.createRequestPageTempletResponse("redirect:/apps/customer/index.html?msg="+msg));
     }
     
     @RequestMapping("/expids")
@@ -311,7 +322,7 @@ public class CustomerController extends Handler{
     public void expall(ModelMap map , HttpServletRequest request , HttpServletResponse response) throws IOException {
     	BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
     	boolQueryBuilder.must(termQuery("datastatus" , false)) ;		//只导出 数据删除状态 为 未删除的 数据
-    	Iterable<EntCustomer> entCustomerList = entCustomerRes.findByCreaterAndSharesAndOrgi(super.getUser(request).getId(), super.getUser(request).getId(),super.getOrgi(request), null , null , false, boolQueryBuilder , null , new PageRequest(super.getP(request) , super.getPs(request)));
+    	Iterable<EntCustomer> entCustomerList = entCustomerRes.findByCreaterAndSharesAndOrgi(super.getUser(request).getId(), super.getUser(request).getId(),super.getOrgi(request), null , null , false, boolQueryBuilder , null , new PageRequest(super.getP(request) , 10000));
     	
     	MetadataTable table = metadataRes.findByTablename("uk_entcustomer") ;
 		List<Map<String,Object>> values = new ArrayList<Map<String,Object>>();
