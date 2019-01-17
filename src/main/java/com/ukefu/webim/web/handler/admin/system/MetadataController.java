@@ -348,7 +348,6 @@ public class MetadataController extends Handler{
 				str.append(MetadataTable.getName());
 				str.append(",");
 			}
-			System.out.println(str);
 			map.addAttribute("metadataTable", str);
 		}
     }

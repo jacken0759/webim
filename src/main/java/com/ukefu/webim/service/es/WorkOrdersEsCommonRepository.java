@@ -27,4 +27,6 @@ public interface WorkOrdersEsCommonRepository {
 	public List<WorkOrders> findByOrgiAndQualitydisorgan(BoolQueryBuilder boolQueryBuilder) ;
 	
 	public Page<WorkOrders> findByOrgi(BoolQueryBuilder boolQueryBuilder , Pageable page);
+	
+	public WorkOrders getByIdAndOrgi(String id , String orgi) ;
 }
