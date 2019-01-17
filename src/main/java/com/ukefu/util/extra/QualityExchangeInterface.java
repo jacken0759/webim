@@ -15,4 +15,6 @@ public interface QualityExchangeInterface {
 	public List<?> getListDataByOrgi(Object query) ;
 	
 	public void process(Object data) ;
+	
+	public void processList(Object data) ;
 }
