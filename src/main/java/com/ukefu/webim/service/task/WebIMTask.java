@@ -5,23 +5,33 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.UKTools;
+import com.ukefu.util.asr.lfasr.PhoneticTranscription;
 import com.ukefu.util.client.NettyClients;
 import com.ukefu.util.extra.DataExchangeInterface;
 import com.ukefu.util.freeswitch.model.CallCenterAgent;
 import com.ukefu.webim.service.acd.ServiceQuene;
 import com.ukefu.webim.service.cache.CacheHelper;
 import com.ukefu.webim.service.impl.CallOutQuene;
+import com.ukefu.webim.service.repository.AgentServiceRepository;
+import com.ukefu.webim.service.repository.AgentUserRepository;
 import com.ukefu.webim.service.repository.AgentUserTaskRepository;
 import com.ukefu.webim.service.repository.BlackListRepository;
 import com.ukefu.webim.service.repository.ChatMessageRepository;
@@ -31,6 +41,7 @@ import com.ukefu.webim.service.repository.OnlineUserRepository;
 import com.ukefu.webim.util.OnlineUserUtils;
 import com.ukefu.webim.util.router.OutMessageRouter;
 import com.ukefu.webim.util.server.message.ChatMessage;
+import com.ukefu.webim.web.model.AgentService;
 import com.ukefu.webim.web.model.AgentStatus;
 import com.ukefu.webim.web.model.AgentUser;
 import com.ukefu.webim.web.model.AgentUserTask;
@@ -41,7 +52,9 @@ import com.ukefu.webim.web.model.CousultInvite;
 import com.ukefu.webim.web.model.JobDetail;
 import com.ukefu.webim.web.model.MessageOutContent;
 import com.ukefu.webim.web.model.OnlineUser;
+import com.ukefu.webim.web.model.QualityConfig;
 import com.ukefu.webim.web.model.SessionConfig;
+import com.ukefu.webim.web.model.StatusEvent;
 
 @Configuration
 @EnableScheduling
@@ -51,7 +64,13 @@ public class WebIMTask {
 	private AgentUserTaskRepository agentUserTaskRes ;
 	
 	@Autowired
+	private AgentServiceRepository agentServiceRes ;
+	
+	@Autowired
 	private OnlineUserRepository onlineUserRes ;
+	
+	@Autowired
+	private AgentServiceRepository agentServiceRepository;
 	
 	@Autowired
 	private JobDetailRepository jobDetailRes ;
@@ -352,6 +371,37 @@ public class WebIMTask {
 			for(BlackEntity blackEntity : blackList) {
 				blackListRes.delete(blackEntity);
 				CacheHelper.getSystemCacheBean().getCacheObject(blackEntity.getUserid(),  blackEntity.getOrgi())  ;
+			}
+		}
+	}
+	
+	@Scheduled(fixedDelay= 3000 , initialDelay = 20000) 
+    public void checkInService() throws Exception {
+		if(UKDataContext.needRunTask()) {
+			Page<AgentService> agentServiceList = agentServiceRes.findAll(new Specification<AgentService>(){
+				@Override
+				public Predicate toPredicate(Root<AgentService> root, CriteriaQuery<?> query,
+						CriteriaBuilder cb) {
+					List<Predicate> list = new ArrayList<Predicate>();  
+					list.add(cb.lessThan(root.get("createtime").as(Date.class), new Date(System.currentTimeMillis() - 1000 * 60 * 10))) ;
+					list.add(cb.equal(root.get("status").as(String.class),UKDataContext.AgentUserStatusEnum.INSERVICE.toString())) ;
+					Predicate[] p = new Predicate[list.size()];  
+
+					return cb.and(list.toArray(p));
+				}}, new PageRequest(0, 100, Sort.Direction.ASC, "createtime")) ;
+			if(agentServiceList.getContent().size()>0) {
+				List<AgentService> serviceList = new ArrayList<AgentService>();
+				for(AgentService agentService : agentServiceList.getContent()) {
+					if(CacheHelper.getAgentUserCacheBean().getCacheObject(agentService.getUserid(), UKDataContext.SYSTEM_ORGI) == null) {
+						if(agentService.getCreatetime() == null || (System.currentTimeMillis() - agentService.getCreatetime().getTime()) > 1000 * 60 * 10) {
+							agentService.setStatus(UKDataContext.AgentUserStatusEnum.END.toString());
+							serviceList.add(agentService) ;
+						}
+					}
+				}
+				if(serviceList.size() > 0) {
+					agentServiceRepository.save(agentServiceList) ;
+				}
 			}
 		}
 	}
