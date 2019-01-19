@@ -30,7 +30,7 @@ public class QualityConfig implements java.io.Serializable{
 	private String filepiecesize ;	//引擎的上传录音文件最大尺寸
 	private String storepath ;		//引擎的转写结果保存位置
 	
-	private String maxthreads;		//最大线程数
+	private int maxthreads;		//最大线程数
 
 	private String creater;
 	private Date createtime ;
@@ -96,10 +96,10 @@ public class QualityConfig implements java.io.Serializable{
 	public void setStorepath(String storepath) {
 		this.storepath = storepath;
 	}
-	public String getMaxthreads() {
+	public int getMaxthreads() {
 		return maxthreads;
 	}
-	public void setMaxthreads(String maxthreads) {
+	public void setMaxthreads(int maxthreads) {
 		this.maxthreads = maxthreads;
 	}
 	public String getCreater() {
